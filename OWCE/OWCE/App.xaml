@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OWCE.App">
+    <Application.Resources>
+        <ResourceDictionary>
+
+            
+            <Color x:Key="lightBackgroundColor">#23354d</Color>
+            <Color x:Key="darkBackgroundColor">#1C2D41</Color>
+            <Color x:Key="textColor">White</Color>
+
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="{DynamicResource textColor}" />
+            </Style>
+            
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarTextColor" Value="{StaticResource textColor}" />
+                <Setter Property="BackgroundColor" Value="{StaticResource darkBackgroundColor}" />
+                <Setter Property="BarBackgroundColor" Value="{StaticResource darkBackgroundColor}" />
+            </Style>
+
+            <Style TargetType="ContentPage">
+                <Setter Property="BackgroundColor" Value="{StaticResource lightBackgroundColor}" />
+            </Style>
+            
+            <Style TargetType="ScrollView">
+                <Setter Property="BackgroundColor" Value="{StaticResource lightBackgroundColor}" />
+            </Style>
+            
+            <Style TargetType="StackLayout">
+                <Setter Property="BackgroundColor" Value="{StaticResource lightBackgroundColor}" />
+            </Style>
+            
+            <Style TargetType="ListView">
+                <Setter Property="BackgroundColor" Value="{StaticResource lightBackgroundColor}" />
+            </Style>
+            
+            
+            <Style TargetType="Button">
+                <Setter Property="TextColor" Value="{StaticResource textColor}" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

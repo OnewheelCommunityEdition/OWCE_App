@@ -1,0 +1,1 @@
+../appcenter-pre-build.sh
