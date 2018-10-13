@@ -11,6 +11,27 @@
     </ContentPage.Resources>
     <StackLayout>
         <ListView x:Name="DeviceListView" CachingStrategy="RecycleElement" ItemsSource="{Binding Boards}" ItemSelected="DeviceListView_ItemSelected" IsPullToRefreshEnabled="true" RefreshCommand="{Binding RefreshCommand}">
+            <ListView.Header>
+                <StackLayout>
+                    <StackLayout x:Name="NotScanningHeader" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Orientation="Horizontal" Padding="20">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding StartScanningTapCommand}" />
+                        </StackLayout.GestureRecognizers>
+                        <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Orientation="Horizontal">
+                            <Label Text="Tap to start scanning" InputTransparent="true" HorizontalOptions="Center" VerticalOptions="Center"  />
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout x:Name="ScanningHeader" IsVisible="false"  HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Padding="20">
+                        <StackLayout.GestureRecognizers> 
+                            <TapGestureRecognizer Command="{Binding StopScanningTapCommand}" />
+                        </StackLayout.GestureRecognizers>
+                        <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Orientation="Horizontal" >
+                            <Label Text="Scanning..." InputTransparent="true" HorizontalOptions="Center" VerticalOptions="Center"  />
+                            <ActivityIndicator InputTransparent="true" HorizontalOptions="Center" VerticalOptions="Center" IsRunning="true" Color="White" />
+                        </StackLayout>
+                    </StackLayout>
+                </StackLayout>
+            </ListView.Header>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
