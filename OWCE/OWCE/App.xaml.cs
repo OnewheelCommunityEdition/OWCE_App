@@ -13,8 +13,10 @@ namespace OWCE
     {
         public App()
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(AppConstants.SyncfusionLicense);
-
+            if (String.IsNullOrEmpty(AppConstants.SyncfusionLicense) == false)
+            {
+                Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(AppConstants.SyncfusionLicense);
+            }
             InitializeComponent();
 
             /*
