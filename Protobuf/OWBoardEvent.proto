@@ -1,0 +1,23 @@
+
+// [START declaration]
+syntax = "proto3";
+package owce;
+// [END declaration]
+
+
+// [START csharp_declaration]
+option csharp_namespace = "OWCE.Protobuf";
+// [END csharp_declaration]
+
+
+// [START messages]
+message OWBoardEvent {
+  string uuid = 1;
+  int64 timestamp = 2;
+  bytes data = 3;
+}
+
+message OWBoardEventList {
+  repeated OWBoardEvent BoardEvents = 1;
+}
+// [END messages]

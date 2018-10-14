@@ -50,13 +50,14 @@
     <Compile Include="$(MSBuildThisFileDirectory)Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)OWBoardEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExtensionMethods\DateTimeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\OWBoardEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Converters\" />
     <Folder Include="$(MSBuildThisFileDirectory)DependencyInterfaces\" />
     <Folder Include="$(MSBuildThisFileDirectory)Pages\" />
     <Folder Include="$(MSBuildThisFileDirectory)ExtensionMethods\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Protobuf\" />
   </ItemGroup>
 </Project>

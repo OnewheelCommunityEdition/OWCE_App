@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Google.Protobuf;
+using OWCE.Protobuf;
 using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 using Plugin.Geolocator;
@@ -511,7 +513,7 @@ namespace OWCE
             set { if (_rssi != value) { _rssi = value; OnPropertyChanged(); } }
         }
 
-        private List<OWBoardEvent> _events = new List<OWBoardEvent>();
+        private OWBoardEventList _events = new OWBoardEventList();
 
 
         public OWBoard()
@@ -559,7 +561,12 @@ namespace OWCE
                     RSSI = _device.Rssi;
                     if (_isLogging)
                     {
-                        _events.Add(new OWBoardEvent("RSSI", (Int16)_device.Rssi));
+                        _events.BoardEvents.Add(new OWBoardEvent()
+                        {
+                            Uuid = "RSSI",
+                            Data = ByteString.CopyFrom(BitConverter.GetBytes(_device.Rssi)),
+                            Timestamp = DateTime.Now.Ticks,
+                        });
                     }
                 }
                 await Task.Delay(50);
@@ -717,11 +724,16 @@ ReadRequestReceived - LifetimeOdometer
 
             var value = BitConverter.ToUInt16(data, 0);
 
-
             if (_isLogging)
             {
-                _events.Add(new OWBoardEvent(uuid, value));
-                if (_events.Count > 1000)
+                _events.BoardEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = uuid,
+                    Data = ByteString.CopyFrom(data),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
+
+                if (_events.BoardEvents.Count > 1000)
                 {
                     SaveEvents();
                 }
@@ -880,7 +892,7 @@ ReadRequestReceived - LifetimeOdometer
             _logDirectory = Path.Combine(FileSystem.CacheDirectory, currentRunStart.ToString());
             Directory.CreateDirectory(_logDirectory);
             _isLogging = true;
-            _events = new List<OWBoardEvent>();
+            _events = new OWBoardEventList();
 
             if (CrossGeolocator.Current.IsGeolocationAvailable)
             {
@@ -926,12 +938,56 @@ ReadRequestReceived - LifetimeOdometer
                 _oldLat = e.Position.Latitude;
                 _oldLon = e.Position.Longitude;
 
+                _events.BoardEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = "gps_latitude",
+                    Data = ByteString.CopyFrom(BitConverter.GetBytes(e.Position.Latitude)),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
+
+                _events.BoardEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = "gps_longitude",
+                    Data = ByteString.CopyFrom(BitConverter.GetBytes(e.Position.Longitude)),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
+
+                _events.BoardEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = "gps_altitude",
+                    Data = ByteString.CopyFrom(BitConverter.GetBytes(e.Position.Altitude)),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
+
+                _events.BoardEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = "gps_speed",
+                    Data = ByteString.CopyFrom(BitConverter.GetBytes(e.Position.Speed)),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
+
+                _events.BoardEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = "gps_accuracy",
+                    Data = ByteString.CopyFrom(BitConverter.GetBytes(e.Position.Accuracy)),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
+
+                _events.BoardEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = "gps_heading",
+                    Data = ByteString.CopyFrom(BitConverter.GetBytes(e.Position.Heading)),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
+
+                /*
                 _events.Add(new OWBoardEvent("lat", e.Position.Latitude));
                 _events.Add(new OWBoardEvent("lon", e.Position.Longitude));
                 _events.Add(new OWBoardEvent("speed", e.Position.Speed));
                 _events.Add(new OWBoardEvent("acc", e.Position.Accuracy));
                 _events.Add(new OWBoardEvent("head", e.Position.Heading));
 
+*/
 
                 //If updating the UI, ensure you invoke on main thread
                 var position = e.Position;
@@ -957,16 +1013,18 @@ ReadRequestReceived - LifetimeOdometer
         {
             try
             {
+                var oldEvents = _events;
+                _events = new OWBoardEventList();
 
-                string data = Newtonsoft.Json.JsonConvert.SerializeObject(_events, Newtonsoft.Json.Formatting.None,
-                    new Newtonsoft.Json.JsonSerializerSettings
+                Task.Run(() =>
+                {
+                    long currentRunEnd = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                    var outputFile = Path.Combine(_logDirectory, $"{currentRunEnd}.dat");
+                    using (var output = File.Create(outputFile))
                     {
-                        NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
-                    });
-                _events = new List<OWBoardEvent>();
-
-                long currentRunEnd = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                File.WriteAllText(Path.Combine(_logDirectory, $"{currentRunEnd}.json"), data);
+                        _events.WriteTo(output);
+                    }
+                });
             }
             catch (Exception err)
             {

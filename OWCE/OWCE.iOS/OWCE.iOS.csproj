@@ -166,6 +166,9 @@
     <PackageReference Include="Xamarin.FFImageLoading.Forms">
       <Version>2.4.3.840</Version>
     </PackageReference>
+    <PackageReference Include="Google.Protobuf">
+      <Version>3.6.1</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />
