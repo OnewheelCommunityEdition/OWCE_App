@@ -933,7 +933,7 @@ ReadRequestReceived - LifetimeOdometer
         double _oldLon = 0;
         private void PositionChanged(object sender, PositionEventArgs e)
         {
-            if (_oldLat != e.Position.Latitude || _oldLon != e.Position.Longitude)
+            if (_oldLat.Equals(e.Position.Latitude) == false || _oldLon.Equals(e.Position.Longitude) == false)
             {
                 _oldLat = e.Position.Latitude;
                 _oldLon = e.Position.Longitude;

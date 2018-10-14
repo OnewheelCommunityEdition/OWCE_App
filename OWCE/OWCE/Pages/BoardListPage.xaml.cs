@@ -33,13 +33,13 @@ namespace OWCE
         public Command RefreshCommand => _refreshCommand ?? (_refreshCommand = new Command(async () =>
         {
             DeviceListView.EndRefresh();
-            StartScanning();
+            await StartScanning();
         }));
 
         private Command _startScanningTapCommand;
-        public Command StartScanningTapCommand => _startScanningTapCommand ?? (_startScanningTapCommand = new Command(() =>
+        public Command StartScanningTapCommand => _startScanningTapCommand ?? (_startScanningTapCommand = new Command(async () =>
         {
-            StartScanning();
+            await StartScanning();
         }));
 
         private Command _stopScanningTapCommand;
@@ -83,7 +83,6 @@ namespace OWCE
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
             _selectedBoard = null;
             CrossBluetoothLE.Current.StateChanged += BLE_StateChanged;
             CrossBluetoothLE.Current.Adapter.DeviceDiscovered += Adapter_DeviceDiscovered;
