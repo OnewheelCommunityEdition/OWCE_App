@@ -8,6 +8,8 @@ using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 #if __ANDROID__
 using Plugin.CurrentActivity;
+using Plugin.Permissions;
+using Xamarin.Essentials;
 #endif
 using Xamarin.Forms;
 
@@ -86,28 +88,47 @@ namespace OWCE
             CrossBluetoothLE.Current.StateChanged += BLE_StateChanged;
             CrossBluetoothLE.Current.Adapter.DeviceDiscovered += Adapter_DeviceDiscovered;
             CrossBluetoothLE.Current.Adapter.DeviceConnected += Adapter_DeviceConnected;
-
-
-#if __ANDROID__
-
-            /*
-            CrossCurrentActivity.Current.Activity.RequestPermissions(new string[] {
-                Android.Manifest.Permission.Bluetooth,
-                Android.Manifest.Permission.BluetoothAdmin,
-                Android.Manifest.Permission.AccessFineLocation,
-                Android.Manifest.Permission.AccessCoarseLocation,
-            }, BLE_REQUEST_CODE);
-            */
-#endif
-
         }
 
         private CancellationTokenSource _scanCancellationToken;
 
-        private void StartScanning()
+        private async Task StartScanning()
         {
             if (_isScanning)
                 return;
+
+#if __ANDROID__
+            if ((int)Android.OS.Build.VERSION.SdkInt >= 23)
+            {
+                var locationPermission = Plugin.Permissions.Abstractions.Permission.Location;
+                var permissionStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(locationPermission);
+
+
+                if (permissionStatus != Plugin.Permissions.Abstractions.PermissionStatus.Granted)
+                {
+                    bool shouldRequest = await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(locationPermission);
+                    if (shouldRequest)
+                    {
+                        await DisplayAlert("Oops", "In order to access board details in a bluetooth scan your phones location permission needs to be enabled.\n(Yeah, that is as confusing as it sounds)", "Ok");
+                    }
+
+                    var result = await CrossPermissions.Current.RequestPermissionsAsync(locationPermission);
+
+                    permissionStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(locationPermission);
+                }
+
+                if (permissionStatus == Plugin.Permissions.Abstractions.PermissionStatus.Denied)
+                {
+                    var shouldOpenSettings = await DisplayAlert("Error", "In order to access board details in a bluetooth scan your phones location permission needs to be enabled.\n(Yeah, that is as confusing as it sounds)", "Open Settings",  "Cancel");
+                    if (shouldOpenSettings)
+                    {
+                        AppInfo.OpenSettings();
+                    }
+                    return;
+                }
+
+            }
+#endif
 
             _isScanning = true;
             _shouldKeepScanning = true;
@@ -116,8 +137,7 @@ namespace OWCE
             NotScanningHeader.IsVisible = false;
 
 
-            Task.Run(async () =>
-            {
+           
                 CrossBluetoothLE.Current.Adapter.ScanTimeout = 5 * 1000;
                 try
                 {
@@ -143,7 +163,6 @@ namespace OWCE
                 {
                     _isScanning = false;
                 }
-            });
         }
 
         private void StopScanning()
@@ -209,7 +228,7 @@ namespace OWCE
 
             if (e.NewState == BluetoothState.On)
             {
-                Device.BeginInvokeOnMainThread(StartScanning);
+                Device.BeginInvokeOnMainThread(async () => { await StartScanning(); });
             }
         }
 
