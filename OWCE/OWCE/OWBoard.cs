@@ -514,6 +514,8 @@ namespace OWCE
         }
 
         private OWBoardEventList _events = new OWBoardEventList();
+        private List<OWBoardEvent> _initialEvents = new List<OWBoardEvent>();
+        private Ride _currentRide = null;
 
         public OWBoard()
         {
@@ -661,8 +663,8 @@ namespace OWCE
 
             foreach (var key in readTasks.Keys)
             {
-                SetValue(key, readTasks[key].Result);
                 System.Diagnostics.Debug.WriteLine(key);
+                SetValue(key, readTasks[key].Result, true);
             }
 
 
@@ -715,7 +717,7 @@ ReadRequestReceived - LifetimeOdometer
 */
         }
 
-        private void SetValue(string uuid, byte[] data)
+        private void SetValue(string uuid, byte[] data, bool initialData = false)
         {
             // If our system is little endian, reverse the array.
             if (BitConverter.IsLittleEndian)
@@ -723,8 +725,22 @@ ReadRequestReceived - LifetimeOdometer
 
             var value = BitConverter.ToUInt16(data, 0);
 
+
+            if (initialData)
+            {
+                _initialEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = uuid,
+                    Data = ByteString.CopyFrom(data),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
+            }
+
             if (_isLogging)
             {
+              //  var boardEvent = new OWBoardEvent();
+              // boardEvent.write
+                //boardEvent.WriteDelimitedTo()
                 _events.BoardEvents.Add(new OWBoardEvent()
                 {
                     Uuid = uuid,
@@ -847,17 +863,22 @@ ReadRequestReceived - LifetimeOdometer
         }
 
         private bool _isLogging = false;
-        private string _logDirectory = String.Empty;
-        private long _currentRunStart = 0;
-        public long CurrentRunStart { get{ return _currentRunStart; } }
+        //private long _currentRunStart = 0;
+        //public long CurrentRunStart { get{ return _currentRunStart; } }
 
         public async Task StartLogging()
         {
-            _currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            _logDirectory = Path.Combine(FileSystem.CacheDirectory, _currentRunStart.ToString());
-            Directory.CreateDirectory(_logDirectory);
+           // _currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            //_logDirectory = Path.Combine(FileSystem.CacheDirectory, _currentRunStart.ToString());
+            var currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            _currentRide = new Ride($"{currentRunStart}.dat");
+
+
             _isLogging = true;
             _events = new OWBoardEventList();
+            _events.BoardEvents.AddRange(_initialEvents);
+
+
 
             if (CrossGeolocator.Current.IsGeolocationAvailable)
             {
@@ -874,6 +895,7 @@ ReadRequestReceived - LifetimeOdometer
         public async Task<string> StopLogging()
         {
             _isLogging = false;
+            _currentRide.EndTime = DateTime.Now;
 
 
             Hud.Show("Compressing data");
@@ -885,11 +907,35 @@ ReadRequestReceived - LifetimeOdometer
             SaveEvents();
 
 
-            string dirName = Path.GetFileName(_logDirectory);
-            var zipPath = Path.Combine(FileSystem.CacheDirectory, $"{dirName}.zip");
-            var zip = new ICSharpCode.SharpZipLib.Zip.FastZip();
-            zip.CreateEmptyDirectories = true;
-            zip.CreateZip(zipPath, _logDirectory, true, "");
+            var logFilePath = _currentRide.GetLogFilePath();
+            string datFileName = Path.GetFileName(logFilePath);
+            var zipPath = Path.Combine(FileSystem.CacheDirectory, $"{datFileName}.zip");
+
+            using (FileStream fs = File.Create(zipPath))
+            {
+                using (ICSharpCode.SharpZipLib.Zip.ZipOutputStream zipStream = new ICSharpCode.SharpZipLib.Zip.ZipOutputStream(fs))
+                {
+                    zipStream.SetLevel(3);
+
+                    //FileInfo inFileInfo = new FileInfo(inputPath);
+
+
+                    ICSharpCode.SharpZipLib.Zip.ZipEntry newEntry = new ICSharpCode.SharpZipLib.Zip.ZipEntry(datFileName);
+                    newEntry.DateTime = DateTime.UtcNow;
+                    zipStream.PutNextEntry(newEntry);
+
+                    byte[] buffer = new byte[4096];
+                    using (FileStream streamReader = File.OpenRead(logFilePath))
+                    {
+                        ICSharpCode.SharpZipLib.Core.StreamUtils.Copy(streamReader, zipStream, buffer);
+                    }
+
+                    zipStream.CloseEntry();
+                    zipStream.IsStreamOwner = true;
+                    zipStream.Close();
+                }
+            }
+
 
             return zipPath;
         }
@@ -972,12 +1018,28 @@ ReadRequestReceived - LifetimeOdometer
                 var oldEvents = _events;
                 _events = new OWBoardEventList();
 
-                long currentRunEnd = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                var outputFile = Path.Combine(_logDirectory, $"{currentRunEnd}.dat");
+                using (FileStream fs = new FileStream(_currentRide.GetLogFilePath(), FileMode.Append, FileAccess.Write))
+                {
+                    foreach (var owBoardEvent in oldEvents.BoardEvents)
+                    {
+                        owBoardEvent.WriteDelimitedTo(fs);
+                    }
+
+                    /*
+                    using (StreamWriter sw = new StreamWriter(fs))
+                    {
+                        sw.WriteLine(myNewCSVLine);
+                    }
+                    */
+                }
+                //long currentRunEnd = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                // var outputFile = Path.Combine(_logDirectory, $"{currentRunEnd}.dat");
+                /*
                 using (var output = File.Create(outputFile))
                 {
                     oldEvents.WriteTo(output);
                 }
+                */
             }
             catch (Exception err)
             {

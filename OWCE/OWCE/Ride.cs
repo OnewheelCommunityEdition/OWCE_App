@@ -1,40 +1,59 @@
 ﻿using System;
+using System.IO;
+using Xamarin.Essentials;
+
 namespace OWCE
 {
     public class Ride
     {
-        private DateTime _dateTime;
-
-        public DateTime DateTime
+        private DateTime _startTime;
+        public DateTime StartTime
         {
             get
             {
-                return _dateTime;
+                return _startTime;
             }
         }
 
-        private string _directory;
-
-        public string Directory
+        private DateTime _endTime;
+        public DateTime EndTime
         {
             get
             {
-                return _directory;
+                return _endTime;
+            }
+            set 
+            {
+                _endTime = value;
+            }
+        }
+
+        private string _file;
+        public string File
+        {
+            get
+            {
+                return _file;
             }
         }
 
         public string TextDisplay {
-            get { return _dateTime.ToShortDateString() + " " + _dateTime.ToShortTimeString(); }
+            get { return _startTime.ToShortDateString() + " " + _startTime.ToShortTimeString(); }
         }
 
         public Ride()
         {
         }
 
-        public Ride(DateTime dateTime, string directory)
+        public Ride(string file)
         {
-            _dateTime = dateTime;
-            _directory = directory;
+            _startTime = DateTime.Now;
+            _file = file;
+        }
+
+        public string GetLogFilePath()
+        {
+            return Path.Combine(FileSystem.CacheDirectory, _file);
         }
     }
 }
