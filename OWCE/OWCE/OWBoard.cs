@@ -515,7 +515,6 @@ namespace OWCE
 
         private OWBoardEventList _events = new OWBoardEventList();
 
-
         public OWBoard()
         {
 
@@ -662,8 +661,8 @@ namespace OWCE
 
             foreach (var key in readTasks.Keys)
             {
-                Console.WriteLine(key);
                 SetValue(key, readTasks[key].Result);
+                System.Diagnostics.Debug.WriteLine(key);
             }
 
 
@@ -758,14 +757,12 @@ ReadRequestReceived - LifetimeOdometer
                     break;
                 case PitchUUID:
                     Pitch = 0.1f * (1800 - value);
-                    //Console.WriteLine(Pitch);
                     break;
                 case RollUUID:
                     Roll = 0.1f * (1800 - value);
                     break;
                 case YawUUID:
                     Yaw = 0.1f * (1800 - value);
-                    //Console.WriteLine(Yaw);
                     break;
                 case TripOdometerUUID:
                     TripOdometer = value;
@@ -842,41 +839,7 @@ ReadRequestReceived - LifetimeOdometer
         void Characteristic_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e)
         {
             SetValue(e.Characteristic.Uuid.ToUpper(), e.Characteristic.Value);
-
         }
-
-        /*
-        public string file1 = System.IO.Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, "file1.txt");
-        public string file2 = System.IO.Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, "file2.txt");
-
-        int length = 0;
-        void Characteristic_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e)
-        {
-            SetValue(e.Characteristic.Uuid, e.Characteristic.Value);
-
-
-            if (e.Characteristic.Uuid.Equals(SerialRead, StringComparison.CurrentCultureIgnoreCase))
-            {
-                byte[] data = e.Characteristic.Value;
-
-
-                using (var stream = new FileStream(file1, FileMode.Append))
-                {
-                    stream.Write(data, 0, data.Length);
-                }
-
-             
-                using (var stream = new FileStream(file2, FileMode.Append))
-                {
-                    stream.Write(data, 0, data.Length);
-                }
-
-
-
-            }
-
-        }
-        */
 
         public async Task Disconnect()
         {
@@ -1018,7 +981,7 @@ ReadRequestReceived - LifetimeOdometer
             }
             catch (Exception err)
             {
-                Console.WriteLine("ERROR: " + err.Message);
+                System.Diagnostics.Debug.WriteLine("ERROR: " + err.Message);
             }
         }
     }

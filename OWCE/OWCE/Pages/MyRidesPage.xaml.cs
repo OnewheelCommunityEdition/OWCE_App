@@ -24,6 +24,8 @@ namespace OWCE
 
             Rides = new ObservableCollection<Ride>();
 
+            /*
+
             if (Directory.Exists(FileSystem.CacheDirectory))
             {
                 string[] directories = Directory.GetDirectories(FileSystem.CacheDirectory);
@@ -40,11 +42,12 @@ namespace OWCE
                         if (long.TryParse(dirName, out tempLong))
                         {
                             var offest = DateTimeOffset.FromUnixTimeSeconds(tempLong);
-                            Rides.Add(new Ride(offest.DateTime, directory));
+                            Rides.Add(new Ride(directory));
                         }
                     }
                 }
             }
+            */
 
             this.MyRidesListView.ItemsSource = null;
             this.MyRidesListView.ItemsSource = Rides;

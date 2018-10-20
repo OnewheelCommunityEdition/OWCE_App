@@ -266,23 +266,7 @@ namespace OWCE
                         });
                     });
 
-
-
                     await CrossBluetoothLE.Current.Adapter.ConnectToDeviceAsync(board.Device);
-
-
-                    /*
-                    var service = await device.GetServiceAsync(new Guid(OWBoard.Service.ToLower()));
-                    var hardwareVersionCharacteristic = await service.GetCharacteristicAsync(new Guid(OWBoard.HardwareVersion));
-                    var data = await hardwareVersionCharacteristic.ReadAsync();
-                    // If the OS we are on is a // IF the 
-                    if (BitConverter.IsLittleEndian)
-                        Array.Reverse(data);
-
-                    var version = BitConverter.ToInt16(data, 0);
-                    //int value = (data[0] << 8) | data[1];
-
-                    */
                 }
                 else
                 {

@@ -75,7 +75,7 @@ namespace OWCE
 
                 var request = new RestRequest("/upload_log.php", Method.POST);
                 request.AddParameter("serial", Board.SerialNumber);
-                request.AddParameter("ride_start", Board.CurrentRunStart);
+                request.AddParameter("ride_start", DateTimeOffset.UtcNow.ToUnixTimeSeconds());
 
                 try
                 {
