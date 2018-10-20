@@ -26,6 +26,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\MyRidesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -52,6 +56,10 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)ExtensionMethods\DateTimeExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Protobuf\OWBoardEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\MyRidesPage.xaml.cs">
+      <DependentUpon>MyRidesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Ride.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Converters\" />

@@ -28,6 +28,12 @@ namespace OWCE
             Detail = new NavigationPage(new SettingsPage());
             this.IsPresented = false;
         }
+
+        internal void GoToMyRidesPage()
+        {
+            Detail = new NavigationPage(new MyRidesPage());
+            this.IsPresented = false;
+        }
     }
 }
 

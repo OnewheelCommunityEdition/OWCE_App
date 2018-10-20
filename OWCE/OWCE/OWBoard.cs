@@ -885,11 +885,13 @@ ReadRequestReceived - LifetimeOdometer
 
         private bool _isLogging = false;
         private string _logDirectory = String.Empty;
+        private long _currentRunStart = 0;
+        public long CurrentRunStart { get{ return _currentRunStart; } }
 
         public async Task StartLogging()
         {
-            long currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            _logDirectory = Path.Combine(FileSystem.CacheDirectory, currentRunStart.ToString());
+            _currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            _logDirectory = Path.Combine(FileSystem.CacheDirectory, _currentRunStart.ToString());
             Directory.CreateDirectory(_logDirectory);
             _isLogging = true;
             _events = new OWBoardEventList();
@@ -980,15 +982,6 @@ ReadRequestReceived - LifetimeOdometer
                     Timestamp = DateTime.UtcNow.Ticks,
                 });
 
-                /*
-                _events.Add(new OWBoardEvent("lat", e.Position.Latitude));
-                _events.Add(new OWBoardEvent("lon", e.Position.Longitude));
-                _events.Add(new OWBoardEvent("speed", e.Position.Speed));
-                _events.Add(new OWBoardEvent("acc", e.Position.Accuracy));
-                _events.Add(new OWBoardEvent("head", e.Position.Heading));
-
-*/
-
                 //If updating the UI, ensure you invoke on main thread
                 var position = e.Position;
                 var output = "Full: Lat: " + position.Latitude + " Long: " + position.Longitude;
@@ -1016,15 +1009,12 @@ ReadRequestReceived - LifetimeOdometer
                 var oldEvents = _events;
                 _events = new OWBoardEventList();
 
-                Task.Run(() =>
+                long currentRunEnd = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                var outputFile = Path.Combine(_logDirectory, $"{currentRunEnd}.dat");
+                using (var output = File.Create(outputFile))
                 {
-                    long currentRunEnd = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                    var outputFile = Path.Combine(_logDirectory, $"{currentRunEnd}.dat");
-                    using (var output = File.Create(outputFile))
-                    {
-                        _events.WriteTo(output);
-                    }
-                });
+                    oldEvents.WriteTo(output);
+                }
             }
             catch (Exception err)
             {

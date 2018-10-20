@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Plugin.BLE;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using RestSharp;
+using System.Net;
+using System.IO;
 
 
 #if __IOS__
@@ -67,46 +70,64 @@ namespace OWCE
                 _isLogging = false;
                 string zip = await Board.StopLogging();
                 Hud.Dismiss();
+                Hud.Show("Uploading");
+                var client = new RestClient("https://owce.app");
 
-#if __IOS__
-                NSUrl item = NSUrl.FromFilename(zip);
-                var controller = new UIKit.UIActivityViewController(new NSObject[] { item }, null);
-                controller.ExcludedActivityTypes = new Foundation.NSString[] {
-                    UIKit.UIActivityType.AddToReadingList,
-                    //UIKit.UIActivityType.AirDrop,
-                    UIKit.UIActivityType.AssignToContact,
-                    UIKit.UIActivityType.CopyToPasteboard,
-                    UIKit.UIActivityType.Mail,
-                    UIKit.UIActivityType.MarkupAsPdf,
-                    UIKit.UIActivityType.Message,
-                    UIKit.UIActivityType.OpenInIBooks,
-                    UIKit.UIActivityType.PostToFacebook,
-                    UIKit.UIActivityType.PostToFlickr,
-                    UIKit.UIActivityType.PostToTencentWeibo,
-                    UIKit.UIActivityType.PostToTwitter,
-                    UIKit.UIActivityType.PostToVimeo,
-                    UIKit.UIActivityType.PostToWeibo,
-                    UIKit.UIActivityType.Print,
-                    UIKit.UIActivityType.SaveToCameraRoll
-                };
-                UIKit.UIApplication.SharedApplication.KeyWindow.RootViewController.PresentViewController(controller, true, null);
-#elif __ANDROID__
-                var shareIntent = new Android.Content.Intent(Android.Content.Intent.ActionSend);
-                shareIntent.SetType("application/zip");
-                var dirName = System.IO.Path.GetDirectoryName(zip);
-                var zipName = System.IO.Path.GetFileName(zip);
+                var request = new RestRequest("/upload_log.php", Method.POST);
+                request.AddParameter("serial", Board.SerialNumber);
+                request.AddParameter("ride_start", Board.CurrentRunStart);
 
-                var uri = Android.Net.Uri.FromFile(new Java.IO.File(dirName, zipName));
-                shareIntent.PutExtra(Android.Content.Intent.ExtraStream, uri);
-#endif
+                try
+                {
+                    var response = await client.ExecuteTaskAsync(request);
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+
+                        HttpWebRequest httpRequest = WebRequest.Create(response.Content) as HttpWebRequest;
+                        httpRequest.Method = "PUT";
+                        using (Stream dataStream = httpRequest.GetRequestStream())
+                        {
+                            var buffer = new byte[8000];
+                            using (FileStream fileStream = new FileStream(zip, FileMode.Open, FileAccess.Read))
+                            {
+                                int bytesRead = 0;
+                                while ((bytesRead = fileStream.Read(buffer, 0, buffer.Length)) > 0)
+                                {
+                                    dataStream.Write(buffer, 0, bytesRead);
+                                }
+                            }
+                        }
+                        HttpWebResponse uploadResponse = httpRequest.GetResponse() as HttpWebResponse;
 
 
+                        Hud.Dismiss();
+                        if (uploadResponse.StatusCode == HttpStatusCode.OK)
+                        {
+                            await DisplayAlert("Success", "Log file sucessfully uploaded.", "Ok");
+                        }
+                        else
+                        {
+                            await DisplayAlert("Error", "Could not upload log at this time.", "Ok");
+                        }
+                    }
+                    else
+                    {
+                        Hud.Dismiss();
+                        await DisplayAlert("Error", "Could not upload log at this time.", "Ok");
+                    }
+                }
+                catch (Exception err)
+                {
+                    Hud.Dismiss();
+                    await DisplayAlert("Error", err.Message, "Ok");
+                    // Log
+                }
             }
             else
             {
                 LogDataButton.Text = "Stop Logging Data";
                 _isLogging = true;
-                Board.StartLogging();
+                await Board.StartLogging();
 
             }
 
