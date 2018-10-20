@@ -20,9 +20,12 @@ namespace OWCE
             }
         }
 
-        async void MyRides_Tapped(object sender, System.EventArgs e)
+        private void MyRides_Tapped(object sender, System.EventArgs e)
         {
-            await DisplayAlert(String.Empty, "Not implemented yet.", "Cancel");
+            if (Parent is MainMasterDetailPage masterDetailPage)
+            {
+                masterDetailPage.GoToMyRidesPage();
+            }
         }
 
         async void Leaderboards_Tapped(object sender, System.EventArgs e)

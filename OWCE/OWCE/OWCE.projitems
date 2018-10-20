@@ -26,6 +26,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Pages\MyRidesPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
@@ -50,13 +54,22 @@
     <Compile Include="$(MSBuildThisFileDirectory)Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)OWBoardEvent.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ExtensionMethods\DateTimeExtensions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Protobuf\OWBoardEvent.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Pages\MyRidesPage.xaml.cs">
+      <DependentUpon>MyRidesPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Ride.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mock\MockOWBoardCharacteristic.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mock\MockOWBoardDevice.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mock\MockOWBoardService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Converters\" />
     <Folder Include="$(MSBuildThisFileDirectory)DependencyInterfaces\" />
     <Folder Include="$(MSBuildThisFileDirectory)Pages\" />
     <Folder Include="$(MSBuildThisFileDirectory)ExtensionMethods\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Protobuf\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Mock\" />
   </ItemGroup>
 </Project>

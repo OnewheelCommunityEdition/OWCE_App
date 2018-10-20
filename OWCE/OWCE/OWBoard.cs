@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Google.Protobuf;
+using OWCE.Protobuf;
 using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
 using Plugin.Geolocator;
@@ -511,8 +513,9 @@ namespace OWCE
             set { if (_rssi != value) { _rssi = value; OnPropertyChanged(); } }
         }
 
-        private List<OWBoardEvent> _events = new List<OWBoardEvent>();
-
+        private OWBoardEventList _events = new OWBoardEventList();
+        private List<OWBoardEvent> _initialEvents = new List<OWBoardEvent>();
+        private Ride _currentRide = null;
 
         public OWBoard()
         {
@@ -559,7 +562,12 @@ namespace OWCE
                     RSSI = _device.Rssi;
                     if (_isLogging)
                     {
-                        _events.Add(new OWBoardEvent("RSSI", (Int16)_device.Rssi));
+                        _events.BoardEvents.Add(new OWBoardEvent()
+                        {
+                            Uuid = "RSSI",
+                            Data = ByteString.CopyFrom(BitConverter.GetBytes(_device.Rssi)),
+                            Timestamp = DateTime.Now.Ticks,
+                        });
                     }
                 }
                 await Task.Delay(50);
@@ -655,8 +663,8 @@ namespace OWCE
 
             foreach (var key in readTasks.Keys)
             {
-                Console.WriteLine(key);
-                SetValue(key, readTasks[key].Result);
+                System.Diagnostics.Debug.WriteLine(key);
+                SetValue(key, readTasks[key].Result, true);
             }
 
 
@@ -709,7 +717,7 @@ ReadRequestReceived - LifetimeOdometer
 */
         }
 
-        private void SetValue(string uuid, byte[] data)
+        private void SetValue(string uuid, byte[] data, bool initialData = false)
         {
             // If our system is little endian, reverse the array.
             if (BitConverter.IsLittleEndian)
@@ -718,10 +726,29 @@ ReadRequestReceived - LifetimeOdometer
             var value = BitConverter.ToUInt16(data, 0);
 
 
+            if (initialData)
+            {
+                _initialEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = uuid,
+                    Data = ByteString.CopyFrom(data),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
+            }
+
             if (_isLogging)
             {
-                _events.Add(new OWBoardEvent(uuid, value));
-                if (_events.Count > 1000)
+              //  var boardEvent = new OWBoardEvent();
+              // boardEvent.write
+                //boardEvent.WriteDelimitedTo()
+                _events.BoardEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = uuid,
+                    Data = ByteString.CopyFrom(data),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
+
+                if (_events.BoardEvents.Count > 1000)
                 {
                     SaveEvents();
                 }
@@ -746,14 +773,12 @@ ReadRequestReceived - LifetimeOdometer
                     break;
                 case PitchUUID:
                     Pitch = 0.1f * (1800 - value);
-                    //Console.WriteLine(Pitch);
                     break;
                 case RollUUID:
                     Roll = 0.1f * (1800 - value);
                     break;
                 case YawUUID:
                     Yaw = 0.1f * (1800 - value);
-                    //Console.WriteLine(Yaw);
                     break;
                 case TripOdometerUUID:
                     TripOdometer = value;
@@ -830,41 +855,7 @@ ReadRequestReceived - LifetimeOdometer
         void Characteristic_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e)
         {
             SetValue(e.Characteristic.Uuid.ToUpper(), e.Characteristic.Value);
-
         }
-
-        /*
-        public string file1 = System.IO.Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, "file1.txt");
-        public string file2 = System.IO.Path.Combine(Xamarin.Essentials.FileSystem.CacheDirectory, "file2.txt");
-
-        int length = 0;
-        void Characteristic_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e)
-        {
-            SetValue(e.Characteristic.Uuid, e.Characteristic.Value);
-
-
-            if (e.Characteristic.Uuid.Equals(SerialRead, StringComparison.CurrentCultureIgnoreCase))
-            {
-                byte[] data = e.Characteristic.Value;
-
-
-                using (var stream = new FileStream(file1, FileMode.Append))
-                {
-                    stream.Write(data, 0, data.Length);
-                }
-
-             
-                using (var stream = new FileStream(file2, FileMode.Append))
-                {
-                    stream.Write(data, 0, data.Length);
-                }
-
-
-
-            }
-
-        }
-        */
 
         public async Task Disconnect()
         {
@@ -872,15 +863,22 @@ ReadRequestReceived - LifetimeOdometer
         }
 
         private bool _isLogging = false;
-        private string _logDirectory = String.Empty;
+        //private long _currentRunStart = 0;
+        //public long CurrentRunStart { get{ return _currentRunStart; } }
 
         public async Task StartLogging()
         {
-            long currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            _logDirectory = Path.Combine(FileSystem.CacheDirectory, currentRunStart.ToString());
-            Directory.CreateDirectory(_logDirectory);
+           // _currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            //_logDirectory = Path.Combine(FileSystem.CacheDirectory, _currentRunStart.ToString());
+            var currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            _currentRide = new Ride($"{currentRunStart}.dat");
+
+
             _isLogging = true;
-            _events = new List<OWBoardEvent>();
+            _events = new OWBoardEventList();
+            _events.BoardEvents.AddRange(_initialEvents);
+
+
 
             if (CrossGeolocator.Current.IsGeolocationAvailable)
             {
@@ -897,6 +895,7 @@ ReadRequestReceived - LifetimeOdometer
         public async Task<string> StopLogging()
         {
             _isLogging = false;
+            _currentRide.EndTime = DateTime.Now;
 
 
             Hud.Show("Compressing data");
@@ -908,11 +907,35 @@ ReadRequestReceived - LifetimeOdometer
             SaveEvents();
 
 
-            string dirName = Path.GetFileName(_logDirectory);
-            var zipPath = Path.Combine(FileSystem.CacheDirectory, $"{dirName}.zip");
-            var zip = new ICSharpCode.SharpZipLib.Zip.FastZip();
-            zip.CreateEmptyDirectories = true;
-            zip.CreateZip(zipPath, _logDirectory, true, "");
+            var logFilePath = _currentRide.GetLogFilePath();
+            string datFileName = Path.GetFileName(logFilePath);
+            var zipPath = Path.Combine(FileSystem.CacheDirectory, $"{datFileName}.zip");
+
+            using (FileStream fs = File.Create(zipPath))
+            {
+                using (ICSharpCode.SharpZipLib.Zip.ZipOutputStream zipStream = new ICSharpCode.SharpZipLib.Zip.ZipOutputStream(fs))
+                {
+                    zipStream.SetLevel(3);
+
+                    //FileInfo inFileInfo = new FileInfo(inputPath);
+
+
+                    ICSharpCode.SharpZipLib.Zip.ZipEntry newEntry = new ICSharpCode.SharpZipLib.Zip.ZipEntry(datFileName);
+                    newEntry.DateTime = DateTime.UtcNow;
+                    zipStream.PutNextEntry(newEntry);
+
+                    byte[] buffer = new byte[4096];
+                    using (FileStream streamReader = File.OpenRead(logFilePath))
+                    {
+                        ICSharpCode.SharpZipLib.Core.StreamUtils.Copy(streamReader, zipStream, buffer);
+                    }
+
+                    zipStream.CloseEntry();
+                    zipStream.IsStreamOwner = true;
+                    zipStream.Close();
+                }
+            }
+
 
             return zipPath;
         }
@@ -921,17 +944,52 @@ ReadRequestReceived - LifetimeOdometer
         double _oldLon = 0;
         private void PositionChanged(object sender, PositionEventArgs e)
         {
-            if (_oldLat != e.Position.Latitude || _oldLon != e.Position.Longitude)
+            if (_oldLat.Equals(e.Position.Latitude) == false || _oldLon.Equals(e.Position.Longitude) == false)
             {
                 _oldLat = e.Position.Latitude;
                 _oldLon = e.Position.Longitude;
 
-                _events.Add(new OWBoardEvent("lat", e.Position.Latitude));
-                _events.Add(new OWBoardEvent("lon", e.Position.Longitude));
-                _events.Add(new OWBoardEvent("speed", e.Position.Speed));
-                _events.Add(new OWBoardEvent("acc", e.Position.Accuracy));
-                _events.Add(new OWBoardEvent("head", e.Position.Heading));
+                _events.BoardEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = "gps_latitude",
+                    Data = ByteString.CopyFrom(BitConverter.GetBytes(e.Position.Latitude)),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
 
+                _events.BoardEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = "gps_longitude",
+                    Data = ByteString.CopyFrom(BitConverter.GetBytes(e.Position.Longitude)),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
+
+                _events.BoardEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = "gps_altitude",
+                    Data = ByteString.CopyFrom(BitConverter.GetBytes(e.Position.Altitude)),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
+
+                _events.BoardEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = "gps_speed",
+                    Data = ByteString.CopyFrom(BitConverter.GetBytes(e.Position.Speed)),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
+
+                _events.BoardEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = "gps_accuracy",
+                    Data = ByteString.CopyFrom(BitConverter.GetBytes(e.Position.Accuracy)),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
+
+                _events.BoardEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = "gps_heading",
+                    Data = ByteString.CopyFrom(BitConverter.GetBytes(e.Position.Heading)),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
 
                 //If updating the UI, ensure you invoke on main thread
                 var position = e.Position;
@@ -957,20 +1015,35 @@ ReadRequestReceived - LifetimeOdometer
         {
             try
             {
+                var oldEvents = _events;
+                _events = new OWBoardEventList();
 
-                string data = Newtonsoft.Json.JsonConvert.SerializeObject(_events, Newtonsoft.Json.Formatting.None,
-                    new Newtonsoft.Json.JsonSerializerSettings
+                using (FileStream fs = new FileStream(_currentRide.GetLogFilePath(), FileMode.Append, FileAccess.Write))
+                {
+                    foreach (var owBoardEvent in oldEvents.BoardEvents)
                     {
-                        NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore
-                    });
-                _events = new List<OWBoardEvent>();
+                        owBoardEvent.WriteDelimitedTo(fs);
+                    }
 
-                long currentRunEnd = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-                File.WriteAllText(Path.Combine(_logDirectory, $"{currentRunEnd}.json"), data);
+                    /*
+                    using (StreamWriter sw = new StreamWriter(fs))
+                    {
+                        sw.WriteLine(myNewCSVLine);
+                    }
+                    */
+                }
+                //long currentRunEnd = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                // var outputFile = Path.Combine(_logDirectory, $"{currentRunEnd}.dat");
+                /*
+                using (var output = File.Create(outputFile))
+                {
+                    oldEvents.WriteTo(output);
+                }
+                */
             }
             catch (Exception err)
             {
-                Console.WriteLine("ERROR: " + err.Message);
+                System.Diagnostics.Debug.WriteLine("ERROR: " + err.Message);
             }
         }
     }
