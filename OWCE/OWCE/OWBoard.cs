@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using OWCE.Protobuf;
@@ -553,47 +554,87 @@ namespace OWCE
 
         private void RSSIMonitor()
         {
-            Task.Factory.StartNew(async () =>
+            ThreadPool.QueueUserWorkItem(async (object state) =>
             {
-
-                bool didUpdate = await _device.UpdateRssiAsync();
-                if (didUpdate)
+                while (_device.State == Plugin.BLE.Abstractions.DeviceState.Connected)
                 {
-                    RSSI = _device.Rssi;
-                    if (_isLogging)
+                    try
                     {
-                        _events.BoardEvents.Add(new OWBoardEvent()
+                        bool didUpdate = await _device.UpdateRssiAsync();
+                        if (didUpdate)
                         {
-                            Uuid = "RSSI",
-                            Data = ByteString.CopyFrom(BitConverter.GetBytes(_device.Rssi)),
-                            Timestamp = DateTime.Now.Ticks,
-                        });
+                            RSSI = _device.Rssi;
+                            if (_isLogging)
+                            {
+                                _events.BoardEvents.Add(new OWBoardEvent()
+                                {
+                                    Uuid = "RSSI",
+                                    Data = ByteString.CopyFrom(BitConverter.GetBytes(_device.Rssi)),
+                                    Timestamp = DateTime.Now.Ticks,
+                                });
+                            }
+                        }
                     }
+                    catch (Exception err)
+                    {
+                        System.Diagnostics.Debug.WriteLine("RSSI fetch error: " + err.Message);
+                    }
+                    await Task.Delay(1000);
                 }
-                await Task.Delay(50);
 
-                if (_device.State == Plugin.BLE.Abstractions.DeviceState.Connected)
-                {
-                    // I hope this won't crash the app.
-                    RSSIMonitor();
-                }
             });
         }
 
-        internal async void SubscribeToBLE()
+        internal async Task SubscribeToBLE()
         {
 #if DEBUG
             if (_device == null)
                 return;
 #endif
-            RSSIMonitor();
+           RSSIMonitor();
 
 
 
+            List<string> characteristicsToReadNow = new List<string>()
+            {
+                SerialNumberUUID,
+                BatteryPercentUUID,
+                //BatteryLow5UUID,
+                //BatteryLow20UUID,
+                BatterySerialUUID,
+                //PitchUUID,
+                //RollUUID,
+                //YawUUID,
+                TripOdometerUUID,
+                //RpmUUID,
+                LightModeUUID,
+                LightsFrontUUID,
+                LightsBackUUID,
+                //StatusErrorUUID,
+                TemperatureUUID,
+                FirmwareRevisionUUID,
+                //CurrentAmpsUUID,
+                TripAmpHoursUUID,
+                TripRegenAmpHoursUUID,
+                BatteryTemperatureUUID,
+                BatteryVoltageUUID,
+                SafetyHeadroomUUID,
+                HardwareRevisionUUID,
+                LifetimeOdometerUUID,
+                LifetimeAmpHoursUUID,
+                //BatteryCellsUUID,
+                //LastErrorCodeUUID,
+                //SerialRead,
+                //SerialWrite,
+                //UNKNOWN1UUID,
+                //UNKNOWN2UUID,
+                //UNKNOWN3UUID,
+                //UNKNOWN4UUID,
+            };
 
             List<string> characteristicsToSubscribeTo = new List<string>()
             {
-                SerialNumberUUID,
+                //SerialNumberUUID,
                 BatteryPercentUUID,
                 BatteryLow5UUID,
                 BatteryLow20UUID,
@@ -608,14 +649,14 @@ namespace OWCE
                 LightsBackUUID,
                 StatusErrorUUID,
                 TemperatureUUID,
-                FirmwareRevisionUUID,
+                //FirmwareRevisionUUID,
                 CurrentAmpsUUID,
                 TripAmpHoursUUID,
                 TripRegenAmpHoursUUID,
                 BatteryTemperatureUUID,
                 BatteryVoltageUUID,
                 SafetyHeadroomUUID,
-                HardwareRevisionUUID,
+                //HardwareRevisionUUID,
                 LifetimeOdometerUUID,
                 LifetimeAmpHoursUUID,
                 BatteryCellsUUID,
@@ -631,8 +672,52 @@ namespace OWCE
 
 
             _service = await _device.GetServiceAsync(new Guid(ServiceUUID.ToLower()));
+
             _characteristics = await _service.GetCharacteristicsAsync();
 
+            foreach (var characteristic in _characteristics)
+            {
+                var uuid = characteristic.Uuid.ToUpper();
+
+                if (characteristicsToReadNow.Contains(uuid))
+                {
+                    var data = await characteristic.ReadAsync();
+                    SetValue(characteristic.Uuid.ToUpper(), data, true);
+                }
+
+                if (characteristic.CanUpdate)
+                {
+                    if (characteristicsToSubscribeTo.Contains(uuid))
+                    {
+                        characteristic.ValueUpdated += Characteristic_ValueUpdated;
+                        await characteristic.StartUpdatesAsync();
+                    }
+                }
+            }
+
+
+
+            /*
+            foreach (var characteristicName in characteristicsToSubscribeTo)
+            {
+                var characteristic = await _service.GetCharacteristicAsync(new Guid(characteristicName));
+                Console.WriteLine(characteristic.Uuid);
+                var data = await characteristic.ReadAsync();
+
+                if (BitConverter.IsLittleEndian)
+                    Array.Reverse(data);
+
+                var value = BitConverter.ToUInt16(data, 0);
+
+                _characteristics.Add(characteristic);
+                Console.WriteLine(value);
+                Console.WriteLine();
+            }
+            */
+
+
+
+            /*
             var readTasks = new Dictionary<string, Task<byte[]>>();
             //var readTask = new List<Task<byte[]>>();
             foreach (var characteristic in _characteristics)
@@ -666,6 +751,7 @@ namespace OWCE
                 System.Diagnostics.Debug.WriteLine(key);
                 SetValue(key, readTasks[key].Result, true);
             }
+            */
 
 
 
