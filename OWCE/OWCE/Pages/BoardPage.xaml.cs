@@ -6,6 +6,7 @@ using Xamarin.Forms;
 using RestSharp;
 using System.Net;
 using System.IO;
+using System.Threading.Tasks;
 
 
 #if __IOS__
@@ -54,7 +55,18 @@ namespace OWCE
             }
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            DisconnectAndPop();
+            return false;
+        }
+
         async void Disconnect_Clicked(object sender, System.EventArgs e)
+        {
+            await DisconnectAndPop();
+        }
+
+        private async Task DisconnectAndPop()
         {
             await Board.Disconnect();
             await Navigation.PopAsync();
