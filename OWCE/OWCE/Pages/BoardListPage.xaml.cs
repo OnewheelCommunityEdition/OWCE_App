@@ -182,13 +182,15 @@ namespace OWCE
         }
 
 
-        async void Adapter_DeviceConnected(object sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e)
+        void Adapter_DeviceConnected(object sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine($"Device connected {e.Device.Name} {e.Device.Id}");
             if (e.Device == _selectedBoard.Device && _selectedBoard != null)
             {
-                Hud.Dismiss();
-                await Navigation.PushAsync(new BoardPage(_selectedBoard));
+                Device.BeginInvokeOnMainThread(async () => {
+                    await Navigation.PushAsync(new BoardPage(_selectedBoard));
+                    Hud.Dismiss();
+                });
             }
         }
 
@@ -246,14 +248,8 @@ namespace OWCE
                 {
                     _selectedBoard = board;
 
-                    _shouldKeepScanning = false;
-                    if (CrossBluetoothLE.Current.Adapter.IsScanning)
-                    {
-                        await CrossBluetoothLE.Current.Adapter.StopScanningForDevicesAsync();
-                    }
 
-
-                    Device.BeginInvokeOnMainThread(() =>
+                    Device.BeginInvokeOnMainThread(async () =>
                     {
                         Hud.Show("Connecting", "Cancel", async delegate
                         {
@@ -264,9 +260,22 @@ namespace OWCE
                             _selectedBoard = null;
                             Hud.Dismiss();
                         });
+
+                        await Task.Delay(250);
+
+                        _shouldKeepScanning = false;
+                        StopScanning();
+                        if (CrossBluetoothLE.Current.Adapter.IsScanning)
+                        {
+                            await CrossBluetoothLE.Current.Adapter.StopScanningForDevicesAsync();
+                        }
+
+                      
+
+                        await CrossBluetoothLE.Current.Adapter.ConnectToDeviceAsync(board.Device);
+
                     });
 
-                    await CrossBluetoothLE.Current.Adapter.ConnectToDeviceAsync(board.Device);
                 }
                 else
                 {
