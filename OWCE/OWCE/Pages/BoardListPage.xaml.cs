@@ -136,32 +136,32 @@ namespace OWCE
             NotScanningHeader.IsVisible = false;
 
 
-           
-                CrossBluetoothLE.Current.Adapter.ScanTimeout = 5 * 1000;
-                try
+
+            CrossBluetoothLE.Current.Adapter.ScanTimeout = 5 * 1000;
+            try
+            {
+                _scanCancellationToken = new CancellationTokenSource();
+                do
                 {
-                    _scanCancellationToken = new CancellationTokenSource();
-                    do
+                    _foundInLastScan = new List<OWBoard>();
+                    System.Diagnostics.Debug.WriteLine("StartScan");
+                    await CrossBluetoothLE.Current.Adapter.StartScanningForDevicesAsync(new Guid[] { new Guid(OWBoard.ServiceUUID) }, cancellationToken: _scanCancellationToken.Token);
+                    System.Diagnostics.Debug.WriteLine("StopScan");
+                    foreach (var board in Boards)
                     {
-                        _foundInLastScan = new List<OWBoard>();
-                        System.Diagnostics.Debug.WriteLine("StartScan");
-                        await CrossBluetoothLE.Current.Adapter.StartScanningForDevicesAsync(new Guid[] { new Guid(OWBoard.ServiceUUID) }, cancellationToken: _scanCancellationToken.Token);
-                        System.Diagnostics.Debug.WriteLine("StopScan");
-                        foreach (var board in Boards)
-                        {
-                            board.IsAvailable = _foundInLastScan.Contains(board);
-                        }
+                        board.IsAvailable = _foundInLastScan.Contains(board);
                     }
-                    while (_shouldKeepScanning && CrossBluetoothLE.Current.IsOn);
                 }
-                catch (Exception err)
-                {
-                    System.Diagnostics.Debug.WriteLine("ScanError: " + err.Message);
-                }
-                finally
-                {
-                    _isScanning = false;
-                }
+                while (_shouldKeepScanning && CrossBluetoothLE.Current.IsOn);
+            }
+            catch (Exception err)
+            {
+                System.Diagnostics.Debug.WriteLine("ScanError: " + err.Message);
+            }
+            finally
+            {
+                _isScanning = false;
+            }
         }
 
         private void StopScanning()
@@ -270,7 +270,7 @@ namespace OWCE
                             await CrossBluetoothLE.Current.Adapter.StopScanningForDevicesAsync();
                         }
 
-                      
+
 
                         await CrossBluetoothLE.Current.Adapter.ConnectToDeviceAsync(board.Device);
 

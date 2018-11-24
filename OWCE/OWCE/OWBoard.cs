@@ -64,7 +64,7 @@ namespace OWCE
 
 
         private string _id = String.Empty;
-        [SQLite.PrimaryKey]
+        //[SQLite.PrimaryKey]
         public string ID
         {
             get { return _id; }
@@ -95,7 +95,7 @@ namespace OWCE
         }
 
         private IDevice _device = null;
-        [SQLite.Ignore]
+        //[SQLite.Ignore]
         public IDevice Device
         {
             get { return _device; }
