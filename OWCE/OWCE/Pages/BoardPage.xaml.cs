@@ -32,7 +32,15 @@ namespace OWCE
         public BoardPage(OWBoard board)
         {
             Board = board;
-            board.SubscribeToBLE();
+
+            Console.WriteLine("Ax");
+            Task.Run(async () =>
+            {
+                Console.WriteLine("ax");
+                await board.SubscribeToBLE();
+                Console.WriteLine("bx");
+            });
+            Console.WriteLine("Bx");
 
             BindingContext = this;
 
