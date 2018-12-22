@@ -105,7 +105,6 @@ namespace OWCE
             NotScanningHeader.IsVisible = false;
 
 
-
             CrossBluetoothLE.Current.Adapter.ScanTimeout = 5 * 1000;
             try
             {

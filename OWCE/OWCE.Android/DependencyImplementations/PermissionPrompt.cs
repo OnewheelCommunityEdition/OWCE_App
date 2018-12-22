@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using OWCE.DependencyInterfaces;
 using Plugin.Permissions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -18,7 +19,7 @@ namespace OWCE.Droid.DependencyImplementations
                 var permissionStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(locationPermission);
 
 
-                if (permissionStatus != Plugin.Permissions.Abstractions.PermissionStatus.Granted)
+                if (true || permissionStatus != Plugin.Permissions.Abstractions.PermissionStatus.Granted)
                 {
                     bool shouldRequest = await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(locationPermission);
                     if (shouldRequest)

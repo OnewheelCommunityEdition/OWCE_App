@@ -1,5 +1,6 @@
 ﻿using System;
 using AndroidHUD;
+using OWCE.DependencyInterfaces;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(OWCE.Droid.DependencyImplementations.Hud))]
