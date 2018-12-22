@@ -2,9 +2,9 @@
 using AndroidHUD;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(OWCE.Droid.Hud))]
+[assembly: Dependency(typeof(OWCE.Droid.DependencyImplementations.Hud))]
 
-namespace OWCE.Droid
+namespace OWCE.Droid.DependencyImplementations
 {
     public class Hud : IHud
     {

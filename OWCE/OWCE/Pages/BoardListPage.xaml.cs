@@ -6,11 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
-#if __ANDROID__
-using Plugin.CurrentActivity;
-using Plugin.Permissions;
 using Xamarin.Essentials;
-#endif
 using Xamarin.Forms;
 
 namespace OWCE
@@ -96,38 +92,11 @@ namespace OWCE
             if (_isScanning)
                 return;
 
-#if __ANDROID__
-            if ((int)Android.OS.Build.VERSION.SdkInt >= 23)
+
+            if (await DependencyService.Get<DependencyInterfaces.IPermissionPrompt>().PromptBLEPermission() == false)
             {
-                var locationPermission = Plugin.Permissions.Abstractions.Permission.Location;
-                var permissionStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(locationPermission);
-
-
-                if (permissionStatus != Plugin.Permissions.Abstractions.PermissionStatus.Granted)
-                {
-                    bool shouldRequest = await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(locationPermission);
-                    if (shouldRequest)
-                    {
-                        await DisplayAlert("Oops", "In order to access board details in a bluetooth scan your phones location permission needs to be enabled.\n(Yeah, that is as confusing as it sounds)", "Ok");
-                    }
-
-                    var result = await CrossPermissions.Current.RequestPermissionsAsync(locationPermission);
-
-                    permissionStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(locationPermission);
-                }
-
-                if (permissionStatus == Plugin.Permissions.Abstractions.PermissionStatus.Denied)
-                {
-                    var shouldOpenSettings = await DisplayAlert("Error", "In order to access board details in a bluetooth scan your phones location permission needs to be enabled.\n(Yeah, that is as confusing as it sounds)", "Open Settings",  "Cancel");
-                    if (shouldOpenSettings)
-                    {
-                        AppInfo.OpenSettings();
-                    }
-                    return;
-                }
-
+                return;
             }
-#endif
 
             _isScanning = true;
             _shouldKeepScanning = true;

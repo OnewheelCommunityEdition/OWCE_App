@@ -8,12 +8,6 @@ using System.Net;
 using System.IO;
 using System.Threading.Tasks;
 
-
-#if __IOS__
-using Foundation;
-
-#endif
-
 namespace OWCE
 {
     public partial class BoardPage : ContentPage
@@ -33,14 +27,10 @@ namespace OWCE
         {
             Board = board;
 
-            Console.WriteLine("Ax");
             Task.Run(async () =>
             {
-                Console.WriteLine("ax");
                 await board.SubscribeToBLE();
-                Console.WriteLine("bx");
             });
-            Console.WriteLine("Bx");
 
             BindingContext = this;
 

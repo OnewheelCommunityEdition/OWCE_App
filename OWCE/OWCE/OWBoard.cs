@@ -517,6 +517,7 @@ namespace OWCE
         private OWBoardEventList _events = new OWBoardEventList();
         private List<OWBoardEvent> _initialEvents = new List<OWBoardEvent>();
         private Ride _currentRide = null;
+        private bool _keepHandshakeBackgroundRunning = false;
 
         public OWBoard()
         {
@@ -694,6 +695,26 @@ namespace OWCE
             if (HardwareRevision > 3000 && FirmwareRevision > 4000)
             {
                 await Handshake();
+                _keepHandshakeBackgroundRunning = true;
+                Xamarin.Forms.Device.StartTimer(TimeSpan.FromSeconds(15), () =>
+                {
+                    Task.Run(async () =>
+                    {
+                        try
+                        {
+                            byte[] fwRev = GetBytesForBoardFromUInt16(FirmwareRevision, FirmwareRevisionUUID);
+                            await _characteristics[OWBoard.FirmwareRevisionUUID].WriteAsync(fwRev);
+                        }
+                        catch (Exception err)
+                        {
+                            // TODO: Couldnt update firmware revision.
+
+                            Console.WriteLine("ERROR: " + err.Message);
+
+                        }
+                    });
+                    return _keepHandshakeBackgroundRunning;
+                });
             }
 
             foreach (var characteristic in characteristics)
@@ -1179,6 +1200,7 @@ ReadRequestReceived - LifetimeOdometer
 
         public async Task Disconnect()
         {
+            _keepHandshakeBackgroundRunning = false;
             await CrossBluetoothLE.Current.Adapter.DisconnectDeviceAsync(_device);
         }
 
