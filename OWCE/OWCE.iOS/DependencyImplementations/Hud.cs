@@ -1,10 +1,11 @@
 ﻿using System;
 using BigTed;
+using OWCE.DependencyInterfaces;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(OWCE.iOS.Hud))]
+[assembly: Dependency(typeof(OWCE.iOS.DependencyImplementations.Hud))]
 
-namespace OWCE.iOS
+namespace OWCE.iOS.DependencyImplementations
 {
     public class Hud : IHud
     {
