@@ -51,5 +51,7 @@
 	<string>This app needs access to location when open.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Needs Calendar Permission</string>
+	<key>beta-reports-active</key>
+	<true/>
 </dict>
 </plist>
