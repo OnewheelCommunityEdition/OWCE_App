@@ -6,11 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Plugin.BLE;
 using Plugin.BLE.Abstractions.Contracts;
-#if __ANDROID__
-using Plugin.CurrentActivity;
-using Plugin.Permissions;
 using Xamarin.Essentials;
-#endif
 using Xamarin.Forms;
 
 namespace OWCE
@@ -96,38 +92,11 @@ namespace OWCE
             if (_isScanning)
                 return;
 
-#if __ANDROID__
-            if ((int)Android.OS.Build.VERSION.SdkInt >= 23)
+
+            if (await DependencyService.Get<DependencyInterfaces.IPermissionPrompt>().PromptBLEPermission() == false)
             {
-                var locationPermission = Plugin.Permissions.Abstractions.Permission.Location;
-                var permissionStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(locationPermission);
-
-
-                if (permissionStatus != Plugin.Permissions.Abstractions.PermissionStatus.Granted)
-                {
-                    bool shouldRequest = await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(locationPermission);
-                    if (shouldRequest)
-                    {
-                        await DisplayAlert("Oops", "In order to access board details in a bluetooth scan your phones location permission needs to be enabled.\n(Yeah, that is as confusing as it sounds)", "Ok");
-                    }
-
-                    var result = await CrossPermissions.Current.RequestPermissionsAsync(locationPermission);
-
-                    permissionStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(locationPermission);
-                }
-
-                if (permissionStatus == Plugin.Permissions.Abstractions.PermissionStatus.Denied)
-                {
-                    var shouldOpenSettings = await DisplayAlert("Error", "In order to access board details in a bluetooth scan your phones location permission needs to be enabled.\n(Yeah, that is as confusing as it sounds)", "Open Settings",  "Cancel");
-                    if (shouldOpenSettings)
-                    {
-                        AppInfo.OpenSettings();
-                    }
-                    return;
-                }
-
+                return;
             }
-#endif
 
             _isScanning = true;
             _shouldKeepScanning = true;
@@ -136,32 +105,31 @@ namespace OWCE
             NotScanningHeader.IsVisible = false;
 
 
-           
-                CrossBluetoothLE.Current.Adapter.ScanTimeout = 5 * 1000;
-                try
+            CrossBluetoothLE.Current.Adapter.ScanTimeout = 5 * 1000;
+            try
+            {
+                _scanCancellationToken = new CancellationTokenSource();
+                do
                 {
-                    _scanCancellationToken = new CancellationTokenSource();
-                    do
+                    _foundInLastScan = new List<OWBoard>();
+                    System.Diagnostics.Debug.WriteLine("StartScan");
+                    await CrossBluetoothLE.Current.Adapter.StartScanningForDevicesAsync(new Guid[] { new Guid(OWBoard.ServiceUUID) }, cancellationToken: _scanCancellationToken.Token);
+                    System.Diagnostics.Debug.WriteLine("StopScan");
+                    foreach (var board in Boards)
                     {
-                        _foundInLastScan = new List<OWBoard>();
-                        System.Diagnostics.Debug.WriteLine("StartScan");
-                        await CrossBluetoothLE.Current.Adapter.StartScanningForDevicesAsync(new Guid[] { new Guid(OWBoard.ServiceUUID) }, cancellationToken: _scanCancellationToken.Token);
-                        System.Diagnostics.Debug.WriteLine("StopScan");
-                        foreach (var board in Boards)
-                        {
-                            board.IsAvailable = _foundInLastScan.Contains(board);
-                        }
+                        board.IsAvailable = _foundInLastScan.Contains(board);
                     }
-                    while (_shouldKeepScanning && CrossBluetoothLE.Current.IsOn);
                 }
-                catch (Exception err)
-                {
-                    System.Diagnostics.Debug.WriteLine("ScanError: " + err.Message);
-                }
-                finally
-                {
-                    _isScanning = false;
-                }
+                while (_shouldKeepScanning && CrossBluetoothLE.Current.IsOn);
+            }
+            catch (Exception err)
+            {
+                System.Diagnostics.Debug.WriteLine("ScanError: " + err.Message);
+            }
+            finally
+            {
+                _isScanning = false;
+            }
         }
 
         private void StopScanning()
@@ -182,13 +150,15 @@ namespace OWCE
         }
 
 
-        async void Adapter_DeviceConnected(object sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e)
+        void Adapter_DeviceConnected(object sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine($"Device connected {e.Device.Name} {e.Device.Id}");
             if (e.Device == _selectedBoard.Device && _selectedBoard != null)
             {
-                Hud.Dismiss();
-                await Navigation.PushAsync(new BoardPage(_selectedBoard));
+                Device.BeginInvokeOnMainThread(async () => {
+                    await Navigation.PushAsync(new BoardPage(_selectedBoard));
+                    Hud.Dismiss();
+                });
             }
         }
 
@@ -246,14 +216,8 @@ namespace OWCE
                 {
                     _selectedBoard = board;
 
-                    _shouldKeepScanning = false;
-                    if (CrossBluetoothLE.Current.Adapter.IsScanning)
-                    {
-                        await CrossBluetoothLE.Current.Adapter.StopScanningForDevicesAsync();
-                    }
 
-
-                    Device.BeginInvokeOnMainThread(() =>
+                    Device.BeginInvokeOnMainThread(async () =>
                     {
                         Hud.Show("Connecting", "Cancel", async delegate
                         {
@@ -264,9 +228,22 @@ namespace OWCE
                             _selectedBoard = null;
                             Hud.Dismiss();
                         });
+
+                        await Task.Delay(250);
+
+                        _shouldKeepScanning = false;
+                        StopScanning();
+                        if (CrossBluetoothLE.Current.Adapter.IsScanning)
+                        {
+                            await CrossBluetoothLE.Current.Adapter.StopScanningForDevicesAsync();
+                        }
+
+
+
+                        await CrossBluetoothLE.Current.Adapter.ConnectToDeviceAsync(board.Device);
+
                     });
 
-                    await CrossBluetoothLE.Current.Adapter.ConnectToDeviceAsync(board.Device);
                 }
                 else
                 {

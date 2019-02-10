@@ -30,6 +30,11 @@
 	<string>OWCE</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+		<string>bluetooth-central</string>
+	</array>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
@@ -37,17 +42,12 @@
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>When recording your own rides.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>When recording your own rides.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open.</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>location</string>
-		<string>bluetooth-central</string>
-	</array>
+ 	<false/>
+ 	<key>NSLocationAlwaysUsageDescription</key>
+ 	<string>When recording your own rides.</string>
+ 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+ 	<string>When recording your own rides.</string>
+ 	<key>NSLocationWhenInUseUsageDescription</key>
+ 	<string>This app needs access to location when open.</string>
 </dict>
 </plist>

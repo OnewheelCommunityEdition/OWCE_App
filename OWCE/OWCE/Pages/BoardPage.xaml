@@ -76,13 +76,13 @@
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
 
-                    
+                    <!--
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="MaxDisplaySpeed" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
                         <Label Text="{Binding Board.MaxDisplaySpeed}" HorizontalOptions="End" VerticalOptions="Center" />
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-
+                    -->
                     
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="SerialNumber" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
@@ -104,7 +104,7 @@
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
                     
-                    
+                    <!--
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="BatteryLow5" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
                         <Label Text="{Binding Board.BatteryLow5}" HorizontalOptions="End" VerticalOptions="Center" />
@@ -117,7 +117,7 @@
                         <Label Text="{Binding Board.BatteryLow20}" HorizontalOptions="End" VerticalOptions="Center" />
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-
+                    -->
                     
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="BatterySerial" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
@@ -167,7 +167,7 @@
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
 
-                    
+                    <!--
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="LightMode" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
                         <Label Text="{Binding Board.LightMode}" HorizontalOptions="End" VerticalOptions="Center" />
@@ -187,7 +187,7 @@
                         <Label Text="{Binding Board.RearLightMode}" HorizontalOptions="End" VerticalOptions="Center" />
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-
+                    -->
                     
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="StatusError" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
@@ -244,13 +244,13 @@
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
 
-                    
+                    <!--
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="SafetyHeadroom" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
                         <Label Text="{Binding Board.SafetyHeadroom}" HorizontalOptions="End" VerticalOptions="Center" />
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-
+                    -->
                     
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="HardwareRevision" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
@@ -272,7 +272,7 @@
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
 
-                    
+                    <!--
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="LastErrorCode" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
                         <Label Text="{Binding Board.LastErrorCode}" HorizontalOptions="End" VerticalOptions="Center" />
@@ -316,25 +316,20 @@
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
                     
                     <Button x:Name="LogDataButton" HorizontalOptions="FillAndExpand" VerticalOptions="End" Text="Start Logging Data" Clicked="LogData_Clicked" />
-
+                     -->
                     
                     <Button HorizontalOptions="FillAndExpand" VerticalOptions="End" Text="Disconnect" Clicked="Disconnect_Clicked" />
-
+                   
                 </StackLayout>
 
 
             </ScrollView>
-                
+        
           
             
           
                       
             
-
-
- <!--<Button HorizontalOptions="FillAndExpand" VerticalOptions="End" Text="save 1" Clicked="save1_Clicked" />
- <Button HorizontalOptions="FillAndExpand" VerticalOptions="End" Text="save 2" Clicked="save2_Clicked" />-->
-
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
