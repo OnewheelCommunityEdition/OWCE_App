@@ -42,12 +42,14 @@
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
- 	<false/>
- 	<key>NSLocationAlwaysUsageDescription</key>
- 	<string>When recording your own rides.</string>
- 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
- 	<string>When recording your own rides.</string>
- 	<key>NSLocationWhenInUseUsageDescription</key>
- 	<string>This app needs access to location when open.</string>
+	<false/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>When recording your own rides.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>When recording your own rides.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs access to location when open.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Needs Calendar Permission</string>
 </dict>
 </plist>
