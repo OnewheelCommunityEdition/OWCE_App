@@ -72,6 +72,7 @@ namespace OWCE
 
         private bool _isLogging = false;
 
+        /*
         private async void LogData_Clicked(object sender, System.EventArgs e)
         {
             if (_isLogging)
@@ -142,6 +143,7 @@ namespace OWCE
             }
 
         }
+        */
 
     }
 }
