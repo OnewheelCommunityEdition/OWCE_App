@@ -22,7 +22,7 @@ namespace OWCE
             {
                 return _endTime;
             }
-            set 
+            set
             {
                 _endTime = value;
             }
@@ -37,7 +37,8 @@ namespace OWCE
             }
         }
 
-        public string TextDisplay {
+        public string TextDisplay
+        {
             get { return _startTime.ToShortDateString() + " " + _startTime.ToShortTimeString(); }
         }
 

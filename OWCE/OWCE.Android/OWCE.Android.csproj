@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6A656452-53F5-4FB8-86CC-EBA9B0632B86}</ProjectGuid>
+    <ProjectGuid>{B8DDF912-64B6-4BD8-BCA8-86E29FC40F2F}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TemplateGuid>{c9e5eea5-ca05-42a1-839b-61506e0a37df}</TemplateGuid>
     <OutputType>Library</OutputType>
@@ -16,6 +16,8 @@
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
+    <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -29,50 +31,43 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidLinkMode>None</AndroidLinkMode>
-    <MandroidI18n></MandroidI18n>
-    <AndroidEnableSGenConcurrent>false</AndroidEnableSGenConcurrent>
-<RunCodeAnalysis>false</RunCodeAnalysis>  </PropertyGroup>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
-    <DefineConstants>__ANDROID__</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
-<RunCodeAnalysis>false</RunCodeAnalysis>  </PropertyGroup>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors" />
     <Reference Include="Mono.Android.Export" />
   </ItemGroup>
-  <ItemGroup>
+    <ItemGroup>
     <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.1" />
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="28.0.0.1" />
     <PackageReference Include="Xamarin.Android.Support.v4" Version="28.0.0.1" />
     <PackageReference Include="Xamarin.Android.Support.v7.CardView" Version="28.0.0.1" />
     <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="28.0.0.1" />
-    <PackageReference Include="Plugin.CurrentActivity">
-      <Version>2.1.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="AndHUD">
-      <Version>1.4.1</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Forms">
-      <Version>3.5.0.129452</Version>
-    </PackageReference>
+    <PackageReference Include="Plugin.CurrentActivity" Version="2.1.0.4" />
+    <PackageReference Include="AndHUD" Version="1.4.1" />
+    <PackageReference Include="Xamarin.Forms" Version="3.5.0.129452" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DependencyImplementations\Hud.cs" />
     <Compile Include="SplashActivity.cs" />
+    <Compile Include="DependencyImplementations\Hud.cs" />
     <Compile Include="DependencyImplementations\PermissionPrompt.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -80,67 +75,238 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\Tabbar.axml" />
-    <AndroidResource Include="Resources\layout\Toolbar.axml" />
+    <AndroidResource Include="Resources\layout\Tabbar.xml" />
+    <AndroidResource Include="Resources\layout\Toolbar.xml" />
     <AndroidResource Include="Resources\values\styles.xml" />
     <AndroidResource Include="Resources\values\colors.xml" />
-    <AndroidResource Include="Resources\drawable\splash_screen.xml" />
-    <AndroidResource Include="Resources\drawable-hdpi\hamburger.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\menu_leaderboards.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\menu_myrides.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\menu_onewheels.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\menu_settings.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\ow_icon_plus.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\ow_icon_v1.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\ow_icon_xr.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\ow_icon.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\splash_icon.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\hamburger.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\menu_leaderboards.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\menu_myrides.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\menu_onewheels.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\menu_settings.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\ow_icon_plus.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\ow_icon_v1.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\ow_icon_xr.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\ow_icon.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\splash_icon.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\hamburger.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\menu_leaderboards.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\menu_myrides.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\menu_onewheels.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\menu_settings.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\ow_icon_plus.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\ow_icon_v1.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\ow_icon_xr.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\ow_icon.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\splash_icon.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\hamburger.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\menu_leaderboards.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\menu_myrides.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\menu_onewheels.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\menu_settings.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\ow_icon_plus.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\ow_icon_v1.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\ow_icon_xr.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\ow_icon.png" />
-    <AndroidResource Include="Resources\drawable-xxxhdpi\splash_icon.png" />
-    <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml" />
-    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_background.png" />
-    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_background.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_background.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_background.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_background.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\drawable\splash_screen.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-hdpi\hamburger.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-hdpi\menu_leaderboards.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-hdpi\menu_myrides.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-hdpi\menu_onewheels.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-hdpi\menu_settings.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-hdpi\ow_icon_plus.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-hdpi\ow_icon_v1.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-hdpi\ow_icon_xr.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-hdpi\ow_icon.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-hdpi\splash_icon.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xhdpi\hamburger.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xhdpi\menu_leaderboards.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xhdpi\menu_myrides.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xhdpi\menu_onewheels.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xhdpi\menu_settings.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xhdpi\ow_icon_plus.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xhdpi\ow_icon_v1.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xhdpi\ow_icon_xr.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xhdpi\ow_icon.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xhdpi\splash_icon.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxhdpi\hamburger.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxhdpi\menu_leaderboards.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxhdpi\menu_myrides.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxhdpi\menu_onewheels.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxhdpi\menu_settings.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxhdpi\ow_icon_plus.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxhdpi\ow_icon_v1.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxhdpi\ow_icon_xr.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxhdpi\ow_icon.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxhdpi\splash_icon.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\hamburger.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\menu_leaderboards.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\menu_myrides.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\menu_onewheels.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\menu_settings.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ow_icon_plus.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ow_icon_v1.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ow_icon_xr.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ow_icon.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\splash_icon.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_background.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_foreground.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_background.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_foreground.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_background.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_foreground.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_background.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_foreground.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_background.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_foreground.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />
@@ -149,17 +315,15 @@
     <Folder Include="Resources\drawable-xxhdpi\" />
     <Folder Include="Resources\drawable-xxxhdpi\" />
     <Folder Include="DependencyImplementations\" />
-    <Folder Include="Assets\" />
-    <Folder Include="Resources\mipmap-anydpi-v26\" />
-    <Folder Include="Resources\mipmap-hdpi\" />
     <Folder Include="Resources\mipmap-mdpi\" />
     <Folder Include="Resources\mipmap-xhdpi\" />
     <Folder Include="Resources\mipmap-xxhdpi\" />
     <Folder Include="Resources\mipmap-xxxhdpi\" />
+    <Folder Include="Assets\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OWCE\OWCE.csproj">
-      <Project>{ED9E33C3-F6C4-4787-ACEE-57CEE96A1D25}</Project>
+      <Project>{4B3D0411-B028-494E-AB04-113D1F130DA1}</Project>
       <Name>OWCE</Name>
     </ProjectReference>
   </ItemGroup>
