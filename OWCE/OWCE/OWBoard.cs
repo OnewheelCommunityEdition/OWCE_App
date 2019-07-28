@@ -592,7 +592,7 @@ namespace OWCE
             if (_device == null)
                 return;
 #endif
-           //RSSIMonitor();
+            //RSSIMonitor();
 
 
 
@@ -843,7 +843,7 @@ ReadRequestReceived - LifetimeOdometer
             //_characteristics[OWBoard.UNKNOWN1UUID].ValueUpdated += SerialRead_ValueUpdated;
             _characteristics[OWBoard.SerialReadUUID].ValueUpdated += SerialRead_ValueUpdated;
 
-           //await _characteristics[OWBoard.UNKNOWN1UUID].StartUpdatesAsync();
+            //await _characteristics[OWBoard.UNKNOWN1UUID].StartUpdatesAsync();
             //await _characteristics[OWBoard.UNKNOWN2UUID].StartUpdatesAsync();
             await _characteristics[OWBoard.SerialReadUUID].StartUpdatesAsync();
 
@@ -931,7 +931,7 @@ ReadRequestReceived - LifetimeOdometer
             else
             {
 
-            
+
             }
 
             var bytes = BitConverter.GetBytes(value);
@@ -1063,8 +1063,8 @@ ReadRequestReceived - LifetimeOdometer
 
             if (_isLogging)
             {
-              //  var boardEvent = new OWBoardEvent();
-              // boardEvent.write
+                //  var boardEvent = new OWBoardEvent();
+                // boardEvent.write
                 //boardEvent.WriteDelimitedTo()
                 _events.BoardEvents.Add(new OWBoardEvent()
                 {
@@ -1210,7 +1210,7 @@ ReadRequestReceived - LifetimeOdometer
 
         public async Task StartLogging()
         {
-           // _currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            // _currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             //_logDirectory = Path.Combine(FileSystem.CacheDirectory, _currentRunStart.ToString());
             var currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             _currentRide = new Ride($"{currentRunStart}.dat");

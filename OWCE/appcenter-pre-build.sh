@@ -56,3 +56,10 @@ then
     echo "Updating SyncfusionLicense to $OWCE_APPCENTER_ANDROID in AppConstant.cs"
     sed -i '' 's#AppCenterAndroid = "[a-z:./]*"#AppCenterAndroid = "'$OWCE_APPCENTER_ANDROID'"#' $APP_CONSTANT_FILE
 fi
+
+
+# Add entitlement for TestFlight distribution.
+if [ "$APPCENTER_BRANCH" == "master" ];
+then
+    plutil -insert beta-reports-active -bool YES $APPCENTER_SOURCE_DIRECTORY/OWCE.iOS/Info.plist
+fi
