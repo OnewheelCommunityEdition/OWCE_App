@@ -1,5 +1,5 @@
 ﻿using System;
-namespace OWCE
+namespace OWCE.DependencyInterfaces
 {
     public interface IHud
     {

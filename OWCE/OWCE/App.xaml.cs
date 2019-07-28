@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Microsoft.AppCenter;
@@ -26,7 +26,9 @@ namespace OWCE
             Preferences.Set("speed_demon", true);
             */
             //MainPage = new NavigationPage(new BoardPage(owBoard)); 
-            MainPage = new MainMasterDetailPage();
+
+            MainPage = new NavigationPage(new BoardListPage());
+            //MainPage = new MainMasterDetailPage();
         }
 
         protected override void OnStart()

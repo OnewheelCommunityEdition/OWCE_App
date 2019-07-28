@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using OWCE.Protobuf;
@@ -63,7 +64,7 @@ namespace OWCE
 
 
         private string _id = String.Empty;
-        [SQLite.PrimaryKey]
+        //[SQLite.PrimaryKey]
         public string ID
         {
             get { return _id; }
@@ -94,7 +95,7 @@ namespace OWCE
         }
 
         private IDevice _device = null;
-        [SQLite.Ignore]
+        //[SQLite.Ignore]
         public IDevice Device
         {
             get { return _device; }
@@ -372,8 +373,8 @@ namespace OWCE
             set { if (_temperature != value) { _temperature = value; OnPropertyChanged(); } }
         }
 
-        private int _firmwareRevision = 0;
-        public int FirmwareRevision
+        private UInt16 _firmwareRevision = 0;
+        public UInt16 FirmwareRevision
         {
             get { return _firmwareRevision; }
             set { if (_firmwareRevision != value) { _firmwareRevision = value; OnPropertyChanged(); } }
@@ -516,6 +517,7 @@ namespace OWCE
         private OWBoardEventList _events = new OWBoardEventList();
         private List<OWBoardEvent> _initialEvents = new List<OWBoardEvent>();
         private Ride _currentRide = null;
+        private bool _keepHandshakeBackgroundRunning = false;
 
         public OWBoard()
         {
@@ -549,51 +551,91 @@ namespace OWCE
         }
 
         IService _service = null;
-        IList<ICharacteristic> _characteristics = null;
+        Dictionary<string, ICharacteristic> _characteristics = new Dictionary<string, ICharacteristic>();
 
         private void RSSIMonitor()
         {
-            Task.Factory.StartNew(async () =>
+            ThreadPool.QueueUserWorkItem(async (object state) =>
             {
-
-                bool didUpdate = await _device.UpdateRssiAsync();
-                if (didUpdate)
+                while (_device.State == Plugin.BLE.Abstractions.DeviceState.Connected)
                 {
-                    RSSI = _device.Rssi;
-                    if (_isLogging)
+                    try
                     {
-                        _events.BoardEvents.Add(new OWBoardEvent()
+                        bool didUpdate = await _device.UpdateRssiAsync();
+                        if (didUpdate)
                         {
-                            Uuid = "RSSI",
-                            Data = ByteString.CopyFrom(BitConverter.GetBytes(_device.Rssi)),
-                            Timestamp = DateTime.Now.Ticks,
-                        });
+                            RSSI = _device.Rssi;
+                            if (_isLogging)
+                            {
+                                _events.BoardEvents.Add(new OWBoardEvent()
+                                {
+                                    Uuid = "RSSI",
+                                    Data = ByteString.CopyFrom(BitConverter.GetBytes(_device.Rssi)),
+                                    Timestamp = DateTime.Now.Ticks,
+                                });
+                            }
+                        }
                     }
+                    catch (Exception err)
+                    {
+                        System.Diagnostics.Debug.WriteLine("RSSI fetch error: " + err.Message);
+                    }
+                    await Task.Delay(1000);
                 }
-                await Task.Delay(50);
 
-                if (_device.State == Plugin.BLE.Abstractions.DeviceState.Connected)
-                {
-                    // I hope this won't crash the app.
-                    RSSIMonitor();
-                }
             });
         }
 
-        internal async void SubscribeToBLE()
+        internal async Task SubscribeToBLE()
         {
 #if DEBUG
             if (_device == null)
                 return;
 #endif
-            RSSIMonitor();
+            //RSSIMonitor();
 
 
 
+            List<string> characteristicsToReadNow = new List<string>()
+            {
+                SerialNumberUUID,
+                BatteryPercentUUID,
+                //BatteryLow5UUID,
+                //BatteryLow20UUID,
+                BatterySerialUUID,
+                //PitchUUID,
+                //RollUUID,
+                //YawUUID,
+                TripOdometerUUID,
+                //RpmUUID,
+                LightModeUUID,
+                LightsFrontUUID,
+                LightsBackUUID,
+                //StatusErrorUUID,
+                TemperatureUUID,
+                FirmwareRevisionUUID,
+                //CurrentAmpsUUID,
+                TripAmpHoursUUID,
+                TripRegenAmpHoursUUID,
+                BatteryTemperatureUUID,
+                BatteryVoltageUUID,
+                SafetyHeadroomUUID,
+                HardwareRevisionUUID,
+                LifetimeOdometerUUID,
+                LifetimeAmpHoursUUID,
+                //BatteryCellsUUID,
+                //LastErrorCodeUUID,
+                //SerialRead,
+                //SerialWrite,
+                //UNKNOWN1UUID,
+                //UNKNOWN2UUID,
+                //UNKNOWN3UUID,
+                //UNKNOWN4UUID,
+            };
 
             List<string> characteristicsToSubscribeTo = new List<string>()
             {
-                SerialNumberUUID,
+                //SerialNumberUUID,
                 BatteryPercentUUID,
                 BatteryLow5UUID,
                 BatteryLow20UUID,
@@ -608,36 +650,99 @@ namespace OWCE
                 LightsBackUUID,
                 StatusErrorUUID,
                 TemperatureUUID,
-                FirmwareRevisionUUID,
+                //FirmwareRevisionUUID,
                 CurrentAmpsUUID,
                 TripAmpHoursUUID,
                 TripRegenAmpHoursUUID,
                 BatteryTemperatureUUID,
                 BatteryVoltageUUID,
                 SafetyHeadroomUUID,
-                HardwareRevisionUUID,
+                //HardwareRevisionUUID,
                 LifetimeOdometerUUID,
                 LifetimeAmpHoursUUID,
                 BatteryCellsUUID,
                 LastErrorCodeUUID,
                 //SerialRead,
                 //SerialWrite,
-                UNKNOWN1UUID,
-                UNKNOWN2UUID,
-                UNKNOWN3UUID,
-                UNKNOWN4UUID,
+                //UNKNOWN1UUID,
+                //UNKNOWN2UUID,
+                //UNKNOWN3UUID,
+                //UNKNOWN4UUID,
             };
 
 
 
             _service = await _device.GetServiceAsync(new Guid(ServiceUUID.ToLower()));
-            _characteristics = await _service.GetCharacteristicsAsync();
-
-            var readTasks = new Dictionary<string, Task<byte[]>>();
-            //var readTask = new List<Task<byte[]>>();
-            foreach (var characteristic in _characteristics)
+            _characteristics.Clear();
+            var characteristics = await _service.GetCharacteristicsAsync();
+            foreach (var characteristic in characteristics)
             {
                 var uuid = characteristic.Uuid.ToUpper();
+                _characteristics[uuid] = characteristic;
+            }
+
+            if (_characteristics.ContainsKey(HardwareRevisionUUID) == false || _characteristics.ContainsKey(FirmwareRevisionUUID) == false)
+            {
+                // TODO: Alert about how the connection can't continue. 
+                return;
+            }
+
+            var hardwareRevision = await _characteristics[HardwareRevisionUUID].ReadAsync();
+            SetValue(HardwareRevisionUUID, hardwareRevision, true);
+            var firmwareRevision = await _characteristics[FirmwareRevisionUUID].ReadAsync();
+            SetValue(FirmwareRevisionUUID, firmwareRevision, true);
+
+            if (HardwareRevision > 3000 && FirmwareRevision > 4000)
+            {
+                await Handshake();
+                _keepHandshakeBackgroundRunning = true;
+                Xamarin.Forms.Device.StartTimer(TimeSpan.FromSeconds(15), () =>
+                {
+                    Task.Run(async () =>
+                    {
+                        try
+                        {
+                            byte[] fwRev = GetBytesForBoardFromUInt16(FirmwareRevision, FirmwareRevisionUUID);
+                            await _characteristics[OWBoard.FirmwareRevisionUUID].WriteAsync(fwRev);
+                        }
+                        catch (Exception err)
+                        {
+                            // TODO: Couldnt update firmware revision.
+
+                            Console.WriteLine("ERROR: " + err.Message);
+
+                        }
+                    });
+                    return _keepHandshakeBackgroundRunning;
+                });
+            }
+
+            foreach (var characteristic in characteristics)
+            {
+                var uuid = characteristic.Uuid.ToUpper();
+                if (characteristicsToReadNow.Contains(uuid))
+                {
+                    var data = await characteristic.ReadAsync();
+                    SetValue(characteristic.Uuid.ToUpper(), data, true);
+                }
+
+                if (characteristic.CanUpdate)
+                {
+                    if (characteristicsToSubscribeTo.Contains(uuid))
+                    {
+                        characteristic.ValueUpdated += Characteristic_ValueUpdated;
+                        await characteristic.StartUpdatesAsync();
+                    }
+                }
+            }
+
+            /*
+            var readTasks = new Dictionary<string, Task<byte[]>>();
+            //var readTask = new List<Task<byte[]>>();
+           
+            foreach (var characteristic in _characteristics)
+            {
+                var uuid = characteristic.u.ToUpper();
                 if (characteristic.CanRead)
                 {
                     //byte[] data = await char    acteristic.ReadAsync();
@@ -661,11 +766,13 @@ namespace OWCE
 
             await Task.WhenAll(readTasks.Values.ToArray());
 
+
             foreach (var key in readTasks.Keys)
             {
                 System.Diagnostics.Debug.WriteLine(key);
                 SetValue(key, readTasks[key].Result, true);
             }
+            */
 
 
 
@@ -717,6 +824,224 @@ ReadRequestReceived - LifetimeOdometer
 */
         }
 
+        private List<byte> _handshakeBuffer = null;
+        private bool _isHandshaking = false;
+        private TaskCompletionSource<byte[]> _handshakeTaskCompletionSource = null;
+
+        private async Task<bool> Handshake()
+        {
+            _isHandshaking = true;
+            _handshakeTaskCompletionSource = new TaskCompletionSource<byte[]>();
+            _handshakeBuffer = new List<byte>();
+            //var rideMode = await _characteristics[OWBoard.RideModeUUID].ReadAsync();
+            //await _characteristics[OWBoard.RideModeUUID].StartUpdatesAsync();
+
+            //var batteryPercent = await _characteristics[OWBoard.BatteryPercentUUID].ReadAsync();
+            //await _characteristics[OWBoard.BatteryPercentUUID].StartUpdatesAsync();
+
+            //_characteristics[OWBoard.UNKNOWN1UUID].ValueUpdated += SerialRead_ValueUpdated;
+            //_characteristics[OWBoard.UNKNOWN1UUID].ValueUpdated += SerialRead_ValueUpdated;
+            _characteristics[OWBoard.SerialReadUUID].ValueUpdated += SerialRead_ValueUpdated;
+
+            //await _characteristics[OWBoard.UNKNOWN1UUID].StartUpdatesAsync();
+            //await _characteristics[OWBoard.UNKNOWN2UUID].StartUpdatesAsync();
+            await _characteristics[OWBoard.SerialReadUUID].StartUpdatesAsync();
+
+            // Data does not send until this is triggered. 
+            byte[] firmwareRevision = GetBytesForBoardFromUInt16(FirmwareRevision, FirmwareRevisionUUID);
+
+            var didWrite = await _characteristics[OWBoard.FirmwareRevisionUUID].WriteAsync(firmwareRevision);
+
+            var byteArray = await _handshakeTaskCompletionSource.Task;
+
+            await _characteristics[OWBoard.SerialReadUUID].StopUpdatesAsync();
+            _characteristics[OWBoard.SerialReadUUID].ValueUpdated -= SerialRead_ValueUpdated;
+            if (byteArray.Length == 20)
+            {
+                var outputArray = new byte[20];
+                Array.Copy(byteArray, 0, outputArray, 0, 3);
+
+                // Take almost all of the bytes from the input array. This is almost the same as the last part as
+                // we are ignoring the first 3 and the last bytes.
+                var arrayToMD5_part1 = new byte[16];
+                Array.Copy(byteArray, 3, arrayToMD5_part1, 0, 16);
+
+                // This appears to be a static valu efrom the board.
+                var arrayToMD5_part2 = new byte[] {
+                    217,    // D9
+                    37,     // 25
+                    95,     // 5F
+                    15,     // 0F
+                    35,     // 23
+                    53,     // 35
+                    78,     // 4E
+                    25,     // 19
+                    186,    // BA
+                    115,    // 73
+                    156,    // 9C
+                    205,    // CD
+                    196,    // C4
+                    169,    // A9
+                    23,     // 17
+                    101,    // 65
+                };
+
+
+                // New byte array we are going to MD5 hash. Part of the input string, part of this static string.
+                var arrayToMD5 = new byte[arrayToMD5_part1.Length + arrayToMD5_part2.Length];
+                arrayToMD5_part1.CopyTo(arrayToMD5, 0);
+                arrayToMD5_part2.CopyTo(arrayToMD5, arrayToMD5_part1.Length);
+
+                // Start prepping the MD5 hash
+                byte[] md5Hash = null;
+                using (var md5 = System.Security.Cryptography.MD5.Create())
+                {
+                    md5Hash = md5.ComputeHash(arrayToMD5);
+                }
+
+                // Add it to the 3 bytes we already have.
+                Array.Copy(md5Hash, 0, outputArray, 3, md5Hash.Length);
+
+                // Validate the check byte.
+                outputArray[19] = 0;
+                for (int i = 0; i < outputArray.Length - 1; ++i)
+                {
+                    outputArray[19] = ((byte)(outputArray[i] ^ outputArray[19]));
+                }
+
+                var inputString = BitConverter.ToString(byteArray).Replace("-", ":").ToLower();
+                var outputString = BitConverter.ToString(outputArray).Replace("-", ":").ToLower();
+
+                Console.WriteLine($"Input: {inputString}");
+                Console.WriteLine($"Output: {outputString}");
+
+                await _characteristics[OWBoard.SerialWriteUUID].WriteAsync(outputArray);
+
+            }
+            return false;
+        }
+
+
+        private byte[] GetBytesForBoardFromUInt16(UInt16 value, string uuidHint = null)
+        {
+            if (uuidHint == null)
+            {
+
+            }
+            else
+            {
+
+
+            }
+
+            var bytes = BitConverter.GetBytes(value);
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(bytes);
+            return bytes;
+
+
+            /*
+
+
+            switch (uuid)
+            {
+                case SerialNumberUUID:
+                    SerialNumber = value;
+                    break;
+                case BatteryPercentUUID:
+                    BatteryPercent = value;
+                    break;
+                case BatteryLow5UUID:
+                    BatteryLow5 = value;
+                    break;
+                case BatteryLow20UUID:
+                    BatteryLow20 = value;
+                    break;
+                case BatterySerialUUID:
+                    BatterySerial = value;
+                    break;
+                case PitchUUID:
+                    Pitch = 0.1f * (1800 - value);
+                    break;
+                case RollUUID:
+                    Roll = 0.1f * (1800 - value);
+                    break;
+                case YawUUID:
+                    Yaw = 0.1f * (1800 - value);
+                    break;
+                case TripOdometerUUID:
+                    TripOdometer = value;
+                    break;
+                case RpmUUID:
+                    RPM = value;
+                    break;
+                case LightModeUUID:
+                    LightMode = (value == 1);
+                    break;
+                case LightsFrontUUID:
+                    FrontLightMode = value;
+                    break;
+                case LightsBackUUID:
+                    RearLightMode = value;
+                    break;
+                case StatusErrorUUID:
+                    StatusError = value;
+                    break;
+                case TemperatureUUID:
+                    Temperature = 0.1f * value;
+                    break;
+                case FirmwareRevisionUUID:
+                    FirmwareRevision = value;
+                    break;
+                case CurrentAmpsUUID:
+                    CurrentAmps = 0.1f * value;
+                    break;
+                case TripAmpHoursUUID:
+                    TripAmpHours = 0.1f * value;
+                    break;
+                case TripRegenAmpHoursUUID:
+                    TripRegenAmpHours = 0.1f * value;
+                    break;
+                case BatteryTemperatureUUID:
+                    BatteryTemperature = 0.1f * value;
+                    break;
+                case BatteryVoltageUUID:
+                    BatteryVoltage = 0.1f * value;
+                    break;
+                case SafetyHeadroomUUID:
+                    SafetyHeadroom = value;
+                    break;
+                case HardwareRevisionUUID:
+                    HardwareRevision = value;
+                    break;
+                case LifetimeOdometerUUID:
+                    LifetimeOdometer = (float)value;
+                    break;
+                case LifetimeAmpHoursUUID:
+                    LifetimeAmpHours = value;
+                    break;
+                case BatteryCellsUUID:
+
+                    break;
+                case LastErrorCodeUUID:
+
+                    break;
+                case UNKNOWN1UUID:
+                    _UNKNOWN1 = value;
+                    break;
+                case UNKNOWN2UUID:
+                    _UNKNOWN2 = value;
+                    break;
+                case UNKNOWN3UUID:
+                    _UNKNOWN3 = value;
+                    break;
+                case UNKNOWN4UUID:
+                    _UNKNOWN4 = value;
+                    break;
+            }
+            */
+        }
+
         private void SetValue(string uuid, byte[] data, bool initialData = false)
         {
             // If our system is little endian, reverse the array.
@@ -738,8 +1063,8 @@ ReadRequestReceived - LifetimeOdometer
 
             if (_isLogging)
             {
-              //  var boardEvent = new OWBoardEvent();
-              // boardEvent.write
+                //  var boardEvent = new OWBoardEvent();
+                // boardEvent.write
                 //boardEvent.WriteDelimitedTo()
                 _events.BoardEvents.Add(new OWBoardEvent()
                 {
@@ -852,13 +1177,30 @@ ReadRequestReceived - LifetimeOdometer
             }
         }
 
+        void SerialRead_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e)
+        {
+            string uuid = e.Characteristic.Uuid.ToUpper();
+            Console.WriteLine($"SerialRead_ValueUpdated - {uuid}");
+            if (_isHandshaking && uuid == SerialReadUUID)
+            {
+                _handshakeBuffer.AddRange(e.Characteristic.Value);
+                if (_handshakeBuffer.Count == 20)
+                {
+                    _isHandshaking = false;
+                    _handshakeTaskCompletionSource.SetResult(_handshakeBuffer.ToArray<byte>());
+                }
+            }
+        }
+
         void Characteristic_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e)
         {
-            SetValue(e.Characteristic.Uuid.ToUpper(), e.Characteristic.Value);
+            string uuid = e.Characteristic.Uuid.ToUpper();
+            SetValue(uuid, e.Characteristic.Value);
         }
 
         public async Task Disconnect()
         {
+            _keepHandshakeBackgroundRunning = false;
             await CrossBluetoothLE.Current.Adapter.DisconnectDeviceAsync(_device);
         }
 
@@ -868,7 +1210,7 @@ ReadRequestReceived - LifetimeOdometer
 
         public async Task StartLogging()
         {
-           // _currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            // _currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             //_logDirectory = Path.Combine(FileSystem.CacheDirectory, _currentRunStart.ToString());
             var currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             _currentRide = new Ride($"{currentRunStart}.dat");

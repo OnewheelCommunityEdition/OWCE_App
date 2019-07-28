@@ -6,12 +6,7 @@ using Xamarin.Forms;
 using RestSharp;
 using System.Net;
 using System.IO;
-
-
-#if __IOS__
-using Foundation;
-
-#endif
+using System.Threading.Tasks;
 
 namespace OWCE
 {
@@ -31,7 +26,11 @@ namespace OWCE
         public BoardPage(OWBoard board)
         {
             Board = board;
-            board.SubscribeToBLE();
+
+            Task.Run(async () =>
+            {
+                await board.SubscribeToBLE();
+            });
 
             BindingContext = this;
 
@@ -54,7 +53,18 @@ namespace OWCE
             }
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            DisconnectAndPop();
+            return false;
+        }
+
         async void Disconnect_Clicked(object sender, System.EventArgs e)
+        {
+            await DisconnectAndPop();
+        }
+
+        private async Task DisconnectAndPop()
         {
             await Board.Disconnect();
             await Navigation.PopAsync();
@@ -62,6 +72,7 @@ namespace OWCE
 
         private bool _isLogging = false;
 
+        /*
         private async void LogData_Clicked(object sender, System.EventArgs e)
         {
             if (_isLogging)
@@ -132,6 +143,7 @@ namespace OWCE
             }
 
         }
+        */
 
-        }
+    }
 }
