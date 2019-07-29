@@ -1,23 +1,4 @@
 #!/usr/bin/env bash
-#
-# For Xamarin, change some constants located in some class of the app.
-# In this sample, suppose we have an AppConstant.cs class in shared folder with follow content:
-#
-# namespace Core
-# {
-#     public class AppConstant
-#     {
-#         public const string ApiUrl = "https://production.com/api";
-#     }
-# }
-# 
-# Suppose in our project exists two branches: master and develop. 
-# We can release app for production API in master branch and app for test API in develop branch. 
-# We just need configure this behaviour with environment variable in each branch :)
-# 
-# The same thing can be perform with any class of the app.
-#
-# AN IMPORTANT THING: FOR THIS SAMPLE YOU NEED DECLARE API_URL ENVIRONMENT VARIABLE IN APP CENTER BUILD CONFIGURATION.
 
 if [ ! -n "$OWCE_SYNCFUSION_LICENSE" ]
 then
