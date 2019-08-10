@@ -41,6 +41,9 @@
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <AndroidDexTool>d8</AndroidDexTool>
+    <AndroidLinkTool>r8</AndroidLinkTool>
+    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
