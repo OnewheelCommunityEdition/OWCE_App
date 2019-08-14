@@ -514,6 +514,12 @@ namespace OWCE
             set { if (_rssi != value) { _rssi = value; OnPropertyChanged(); } }
         }
 
+        private Dictionary<uint, uint> _batteryCells = new Dictionary<uint, uint>();
+        public Dictionary<uint, uint> BatteryCells
+        {
+            get { return _batteryCells; }
+        }
+
         private OWBoardEventList _events = new OWBoardEventList();
         private List<OWBoardEvent> _initialEvents = new List<OWBoardEvent>();
         private Ride _currentRide = null;
@@ -522,6 +528,12 @@ namespace OWCE
         public OWBoard()
         {
 
+        }
+
+        public void SetBatteryCellValue(uint cell, uint value)
+        {
+            _batteryCells[cell] = value;
+            OnPropertyChanged("BatteryCells");
         }
 
         public bool Equals(OWBoard otherBoard)
@@ -866,7 +878,7 @@ ReadRequestReceived - LifetimeOdometer
                 var arrayToMD5_part1 = new byte[16];
                 Array.Copy(byteArray, 3, arrayToMD5_part1, 0, 16);
 
-                // This appears to be a static valu efrom the board.
+                // This appears to be a static value from the board.
                 var arrayToMD5_part2 = new byte[] {
                     217,    // D9
                     37,     // 25
@@ -1157,6 +1169,15 @@ ReadRequestReceived - LifetimeOdometer
                     LifetimeAmpHours = value;
                     break;
                 case BatteryCellsUUID:
+
+                    var batteryVoltage = (uint)data[0];
+                    var cellID = (uint)data[1];
+                    var batteryVoltageDisplay = batteryVoltage / 50.0;
+
+
+                    SetBatteryCellValue(cellID, batteryVoltage);
+                    //batteryVoltageCells[cellIdentifier] = (double)var3 / 50.0D;
+                    //Console.WriteLine($"BatteryCellsUUID: {cellID} {batteryVoltage} {batteryVoltageDisplay} ");
 
                     break;
                 case LastErrorCodeUUID:

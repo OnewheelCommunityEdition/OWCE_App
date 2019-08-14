@@ -11,8 +11,6 @@ using Xamarin.Forms;
 
 namespace OWCE
 {
-    //[XamlCompilation(XamlCompilationOptions.Compile)]
-
     public partial class BoardListPage : ContentPage
     {
         public ObservableCollection<OWBoard> Boards { get; internal set; } = new ObservableCollection<OWBoard>();

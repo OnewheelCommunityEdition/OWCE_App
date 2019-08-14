@@ -3,8 +3,15 @@
              x:Class="OWCE.BoardPage"
              Title="{Binding Board.Name}"
              xmlns:gauge="clr-namespace:Syncfusion.SfGauge.XForms;assembly=Syncfusion.SfGauge.XForms"
-
+             xmlns:converters="clr-namespace:OWCE.Converters"
              >
+
+        <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BatteryCellsToTextConverter x:Key="batteryCellsToTextConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" >
         
@@ -241,6 +248,13 @@
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="BatteryVoltage" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
                         <Label Text="{Binding Board.BatteryVoltage}" HorizontalOptions="End" VerticalOptions="Center" />
+                    </StackLayout>
+                    <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
+
+
+                    <StackLayout Orientation="Horizontal" MinimumHeightRequest="40">
+                        <Label Text="BatteryCells" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
+                        <Label Text="{Binding Board.BatteryCells, Converter={StaticResource batteryCellsToTextConverter}}" HorizontalOptions="End" VerticalOptions="Center" />
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
 
