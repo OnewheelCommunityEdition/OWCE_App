@@ -1,32 +1,30 @@
 #!/usr/bin/env bash
 
-echo "SHARED"
-
-if [ ! -n "$OWCE_SYNCFUSION_LICENSE" ]
+if [ -z "$OWCE_SYNCFUSION_LICENSE" ]
 then
     echo "You need define the OWCE_SYNCFUSION_LICENSE variable in App Center"
     exit
 fi
 
-if [ ! -n "$OWCE_APPCENTER_IOS" ]
+if [ -z "$OWCE_APPCENTER_IOS" ]
 then
     echo "You need define the OWCE_APPCENTER_IOS variable in App Center"
     exit
 fi
 
-if [ ! -n "$OWCE_APPCENTER_ANDROID" ]
+if [ -z "$OWCE_APPCENTER_ANDROID" ]
 then
     echo "You need define the OWCE_APPCENTER_ANDROID variable in App Center"
     exit
 fi
 
 # For local dev.
-if [ ! -n "$APPCENTER_SOURCE_DIRECTORY" ]
+if [ -z "$APPCENTER_SOURCE_DIRECTORY" ]
 then
     APPCENTER_SOURCE_DIRECTORY=$(pwd)
 fi
 
-APP_CONSTANT_FILE=$APPCENTER_SOURCE_DIRECTORY/OWCE/AppConstants.cs
+APP_CONSTANT_FILE=$APPCENTER_SOURCE_DIRECTORY/OWCE/OWCE/AppConstants.cs
 
 if [ -e "$APP_CONSTANT_FILE" ]
 then
