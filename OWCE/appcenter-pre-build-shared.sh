@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 if [ ! -n "$OWCE_SYNCFUSION_LICENSE" ]
 then
