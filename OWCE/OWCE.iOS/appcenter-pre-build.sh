@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env bash
+﻿#!/bin/bash
 
 ../appcenter-pre-build-shared.sh
 
