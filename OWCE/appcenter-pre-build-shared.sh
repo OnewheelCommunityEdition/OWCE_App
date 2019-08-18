@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+echo "SHARED"
 
 if [ ! -n "$OWCE_SYNCFUSION_LICENSE" ]
 then

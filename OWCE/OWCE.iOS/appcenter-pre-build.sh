@@ -1,4 +1,6 @@
-﻿#!/bin/bash
+﻿#!/usr/bin/env bash
+
+echo "IOS"
 
 ../appcenter-pre-build-shared.sh
 
