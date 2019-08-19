@@ -1,3 +1,3 @@
-﻿#!/usr/bin/env bash
+#!/usr/bin/env bash
 
 ../appcenter-pre-build-shared.sh
