@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Plugin.BLE;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using RestSharp;
@@ -23,14 +22,10 @@ namespace OWCE
             }
         }
 
+        private bool _initialSubscirbe = false;
         public BoardPage(OWBoard board)
         {
             Board = board;
-
-            Task.Run(async () =>
-            {
-                await board.SubscribeToBLE();
-            });
 
             BindingContext = this;
 
@@ -38,6 +33,17 @@ namespace OWCE
 
             NavigationPage.SetHasBackButton(this, false);
 
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (_initialSubscirbe == false)
+            {
+                _initialSubscirbe = true;
+                _ = Board.SubscribeToBLE();
+            }
         }
 
         protected override void OnSizeAllocated(double width, double height)

@@ -5,14 +5,20 @@ using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Xamarin.Essentials;
+using OWCE.DependencyInterfaces;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace OWCE
 {
     public partial class App : Application
     {
+        public static new App Current => Application.Current as App;
+        public IOWBLE OWBLE { get; private set; }
+
         public App()
         {
+            OWBLE = DependencyService.Get<IOWBLE>();
+
             if (String.IsNullOrEmpty(AppConstants.SyncfusionLicense) == false)
             {
                 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(AppConstants.SyncfusionLicense);

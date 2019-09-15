@@ -7,10 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using OWCE.Protobuf;
-using Plugin.BLE;
-using Plugin.BLE.Abstractions.Contracts;
-using Plugin.Geolocator;
-using Plugin.Geolocator.Abstractions;
+//using Plugin.Geolocator;
+//using Plugin.Geolocator.Abstractions;
 using Xamarin.Essentials;
 
 namespace OWCE
@@ -25,7 +23,7 @@ namespace OWCE
 
     public class OWBoard : object, IEquatable<OWBoard>, INotifyPropertyChanged
     {
-        public const string ServiceUUID = "E659F300-EA98-11E3-AC10-0800200C9A66";
+        public static readonly Guid ServiceUUID = new Guid("E659F300-EA98-11E3-AC10-0800200C9A66");
         public const string SerialNumberUUID = "E659F301-EA98-11E3-AC10-0800200C9A66";
         public const string RideModeUUID = "E659F302-EA98-11E3-AC10-0800200C9A66";
         public const string BatteryPercentUUID = "E659F303-EA98-11E3-AC10-0800200C9A66";
@@ -94,6 +92,14 @@ namespace OWCE
             set { if (_boardType != value) { _boardType = value; OnPropertyChanged(); } }
         }
 
+        private Object _nativePeripheral = null;
+        public Object NativePeripheral
+        {
+            get { return _nativePeripheral; }
+            set { if (_nativePeripheral != value) { _nativePeripheral = value; } }
+        }
+
+        /*
         private IDevice _device = null;
         //[SQLite.Ignore]
         public IDevice Device
@@ -101,6 +107,7 @@ namespace OWCE
             get { return _device; }
             set { if (_device != value) { _device = value; OnPropertyChanged(); } }
         }
+        */
 
 
         public string BoardIcon
@@ -562,11 +569,11 @@ namespace OWCE
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        IService _service = null;
-        Dictionary<string, ICharacteristic> _characteristics = new Dictionary<string, ICharacteristic>();
+        // TODO: Restore, Dictionary<string, ICharacteristic> _characteristics = new Dictionary<string, ICharacteristic>();
 
         private void RSSIMonitor()
         {
+            /*
             ThreadPool.QueueUserWorkItem(async (object state) =>
             {
                 while (_device.State == Plugin.BLE.Abstractions.DeviceState.Connected)
@@ -596,19 +603,19 @@ namespace OWCE
                 }
 
             });
+            */
         }
 
         internal async Task SubscribeToBLE()
         {
 #if DEBUG
-            if (_device == null)
+            if (_nativePeripheral == null)
                 return;
 #endif
             //RSSIMonitor();
 
-
-
-            List<string> characteristicsToReadNow = new List<string>()
+            
+            var characteristicsToReadNow = new List<string>()
             {
                 SerialNumberUUID,
                 BatteryPercentUUID,
@@ -645,13 +652,13 @@ namespace OWCE
                 //UNKNOWN4UUID,
             };
 
-            List<string> characteristicsToSubscribeTo = new List<string>()
+            var characteristicsToSubscribeTo = new List<string>()
             {
                 //SerialNumberUUID,
                 BatteryPercentUUID,
                 BatteryLow5UUID,
                 BatteryLow20UUID,
-                BatterySerialUUID,
+                //BatterySerialUUID,
                 PitchUUID,
                 RollUUID,
                 YawUUID,
@@ -682,27 +689,12 @@ namespace OWCE
                 //UNKNOWN4UUID,
             };
 
-
-
-            _service = await _device.GetServiceAsync(new Guid(ServiceUUID.ToLower()));
-            _characteristics.Clear();
-            var characteristics = await _service.GetCharacteristicsAsync();
-            foreach (var characteristic in characteristics)
-            {
-                var uuid = characteristic.Uuid.ToUpper();
-                _characteristics[uuid] = characteristic;
-            }
-
-            if (_characteristics.ContainsKey(HardwareRevisionUUID) == false || _characteristics.ContainsKey(FirmwareRevisionUUID) == false)
-            {
-                // TODO: Alert about how the connection can't continue. 
-                return;
-            }
-
-            var hardwareRevision = await _characteristics[HardwareRevisionUUID].ReadAsync();
+          
+            var hardwareRevision = await App.Current.OWBLE.ReadValue(HardwareRevisionUUID);
             SetValue(HardwareRevisionUUID, hardwareRevision, true);
-            var firmwareRevision = await _characteristics[FirmwareRevisionUUID].ReadAsync();
+            var firmwareRevision = await App.Current.OWBLE.ReadValue(FirmwareRevisionUUID);
             SetValue(FirmwareRevisionUUID, firmwareRevision, true);
+
 
             if (HardwareRevision > 3000 && FirmwareRevision > 4000)
             {
@@ -715,7 +707,7 @@ namespace OWCE
                         try
                         {
                             byte[] fwRev = GetBytesForBoardFromUInt16(FirmwareRevision, FirmwareRevisionUUID);
-                            await _characteristics[OWBoard.FirmwareRevisionUUID].WriteAsync(fwRev);
+                            await App.Current.OWBLE.WriteValue(OWBoard.FirmwareRevisionUUID, fwRev);
                         }
                         catch (Exception err)
                         {
@@ -729,24 +721,18 @@ namespace OWCE
                 });
             }
 
-            foreach (var characteristic in characteristics)
+            foreach (var characteristic in characteristicsToSubscribeTo)
             {
-                var uuid = characteristic.Uuid.ToUpper();
-                if (characteristicsToReadNow.Contains(uuid))
-                {
-                    var data = await characteristic.ReadAsync();
-                    SetValue(characteristic.Uuid.ToUpper(), data, true);
-                }
-
-                if (characteristic.CanUpdate)
-                {
-                    if (characteristicsToSubscribeTo.Contains(uuid))
-                    {
-                        characteristic.ValueUpdated += Characteristic_ValueUpdated;
-                        await characteristic.StartUpdatesAsync();
-                    }
-                }
+                //characteristic.ValueUpdated += Characteristic_ValueUpdated;
+                await App.Current.OWBLE.SubscribeValue(characteristic);
             }
+
+            foreach (var characteristic in characteristicsToReadNow)
+            {
+                var data = await App.Current.OWBLE.ReadValue(characteristic);
+                SetValue(characteristic, data, true);
+            }
+
 
             /*
             var readTasks = new Dictionary<string, Task<byte[]>>();
@@ -845,6 +831,7 @@ ReadRequestReceived - LifetimeOdometer
             _isHandshaking = true;
             _handshakeTaskCompletionSource = new TaskCompletionSource<byte[]>();
             _handshakeBuffer = new List<byte>();
+
             //var rideMode = await _characteristics[OWBoard.RideModeUUID].ReadAsync();
             //await _characteristics[OWBoard.RideModeUUID].StartUpdatesAsync();
 
@@ -853,21 +840,21 @@ ReadRequestReceived - LifetimeOdometer
 
             //_characteristics[OWBoard.UNKNOWN1UUID].ValueUpdated += SerialRead_ValueUpdated;
             //_characteristics[OWBoard.UNKNOWN1UUID].ValueUpdated += SerialRead_ValueUpdated;
-            _characteristics[OWBoard.SerialReadUUID].ValueUpdated += SerialRead_ValueUpdated;
+            // TODO: Restore _characteristics[OWBoard.SerialReadUUID].ValueUpdated += SerialRead_ValueUpdated;
 
             //await _characteristics[OWBoard.UNKNOWN1UUID].StartUpdatesAsync();
             //await _characteristics[OWBoard.UNKNOWN2UUID].StartUpdatesAsync();
-            await _characteristics[OWBoard.SerialReadUUID].StartUpdatesAsync();
+            await App.Current.OWBLE.SubscribeValue(OWBoard.SerialReadUUID, true);
 
             // Data does not send until this is triggered. 
             byte[] firmwareRevision = GetBytesForBoardFromUInt16(FirmwareRevision, FirmwareRevisionUUID);
 
-            var didWrite = await _characteristics[OWBoard.FirmwareRevisionUUID].WriteAsync(firmwareRevision);
+            var didWrite = await App.Current.OWBLE.WriteValue(OWBoard.FirmwareRevisionUUID, firmwareRevision, true);
 
             var byteArray = await _handshakeTaskCompletionSource.Task;
 
-            await _characteristics[OWBoard.SerialReadUUID].StopUpdatesAsync();
-            _characteristics[OWBoard.SerialReadUUID].ValueUpdated -= SerialRead_ValueUpdated;
+            await App.Current.OWBLE.UnsubscribeValue(OWBoard.SerialReadUUID, true);
+            // TODO: Restore _characteristics[OWBoard.SerialReadUUID].ValueUpdated -= SerialRead_ValueUpdated;
             if (byteArray.Length == 20)
             {
                 var outputArray = new byte[20];
@@ -927,7 +914,7 @@ ReadRequestReceived - LifetimeOdometer
                 Console.WriteLine($"Input: {inputString}");
                 Console.WriteLine($"Output: {outputString}");
 
-                await _characteristics[OWBoard.SerialWriteUUID].WriteAsync(outputArray);
+                await App.Current.OWBLE.WriteValue(OWBoard.SerialWriteUUID, outputArray);
 
             }
             return false;
@@ -1198,6 +1185,7 @@ ReadRequestReceived - LifetimeOdometer
             }
         }
 
+        /*Disconnect
         void SerialRead_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e)
         {
             string uuid = e.Characteristic.Uuid.ToUpper();
@@ -1218,11 +1206,13 @@ ReadRequestReceived - LifetimeOdometer
             string uuid = e.Characteristic.Uuid.ToUpper();
             SetValue(uuid, e.Characteristic.Value);
         }
+        */
 
         public async Task Disconnect()
         {
             _keepHandshakeBackgroundRunning = false;
-            await CrossBluetoothLE.Current.Adapter.DisconnectDeviceAsync(_device);
+            App.Current.OWBLE.Disconnect();
+            //await CrossBluetoothLE.Current.Adapter.DisconnectDeviceAsync(_device);
         }
 
         private bool _isLogging = false;
@@ -1242,7 +1232,7 @@ ReadRequestReceived - LifetimeOdometer
             _events.BoardEvents.AddRange(_initialEvents);
 
 
-
+            /*
             if (CrossGeolocator.Current.IsGeolocationAvailable)
             {
                 CrossGeolocator.Current.DesiredAccuracy = 1;
@@ -1253,6 +1243,7 @@ ReadRequestReceived - LifetimeOdometer
                 CrossGeolocator.Current.PositionError += PositionError;
 
             }
+            */
         }
 
         public async Task<string> StopLogging()
@@ -1262,10 +1253,12 @@ ReadRequestReceived - LifetimeOdometer
 
 
             Hud.Show("Compressing data");
+            /*
             await CrossGeolocator.Current.StopListeningAsync(); ;
 
             CrossGeolocator.Current.PositionChanged -= PositionChanged;
             CrossGeolocator.Current.PositionError -= PositionError;
+            */
 
             SaveEvents();
 
@@ -1303,6 +1296,8 @@ ReadRequestReceived - LifetimeOdometer
             return zipPath;
         }
 
+
+        /*
         double _oldLat = 0;
         double _oldLon = 0;
         private void PositionChanged(object sender, PositionEventArgs e)
@@ -1373,6 +1368,7 @@ ReadRequestReceived - LifetimeOdometer
             System.Diagnostics.Debug.WriteLine(e.Error);
             //Handle event here for errors
         }
+        */
 
         private void SaveEvents()
         {

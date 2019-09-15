@@ -4,8 +4,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
-using Plugin.BLE;
-using Plugin.BLE.Abstractions.Contracts;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -18,7 +16,6 @@ namespace OWCE
         // Used to dertermine if the board is still found.
         private List<OWBoard> _foundInLastScan = null;
 
-        private bool _shouldKeepScanning = false;
         private bool _isRefreshing = false;
         private bool _isScanning = false;
 
@@ -78,9 +75,10 @@ namespace OWCE
         {
             base.OnAppearing();
             _selectedBoard = null;
-            CrossBluetoothLE.Current.StateChanged += BLE_StateChanged;
-            CrossBluetoothLE.Current.Adapter.DeviceDiscovered += Adapter_DeviceDiscovered;
-            CrossBluetoothLE.Current.Adapter.DeviceConnected += Adapter_DeviceConnected;
+
+            App.Current.OWBLE.BLEStateChanged += OWBLE_BLEStateChanged;
+            App.Current.OWBLE.BoardDiscovered += OWBLE_BoardDiscovered;
+            App.Current.OWBLE.BoardConnected += OWBLE_BoardConnected;
         }
 
         private CancellationTokenSource _scanCancellationToken;
@@ -97,83 +95,48 @@ namespace OWCE
             }
 
             _isScanning = true;
-            _shouldKeepScanning = true;
-
             ScanningHeader.IsVisible = true;
             NotScanningHeader.IsVisible = false;
-
-
-            CrossBluetoothLE.Current.Adapter.ScanTimeout = 5 * 1000;
-            try
-            {
-                _scanCancellationToken = new CancellationTokenSource();
-                do
-                {
-                    _foundInLastScan = new List<OWBoard>();
-                    System.Diagnostics.Debug.WriteLine("StartScan");
-                    await CrossBluetoothLE.Current.Adapter.StartScanningForDevicesAsync(new Guid[] { new Guid(OWBoard.ServiceUUID) }, cancellationToken: _scanCancellationToken.Token);
-                    System.Diagnostics.Debug.WriteLine("StopScan");
-                    foreach (var board in Boards)
-                    {
-                        board.IsAvailable = _foundInLastScan.Contains(board);
-                    }
-                }
-                while (_shouldKeepScanning && CrossBluetoothLE.Current.IsOn);
-            }
-            catch (Exception err)
-            {
-                System.Diagnostics.Debug.WriteLine("ScanError: " + err.Message);
-            }
-            finally
-            {
-                _isScanning = false;
-            }
+            await App.Current.OWBLE.StartScanning();
+            NotScanningHeader.IsVisible = true;
+            ScanningHeader.IsVisible = false;
+            _isScanning = false;
         }
 
         private void StopScanning()
         {
+            App.Current.OWBLE.StopScanning();
             ScanningHeader.IsVisible = false;
             NotScanningHeader.IsVisible = true;
-
-            _shouldKeepScanning = false;
             _scanCancellationToken?.Cancel();
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            CrossBluetoothLE.Current.StateChanged -= BLE_StateChanged;
-            CrossBluetoothLE.Current.Adapter.DeviceDiscovered -= Adapter_DeviceDiscovered;
-            CrossBluetoothLE.Current.Adapter.DeviceConnected -= Adapter_DeviceConnected;
+
+            App.Current.OWBLE.BLEStateChanged -= OWBLE_BLEStateChanged;
+            App.Current.OWBLE.BoardDiscovered -= OWBLE_BoardDiscovered;
+            App.Current.OWBLE.BoardConnected -= OWBLE_BoardConnected;
         }
 
 
-        void Adapter_DeviceConnected(object sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e)
+        void OWBLE_BoardConnected(OWBoard board)
         {
-            System.Diagnostics.Debug.WriteLine($"Device connected {e.Device.Name} {e.Device.Id}");
-            if (e.Device == _selectedBoard.Device && _selectedBoard != null)
+            System.Diagnostics.Debug.WriteLine($"Device connected {board.Name} {board.ID}");
+            if (board == _selectedBoard && _selectedBoard != null)
             {
-                Device.BeginInvokeOnMainThread(async () => {
-                    await Navigation.PushAsync(new BoardPage(_selectedBoard));
+                Device.BeginInvokeOnMainThread(async () =>
+                {
                     Hud.Dismiss();
+                    await Navigation.PushAsync(new BoardPage(_selectedBoard));
                 });
             }
         }
 
-        void Adapter_DeviceDiscovered(object sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e)
+        void OWBLE_BoardDiscovered(OWBoard board)
         {
-            System.Diagnostics.Debug.WriteLine($"Device detected {e.Device.Name} {e.Device.Id}");
-
-            var board = new OWBoard()
-            {
-                Name = e.Device.Name,
-                ID = e.Device.Id.ToString(),
-                IsAvailable = true,
-                Device = e.Device,
-            };
-
-            _foundInLastScan.Add(board);
-
+            System.Diagnostics.Debug.WriteLine($"Device detected {board.Name} {board.ID}");
             var boardIndex = Boards.IndexOf(board);
             if (boardIndex == -1)
             {
@@ -182,23 +145,20 @@ namespace OWCE
             else
             {
                 // Its odd that we set the name again, but when a board is just powered on its name is "Onewheel", not "ow123456"
-                Boards[boardIndex].Name = e.Device.Name;
+                Boards[boardIndex].Name = board.Name;
                 Boards[boardIndex].IsAvailable = true;
-                Boards[boardIndex].Device = e.Device;
+                Boards[boardIndex].NativePeripheral = board.NativePeripheral;
             }
         }
 
 
-        private void BLE_StateChanged(object sender, Plugin.BLE.Abstractions.EventArgs.BluetoothStateChangedArgs e)
+        private void OWBLE_BLEStateChanged(BluetoothState state)
         {
-            System.Diagnostics.Debug.WriteLine($"The bluetooth state changed to {e.NewState}");
-
-            if (e.NewState == BluetoothState.On)
+            if (state == BluetoothState.On)
             {
-                Device.BeginInvokeOnMainThread(async () => { await StartScanning(); });
+                _ = StartScanning();
             }
         }
-
 
         OWBoard _selectedBoard = null;
         public async void DeviceListView_ItemSelected(object sender, Xamarin.Forms.SelectedItemChangedEventArgs e)
@@ -214,33 +174,32 @@ namespace OWCE
                 {
                     _selectedBoard = board;
 
+                    StopScanning();
 
-                    Device.BeginInvokeOnMainThread(async () =>
+                    Hud.Show("Connecting", "Cancel", delegate
                     {
-                        Hud.Show("Connecting", "Cancel", async delegate
-                        {
-                            foreach (var device in CrossBluetoothLE.Current.Adapter.ConnectedDevices)
-                            {
-                                await CrossBluetoothLE.Current.Adapter.DisconnectDeviceAsync(device);
-                            }
-                            _selectedBoard = null;
-                            Hud.Dismiss();
-                        });
-
-                        await Task.Delay(250);
-
-                        _shouldKeepScanning = false;
-                        StopScanning();
-                        if (CrossBluetoothLE.Current.Adapter.IsScanning)
-                        {
-                            await CrossBluetoothLE.Current.Adapter.StopScanningForDevicesAsync();
-                        }
-
-
-
-                        await CrossBluetoothLE.Current.Adapter.ConnectToDeviceAsync(board.Device);
-
+                        App.Current.OWBLE.Disconnect();
+                        _selectedBoard = null;
+                        Hud.Dismiss();
                     });
+                    
+                    await Task.Delay(100);
+
+                    try
+                    {
+                        var connectTask = App.Current.OWBLE.Connect(_selectedBoard);
+
+                        var connected = await connectTask;
+                    }
+                    catch (TaskCanceledException )
+                    {
+                        _selectedBoard = null;
+                        Hud.Dismiss();
+                    }
+                    catch (Exception )
+                    {
+                        await DisplayAlert("Error", $"Unable to connect to {board.Name}.", "Cancel");
+                    }
 
                 }
                 else
