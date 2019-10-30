@@ -235,9 +235,6 @@ namespace OWCE.Droid.DependencyImplementations
         }
         */
 
-        public Action<BluetoothState> BLEStateChanged { get; set; }
-        public Action<OWBoard> BoardDiscovered { get; set; }
-        public Action<OWBoard> BoardConnected { get; set; }
 
         private bool _isScanning = false;
         private BluetoothAdapter _adapter;
@@ -287,40 +284,8 @@ namespace OWCE.Droid.DependencyImplementations
                 Plugin.CurrentActivity.CrossCurrentActivity.Current.Activity.StartActivityForResult(enableBtIntent, MainActivity.REQUEST_ENABLE_BT);
             }
         }
-
-        public Task Disconnect()
-        {
-            if (_connectTaskCompletionSource != null && _connectTaskCompletionSource.Task.IsCanceled == false)
-            {
-                _connectTaskCompletionSource.SetCanceled();
-            }
-
-            // TODO: Handle is connecting.
-            if (_bluetoothGatt != null)
-            {
-                _bluetoothGatt.Disconnect();
-            }
-
-            _board = null;
-
-            return Task.CompletedTask;
-        }
         
 
-        public Task<bool> Connect(OWBoard board)
-        {
-            _board = board;
-
-            _connectTaskCompletionSource = new TaskCompletionSource<bool>();
-
-            if (board.NativePeripheral is BluetoothDevice device)
-            {
-                _gattCallback = new OWBLE_BluetoothGattCallback(this);
-                _bluetoothGatt = device.ConnectGatt(Plugin.CurrentActivity.CrossCurrentActivity.Current.Activity, false, _gattCallback);
-            }
-
-            return _connectTaskCompletionSource.Task;
-        }
 
         private void OnConnectionStateChange(BluetoothGatt gatt, GattStatus status, ProfileState newState)
         {
@@ -336,201 +301,7 @@ namespace OWCE.Droid.DependencyImplementations
                 _connectTaskCompletionSource.SetResult(false);
             }
         }
-
-        public async Task StartScanning(int timeout = 15)
-        {
-            if (_isScanning)
-                return;
-
-            _isScanning = true;
-
-            // TODO: Handle power on state.
-
-            if (_sdkInt >= BuildVersionCodes.Lollipop) // 21
-            {
-                _bleScanner = _adapter.BluetoothLeScanner;
-                _scanCallback = new OWBLE_ScanCallback(this);
-                var scanFilters = new List<ScanFilter>();
-                var scanSettingsBuilder = new ScanSettings.Builder();
-
-                var scanFilterBuilder = new ScanFilter.Builder();
-                scanFilterBuilder.SetServiceUuid(OWBoard.ServiceUUID.ToParcelUuid());
-                scanFilters.Add(scanFilterBuilder.Build());
-                _bleScanner.StartScan(scanFilters, scanSettingsBuilder.Build(), _scanCallback);
-            }
-            else if (_sdkInt >= BuildVersionCodes.JellyBeanMr2) // 18
-            {
-                _leScanCallback = new OWBLE_LeScanCallback(this);
-#pragma warning disable 0618
-                _adapter.StartLeScan(new Java.Util.UUID[] { OWBoard.ServiceUUID.ToUUID() }, _leScanCallback);
-#pragma warning restore 0618
-            }
-            else
-            {
-                throw new NotImplementedException("Can't run bluetooth scans on device lower than Android 4.3");
-            }
-
-            await Task.Delay(timeout * 1000);
-
-            StopScanning();
-        }
-
-        public void StopScanning()
-        {
-            if (_isScanning == false)
-                return;
-
-
-            if (_sdkInt >= BuildVersionCodes.Lollipop) // 21
-            {
-                _bleScanner.StopScan(_scanCallback);
-            }
-            else
-            {
-#pragma warning disable 0618
-                _adapter.StopLeScan(_leScanCallback);
-#pragma warning restore 0618
-            }
-
-            _isScanning = false;
-        }
-
-        public Task<byte[]> ReadValue(string characteristicGuid, bool important = false)
-        {
-            Console.WriteLine($"ReadValue: {characteristicGuid}");
-
-            if (_bluetoothGatt == null)
-                return null;
-
-            var uuid = UUID.FromString(characteristicGuid);
-
-            // TODO: Check for connected devices?
-            if (_characteristics.ContainsKey(uuid) == false)
-            {
-                // TODO Error?
-                return null;
-            }
-
-            // Already awaiting it.
-            if (_readQueue.ContainsKey(uuid))
-            {
-                return _readQueue[uuid].Task;
-            }
-
-            var taskCompletionSource = new TaskCompletionSource<byte[]>();
-
-            if (important)
-            {
-                // TODO: Put this at the start of the queue.
-                _readQueue.Add(uuid, taskCompletionSource);
-            }
-            else
-            {
-                _readQueue.Add(uuid, taskCompletionSource);
-            }
-
-            _gattOperationQueue.Enqueue(new OWBLE_QueueItem(_characteristics[uuid], OWBLE_QueueItemOperationType.Read));
-
-            ProcessQueue();
-            
-            return taskCompletionSource.Task;
-        }
-
-        public Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool important = false)
-        {
-            Console.WriteLine($"WriteValue: {characteristicGuid}");
-            if (_bluetoothGatt == null)
-                return null;
-
-            if (data.Length > 20)
-            {
-                // TODO: Error, some Android BLE devices do not handle > 20byte packets well.
-                return null;
-            }
-
-            var uuid = UUID.FromString(characteristicGuid);
-
-            // TODO: Check for connected devices?
-            if (_characteristics.ContainsKey(uuid) == false)
-            {
-                // TODO Error?
-                return null;
-            }
-
-            // TODO: Handle this.
-            /*
-            if (_readQueue.ContainsKey(uuid))
-            {
-                return _readQueue[uuid].Task;
-            }
-            */
-
-            var taskCompletionSource = new TaskCompletionSource<byte[]>();
-
-            if (important)
-            {
-                // TODO: Put this at the start of the queue.
-                _writeQueue.Add(uuid, taskCompletionSource);
-            }
-            else
-            {
-                _writeQueue.Add(uuid, taskCompletionSource);
-            }
-
-
-            _gattOperationQueue.Enqueue(new OWBLE_QueueItem(_characteristics[uuid], OWBLE_QueueItemOperationType.Write));
-
-            ProcessQueue();
-
-            return taskCompletionSource.Task;
-        }
-
-        public Task SubscribeValue(string characteristicGuid, bool important = false)
-        {
-            Console.WriteLine($"SubscribeValue: {characteristicGuid}");
-            if (_bluetoothGatt == null)
-                return null;
-
-            var uuid = UUID.FromString(characteristicGuid);
-
-            // TODO: Check for connected devices?
-            if (_characteristics.ContainsKey(uuid) == false)
-            {
-                // TODO Error?
-                return null;
-            }
-
-
-            _gattOperationQueue.Enqueue(new OWBLE_QueueItem(_characteristics[uuid], OWBLE_QueueItemOperationType.Subscribe));
-
-            ProcessQueue();
-
-            return Task.CompletedTask;
-        }
-
-        public Task UnsubscribeValue(string characteristicGuid, bool important = false)
-        {
-            Console.WriteLine($"UnsubscribeValue: {characteristicGuid}");
-            if (_bluetoothGatt == null)
-                return null;
-
-            var uuid = UUID.FromString(characteristicGuid);
-
-            // TODO: Check for connected devices?
-            if (_characteristics.ContainsKey(uuid) == false)
-            {
-                // TODO Error?
-                return null;
-            }
-
-            _gattOperationQueue.Enqueue(new OWBLE_QueueItem(_characteristics[uuid], OWBLE_QueueItemOperationType.Unsubscribe));
-
-            ProcessQueue();
-
-            return Task.CompletedTask;
-        }
-
-
+               
         private void ProcessQueue()
         {
             Console.WriteLine($"ProcessQueue: {_gattOperationQueue.Count}");
@@ -628,5 +399,238 @@ namespace OWCE.Droid.DependencyImplementations
             Console.WriteLine($"OnCharacteristicChanged: {characteristic.Uuid}, {characteristic.GetValue()}");
 
         }
+
+
+        #region IOWBLE
+        public Action<BluetoothState> BLEStateChanged { get; set; }
+        public Action<OWBoard> BoardDiscovered { get; set; }
+        public Action<OWBoard> BoardConnected { get; set; }
+
+        public Task<bool> Connect(OWBoard board)
+        {
+            _board = board;
+
+            _connectTaskCompletionSource = new TaskCompletionSource<bool>();
+
+            if (board.NativePeripheral is BluetoothDevice device)
+            {
+                _gattCallback = new OWBLE_BluetoothGattCallback(this);
+                _bluetoothGatt = device.ConnectGatt(Plugin.CurrentActivity.CrossCurrentActivity.Current.Activity, false, _gattCallback);
+            }
+
+            return _connectTaskCompletionSource.Task;
+        }
+
+        public Task Disconnect()
+        {
+            if (_connectTaskCompletionSource != null && _connectTaskCompletionSource.Task.IsCanceled == false)
+            {
+                _connectTaskCompletionSource.SetCanceled();
+            }
+
+            // TODO: Handle is connecting.
+            if (_bluetoothGatt != null)
+            {
+                _bluetoothGatt.Disconnect();
+            }
+
+            _board = null;
+
+            return Task.CompletedTask;
+        }
+        public async Task StartScanning(int timeout = 15)
+        {
+            if (_isScanning)
+                return;
+
+            _isScanning = true;
+
+            // TODO: Handle power on state.
+
+            if (_sdkInt >= BuildVersionCodes.Lollipop) // 21
+            {
+                _bleScanner = _adapter.BluetoothLeScanner;
+                _scanCallback = new OWBLE_ScanCallback(this);
+                var scanFilters = new List<ScanFilter>();
+                var scanSettingsBuilder = new ScanSettings.Builder();
+
+                var scanFilterBuilder = new ScanFilter.Builder();
+                scanFilterBuilder.SetServiceUuid(OWBoard.ServiceUUID.ToParcelUuid());
+                scanFilters.Add(scanFilterBuilder.Build());
+                _bleScanner.StartScan(scanFilters, scanSettingsBuilder.Build(), _scanCallback);
+            }
+            else if (_sdkInt >= BuildVersionCodes.JellyBeanMr2) // 18
+            {
+                _leScanCallback = new OWBLE_LeScanCallback(this);
+#pragma warning disable 0618
+                _adapter.StartLeScan(new Java.Util.UUID[] { OWBoard.ServiceUUID.ToUUID() }, _leScanCallback);
+#pragma warning restore 0618
+            }
+            else
+            {
+                throw new NotImplementedException("Can't run bluetooth scans on device lower than Android 4.3");
+            }
+
+            await Task.Delay(timeout * 1000);
+
+            StopScanning();
+        }
+
+        public void StopScanning()
+        {
+            if (_isScanning == false)
+                return;
+
+
+            if (_sdkInt >= BuildVersionCodes.Lollipop) // 21
+            {
+                _bleScanner.StopScan(_scanCallback);
+            }
+            else
+            {
+#pragma warning disable 0618
+                _adapter.StopLeScan(_leScanCallback);
+#pragma warning restore 0618
+            }
+
+            _isScanning = false;
+        }
+
+
+        public Task<byte[]> ReadValue(string characteristicGuid, bool important = false)
+        {
+            Console.WriteLine($"ReadValue: {characteristicGuid}");
+
+            if (_bluetoothGatt == null)
+                return null;
+
+            var uuid = UUID.FromString(characteristicGuid);
+
+            // TODO: Check for connected devices?
+            if (_characteristics.ContainsKey(uuid) == false)
+            {
+                // TODO Error?
+                return null;
+            }
+
+            // Already awaiting it.
+            if (_readQueue.ContainsKey(uuid))
+            {
+                return _readQueue[uuid].Task;
+            }
+
+            var taskCompletionSource = new TaskCompletionSource<byte[]>();
+
+            if (important)
+            {
+                // TODO: Put this at the start of the queue.
+                _readQueue.Add(uuid, taskCompletionSource);
+            }
+            else
+            {
+                _readQueue.Add(uuid, taskCompletionSource);
+            }
+
+            _gattOperationQueue.Enqueue(new OWBLE_QueueItem(_characteristics[uuid], OWBLE_QueueItemOperationType.Read));
+
+            ProcessQueue();
+
+            return taskCompletionSource.Task;
+        }
+
+        public Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool important = false)
+        {
+            Console.WriteLine($"WriteValue: {characteristicGuid}");
+            if (_bluetoothGatt == null)
+                return null;
+
+            if (data.Length > 20)
+            {
+                // TODO: Error, some Android BLE devices do not handle > 20byte packets well.
+                return null;
+            }
+
+            var uuid = UUID.FromString(characteristicGuid);
+
+            // TODO: Check for connected devices?
+            if (_characteristics.ContainsKey(uuid) == false)
+            {
+                // TODO Error?
+                return null;
+            }
+
+            // TODO: Handle this.
+            /*
+            if (_readQueue.ContainsKey(uuid))
+            {
+                return _readQueue[uuid].Task;
+            }
+            */
+
+            var taskCompletionSource = new TaskCompletionSource<byte[]>();
+
+            if (important)
+            {
+                // TODO: Put this at the start of the queue.
+                _writeQueue.Add(uuid, taskCompletionSource);
+            }
+            else
+            {
+                _writeQueue.Add(uuid, taskCompletionSource);
+            }
+
+
+            _gattOperationQueue.Enqueue(new OWBLE_QueueItem(_characteristics[uuid], OWBLE_QueueItemOperationType.Write));
+
+            ProcessQueue();
+
+            return taskCompletionSource.Task;
+        }
+
+        public Task SubscribeValue(string characteristicGuid, bool important = false)
+        {
+            Console.WriteLine($"SubscribeValue: {characteristicGuid}");
+            if (_bluetoothGatt == null)
+                return null;
+
+            var uuid = UUID.FromString(characteristicGuid);
+
+            // TODO: Check for connected devices?
+            if (_characteristics.ContainsKey(uuid) == false)
+            {
+                // TODO Error?
+                return null;
+            }
+
+
+            _gattOperationQueue.Enqueue(new OWBLE_QueueItem(_characteristics[uuid], OWBLE_QueueItemOperationType.Subscribe));
+
+            ProcessQueue();
+
+            return Task.CompletedTask;
+        }
+
+        public Task UnsubscribeValue(string characteristicGuid, bool important = false)
+        {
+            Console.WriteLine($"UnsubscribeValue: {characteristicGuid}");
+            if (_bluetoothGatt == null)
+                return null;
+
+            var uuid = UUID.FromString(characteristicGuid);
+
+            // TODO: Check for connected devices?
+            if (_characteristics.ContainsKey(uuid) == false)
+            {
+                // TODO Error?
+                return null;
+            }
+
+            _gattOperationQueue.Enqueue(new OWBLE_QueueItem(_characteristics[uuid], OWBLE_QueueItemOperationType.Unsubscribe));
+
+            ProcessQueue();
+
+            return Task.CompletedTask;
+        }
+        #endregion
     }
 }

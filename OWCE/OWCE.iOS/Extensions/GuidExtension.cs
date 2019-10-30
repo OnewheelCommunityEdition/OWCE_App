@@ -16,5 +16,13 @@ namespace OWCE.MacOS.Extensions
             //return CBUUID.FromBytes(guid.ToByteArray());
         }
 
+        public static Guid ToGuid(this CBUUID guid)
+        {
+            return Guid.Parse(guid.ToString());
+            //var bytes = guid.ToByteArray();
+            //return CBUUID.FromString(guid.ToString());
+            //return CBUUID.FromBytes(guid.ToByteArray());
+        }
+
     }
 }

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 
 namespace OWCE.DependencyInterfaces
 {
-
     public interface IOWBLE
     {
         Action<BluetoothState> BLEStateChanged { get; set; }

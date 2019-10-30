@@ -6,6 +6,7 @@ using Foundation;
 using CoreFoundation;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Generic;
 
 #if __IOS__
 using OWCE.iOS.Extensions;
@@ -17,69 +18,25 @@ using OWCE.MacOS.Extensions;
 namespace OWCE.MacOS.DependencyImplementations
 #endif
 {
-    public class OWBLE : NSObject, IOWBLE, ICBCentralManagerDelegate
+    public class OWBLE : NSObject, IOWBLE, ICBCentralManagerDelegate, ICBPeripheralDelegate
     {
-        public Action<string> BLEStateChanged { get; set; }
-        public Action<OWBoard> BoardDiscovered { get; set; }
-        public Action<OWBoard> BoardConnected { get; set; }
-
-        private CBCentralManager _centralManager;
-        private CBPeripheral _peripheral;
-        private DispatchQueue _dispatchQueue;
+        CBCentralManager _centralManager;
+        CBPeripheral _peripheral;
+        DispatchQueue _dispatchQueue;
 
         public OWBLE()
         {
             _dispatchQueue = new DispatchQueue("CBCentralManager_Queue");
             _centralManager = new CBCentralManager(this, _dispatchQueue);
-            /*
-            _centralManager.ConnectedPeripheral += CentralManager_ConnectedPeripheral;
-            _centralManager.DisconnectedPeripheral += CentralManager_DisconnectedPeripheral;
-            _centralManager.DiscoveredPeripheral += CentralManager_DiscoveredPeripheral;
-            _centralManager.FailedToConnectPeripheral += CentralManager_FailedToConnectPeripheral;
-            _centralManager.RetrievedConnectedPeripherals += CentralManager_RetrievedConnectedPeripherals;
-            _centralManager.RetrievedPeripherals += CentralManager_RetrievedPeripherals;
-            _centralManager.UpdatedState += CentralManager_UpdatedState;
-            _centralManager.WillRestoreState += CentralManager_WillRestoreState;
-            */
         }
 
         public async Task StartScanning(int timeout = 15)
         {
             Console.WriteLine("StartScanning");
 
-            /*
-            //B9859BB5-2CF8-4583-A396-9950656F2265 
-            var serviceUuids = new Guid[]
-            {
-                //Guid.Parse("40DD9B0B-7D8D-FA29-B8D7-28F026F6C247"),
-                //Guid.Parse("B9859BB5-2CF8-4583-A396-9950656F2265"),
-                Guid.Parse("E659F300-EA98-11E3-AC10-0800200C9A66"),
-            };
-            //40DD9B0B-7D8D-FA29-B8D7-28F026F6C247
-            //B9859BB5-2CF8-4583-A396-9950656F2265 
-            CBUUID[] serviceCbuuids = null;
-            if (serviceUuids != null && serviceUuids.Any())
-            {
-                serviceCbuuids = serviceUuids.Select(u => CBUUID.FromString(u.ToString())).ToArray();
-            }
-            */
             _centralManager.ScanForPeripherals(new CBUUID[] { OWBoard.ServiceUUID.ToCBUUID() }, new PeripheralScanningOptions { AllowDuplicatesKey = true });
 
-            //CBUUID[] peripherals = null;
-            //_centralManager.ScanForPeripherals(peripherals, new PeripheralScanningOptions { AllowDuplicatesKey = false });
-
-            /*
-            //Console.WriteLine("IsMainThread: " + Xamarin.Essentials.MainThread.IsMainThread);
-            _centralManager.ScanForPeripherals((CBUUID[])null); // OWBoard.ServiceUUID.ToCBUUID());
-
-
-            if (_centralManager.IsScanning)
-            {
-                _centralManager.StopScan();
-            }
-            */
-
-            await Task.Delay(timeout);
+            await Task.Delay(timeout * 1000);
 
             StopScanning();
         }
@@ -87,21 +44,87 @@ namespace OWCE.MacOS.DependencyImplementations
         public void StopScanning()
         {
             Console.WriteLine("StopScanning");
-            _centralManager.StopScan();
+            if (_centralManager.IsScanning)
+            {
+                _centralManager.StopScan();
+            }
         }
 
-        public void Disconnect()
+        CBService _service;
+
+        [Export("peripheral:didDiscoverServices:")]
+        public void DiscoveredService(CBPeripheral peripheral, NSError error)
         {
-            Console.WriteLine("Disconnect");
-            _centralManager.CancelPeripheralConnection(_peripheral);
+            Console.WriteLine("Peripheral_DiscoveredService: " + peripheral.Name);
+
+            CBService foundService = null;
+
+            foreach (var service in peripheral.Services)
+            {
+                if (service.UUID == OWBoard.ServiceUUID.ToCBUUID())
+                {
+                    foundService = service;
+                    break;
+                }
+            }
+
+            if (foundService != null)
+            {
+                _service = foundService;
+                _peripheral.DiscoverCharacteristics(_service);
+            }
         }
 
-#region CBCentralManager_Delegate
+        Dictionary<Guid, CBCharacteristic> _characteristics = new Dictionary<Guid, CBCharacteristic>();
+
+        [Export("peripheral:didDiscoverCharacteristicsForService:error:")]
+        public void DiscoveredCharacteristic(CBPeripheral peripheral, CBService service, NSError error)
+        {
+            Console.WriteLine("Peripheral_DiscoveredCharacteristic");
+
+            foreach (var characteristic in _service.Characteristics)
+            {
+                var guid = characteristic.UUID.ToGuid();
+                if (_characteristics.ContainsKey(guid))
+                {
+                    _characteristics[guid] = characteristic;
+                }
+                else
+                {
+                    _characteristics.Add(guid, characteristic);
+                }
+            }
+
+            BoardConnected?.Invoke(_board);
+        }
+
+        [Export("peripheral:didUpdateValueForCharacteristic:error:")]
+        public void UpdatedCharacterteristicValue(CBPeripheral peripheral, CBCharacteristic characteristic, NSError error)
+        {
+            Console.WriteLine("Peripheral_UpdatedCharacterteristicValue");
+
+        }
+
+        [Export("peripheral:didWriteValueForCharacteristic:error:")]
+        public void WroteCharacteristicValue(CBPeripheral peripheral, CBCharacteristic characteristic, NSError error)
+        {
+            Console.WriteLine("Peripheral_WroteCharacteristicValue");
+
+        }
+
+        #region CBCentralManager_Delegate
         [Export("centralManager:didConnectPeripheral:")]
         public void CentralManager_ConnectedPeripheral(CBCentralManager central, CBPeripheral peripheral)
         {
             Console.WriteLine("CentralManager_ConnectedPeripheral: " + peripheral.Name);
+            _connectionCompletionSource.SetResult(true);
+
+            var services = _peripheral.Services;
+            _peripheral.DiscoverServices(new CBUUID[] { OWBoard.ServiceUUID.ToCBUUID() });
+
+            //this.BoardConnected?.Invoke(_board);
         }
+
 
         [Export("centralManager:didDiscoverPeripheral:advertisementData:RSSI:")]
         public void CentralManager_DiscoveredPeripheral(CBCentralManager central, CBPeripheral peripheral, NSDictionary advertisementData, NSNumber RSSI)
@@ -113,6 +136,7 @@ namespace OWCE.MacOS.DependencyImplementations
                 ID = peripheral.Identifier.ToString(),
                 Name = peripheral.Name ?? "Onewheel",
                 IsAvailable = true,
+                NativePeripheral = peripheral,
             };
 
             BoardDiscovered?.Invoke(board);
@@ -153,6 +177,72 @@ namespace OWCE.MacOS.DependencyImplementations
             Console.WriteLine("CentralManager_WillRestoreState");
 
         }
-#endregion
+        #endregion
+
+        TaskCompletionSource<bool> _connectionCompletionSource = null;
+        OWBoard _board;
+
+        #region IOWBLE
+        public Action<BluetoothState> BLEStateChanged { get; set; }
+        public Action<OWBoard> BoardDiscovered { get; set; }
+        public Action<OWBoard> BoardConnected { get; set; }
+
+        public Task<bool> Connect(OWBoard board)
+        {
+            _connectionCompletionSource = new TaskCompletionSource<bool>();
+
+            if (board.NativePeripheral is CBPeripheral peripheral)
+            {
+                _board = board;
+                _peripheral = peripheral;
+                _peripheral.WeakDelegate = this;
+
+                var options = new PeripheralConnectionOptions();
+                options.NotifyOnConnection = true;
+                options.NotifyOnDisconnection = true;
+                options.NotifyOnNotification = true;
+
+                _centralManager.ConnectPeripheral(peripheral, options);
+            }
+            else
+            {
+                // TODO Alert.
+            }
+
+            return _connectionCompletionSource.Task;
+
+        }
+
+        public Task Disconnect()
+        {
+            Console.WriteLine("Disconnect");
+            _centralManager.CancelPeripheralConnection(_peripheral);
+            return Task.CompletedTask;
+        }
+
+
+        public Task<byte[]> ReadValue(string characteristicGuid, bool important = false)
+        {
+
+
+            //_peripheral.read
+            throw new NotImplementedException();
+        }
+
+        public Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool important = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SubscribeValue(string characteristicGuid, bool important = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UnsubscribeValue(string characteristicGuid, bool important = false)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }
