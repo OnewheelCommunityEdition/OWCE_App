@@ -7,8 +7,8 @@
     <ProjectGuid>{49858A1E-C5D0-47D0-AA08-F87A099C6AE0}</ProjectGuid>
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
-    <RootNamespace>OWCE.MacOS</RootNamespace>
-    <AssemblyName>OWCE.MacOS</AssemblyName>
+    <RootNamespace>OWCE.macOS</RootNamespace>
+    <AssemblyName>OWCE.macOS</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <TargetFrameworkIdentifier>Xamarin.Mac</TargetFrameworkIdentifier>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
