@@ -44,7 +44,7 @@
 	<string>When recording your own rides.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open.</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>Needs Calendar Permission</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Access bluetooth to connect to your Onewheel</string>
 </dict>
 </plist>
