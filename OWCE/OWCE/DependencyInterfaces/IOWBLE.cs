@@ -8,6 +8,7 @@ namespace OWCE.DependencyInterfaces
         Action<BluetoothState> BLEStateChanged { get; set; }
         Action<OWBoard> BoardDiscovered { get; set; }
         Action<OWBoard> BoardConnected { get; set; }
+        Action<string, byte[]> BoardValueChanged { get; set; }
 
         Task<bool> Connect(OWBoard board);
         Task Disconnect();

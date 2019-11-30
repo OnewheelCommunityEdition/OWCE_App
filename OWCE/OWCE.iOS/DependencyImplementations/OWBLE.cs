@@ -75,23 +75,22 @@ namespace OWCE.MacOS.DependencyImplementations
             }
         }
 
-        Dictionary<Guid, CBCharacteristic> _characteristics = new Dictionary<Guid, CBCharacteristic>();
+        Dictionary<CBUUID, CBCharacteristic> _characteristics = new Dictionary<CBUUID, CBCharacteristic>();
 
         [Export("peripheral:didDiscoverCharacteristicsForService:error:")]
         public void DiscoveredCharacteristic(CBPeripheral peripheral, CBService service, NSError error)
         {
             Console.WriteLine("Peripheral_DiscoveredCharacteristic");
-
+            //var cbuuid = CBUUID.FromString(characteristicGuid);
             foreach (var characteristic in _service.Characteristics)
             {
-                var guid = characteristic.UUID.ToGuid();
-                if (_characteristics.ContainsKey(guid))
+                if (_characteristics.ContainsKey(characteristic.UUID))
                 {
-                    _characteristics[guid] = characteristic;
+                    _characteristics[characteristic.UUID] = characteristic;
                 }
                 else
                 {
-                    _characteristics.Add(guid, characteristic);
+                    _characteristics.Add(characteristic.UUID, characteristic);
                 }
             }
 
@@ -103,6 +102,31 @@ namespace OWCE.MacOS.DependencyImplementations
         {
             Console.WriteLine("Peripheral_UpdatedCharacterteristicValue");
 
+            if (_characteristics.ContainsKey(characteristic.UUID) == false)
+            {
+                return;
+            }
+
+
+            if (_readQueue.ContainsKey(characteristic.UUID) || _notifyList.Contains(characteristic.UUID))
+            {
+                var data = characteristic.Value;
+
+                var dataBytes = new byte[data.Length];
+                System.Runtime.InteropServices.Marshal.Copy(data.Bytes, dataBytes, 0, Convert.ToInt32(data.Length));
+
+                if (_notifyList.Contains(characteristic.UUID))
+                {
+                    BoardValueChanged?.Invoke(characteristic.UUID.ToString(), dataBytes);
+                }
+
+                if (_readQueue.ContainsKey(characteristic.UUID))
+                {
+                    var task = _readQueue[characteristic.UUID];
+                    _readQueue.Remove(characteristic.UUID);
+                    task.SetResult(dataBytes);
+                }
+            }
         }
 
         [Export("peripheral:didWriteValueForCharacteristic:error:")]
@@ -110,6 +134,32 @@ namespace OWCE.MacOS.DependencyImplementations
         {
             Console.WriteLine("Peripheral_WroteCharacteristicValue");
 
+
+            if (_characteristics.ContainsKey(characteristic.UUID) == false)
+            {
+                return;
+            }
+
+            if (_writeQueue.ContainsKey(characteristic.UUID) == false)
+            {
+                return;
+            }
+
+            var data = characteristic.Value;
+            byte[] dataBytes;
+            if (data != null)
+            {
+                dataBytes = new byte[data.Length];
+                System.Runtime.InteropServices.Marshal.Copy(data.Bytes, dataBytes, 0, Convert.ToInt32(data.Length));
+            }
+            else
+            {
+                dataBytes = null;
+            }
+
+            var task = _writeQueue[characteristic.UUID];
+            _writeQueue.Remove(characteristic.UUID);
+            task.SetResult(dataBytes);
         }
 
         #region CBCentralManager_Delegate
@@ -186,6 +236,7 @@ namespace OWCE.MacOS.DependencyImplementations
         public Action<BluetoothState> BLEStateChanged { get; set; }
         public Action<OWBoard> BoardDiscovered { get; set; }
         public Action<OWBoard> BoardConnected { get; set; }
+        public Action<string, byte[]> BoardValueChanged { get; set; }
 
         public Task<bool> Connect(OWBoard board)
         {
@@ -220,28 +271,114 @@ namespace OWCE.MacOS.DependencyImplementations
             return Task.CompletedTask;
         }
 
+        Dictionary<CBUUID, TaskCompletionSource<byte[]>> _readQueue = new Dictionary<CBUUID, TaskCompletionSource<byte[]>>();
+        Dictionary<CBUUID, TaskCompletionSource<byte[]>> _writeQueue = new Dictionary<CBUUID, TaskCompletionSource<byte[]>>();
+        List<CBUUID> _notifyList = new List<CBUUID>();
+
+
 
         public Task<byte[]> ReadValue(string characteristicGuid, bool important = false)
         {
+            var cbuuid = CBUUID.FromString(characteristicGuid);
+            
+            // TODO: Check for connected devices?
+            if (_characteristics.ContainsKey(cbuuid) == false)
+            {
+                // TODO Error?
+                return null;
+            }
+
+            // Already awaiting it.
+            if (_readQueue.ContainsKey(cbuuid))
+            {
+                return _readQueue[cbuuid].Task;
+            }
+
+            var taskCompletionSource = new TaskCompletionSource<byte[]>();
+
+            if (important)
+            {
+                // TODO: Put this at the start of the queue.
+                _readQueue.Add(cbuuid, taskCompletionSource);
+            }
+            else
+            {
+                _readQueue.Add(cbuuid, taskCompletionSource);
+            }
 
 
-            //_peripheral.read
-            throw new NotImplementedException();
+            _peripheral.ReadValue(_characteristics[cbuuid]);
+
+            return taskCompletionSource.Task;
         }
 
         public Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool important = false)
         {
-            throw new NotImplementedException();
+            var cbuuid = CBUUID.FromString(characteristicGuid);
+
+            // TODO: Check for connected devices?
+            if (_characteristics.ContainsKey(cbuuid) == false)
+            {
+                // TODO Error?
+                return null;
+            }
+
+            var characteristic = _characteristics[cbuuid];
+            var nsData = NSData.FromArray(data);
+
+            var taskCompletionSource = new TaskCompletionSource<byte[]>();
+
+            if (important)
+            {
+                // TODO: Put this at the start of the queue.
+                _writeQueue.Add(cbuuid, taskCompletionSource);
+            }
+            else
+            {
+                _writeQueue.Add(cbuuid, taskCompletionSource);
+            }
+
+            _peripheral.WriteValue(nsData, characteristic, CBCharacteristicWriteType.WithResponse);
+
+            return taskCompletionSource.Task;
         }
 
         public Task SubscribeValue(string characteristicGuid, bool important = false)
         {
-            throw new NotImplementedException();
+            var cbuuid = CBUUID.FromString(characteristicGuid);
+
+            // TODO: Check for connected devices?
+            if (_characteristics.ContainsKey(cbuuid) == false)
+            {
+                // TODO Error?
+                return null;
+            }
+            if (_notifyList.Contains(cbuuid) == false)
+            {
+                _notifyList.Add(cbuuid);
+            }
+            _peripheral.SetNotifyValue(true, _characteristics[cbuuid]);
+
+            return Task.CompletedTask;
+            //throw new NotImplementedException();
         }
 
         public Task UnsubscribeValue(string characteristicGuid, bool important = false)
         {
-            throw new NotImplementedException();
+            var cbuuid = CBUUID.FromString(characteristicGuid);
+
+            // TODO: Check for connected devices?
+            if (_characteristics.ContainsKey(cbuuid) == false)
+            {
+                // TODO Error?
+                return null;
+            }
+            _notifyList.RemoveAll((c) => c.Equals(cbuuid));
+            _peripheral.SetNotifyValue(false, _characteristics[cbuuid]);
+
+            
+            return Task.CompletedTask;
+            //throw new NotImplementedException();
         }
         #endregion
     }

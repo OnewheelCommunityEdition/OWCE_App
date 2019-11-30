@@ -534,7 +534,25 @@ namespace OWCE
 
         public OWBoard()
         {
+            App.Current.OWBLE.BoardValueChanged += OWBLE_BoardValueChanged;
+        }
 
+        private void OWBLE_BoardValueChanged(string characteristicGuid, byte[] data)
+        {
+            if (_isHandshaking && characteristicGuid.Equals(SerialReadUUID, StringComparison.CurrentCultureIgnoreCase))
+            {
+                _handshakeBuffer.AddRange(data);
+                if (_handshakeBuffer.Count == 20)
+                {
+                    _isHandshaking = false;
+                    _handshakeTaskCompletionSource.SetResult(_handshakeBuffer.ToArray<byte>());
+                }
+
+                return;
+            }
+
+
+            SetValue(characteristicGuid, data);
         }
 
         public void SetBatteryCellValue(uint cell, uint value)

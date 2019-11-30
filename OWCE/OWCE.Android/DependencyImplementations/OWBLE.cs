@@ -405,6 +405,7 @@ namespace OWCE.Droid.DependencyImplementations
         public Action<BluetoothState> BLEStateChanged { get; set; }
         public Action<OWBoard> BoardDiscovered { get; set; }
         public Action<OWBoard> BoardConnected { get; set; }
+        public Action<string, byte[]> BoardValueChanged { get; set; }
 
         public Task<bool> Connect(OWBoard board)
         {
