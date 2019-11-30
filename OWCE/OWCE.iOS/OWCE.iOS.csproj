@@ -124,6 +124,46 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-29x29.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\hamburger.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\hamburger.imageset\hamburger.png" />
+    <ImageAsset Include="Assets.xcassets\hamburger.imageset\hamburger%402x.png" />
+    <ImageAsset Include="Assets.xcassets\hamburger.imageset\hamburger%403x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\menu_leaderboards.png" />
+    <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\menu_leaderboards%402x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\menu_leaderboards%403x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_myrides.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\menu_myrides.imageset\menu_myrides.png" />
+    <ImageAsset Include="Assets.xcassets\menu_myrides.imageset\menu_myrides%402x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_myrides.imageset\menu_myrides%403x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_onewheels.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\menu_onewheels.imageset\menu_onewheels.png" />
+    <ImageAsset Include="Assets.xcassets\menu_onewheels.imageset\menu_onewheels%402x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_onewheels.imageset\menu_onewheels%403x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_settings.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\menu_settings.imageset\menu_settings.png" />
+    <ImageAsset Include="Assets.xcassets\menu_settings.imageset\menu_settings%402x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_settings.imageset\menu_settings%403x.png" />
+    <ImageAsset Include="Assets.xcassets\ow_icon_plus.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\ow_icon_plus.imageset\ow_icon_plus.png" />
+    <ImageAsset Include="Assets.xcassets\ow_icon_plus.imageset\ow_icon_plus%402x.png" />
+    <ImageAsset Include="Assets.xcassets\ow_icon_plus.imageset\ow_icon_plus%403x.png" />
+    <ImageAsset Include="Assets.xcassets\ow_icon_v1.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\ow_icon_v1.imageset\ow_icon_v1.png" />
+    <ImageAsset Include="Assets.xcassets\ow_icon_v1.imageset\ow_icon_v1%402x.png" />
+    <ImageAsset Include="Assets.xcassets\ow_icon_v1.imageset\ow_icon_v1%403x.png" />
+    <ImageAsset Include="Assets.xcassets\ow_icon_xr.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\ow_icon_xr.imageset\ow_icon_xr.png" />
+    <ImageAsset Include="Assets.xcassets\ow_icon_xr.imageset\ow_icon_xr%402x.png" />
+    <ImageAsset Include="Assets.xcassets\ow_icon_xr.imageset\ow_icon_xr%403x.png" />
+    <ImageAsset Include="Assets.xcassets\ow_icon.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\ow_icon.imageset\ow_icon.png" />
+    <ImageAsset Include="Assets.xcassets\ow_icon.imageset\ow_icon%402x.png" />
+    <ImageAsset Include="Assets.xcassets\ow_icon.imageset\ow_icon%403x.png" />
+    <ImageAsset Include="Assets.xcassets\splash_icon.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\splash_icon.imageset\splash_icon.png" />
+    <ImageAsset Include="Assets.xcassets\splash_icon.imageset\splash_icon%402x.png" />
+    <ImageAsset Include="Assets.xcassets\splash_icon.imageset\splash_icon%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -145,40 +185,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\hamburger.png" />
-    <BundleResource Include="Resources\hamburger%402x.png" />
-    <BundleResource Include="Resources\hamburger%403x.png" />
-    <BundleResource Include="Resources\menu_leaderboards.png" />
-    <BundleResource Include="Resources\menu_leaderboards%402x.png" />
-    <BundleResource Include="Resources\menu_leaderboards%403x.png" />
-    <BundleResource Include="Resources\menu_myrides.png" />
-    <BundleResource Include="Resources\menu_myrides%402x.png" />
-    <BundleResource Include="Resources\menu_myrides%403x.png" />
-    <BundleResource Include="Resources\menu_onewheels.png" />
-    <BundleResource Include="Resources\menu_onewheels%402x.png" />
-    <BundleResource Include="Resources\menu_onewheels%403x.png" />
-    <BundleResource Include="Resources\menu_settings.png" />
-    <BundleResource Include="Resources\menu_settings%402x.png" />
-    <BundleResource Include="Resources\menu_settings%403x.png" />
-    <BundleResource Include="Resources\ow_icon_plus.png" />
-    <BundleResource Include="Resources\ow_icon_plus%402x.png" />
-    <BundleResource Include="Resources\ow_icon_plus%403x.png" />
-    <BundleResource Include="Resources\ow_icon_v1.png" />
-    <BundleResource Include="Resources\ow_icon_v1%402x.png" />
-    <BundleResource Include="Resources\ow_icon_v1%403x.png" />
-    <BundleResource Include="Resources\ow_icon_xr.png" />
-    <BundleResource Include="Resources\ow_icon_xr%402x.png" />
-    <BundleResource Include="Resources\ow_icon_xr%403x.png" />
-    <BundleResource Include="Resources\ow_icon.png" />
-    <BundleResource Include="Resources\ow_icon%402x.png" />
-    <BundleResource Include="Resources\ow_icon%403x.png" />
-    <BundleResource Include="Resources\splash_icon.png" />
-    <BundleResource Include="Resources\splash_icon%402x.png" />
-    <BundleResource Include="Resources\splash_icon%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="DependencyImplementations\" />
     <Folder Include="Extensions\" />
+    <Folder Include="Assets.xcassets\hamburger.imageset\" />
+    <Folder Include="Assets.xcassets\menu_leaderboards.imageset\" />
+    <Folder Include="Assets.xcassets\menu_myrides.imageset\" />
+    <Folder Include="Assets.xcassets\menu_onewheels.imageset\" />
+    <Folder Include="Assets.xcassets\menu_settings.imageset\" />
+    <Folder Include="Assets.xcassets\ow_icon_plus.imageset\" />
+    <Folder Include="Assets.xcassets\ow_icon_v1.imageset\" />
+    <Folder Include="Assets.xcassets\ow_icon_xr.imageset\" />
+    <Folder Include="Assets.xcassets\ow_icon.imageset\" />
+    <Folder Include="Assets.xcassets\splash_icon.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />
