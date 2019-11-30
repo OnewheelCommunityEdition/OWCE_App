@@ -76,28 +76,28 @@
       <HintPath>..\packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\packages\Google.Protobuf.3.10.0\lib\netstandard2.0\Google.Protobuf.dll</HintPath>
+      <HintPath>..\packages\Google.Protobuf.3.10.1\lib\netstandard2.0\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Licensing">
-      <HintPath>..\packages\Syncfusion.Licensing.17.3.0.14\lib\Xamarin.Mac\Syncfusion.Licensing.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Licensing.17.3.0.29\lib\Xamarin.Mac\Syncfusion.Licensing.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Core.XForms">
-      <HintPath>..\packages\Syncfusion.Xamarin.Core.17.3.0.14\lib\Xamarin.Mac\Syncfusion.Core.XForms.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Xamarin.Core.17.3.0.29\lib\Xamarin.Mac\Syncfusion.Core.XForms.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Core.XForms.macOS">
-      <HintPath>..\packages\Syncfusion.Xamarin.Core.17.3.0.14\lib\Xamarin.Mac\Syncfusion.Core.XForms.macOS.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Xamarin.Core.17.3.0.29\lib\Xamarin.Mac\Syncfusion.Core.XForms.macOS.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.SfGauge.XForms">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfGauge.17.3.0.14\lib\netstandard2.0\Syncfusion.SfGauge.XForms.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Xamarin.SfGauge.17.3.0.29\lib\netstandard2.0\Syncfusion.SfGauge.XForms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter">
-      <HintPath>..\packages\Microsoft.AppCenter.2.1.1\lib\portable-net45+win8+wpa81+wp8\Microsoft.AppCenter.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.2.6.2\lib\netstandard1.0\Microsoft.AppCenter.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Crashes">
-      <HintPath>..\packages\Microsoft.AppCenter.Crashes.2.1.1\lib\portable-net45+win8+wpa81+wp8\Microsoft.AppCenter.Crashes.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.Crashes.2.6.2\lib\netstandard1.0\Microsoft.AppCenter.Crashes.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Analytics">
-      <HintPath>..\packages\Microsoft.AppCenter.Analytics.2.1.1\lib\portable-net45+win8+wpa81+wp8\Microsoft.AppCenter.Analytics.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AppCenter.Analytics.2.6.2\lib\netstandard1.0\Microsoft.AppCenter.Analytics.dll</HintPath>
     </Reference>
     <Reference Include="Plugin.Geolocator">
       <HintPath>..\packages\Xam.Plugin.Geolocator.4.5.0.6\lib\xamarinmac20\Plugin.Geolocator.dll</HintPath>
