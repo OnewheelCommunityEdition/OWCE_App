@@ -50,7 +50,7 @@ namespace OWCE
         {
             base.OnSizeAllocated(width, height);
 
-            if (GaugeAbsolueLayout.WidthRequest != width)
+            if (GaugeAbsolueLayout.WidthRequest.AlmostEqualTo(width) == false)
             {
                 GaugeAbsolueLayout.WidthRequest = width;
                 GaugeAbsolueLayout.HeightRequest = width;

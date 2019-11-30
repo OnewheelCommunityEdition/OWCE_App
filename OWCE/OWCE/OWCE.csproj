@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="Pages\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="App.xaml.cs">

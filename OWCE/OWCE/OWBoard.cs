@@ -274,28 +274,28 @@ namespace OWCE
         public float Pitch
         {
             get { return _pitch; }
-            set { if (_pitch != value) { _pitch = value; OnPropertyChanged(); } }
+            set { if (_pitch.AlmostEqualTo(value) == false) { _pitch = value; OnPropertyChanged(); } }
         }
 
         private float _yaw = 0;
         public float Yaw
         {
             get { return _yaw; }
-            set { if (_yaw != value) { _yaw = value; OnPropertyChanged(); } }
+            set { if (_yaw.AlmostEqualTo(value) == false) { _yaw = value; OnPropertyChanged(); } }
         }
 
         private float _tripOdometer = 0;
         public float TripOdometer
         {
             get { return _tripOdometer; }
-            set { if (_tripOdometer != value) { _tripOdometer = value; OnPropertyChanged(); } }
+            set { if (_tripOdometer.AlmostEqualTo(value) == false) { _tripOdometer = value; OnPropertyChanged(); } }
         }
 
         private float _roll = 0;
         public float Roll
         {
             get { return _roll; }
-            set { if (_roll != value) { _roll = value; OnPropertyChanged(); } }
+            set { if (_roll.AlmostEqualTo(value) == false) { _roll = value; OnPropertyChanged(); } }
         }
 
         private int _rpm = 0;
@@ -342,7 +342,7 @@ namespace OWCE
         public float Speed
         {
             get { return _speed; }
-            set { if (_speed != value) { _speed = value; OnPropertyChanged(); } }
+            set { if (_speed.AlmostEqualTo(value) == false) { _speed = value; OnPropertyChanged(); } }
         }
 
         private bool _lightMode = false;
@@ -377,7 +377,7 @@ namespace OWCE
         public float Temperature
         {
             get { return _temperature; }
-            set { if (_temperature != value) { _temperature = value; OnPropertyChanged(); } }
+            set { if (_temperature.AlmostEqualTo(value) == false) { _temperature = value; OnPropertyChanged(); } }
         }
 
         private UInt16 _firmwareRevision = 0;
@@ -391,35 +391,35 @@ namespace OWCE
         public float CurrentAmps
         {
             get { return _currentAmps; }
-            set { if (_currentAmps != value) { _currentAmps = value; OnPropertyChanged(); } }
+            set { if (_currentAmps.AlmostEqualTo(value) == false) { _currentAmps = value; OnPropertyChanged(); } }
         }
 
         private float _tripAmpHours = 0;
         public float TripAmpHours
         {
             get { return _tripAmpHours; }
-            set { if (_tripAmpHours != value) { _tripAmpHours = value; OnPropertyChanged(); } }
+            set { if (_tripAmpHours.AlmostEqualTo(value) == false) { _tripAmpHours = value; OnPropertyChanged(); } }
         }
 
         private float _tripRegenAmpHours = 0;
         public float TripRegenAmpHours
         {
             get { return _tripRegenAmpHours; }
-            set { if (_tripRegenAmpHours != value) { _tripRegenAmpHours = value; OnPropertyChanged(); } }
+            set { if (_tripRegenAmpHours.AlmostEqualTo(value) == false) { _tripRegenAmpHours = value; OnPropertyChanged(); } }
         }
 
         private float _batteryTemperature = 0;
         public float BatteryTemperature
         {
             get { return _batteryTemperature; }
-            set { if (_batteryTemperature != value) { _batteryTemperature = value; OnPropertyChanged(); } }
+            set { if (_batteryTemperature.AlmostEqualTo(value) == false) { _batteryTemperature = value; OnPropertyChanged(); } }
         }
 
         private float _batteryVoltage = 0;
         public float BatteryVoltage
         {
             get { return _batteryVoltage; }
-            set { if (_batteryVoltage != value) { _batteryVoltage = value; OnPropertyChanged(); } }
+            set { if (_batteryVoltage.AlmostEqualTo(value) == false) { _batteryVoltage = value; OnPropertyChanged(); } }
         }
 
         private int _safetyHeadroom = 0;
@@ -460,14 +460,14 @@ namespace OWCE
         public float LifetimeOdometer
         {
             get { return _lifetimeOdometer; }
-            set { if (_lifetimeOdometer != value) { _lifetimeOdometer = value; OnPropertyChanged(); } }
+            set { if (_lifetimeOdometer.AlmostEqualTo(value) == false) { _lifetimeOdometer = value; OnPropertyChanged(); } }
         }
 
         private float _lifetimeAmpHours = 0;
         public float LifetimeAmpHours
         {
             get { return _lifetimeAmpHours; }
-            set { if (_lifetimeAmpHours != value) { _lifetimeAmpHours = value; OnPropertyChanged(); } }
+            set { if (_lifetimeAmpHours.AlmostEqualTo(value) == false) { _lifetimeAmpHours = value; OnPropertyChanged(); } }
         }
 
         /*
@@ -483,35 +483,35 @@ namespace OWCE
         public float LastErrorCode
         {
             get { return _lastErrorCode; }
-            set { if (_lastErrorCode != value) { _lastErrorCode = value; OnPropertyChanged(); } }
+            set { if (_lastErrorCode.AlmostEqualTo(value) == false) { _lastErrorCode = value; OnPropertyChanged(); } }
         }
 
         private float _UNKNOWN1 = 0;
         public float UNKNOWN1
         {
             get { return _UNKNOWN1; }
-            set { if (_UNKNOWN1 != value) { _UNKNOWN1 = value; OnPropertyChanged(); } }
+            set { if (_UNKNOWN1.AlmostEqualTo(value) == false) { _UNKNOWN1 = value; OnPropertyChanged(); } }
         }
 
         private float _UNKNOWN2 = 0;
         public float UNKNOWN2
         {
             get { return _UNKNOWN2; }
-            set { if (_UNKNOWN2 != value) { _UNKNOWN2 = value; OnPropertyChanged(); } }
+            set { if (_UNKNOWN2.AlmostEqualTo(value) == false) { _UNKNOWN2 = value; OnPropertyChanged(); } }
         }
 
         private float _UNKNOWN3 = 0;
         public float UNKNOWN3
         {
             get { return _UNKNOWN3; }
-            set { if (_UNKNOWN3 != value) { _UNKNOWN3 = value; OnPropertyChanged(); } }
+            set { if (_UNKNOWN3.AlmostEqualTo(value) == false) { _UNKNOWN3 = value; OnPropertyChanged(); } }
         }
 
         private float _UNKNOWN4 = 0;
         public float UNKNOWN4
         {
             get { return _UNKNOWN4; }
-            set { if (_UNKNOWN4 != value) { _UNKNOWN4 = value; OnPropertyChanged(); } }
+            set { if (_UNKNOWN4.AlmostEqualTo(value) == false) { _UNKNOWN4 = value; OnPropertyChanged(); } }
         }
 
         private int _rssi = 0;
