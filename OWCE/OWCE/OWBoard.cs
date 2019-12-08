@@ -132,9 +132,7 @@ namespace OWCE
         {
             get
             {
-                var isMetric = Preferences.Get("metric_display", System.Globalization.RegionInfo.CurrentRegion.IsMetric);
-
-                if (isMetric)
+                if (App.Current.MetricDisplay)
                 {
                     switch (RideMode)
                     {
@@ -197,15 +195,12 @@ namespace OWCE
         {
             get
             {
-                var speedDemon = Preferences.Get("speed_demon", false);
-                if (speedDemon == false)
+                if (App.Current.SpeedDemon == false)
                 {
                     return MaxRecommendedSpeed;
                 }
 
-                var isMetric = Preferences.Get("metric_display", System.Globalization.RegionInfo.CurrentRegion.IsMetric);
-
-                if (isMetric)
+                if (App.Current.MetricDisplay)
                 {
                     return 50;
                 }
@@ -315,8 +310,7 @@ namespace OWCE
                     var radPerSecond = (((float)Math.PI * 2f) / 60f) * _rpm;
                     var speedInMetersPerSecond = radius * radPerSecond;
 
-                    var isMetric = Preferences.Get("metric_display", System.Globalization.RegionInfo.CurrentRegion.IsMetric);
-                    if (isMetric)
+                    if (App.Current.MetricDisplay)
                     {
                         var speedInKilometersPerHour = speedInMetersPerSecond * 3.6f;
                         Speed = speedInKilometersPerHour;

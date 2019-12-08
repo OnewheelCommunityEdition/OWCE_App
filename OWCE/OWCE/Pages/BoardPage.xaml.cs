@@ -17,7 +17,7 @@ namespace OWCE
         {
             get
             {
-                var unit = Preferences.Get("metric_display", System.Globalization.RegionInfo.CurrentRegion.IsMetric) ? "kmph" : "mph";
+                var unit = App.Current.MetricDisplay ? "kmph" : "mph";
                 return $"Speed ({unit})";
             }
         }

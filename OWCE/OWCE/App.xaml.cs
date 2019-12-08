@@ -15,8 +15,22 @@ namespace OWCE
         public static new App Current => Application.Current as App;
         public IOWBLE OWBLE { get; private set; }
 
+        public bool MetricDisplay
+        {
+            get; set;
+        }
+
+        public bool SpeedDemon
+        {
+            get; set;
+        }
+
         public App()
         {
+            MetricDisplay = Preferences.Get("metric_display", System.Globalization.RegionInfo.CurrentRegion.IsMetric);
+            SpeedDemon = Preferences.Get("speed_demon", false);
+
+
             OWBLE = DependencyService.Get<IOWBLE>();
 
             if (String.IsNullOrEmpty(AppConstants.SyncfusionLicense) == false)
@@ -29,7 +43,6 @@ namespace OWCE
             var owBoard = new OWBoard();
             owBoard.BatteryPercent = 96;
             owBoard.RPM = 22;
-            Preferences.Set("speed_demon", true);
             */
             //MainPage = new NavigationPage(new BoardPage(owBoard)); 
 
