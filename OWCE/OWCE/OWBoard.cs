@@ -1422,6 +1422,83 @@ ReadRequestReceived - LifetimeOdometer
                 System.Diagnostics.Debug.WriteLine("ERROR: " + err.Message);
             }
         }
+
+        public static string GetNameFromUUID(string uuid)
+        {
+            switch (uuid)
+            {
+                case SerialNumberUUID:
+                    return "SerialNumber";
+                case RideModeUUID:
+                    return "RideMode";
+                case BatteryPercentUUID:
+                    return "BatteryPercent";
+                case BatteryLow5UUID:
+                    return "BatteryLow5";
+                case BatteryLow20UUID:
+                    return "BatteryLow20";
+                case BatterySerialUUID:
+                    return "BatterySerial";
+                case PitchUUID:
+                    return "Pitch";
+                case RollUUID:
+                    return "Roll";
+                case YawUUID:
+                    return "Yaw";
+                case TripOdometerUUID:
+                    return "TripOdometer";
+                case RpmUUID:
+                    return "Rpm";
+                case LightModeUUID:
+                    return "LightMode";
+                case LightsFrontUUID:
+                    return "LightsFront";
+                case LightsBackUUID:
+                    return "LightsBack";
+                case StatusErrorUUID:
+                    return "StatusError";
+                case TemperatureUUID:
+                    return "Temperature";
+                case FirmwareRevisionUUID:
+                    return "FirmwareRevision";
+                case CurrentAmpsUUID:
+                    return "CurrentAmps";
+                case TripAmpHoursUUID:
+                    return "TripAmpHours";
+                case TripRegenAmpHoursUUID:
+                    return "TripRegenAmpHours";
+                case BatteryTemperatureUUID:
+                    return "BatteryTemperature";
+                case BatteryVoltageUUID:
+                    return "BatteryVoltage";
+                case SafetyHeadroomUUID:
+                    return "SafetyHeadroom";
+                case HardwareRevisionUUID:
+                    return "HardwareRevision";
+                case LifetimeOdometerUUID:
+                    return "LifetimeOdometer";
+                case LifetimeAmpHoursUUID:
+                    return "LifetimeAmpHours";
+                case BatteryCellsUUID:
+                    return "BatteryCells";
+                case LastErrorCodeUUID:
+                    return "LastErrorCode";
+                case SerialReadUUID:
+                    return "SerialRead";
+                case SerialWriteUUID:
+                    return "SerialWrite";
+                case UNKNOWN1UUID:
+                    return "UNKNOWN1";
+                case UNKNOWN2UUID:
+                    return "UNKNOWN2";
+                case UNKNOWN3UUID:
+                    return "UNKNOWN3";
+                case UNKNOWN4UUID:
+                    return "UNKNOWN4";
+            }
+
+            return "Unknown";
+        }
     }
 
 }
