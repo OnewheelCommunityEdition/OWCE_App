@@ -248,10 +248,14 @@ namespace OWCE.MacOS.DependencyImplementations
                 _peripheral = peripheral;
                 _peripheral.WeakDelegate = this;
 
-                var options = new PeripheralConnectionOptions();
-                options.NotifyOnConnection = true;
-                options.NotifyOnDisconnection = true;
-                options.NotifyOnNotification = true;
+                var options = new PeripheralConnectionOptions()
+                {
+                    NotifyOnDisconnection = true,
+#if __IOS__
+                    NotifyOnConnection = true,
+                    NotifyOnNotification = true,
+#endif
+                };
 
                 _centralManager.ConnectPeripheral(peripheral, options);
             }
