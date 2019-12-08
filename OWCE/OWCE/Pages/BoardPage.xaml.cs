@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Plugin.BLE;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using RestSharp;
@@ -18,19 +17,15 @@ namespace OWCE
         {
             get
             {
-                var unit = Preferences.Get("metric_display", System.Globalization.RegionInfo.CurrentRegion.IsMetric) ? "kmph" : "mph";
+                var unit = App.Current.MetricDisplay ? "kmph" : "mph";
                 return $"Speed ({unit})";
             }
         }
 
+        private bool _initialSubscirbe = false;
         public BoardPage(OWBoard board)
         {
             Board = board;
-
-            Task.Run(async () =>
-            {
-                await board.SubscribeToBLE();
-            });
 
             BindingContext = this;
 
@@ -40,11 +35,22 @@ namespace OWCE
 
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if (_initialSubscirbe == false)
+            {
+                _initialSubscirbe = true;
+                _ = Board.SubscribeToBLE();
+            }
+        }
+
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
 
-            if (GaugeAbsolueLayout.WidthRequest != width)
+            if (GaugeAbsolueLayout.WidthRequest.AlmostEqualTo(width) == false)
             {
                 GaugeAbsolueLayout.WidthRequest = width;
                 GaugeAbsolueLayout.HeightRequest = width;

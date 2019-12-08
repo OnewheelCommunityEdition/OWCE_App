@@ -6,9 +6,10 @@
              xmlns:converters="clr-namespace:OWCE.Converters"
              >
 
-        <ContentPage.Resources>
+    <ContentPage.Resources>
         <ResourceDictionary>
             <converters:BatteryCellsToTextConverter x:Key="batteryCellsToTextConverter" />
+            <converters:TempConverter x:Key="tempConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -204,8 +205,14 @@
 
                     
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
-                        <Label Text="Temperature" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-                        <Label Text="{Binding Board.Temperature}" HorizontalOptions="End" VerticalOptions="Center" />
+                        <Label Text="Controller Temp" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
+                        <Label Text="{Binding Board.ControllerTemperature, Converter={StaticResource tempConverter}}" HorizontalOptions="End" VerticalOptions="Center" />
+                    </StackLayout>
+                    <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
+
+                    <StackLayout Orientation="Horizontal" HeightRequest="40">
+                        <Label Text="Motor Temp" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
+                        <Label Text="{Binding Board.MotorTemperature, Converter={StaticResource tempConverter}}" HorizontalOptions="End" VerticalOptions="Center" />
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
 
@@ -239,8 +246,14 @@
 
                     
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
+                        <Label Text="UnknownTemperature" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
+                        <Label Text="{Binding Board.UnknownTemperature, Converter={StaticResource tempConverter}}" HorizontalOptions="End" VerticalOptions="Center" />
+                    </StackLayout>
+                    <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
+
+                    <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="BatteryTemperature" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-                        <Label Text="{Binding Board.BatteryTemperature}" HorizontalOptions="End" VerticalOptions="Center" />
+                        <Label Text="{Binding Board.BatteryTemperature, Converter={StaticResource tempConverter}}" HorizontalOptions="End" VerticalOptions="Center" />
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
 

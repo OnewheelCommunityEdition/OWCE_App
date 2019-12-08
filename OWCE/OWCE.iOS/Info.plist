@@ -30,11 +30,6 @@
 	<string>OWCE</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>location</string>
-		<string>bluetooth-central</string>
-	</array>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
@@ -49,7 +44,7 @@
 	<string>When recording your own rides.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open.</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>Needs Calendar Permission</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Access bluetooth to connect to your Onewheel</string>
 </dict>
 </plist>
