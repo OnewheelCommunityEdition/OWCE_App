@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Xamarin.Forms.4.3.0.991211\build\Xamarin.Forms.props" Condition="Exists('..\packages\Xamarin.Forms.4.3.0.991211\build\Xamarin.Forms.props')" />
+  <Import Project="..\packages\Xamarin.Forms.4.3.0.991221\build\Xamarin.Forms.props" Condition="Exists('..\packages\Xamarin.Forms.4.3.0.991221\build\Xamarin.Forms.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -55,40 +55,40 @@
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.Mac" />
     <Reference Include="Xamarin.Forms.Core">
-      <HintPath>..\packages\Xamarin.Forms.4.3.0.991211\lib\Xamarin.Mac\Xamarin.Forms.Core.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Forms.4.3.0.991221\lib\Xamarin.Mac\Xamarin.Forms.Core.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform">
-      <HintPath>..\packages\Xamarin.Forms.4.3.0.991211\lib\Xamarin.Mac\Xamarin.Forms.Platform.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Forms.4.3.0.991221\lib\Xamarin.Mac\Xamarin.Forms.Platform.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform.macOS">
-      <HintPath>..\packages\Xamarin.Forms.4.3.0.991211\lib\Xamarin.Mac\Xamarin.Forms.Platform.macOS.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Forms.4.3.0.991221\lib\Xamarin.Mac\Xamarin.Forms.Platform.macOS.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Xaml">
-      <HintPath>..\packages\Xamarin.Forms.4.3.0.991211\lib\Xamarin.Mac\Xamarin.Forms.Xaml.dll</HintPath>
+      <HintPath>..\packages\Xamarin.Forms.4.3.0.991221\lib\Xamarin.Mac\Xamarin.Forms.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="System.Buffers">
       <HintPath>..\packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.6.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Memory">
       <HintPath>..\packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf">
-      <HintPath>..\packages\Google.Protobuf.3.10.1\lib\netstandard2.0\Google.Protobuf.dll</HintPath>
+      <HintPath>..\packages\Google.Protobuf.3.11.1\lib\netstandard2.0\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Licensing">
-      <HintPath>..\packages\Syncfusion.Licensing.17.3.0.29\lib\Xamarin.Mac\Syncfusion.Licensing.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Licensing.17.3.0.33\lib\Xamarin.Mac\Syncfusion.Licensing.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Core.XForms">
-      <HintPath>..\packages\Syncfusion.Xamarin.Core.17.3.0.29\lib\Xamarin.Mac\Syncfusion.Core.XForms.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Xamarin.Core.17.3.0.33\lib\Xamarin.Mac\Syncfusion.Core.XForms.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Core.XForms.macOS">
-      <HintPath>..\packages\Syncfusion.Xamarin.Core.17.3.0.29\lib\Xamarin.Mac\Syncfusion.Core.XForms.macOS.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Xamarin.Core.17.3.0.33\lib\Xamarin.Mac\Syncfusion.Core.XForms.macOS.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.SfGauge.XForms">
-      <HintPath>..\packages\Syncfusion.Xamarin.SfGauge.17.3.0.29\lib\netstandard2.0\Syncfusion.SfGauge.XForms.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Xamarin.SfGauge.17.3.0.33\lib\netstandard2.0\Syncfusion.SfGauge.XForms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter">
       <HintPath>..\packages\Microsoft.AppCenter.2.6.2\lib\netstandard1.0\Microsoft.AppCenter.dll</HintPath>
@@ -153,5 +153,5 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
-  <Import Project="..\packages\Xamarin.Forms.4.3.0.991211\build\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.4.3.0.991211\build\Xamarin.Forms.targets')" />
+  <Import Project="..\packages\Xamarin.Forms.4.3.0.991221\build\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.4.3.0.991221\build\Xamarin.Forms.targets')" />
 </Project>
