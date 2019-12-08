@@ -4,3 +4,4 @@ obj/
 .mfractor
 OWCE/OWCE/AppConstants.cs
 AppConstants.cs
+packages/
