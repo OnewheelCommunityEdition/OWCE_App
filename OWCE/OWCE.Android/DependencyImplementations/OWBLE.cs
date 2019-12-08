@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Android.Bluetooth;
 using Android.Bluetooth.LE;
 using Android.Content;
-using Android.OS;
+//using Android.OS;
 using Android.Runtime;
 using Java.Util;
 using OWCE.DependencyInterfaces;
@@ -53,13 +54,13 @@ namespace OWCE.Droid.DependencyImplementations
 
             public override void OnBatchScanResults(IList<ScanResult> results)
             {
-                Console.WriteLine("OnBatchScanResults");
+                Debug.WriteLine("OnBatchScanResults");
                 base.OnBatchScanResults(results);
             }
 
             public override void OnScanResult(ScanCallbackType callbackType, ScanResult result)
             {
-                Console.WriteLine("OnScanResult");
+                Debug.WriteLine("OnScanResult");
                 
                 OWBoard board = new OWBoard()
                 {
@@ -74,7 +75,7 @@ namespace OWCE.Droid.DependencyImplementations
 
             public override void OnScanFailed([GeneratedEnum] ScanFailure errorCode)
             {
-                Console.WriteLine("OnScanFailed");
+                Debug.WriteLine("OnScanFailed");
                 base.OnScanFailed(errorCode);
             }
         }
@@ -90,7 +91,7 @@ namespace OWCE.Droid.DependencyImplementations
 
             public void OnLeScan(BluetoothDevice device, int rssi, byte[] scanRecord)
             {
-                Console.WriteLine("OnLeScan");
+                Debug.WriteLine("OnLeScan");
                 
                 OWBoard board = new OWBoard()
                 {
@@ -115,31 +116,31 @@ namespace OWCE.Droid.DependencyImplementations
                         
             public override void OnServicesDiscovered(BluetoothGatt gatt, GattStatus status)
             {
-                Console.WriteLine("OnServicesDiscovered: " + status);
+                Debug.WriteLine("OnServicesDiscovered: " + status);
                 _owble.OnServicesDiscovered(gatt, status);
             }
 
             public override void OnConnectionStateChange(BluetoothGatt gatt, GattStatus status, ProfileState newState)
             {
-                Console.WriteLine("OnConnectionStateChange: " + status);
+                Debug.WriteLine("OnConnectionStateChange: " + status);
                 _owble.OnConnectionStateChange(gatt, status, newState);
             }
 
             public override void OnCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, GattStatus status)
             {
-                Console.WriteLine("OnCharacteristicRead: " + characteristic.Uuid);
+                Debug.WriteLine("OnCharacteristicRead: " + characteristic.Uuid);
                 _owble.OnCharacteristicRead(gatt, characteristic, status);
             }
 
             public override void OnCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, GattStatus status)
             {
-                Console.WriteLine("OnCharacteristicWrite: " + characteristic.Uuid);
+                Debug.WriteLine("OnCharacteristicWrite: " + characteristic.Uuid);
                 _owble.OnCharacteristicWrite(gatt, characteristic, status);
             }
 
             public override void OnCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic)
             {
-                Console.WriteLine("OnCharacteristicChanged: " + characteristic.Uuid);
+                Debug.WriteLine("OnCharacteristicChanged: " + characteristic.Uuid);
                 _owble.OnCharacteristicChanged(gatt, characteristic);
             }
         }
@@ -183,13 +184,13 @@ namespace OWCE.Droid.DependencyImplementations
 
             public override void OnReceive(Context context, Intent intent)
             {
-                Console.WriteLine("OnReceive: " + intent.Action);
+                Debug.WriteLine("OnReceive: " + intent.Action);
 
                 if (BluetoothAdapter.ActionStateChanged.Equals(intent.Action))
                 {
                     var stateInt = intent.GetIntExtra(BluetoothAdapter.ExtraState, -1);
 
-                    Console.WriteLine("stateInt: " + stateInt);
+                    Debug.WriteLine("stateInt: " + stateInt);
                     if (stateInt == -1)
                     {
                         return;
@@ -251,7 +252,7 @@ namespace OWCE.Droid.DependencyImplementations
         private BluetoothGatt _bluetoothGatt;
 
         // Moved to be its own property for debugging.
-        private BuildVersionCodes _sdkInt = Build.VERSION.SdkInt;
+        private Android.OS.BuildVersionCodes _sdkInt = Android.OS.Build.VERSION.SdkInt;
 
         public OWBLE()
         {
@@ -304,7 +305,7 @@ namespace OWCE.Droid.DependencyImplementations
                
         private void ProcessQueue()
         {
-            Console.WriteLine($"ProcessQueue: {_gattOperationQueue.Count}");
+            Debug.WriteLine($"ProcessQueue: {_gattOperationQueue.Count}");
             if (_gattOperationQueue.Count == 0)
             {
                 _gattOperationQueueProcessing = false;
@@ -323,7 +324,7 @@ namespace OWCE.Droid.DependencyImplementations
                     bool didRead = _bluetoothGatt.ReadCharacteristic(item.Characteristic);
                     if (didRead == false)
                     {
-                        Console.WriteLine($"ERROR: Unable to read {item.Characteristic.Uuid}");
+                        Debug.WriteLine($"ERROR: Unable to read {item.Characteristic.Uuid}");
                     }
                     break;
                 case OWBLE_QueueItemOperationType.Write:
@@ -331,14 +332,14 @@ namespace OWCE.Droid.DependencyImplementations
                     bool didWrite = _bluetoothGatt.WriteCharacteristic(item.Characteristic);
                     if (didWrite == false)
                     {
-                        Console.WriteLine($"ERROR: Unable to write {item.Characteristic.Uuid}");
+                        Debug.WriteLine($"ERROR: Unable to write {item.Characteristic.Uuid}");
                     }
                     break;
                 case OWBLE_QueueItemOperationType.Subscribe:
                     bool didSubscribe = _bluetoothGatt.SetCharacteristicNotification(item.Characteristic, true);
                     if (didSubscribe == false)
                     {
-                        Console.WriteLine($"ERROR: Unable to subscribe {item.Characteristic.Uuid}");
+                        Debug.WriteLine($"ERROR: Unable to subscribe {item.Characteristic.Uuid}");
                     }
 
                     /* This is also sometimes required (e.g. for heart rate monitors) to enable notifications/indications
@@ -356,7 +357,7 @@ namespace OWCE.Droid.DependencyImplementations
                     bool didUnsubscribe = _bluetoothGatt.SetCharacteristicNotification(item.Characteristic, false);
                     if (didUnsubscribe == false)
                     {
-                        Console.WriteLine($"ERROR: Unable to unsubscribe {item.Characteristic.Uuid}");
+                        Debug.WriteLine($"ERROR: Unable to unsubscribe {item.Characteristic.Uuid}");
                     }
                     break;
             }
@@ -396,7 +397,7 @@ namespace OWCE.Droid.DependencyImplementations
 
         private void OnCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic)
         {
-            Console.WriteLine($"OnCharacteristicChanged: {characteristic.Uuid}, {characteristic.GetValue()}");
+            Debug.WriteLine($"OnCharacteristicChanged: {characteristic.Uuid}, {characteristic.GetValue()}");
 
         }
 
@@ -448,7 +449,7 @@ namespace OWCE.Droid.DependencyImplementations
 
             // TODO: Handle power on state.
 
-            if (_sdkInt >= BuildVersionCodes.Lollipop) // 21
+            if (_sdkInt >= Android.OS.BuildVersionCodes.Lollipop) // 21
             {
                 _bleScanner = _adapter.BluetoothLeScanner;
                 _scanCallback = new OWBLE_ScanCallback(this);
@@ -460,7 +461,7 @@ namespace OWCE.Droid.DependencyImplementations
                 scanFilters.Add(scanFilterBuilder.Build());
                 _bleScanner.StartScan(scanFilters, scanSettingsBuilder.Build(), _scanCallback);
             }
-            else if (_sdkInt >= BuildVersionCodes.JellyBeanMr2) // 18
+            else if (_sdkInt >= Android.OS.BuildVersionCodes.JellyBeanMr2) // 18
             {
                 _leScanCallback = new OWBLE_LeScanCallback(this);
 #pragma warning disable 0618
@@ -483,7 +484,7 @@ namespace OWCE.Droid.DependencyImplementations
                 return;
 
 
-            if (_sdkInt >= BuildVersionCodes.Lollipop) // 21
+            if (_sdkInt >= Android.OS.BuildVersionCodes.Lollipop) // 21
             {
                 _bleScanner.StopScan(_scanCallback);
             }
@@ -500,7 +501,7 @@ namespace OWCE.Droid.DependencyImplementations
 
         public Task<byte[]> ReadValue(string characteristicGuid, bool important = false)
         {
-            Console.WriteLine($"ReadValue: {characteristicGuid}");
+            Debug.WriteLine($"ReadValue: {characteristicGuid}");
 
             if (_bluetoothGatt == null)
                 return null;
@@ -541,7 +542,7 @@ namespace OWCE.Droid.DependencyImplementations
 
         public Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool important = false)
         {
-            Console.WriteLine($"WriteValue: {characteristicGuid}");
+            Debug.WriteLine($"WriteValue: {characteristicGuid}");
             if (_bluetoothGatt == null)
                 return null;
 
@@ -590,7 +591,7 @@ namespace OWCE.Droid.DependencyImplementations
 
         public Task SubscribeValue(string characteristicGuid, bool important = false)
         {
-            Console.WriteLine($"SubscribeValue: {characteristicGuid}");
+            Debug.WriteLine($"SubscribeValue: {characteristicGuid}");
             if (_bluetoothGatt == null)
                 return null;
 
@@ -613,7 +614,7 @@ namespace OWCE.Droid.DependencyImplementations
 
         public Task UnsubscribeValue(string characteristicGuid, bool important = false)
         {
-            Console.WriteLine($"UnsubscribeValue: {characteristicGuid}");
+            Debug.WriteLine($"UnsubscribeValue: {characteristicGuid}");
             if (_bluetoothGatt == null)
                 return null;
 

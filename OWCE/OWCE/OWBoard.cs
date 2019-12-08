@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -327,9 +328,9 @@ namespace OWCE
                     }
 
                     /*
-                    Console.WriteLine("RPM: " + _rpm);
-                    Console.WriteLine("m/s: " + speedInMetersPerSecond);
-                    Console.WriteLine("km/h: " + speedInKilometersPerHour);
+                    Debug.WriteLine("RPM: " + _rpm);
+                    Debug.WriteLine("m/s: " + speedInMetersPerSecond);
+                    Debug.WriteLine("km/h: " + speedInKilometersPerHour);
                     */
                     // TODO: Metric check
                     // TODO: Convert RPM to speed.
@@ -730,9 +731,7 @@ namespace OWCE
                         catch (Exception err)
                         {
                             // TODO: Couldnt update firmware revision.
-
-                            Console.WriteLine("ERROR: " + err.Message);
-
+                            Debug.WriteLine("ERROR: " + err.Message);
                         }
                     });
                     return _keepHandshakeBackgroundRunning;
@@ -929,8 +928,8 @@ ReadRequestReceived - LifetimeOdometer
                 var inputString = BitConverter.ToString(byteArray).Replace("-", ":").ToLower();
                 var outputString = BitConverter.ToString(outputArray).Replace("-", ":").ToLower();
 
-                Console.WriteLine($"Input: {inputString}");
-                Console.WriteLine($"Output: {outputString}");
+                Debug.WriteLine($"Input: {inputString}");
+                Debug.WriteLine($"Output: {outputString}");
 
                 await App.Current.OWBLE.WriteValue(OWBoard.SerialWriteUUID, outputArray);
 
@@ -1182,7 +1181,7 @@ ReadRequestReceived - LifetimeOdometer
 
                     SetBatteryCellValue(cellID, batteryVoltage);
                     //batteryVoltageCells[cellIdentifier] = (double)var3 / 50.0D;
-                    //Console.WriteLine($"BatteryCellsUUID: {cellID} {batteryVoltage} {batteryVoltageDisplay} ");
+                    //Debug.WriteLine($"BatteryCellsUUID: {cellID} {batteryVoltage} {batteryVoltageDisplay} ");
 
                     break;
                 case LastErrorCodeUUID:
@@ -1207,7 +1206,7 @@ ReadRequestReceived - LifetimeOdometer
         void SerialRead_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e)
         {
             string uuid = e.Characteristic.Uuid.ToUpper();
-            Console.WriteLine($"SerialRead_ValueUpdated - {uuid}");
+            Debug.WriteLine($"SerialRead_ValueUpdated - {uuid}");
             if (_isHandshaking && uuid == SerialReadUUID)
             {
                 _handshakeBuffer.AddRange(e.Characteristic.Value);

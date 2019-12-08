@@ -7,6 +7,7 @@ using CoreFoundation;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 #if __IOS__
 using OWCE.iOS.Extensions;
@@ -32,7 +33,7 @@ namespace OWCE.MacOS.DependencyImplementations
 
         public async Task StartScanning(int timeout = 15)
         {
-            Console.WriteLine("StartScanning");
+            Debug.WriteLine("StartScanning");
 
             _centralManager.ScanForPeripherals(new CBUUID[] { OWBoard.ServiceUUID.ToCBUUID() }, new PeripheralScanningOptions { AllowDuplicatesKey = true });
 
@@ -43,7 +44,7 @@ namespace OWCE.MacOS.DependencyImplementations
 
         public void StopScanning()
         {
-            Console.WriteLine("StopScanning");
+            Debug.WriteLine("StopScanning");
             if (_centralManager.IsScanning)
             {
                 _centralManager.StopScan();
@@ -55,7 +56,7 @@ namespace OWCE.MacOS.DependencyImplementations
         [Export("peripheral:didDiscoverServices:")]
         public void DiscoveredService(CBPeripheral peripheral, NSError error)
         {
-            Console.WriteLine("Peripheral_DiscoveredService: " + peripheral.Name);
+            Debug.WriteLine($"Peripheral_DiscoveredService: {peripheral.Name}");
 
             CBService foundService = null;
 
@@ -80,7 +81,7 @@ namespace OWCE.MacOS.DependencyImplementations
         [Export("peripheral:didDiscoverCharacteristicsForService:error:")]
         public void DiscoveredCharacteristic(CBPeripheral peripheral, CBService service, NSError error)
         {
-            Console.WriteLine("Peripheral_DiscoveredCharacteristic");
+            Debug.WriteLine("Peripheral_DiscoveredCharacteristic");
             //var cbuuid = CBUUID.FromString(characteristicGuid);
             foreach (var characteristic in _service.Characteristics)
             {
@@ -100,10 +101,14 @@ namespace OWCE.MacOS.DependencyImplementations
         [Export("peripheral:didUpdateValueForCharacteristic:error:")]
         public void UpdatedCharacterteristicValue(CBPeripheral peripheral, CBCharacteristic characteristic, NSError error)
         {
-            Console.WriteLine("Peripheral_UpdatedCharacterteristicValue");
+#if DEBUG
+            string name =  OWBoard.GetNameFromUUID(characteristic.UUID.ToString());
+            Debug.WriteLine($"Peripheral_UpdatedCharacterteristicValue - {name}");
+#endif
 
             if (_characteristics.ContainsKey(characteristic.UUID) == false)
             {
+                Debug.WriteLine($"ERROR: Peripheral missing ({characteristic.UUID})");
                 return;
             }
 
@@ -132,7 +137,7 @@ namespace OWCE.MacOS.DependencyImplementations
         [Export("peripheral:didWriteValueForCharacteristic:error:")]
         public void WroteCharacteristicValue(CBPeripheral peripheral, CBCharacteristic characteristic, NSError error)
         {
-            Console.WriteLine("Peripheral_WroteCharacteristicValue");
+            Debug.WriteLine("Peripheral_WroteCharacteristicValue");
 
 
             if (_characteristics.ContainsKey(characteristic.UUID) == false)
@@ -166,7 +171,7 @@ namespace OWCE.MacOS.DependencyImplementations
         [Export("centralManager:didConnectPeripheral:")]
         public void CentralManager_ConnectedPeripheral(CBCentralManager central, CBPeripheral peripheral)
         {
-            Console.WriteLine("CentralManager_ConnectedPeripheral: " + peripheral.Name);
+            Debug.WriteLine("CentralManager_ConnectedPeripheral: " + peripheral.Name);
             _connectionCompletionSource.SetResult(true);
 
             var services = _peripheral.Services;
@@ -179,7 +184,7 @@ namespace OWCE.MacOS.DependencyImplementations
         [Export("centralManager:didDiscoverPeripheral:advertisementData:RSSI:")]
         public void CentralManager_DiscoveredPeripheral(CBCentralManager central, CBPeripheral peripheral, NSDictionary advertisementData, NSNumber RSSI)
         {
-            Console.WriteLine("CentralManager_DiscoveredPeripheral: "+ peripheral.Name);
+            Debug.WriteLine("CentralManager_DiscoveredPeripheral: "+ peripheral.Name);
 
             OWBoard board = new OWBoard()
             {
@@ -195,36 +200,36 @@ namespace OWCE.MacOS.DependencyImplementations
         [Export("centralManager:didDisconnectPeripheral:error:")]
         public void CentralManager_DisconnectedPeripheral(CBCentralManager central, CBPeripheral peripheral, NSError error)
         {
-            Console.WriteLine("CentralManager_DisconnectedPeripheral");
+            Debug.WriteLine("CentralManager_DisconnectedPeripheral");
         }
 
         [Export("centralManager:didFailToConnectPeripheral:error:")]
         public void CentralManager_FailedToConnectPeripheral(CBCentralManager central, CBPeripheral peripheral, NSError error)
         {
-            Console.WriteLine("CentralManager_FailedToConnectPeripheral");
+            Debug.WriteLine("CentralManager_FailedToConnectPeripheral");
         }
 
         [Export("centralManager:didRetrieveConnectedPeripherals:")]
         public void CentralManager_RetrievedConnectedPeripherals(CBCentralManager central, CBPeripheral[] peripherals)
         {
-            Console.WriteLine("CentralManager_RetrievedConnectedPeripherals");
+            Debug.WriteLine("CentralManager_RetrievedConnectedPeripherals");
 
         }
 
         [Export("centralManager:didRetrievePeripherals:")]
         public void CentralManager_RetrievedPeripherals(CBCentralManager central, CBPeripheral[] peripherals)
         {
-            Console.WriteLine("CentralManager_RetrievedPeripherals");
+            Debug.WriteLine("CentralManager_RetrievedPeripherals");
         }
 
         public void UpdatedState(CBCentralManager central)
         {
-            Console.WriteLine("CentralManager_UpdatedState: " + central.State);
+            Debug.WriteLine("CentralManager_UpdatedState: " + central.State);
         }
 
         private void CentralManager_WillRestoreState(object sender, CBWillRestoreEventArgs e)
         {
-            Console.WriteLine("CentralManager_WillRestoreState");
+            Debug.WriteLine("CentralManager_WillRestoreState");
 
         }
         #endregion
@@ -270,7 +275,7 @@ namespace OWCE.MacOS.DependencyImplementations
 
         public Task Disconnect()
         {
-            Console.WriteLine("Disconnect");
+            Debug.WriteLine("Disconnect");
             _centralManager.CancelPeripheralConnection(_peripheral);
             return Task.CompletedTask;
         }
