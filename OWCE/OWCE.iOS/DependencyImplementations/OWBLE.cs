@@ -115,10 +115,14 @@ namespace OWCE.MacOS.DependencyImplementations
 
             if (_readQueue.ContainsKey(characteristic.UUID) || _notifyList.Contains(characteristic.UUID))
             {
-                var data = characteristic.Value;
+                byte[] dataBytes = null;
 
-                var dataBytes = new byte[data.Length];
-                System.Runtime.InteropServices.Marshal.Copy(data.Bytes, dataBytes, 0, Convert.ToInt32(data.Length));
+                if (characteristic.Value != null)
+                {
+                    var data = characteristic.Value;
+                    dataBytes = new byte[data.Length];
+                    System.Runtime.InteropServices.Marshal.Copy(data.Bytes, dataBytes, 0, Convert.ToInt32(data.Length));
+                }
 
                 if (_notifyList.Contains(characteristic.UUID))
                 {
@@ -389,6 +393,6 @@ namespace OWCE.MacOS.DependencyImplementations
             return Task.CompletedTask;
             //throw new NotImplementedException();
         }
-        #endregion
+#endregion
     }
 }
