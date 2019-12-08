@@ -60,7 +60,7 @@ namespace OWCE
         public const string UNKNOWN3UUID = "E659F31F-EA98-11E3-AC10-0800200C9A66";
         public const string UNKNOWN4UUID = "E659F320-EA98-11E3-AC10-0800200C9A66";
 
-
+       
 
         private string _id = String.Empty;
         //[SQLite.PrimaryKey]
@@ -368,11 +368,18 @@ namespace OWCE
             set { if (_statusError != value) { _statusError = value; OnPropertyChanged(); } }
         }
 
-        private float _temperature = 0;
-        public float Temperature
+        private int _controllerTemperature = 0;
+        public int ControllerTemperature
         {
-            get { return _temperature; }
-            set { if (_temperature.AlmostEqualTo(value) == false) { _temperature = value; OnPropertyChanged(); } }
+            get { return _controllerTemperature; }
+            set { if (_controllerTemperature != value) { _controllerTemperature = value; OnPropertyChanged(); } }
+        }
+
+        private int _motorTemperature = 0;
+        public int MotorTemperature
+        {
+            get { return _motorTemperature; }
+            set { if (_motorTemperature != value) { _motorTemperature = value; OnPropertyChanged(); } }
         }
 
         private UInt16 _firmwareRevision = 0;
@@ -403,11 +410,18 @@ namespace OWCE
             set { if (_tripRegenAmpHours.AlmostEqualTo(value) == false) { _tripRegenAmpHours = value; OnPropertyChanged(); } }
         }
 
-        private float _batteryTemperature = 0;
-        public float BatteryTemperature
+        private int _unknownTemperature = 0;
+        public int UnknownTemperature
+        {
+            get { return _unknownTemperature; }
+            set { if (_unknownTemperature != value) { _unknownTemperature = value; OnPropertyChanged(); } }
+        }
+
+        private int _batteryTemperature = 0;
+        public int BatteryTemperature
         {
             get { return _batteryTemperature; }
-            set { if (_batteryTemperature.AlmostEqualTo(value) == false) { _batteryTemperature = value; OnPropertyChanged(); } }
+            set { if (_batteryTemperature != value) { _batteryTemperature = value; OnPropertyChanged(); } }
         }
 
         private float _batteryVoltage = 0;
@@ -1054,9 +1068,36 @@ ReadRequestReceived - LifetimeOdometer
 
         private void SetValue(string uuid, byte[] data, bool initialData = false)
         {
+            if (data == null)
+                return;
+            
+            uuid = uuid.ToUpper();
+
             // If our system is little endian, reverse the array.
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(data);
+
+            if (data.Length != 2)
+                return;
+
+            if (uuid == TemperatureUUID)
+            {
+                ControllerTemperature = (int)data[0];
+                MotorTemperature = (int)data[1];
+
+                return;
+            }
+            else if (uuid == BatteryTemperatureUUID)
+            {
+                BatteryTemperature = (int)data[0];
+                UnknownTemperature = (int)data[1];
+
+                return;
+            }
+
+
+
+
 
             var value = BitConverter.ToUInt16(data, 0);
 
@@ -1133,9 +1174,6 @@ ReadRequestReceived - LifetimeOdometer
                 case StatusErrorUUID:
                     StatusError = value;
                     break;
-                case TemperatureUUID:
-                    Temperature = 0.1f * value;
-                    break;
                 case FirmwareRevisionUUID:
                     FirmwareRevision = value;
                     break;
@@ -1147,9 +1185,6 @@ ReadRequestReceived - LifetimeOdometer
                     break;
                 case TripRegenAmpHoursUUID:
                     TripRegenAmpHours = 0.1f * value;
-                    break;
-                case BatteryTemperatureUUID:
-                    BatteryTemperature = 0.1f * value;
                     break;
                 case BatteryVoltageUUID:
                     BatteryVoltage = 0.1f * value;
@@ -1419,6 +1454,8 @@ ReadRequestReceived - LifetimeOdometer
 
         public static string GetNameFromUUID(string uuid)
         {
+            uuid = uuid.ToUpper();
+
             switch (uuid)
             {
                 case SerialNumberUUID:
