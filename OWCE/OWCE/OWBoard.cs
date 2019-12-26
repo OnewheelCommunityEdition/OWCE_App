@@ -19,7 +19,8 @@ namespace OWCE
         Unknown,
         V1,
         Plus,
-        XR
+        XR,
+        Pint,
     };
 
     public class OWBoard : object, IEquatable<OWBoard>, INotifyPropertyChanged
@@ -123,6 +124,8 @@ namespace OWCE
                         return "ow_icon_plus.png";
                     case OWBoardType.XR:
                         return "ow_icon_xr.png";
+                    case OWBoardType.Pint:
+                        return "ow_icon.png"; // TODO: Update icon
                 }
                 return "ow_icon.png";
             }
@@ -460,6 +463,10 @@ namespace OWCE
                     else if (_hardwareRevision >= 4000 && _hardwareRevision <= 4999)
                     {
                         BoardType = OWBoardType.XR;
+                    }
+                    else if (_hardwareRevision >= 5000 && _hardwareRevision <= 5999)
+                    {
+                        BoardType = OWBoardType.Pint;
                     }
                 }
             }

@@ -64,6 +64,11 @@ namespace OWCE
             });
             Boards.Add(new OWBoard()
             {
+                Name = "Onewheel Pint",
+                BoardType = OWBoardType.Pint,
+            });
+            Boards.Add(new OWBoard()
+            {
                 Name = "Onewheel unknown",
                 BoardType = OWBoardType.Unknown,
             });
