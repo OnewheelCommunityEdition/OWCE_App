@@ -74,6 +74,7 @@
     <Compile Include="DependencyImplementations\PermissionPrompt.cs" />
     <Compile Include="DependencyImplementations\OWBLE.cs" />
     <Compile Include="Extensions\GuidExtension.cs" />
+    <Compile Include="DependencyImplementations\UserAgent.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />

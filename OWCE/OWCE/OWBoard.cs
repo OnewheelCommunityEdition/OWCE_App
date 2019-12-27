@@ -4,13 +4,16 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf;
+using System.Text.Json;
 using OWCE.Protobuf;
 //using Plugin.Geolocator;
 //using Plugin.Geolocator.Abstractions;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace OWCE
 {
@@ -19,7 +22,8 @@ namespace OWCE
         Unknown,
         V1,
         Plus,
-        XR
+        XR,
+        Pint,
     };
 
     public class OWBoard : object, IEquatable<OWBoard>, INotifyPropertyChanged
@@ -123,6 +127,8 @@ namespace OWCE
                         return "ow_icon_plus.png";
                     case OWBoardType.XR:
                         return "ow_icon_xr.png";
+                    case OWBoardType.Pint:
+                        return "ow_icon.png"; // TODO: Update icon
                 }
                 return "ow_icon.png";
             }
@@ -461,6 +467,10 @@ namespace OWCE
                     {
                         BoardType = OWBoardType.XR;
                     }
+                    else if (_hardwareRevision >= 5000 && _hardwareRevision <= 5999)
+                    {
+                        BoardType = OWBoardType.Pint;
+                    }
                 }
             }
         }
@@ -550,6 +560,11 @@ namespace OWCE
         {
             if (_isHandshaking && characteristicGuid.Equals(SerialReadUUID, StringComparison.CurrentCultureIgnoreCase))
             {
+
+                // If our system is little endian, reverse the array.
+                if (BitConverter.IsLittleEndian)
+                    Array.Reverse(data);
+
                 _handshakeBuffer.AddRange(data);
                 if (_handshakeBuffer.Count == 20)
                 {
@@ -722,7 +737,6 @@ namespace OWCE
             var firmwareRevision = await App.Current.OWBLE.ReadValue(FirmwareRevisionUUID);
             SetValue(FirmwareRevisionUUID, firmwareRevision, true);
 
-
             if (HardwareRevision > 3000 && FirmwareRevision > 4000)
             {
                 await Handshake();
@@ -877,72 +891,198 @@ ReadRequestReceived - LifetimeOdometer
             var didWrite = await App.Current.OWBLE.WriteValue(OWBoard.FirmwareRevisionUUID, firmwareRevision, true);
 
             var byteArray = await _handshakeTaskCompletionSource.Task;
-
+            
             await App.Current.OWBLE.UnsubscribeValue(OWBoard.SerialReadUUID, true);
             // TODO: Restore _characteristics[OWBoard.SerialReadUUID].ValueUpdated -= SerialRead_ValueUpdated;
             if (byteArray.Length == 20)
             {
-                var outputArray = new byte[20];
-                Array.Copy(byteArray, 0, outputArray, 0, 3);
-
-                // Take almost all of the bytes from the input array. This is almost the same as the last part as
-                // we are ignoring the first 3 and the last bytes.
-                var arrayToMD5_part1 = new byte[16];
-                Array.Copy(byteArray, 3, arrayToMD5_part1, 0, 16);
-
-                // This appears to be a static value from the board.
-                var arrayToMD5_part2 = new byte[] {
-                    217,    // D9
-                    37,     // 25
-                    95,     // 5F
-                    15,     // 0F
-                    35,     // 23
-                    53,     // 35
-                    78,     // 4E
-                    25,     // 19
-                    186,    // BA
-                    115,    // 73
-                    156,    // 9C
-                    205,    // CD
-                    196,    // C4
-                    169,    // A9
-                    23,     // 17
-                    101,    // 65
-                };
-
-
-                // New byte array we are going to MD5 hash. Part of the input string, part of this static string.
-                var arrayToMD5 = new byte[arrayToMD5_part1.Length + arrayToMD5_part2.Length];
-                arrayToMD5_part1.CopyTo(arrayToMD5, 0);
-                arrayToMD5_part2.CopyTo(arrayToMD5, arrayToMD5_part1.Length);
-
-                // Start prepping the MD5 hash
-                byte[] md5Hash = null;
-                using (var md5 = System.Security.Cryptography.MD5.Create())
+                if (FirmwareRevision >= 4141) // Pint or XR with 4210 hardware 
                 {
-                    md5Hash = md5.ComputeHash(arrayToMD5);
+                    // Get bytes 3 through to 19 (start 3, length 16)
+                    var apiKeyArray = new byte[16];
+                    Array.Copy(byteArray, 3, apiKeyArray, 0, 16);
+
+                    // Convert to base16 string.
+                    var apiKey = BitConverter.ToString(apiKeyArray).Replace("-", "");
+
+                    // Exchange this apiKey for key from server.
+                    var tokenArray = await FetchToken(apiKey);
+                    if (tokenArray != null)
+                    {
+                        // Feed it back to the app how we normally would.
+                        await App.Current.OWBLE.WriteValue(OWBoard.SerialWriteUUID, tokenArray);
+                    }
                 }
-
-                // Add it to the 3 bytes we already have.
-                Array.Copy(md5Hash, 0, outputArray, 3, md5Hash.Length);
-
-                // Validate the check byte.
-                outputArray[19] = 0;
-                for (int i = 0; i < outputArray.Length - 1; ++i)
+                else
                 {
-                    outputArray[19] = ((byte)(outputArray[i] ^ outputArray[19]));
+                    var outputArray = new byte[20];
+                    Array.Copy(byteArray, 0, outputArray, 0, 3);
+
+                    // Take almost all of the bytes from the input array. This is almost the same as the last part as
+                    // we are ignoring the first 3 and the last bytes.
+                    var arrayToMD5_part1 = new byte[16];
+                    Array.Copy(byteArray, 3, arrayToMD5_part1, 0, 16);
+
+                    // This appears to be a static value from the board.
+                    var arrayToMD5_part2 = new byte[] {
+                        217,    // D9
+                        37,     // 25
+                        95,     // 5F
+                        15,     // 0F
+                        35,     // 23
+                        53,     // 35
+                        78,     // 4E
+                        25,     // 19
+                        186,    // BA
+                        115,    // 73
+                        156,    // 9C
+                        205,    // CD
+                        196,    // C4
+                        169,    // A9
+                        23,     // 17
+                        101,    // 65
+                    };
+
+
+                    // New byte array we are going to MD5 hash. Part of the input string, part of this static string.
+                    var arrayToMD5 = new byte[arrayToMD5_part1.Length + arrayToMD5_part2.Length];
+                    arrayToMD5_part1.CopyTo(arrayToMD5, 0);
+                    arrayToMD5_part2.CopyTo(arrayToMD5, arrayToMD5_part1.Length);
+
+                    // Start prepping the MD5 hash
+                    byte[] md5Hash = null;
+                    using (var md5 = System.Security.Cryptography.MD5.Create())
+                    {
+                        md5Hash = md5.ComputeHash(arrayToMD5);
+                    }
+
+                    // Add it to the 3 bytes we already have.
+                    Array.Copy(md5Hash, 0, outputArray, 3, md5Hash.Length);
+
+                    // Validate the check byte.
+                    outputArray[19] = 0;
+                    for (int i = 0; i < outputArray.Length - 1; ++i)
+                    {
+                        outputArray[19] = ((byte)(outputArray[i] ^ outputArray[19]));
+                    }
+
+                    var inputString = BitConverter.ToString(byteArray).Replace("-", ":").ToLower();
+                    var outputString = BitConverter.ToString(outputArray).Replace("-", ":").ToLower();
+
+                    Debug.WriteLine($"Input: {inputString}");
+                    Debug.WriteLine($"Output: {outputString}");
+
+                    await App.Current.OWBLE.WriteValue(OWBoard.SerialWriteUUID, outputArray);
                 }
-
-                var inputString = BitConverter.ToString(byteArray).Replace("-", ":").ToLower();
-                var outputString = BitConverter.ToString(outputArray).Replace("-", ":").ToLower();
-
-                Debug.WriteLine($"Input: {inputString}");
-                Debug.WriteLine($"Output: {outputString}");
-
-                await App.Current.OWBLE.WriteValue(OWBoard.SerialWriteUUID, outputArray);
-
             }
             return false;
+        }
+
+        private async Task<byte[]> FetchToken(string apiKey)
+        {
+            if (String.IsNullOrWhiteSpace(_name))
+            {
+                return null;
+            }
+            var deviceName = _name.ToLower();
+            deviceName = deviceName.Replace("ow", String.Empty);
+            var key = await SecureStorage.GetAsync($"board_{deviceName}_key");
+
+            // If the API key has changed delete the stored token.
+            if (key != apiKey)
+            {
+                SecureStorage.Remove($"board_{deviceName}_token");
+            }
+
+            var token = await SecureStorage.GetAsync($"board_{deviceName}_token");
+
+            if (String.IsNullOrEmpty(token))
+            {
+                try
+                {
+                    using (var handler = new HttpClientHandler())
+                    {
+                        handler.AutomaticDecompression = System.Net.DecompressionMethods.GZip;
+
+                        using (var client = new HttpClient())
+                        {
+                            // Match headers as best as possible.
+                            client.DefaultRequestHeaders.Clear();
+                            client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "application/json");
+                            client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
+                            client.DefaultRequestHeaders.TryAddWithoutValidation("Connection", "keep-alive");
+                            client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "en-us");
+                            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Basic Og==");
+                            client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip");
+
+                            var platform = DeviceInfo.Platform;
+                            if (platform == DevicePlatform.Android)
+                            {
+                                var userAgent = DependencyService.Get<DependencyInterfaces.IUserAgent>();
+                                var systemUserAgent = await userAgent.GetSystemUserAgent();
+                                client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", systemUserAgent);
+                            }
+                            else if (platform == DevicePlatform.iOS)
+                            {
+                                client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Onewheel/0 CFNetwork/1121.2.2 Darwin/19.2.0");
+                            }
+                            else
+                            {
+                                client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Onewheel/0 CFNetwork/1121.2.2 Darwin/19.2.0");
+                            }
+                            client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
+                            client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
+
+                            string owType = _boardType switch
+                            {
+                                OWBoardType.XR => "xr",
+                                OWBoardType.Pint => "pint",
+                                _ => "",
+                            };
+
+                            // Request unlock key based on board name, board type, and token.
+                            var url = $"https://app.onewheel.com/wp-json/fm/v2/activation/{deviceName}?owType={owType}&apiKey={apiKey}";
+                            var response = await client.GetAsync(url);
+
+                            if (response.IsSuccessStatusCode)
+                            {
+                                var responseBody = await response.Content.ReadAsStringAsync();
+                                var owKey = JsonSerializer.Deserialize<OWKey>(responseBody);
+
+                                if (String.IsNullOrWhiteSpace(owKey.Key))
+                                {
+                                    throw new Exception("No key found.");
+                                }
+
+                                await SecureStorage.SetAsync($"board_{deviceName}_key", apiKey);
+                                await SecureStorage.SetAsync($"board_{deviceName}_token", owKey.Key);
+
+                                var tokenArray = owKey.Key.StringToByteArray();
+                                return tokenArray;
+                            }
+                            else
+                            {
+                                throw new Exception($"Unexpected response code ({response.StatusCode})");
+                            }
+                        }
+                    }
+                }
+                catch (Exception err)
+                {
+                    Debug.WriteLine($"ERROR: {err.Message}");
+
+                    SecureStorage.Remove($"board_{deviceName}_token");
+                    SecureStorage.Remove($"board_{deviceName}_key");
+
+                }
+            }
+            else
+            {
+                var tokenArray = token.StringToByteArray();
+                return tokenArray;
+            }
+
+            return null;
         }
 
 
@@ -1532,4 +1672,12 @@ ReadRequestReceived - LifetimeOdometer
         }
     }
 
+    internal class OWKey
+    {
+        [System.Text.Json.Serialization.JsonPropertyName("key")]
+        public string Key
+        {
+            get; set;
+        }
+    }
 }

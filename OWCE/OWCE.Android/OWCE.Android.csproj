@@ -76,6 +76,7 @@
     <Compile Include="DependencyImplementations\PermissionPrompt.cs" />
     <Compile Include="DependencyImplementations\OWBLE.cs" />
     <Compile Include="Extensions\GuidExtension.cs" />
+    <Compile Include="DependencyImplementations\UserAgent.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
