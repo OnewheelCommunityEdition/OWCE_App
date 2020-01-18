@@ -26,6 +26,7 @@ namespace OWCE
         public BoardPage(OWBoard board)
         {
             Board = board;
+            board.Init();
 
             BindingContext = this;
 

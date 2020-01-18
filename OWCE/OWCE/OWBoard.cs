@@ -553,18 +553,21 @@ namespace OWCE
 
         public OWBoard()
         {
+
+        }
+
+        public void Init()
+        {
             App.Current.OWBLE.BoardValueChanged += OWBLE_BoardValueChanged;
         }
 
+
         private void OWBLE_BoardValueChanged(string characteristicGuid, byte[] data)
         {
+            //Debug.WriteLine($"{characteristicGuid} {BitConverter.ToString(data)}");
+
             if (_isHandshaking && characteristicGuid.Equals(SerialReadUUID, StringComparison.CurrentCultureIgnoreCase))
             {
-
-                // If our system is little endian, reverse the array.
-                if (BitConverter.IsLittleEndian)
-                    Array.Reverse(data);
-
                 _handshakeBuffer.AddRange(data);
                 if (_handshakeBuffer.Count == 20)
                 {
@@ -1396,8 +1399,9 @@ ReadRequestReceived - LifetimeOdometer
 
         public async Task Disconnect()
         {
+            App.Current.OWBLE.BoardValueChanged -= OWBLE_BoardValueChanged;
             _keepHandshakeBackgroundRunning = false;
-            App.Current.OWBLE.Disconnect();
+            await App.Current.OWBLE.Disconnect();
             //await CrossBluetoothLE.Current.Adapter.DisconnectDeviceAsync(_device);
         }
 
