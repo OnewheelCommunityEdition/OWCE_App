@@ -8,7 +8,6 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <converters:BatteryCellsToTextConverter x:Key="batteryCellsToTextConverter" />
             <converters:TempConverter x:Key="tempConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -267,7 +266,41 @@
 
                     <StackLayout Orientation="Horizontal" MinimumHeightRequest="40">
                         <Label Text="BatteryCells" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-                        <Label Text="{Binding Board.BatteryCells, Converter={StaticResource batteryCellsToTextConverter}}" HorizontalOptions="End" VerticalOptions="Center" />
+                        <Grid HorizontalOptions="End" VerticalOptions="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Row="0" Grid.Column="0" Text="{Binding Board.BatteryCell0}" />
+                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding Board.BatteryCell1}" />
+                            <Label Grid.Row="0" Grid.Column="2" Text="{Binding Board.BatteryCell2}" />
+                            <Label Grid.Row="0" Grid.Column="3" Text="{Binding Board.BatteryCell3}" />
+                            
+                            <Label Grid.Row="1" Grid.Column="0" Text="{Binding Board.BatteryCell4}" />
+                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding Board.BatteryCell5}" />
+                            <Label Grid.Row="1" Grid.Column="2" Text="{Binding Board.BatteryCell6}" />
+                            <Label Grid.Row="1" Grid.Column="3" Text="{Binding Board.BatteryCell7}" />
+
+                            <Label Grid.Row="2" Grid.Column="0" Text="{Binding Board.BatteryCell8}" />
+                            <Label Grid.Row="2" Grid.Column="1" Text="{Binding Board.BatteryCell9}" />
+                            <Label Grid.Row="2" Grid.Column="2" Text="{Binding Board.BatteryCell10}" />
+                            <Label Grid.Row="2" Grid.Column="3" Text="{Binding Board.BatteryCell11}" />
+
+                            <Label Grid.Row="3" Grid.Column="0" Text="{Binding Board.BatteryCell12}" />
+                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding Board.BatteryCell13}" />
+                            <Label Grid.Row="3" Grid.Column="2" Text="{Binding Board.BatteryCell14}" />
+                            <Label Grid.Row="3" Grid.Column="3" Text="{Binding Board.BatteryCell15}" />
+                            
+                        </Grid>
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
 

@@ -537,6 +537,119 @@ namespace OWCE
             get { return _batteryCells; }
         }
 
+
+
+        private string _batteryCell0 = "-";
+        public string BatteryCell0
+        {
+            get { return _batteryCell0; }
+            set { if (_batteryCell0 != value) { _batteryCell0 = value; OnPropertyChanged(); } }
+        }
+
+        private string _batteryCell1 = "-";
+        public string BatteryCell1
+        {
+            get { return _batteryCell1; }
+            set { if (_batteryCell1 != value) { _batteryCell1 = value; OnPropertyChanged(); } }
+        }
+
+        private string _batteryCell2 = "-";
+        public string BatteryCell2
+        {
+            get { return _batteryCell2; }
+            set { if (_batteryCell2 != value) { _batteryCell2 = value; OnPropertyChanged(); } }
+        }
+
+        private string _batteryCell3 = "-";
+        public string BatteryCell3
+        {
+            get { return _batteryCell3; }
+            set { if (_batteryCell3 != value) { _batteryCell3 = value; OnPropertyChanged(); } }
+        }
+
+        private string _batteryCell4 = "-";
+        public string BatteryCell4
+        {
+            get { return _batteryCell4; }
+            set { if (_batteryCell4 != value) { _batteryCell4 = value; OnPropertyChanged(); } }
+        }
+
+        private string _batteryCell5 = "-";
+        public string BatteryCell5
+        {
+            get { return _batteryCell5; }
+            set { if (_batteryCell5 != value) { _batteryCell5 = value; OnPropertyChanged(); } }
+        }
+        private string _batteryCell6 = "-";
+        public string BatteryCell6
+        {
+            get { return _batteryCell6; }
+            set { if (_batteryCell6 != value) { _batteryCell6 = value; OnPropertyChanged(); } }
+        }
+
+        private string _batteryCell7 = "-";
+        public string BatteryCell7
+        {
+            get { return _batteryCell7; }
+            set { if (_batteryCell7 != value) { _batteryCell7 = value; OnPropertyChanged(); } }
+        }
+
+        private string _batteryCell8 = "-";
+        public string BatteryCell8
+        {
+            get { return _batteryCell8; }
+            set { if (_batteryCell8 != value) { _batteryCell8 = value; OnPropertyChanged(); } }
+        }
+
+        private string _batteryCell9 = "-";
+        public string BatteryCell9
+        {
+            get { return _batteryCell9; }
+            set { if (_batteryCell9 != value) { _batteryCell9 = value; OnPropertyChanged(); } }
+        }
+
+        private string _batteryCell10 = "-";
+        public string BatteryCell10
+        {
+            get { return _batteryCell10; }
+            set { if (_batteryCell10 != value) { _batteryCell10 = value; OnPropertyChanged(); } }
+        }
+
+        private string _batteryCell11 = "-";
+        public string BatteryCell11
+        {
+            get { return _batteryCell11; }
+            set { if (_batteryCell11 != value) { _batteryCell11 = value; OnPropertyChanged(); } }
+        }
+
+        private string _batteryCell12 = "-";
+        public string BatteryCell12
+        {
+            get { return _batteryCell12; }
+            set { if (_batteryCell12 != value) { _batteryCell12 = value; OnPropertyChanged(); } }
+        }
+
+        private string _batteryCell13 = "-";
+        public string BatteryCell13
+        {
+            get { return _batteryCell13; }
+            set { if (_batteryCell13 != value) { _batteryCell13 = value; OnPropertyChanged(); } }
+        }
+
+        private string _batteryCell14 = "-";
+        public string BatteryCell14
+        {
+            get { return _batteryCell14; }
+            set { if (_batteryCell14 != value) { _batteryCell14 = value; OnPropertyChanged(); } }
+        }
+
+        private string _batteryCell15 = "-";
+        public string BatteryCell15
+        {
+            get { return _batteryCell15; }
+            set { if (_batteryCell15 != value) { _batteryCell15 = value; OnPropertyChanged(); } }
+        }
+
         private OWBoardEventList _events = new OWBoardEventList();
         private List<OWBoardEvent> _initialEvents = new List<OWBoardEvent>();
         private Ride _currentRide = null;
@@ -544,7 +657,6 @@ namespace OWCE
 
         public OWBoard()
         {
-
         }
 
         public void Init()
@@ -555,7 +667,7 @@ namespace OWCE
 
         private void OWBLE_BoardValueChanged(string characteristicGuid, byte[] data)
         {
-            //Debug.WriteLine($"{characteristicGuid} {BitConverter.ToString(data)}");
+            Debug.WriteLine($"{characteristicGuid} {BitConverter.ToString(data)}");
 
             if (_isHandshaking && characteristicGuid.Equals(SerialReadUUID, StringComparison.CurrentCultureIgnoreCase))
             {
@@ -576,6 +688,62 @@ namespace OWCE
         public void SetBatteryCellValue(uint cell, uint value)
         {
             _batteryCells[cell] = value;
+
+            // 1/50 = 0.02
+            var voltageString = (0.02f * value).ToString("F2") + "V";
+            switch (cell)
+            {
+                case 0:
+                    BatteryCell0 = voltageString;
+                    break;
+                case 1:
+                    BatteryCell1 = voltageString;
+                    break;
+                case 2:
+                    BatteryCell2 = voltageString;
+                    break;
+                case 3:
+                    BatteryCell3 = voltageString;
+                    break;
+                case 4:
+                    BatteryCell4 = voltageString;
+                    break;
+                case 5:
+                    BatteryCell5 = voltageString;
+                    break;
+                case 6:
+                    BatteryCell6 = voltageString;
+                    break;
+                case 7:
+                    BatteryCell7 = voltageString;
+                    break;
+                case 8:
+                    BatteryCell8 = voltageString;
+                    break;
+                case 9:
+                    BatteryCell9 = voltageString;
+                    break;
+                case 10:
+                    BatteryCell10 = voltageString;
+                    break;
+                case 11:
+                    BatteryCell11 = voltageString;
+                    break;
+                case 12:
+                    BatteryCell12 = voltageString;
+                    break;
+                case 13:
+                    BatteryCell13 = voltageString;
+                    break;
+                case 14:
+                    BatteryCell14 = voltageString;
+                    break;
+                case 15:
+                    BatteryCell15 = voltageString;
+                    break;
+            }
+
+
             OnPropertyChanged("BatteryCells");
         }
 
@@ -730,6 +898,12 @@ namespace OWCE
             SetValue(HardwareRevisionUUID, hardwareRevision, true);
             var firmwareRevision = await App.Current.OWBLE.ReadValue(FirmwareRevisionUUID);
             SetValue(FirmwareRevisionUUID, firmwareRevision, true);
+
+            // Hide 16th cell on XR and Pint.
+            if (HardwareRevision >= 4000)
+            {
+                BatteryCell15 = String.Empty;
+            }
 
             if (HardwareRevision > 3000 && FirmwareRevision > 4000)
             {
@@ -1239,9 +1413,17 @@ ReadRequestReceived - LifetimeOdometer
 
                 return;
             }
-
-
-
+            else if (uuid == BatteryPercentUUID)
+            {
+                if (data[0] > 0)
+                {
+                    BatteryPercent = data[0];
+                }
+                else if (data[1] > 0)
+                {
+                    BatteryPercent = data[1];
+                }
+            }
 
 
             var value = BitConverter.ToUInt16(data, 0);
@@ -1270,8 +1452,6 @@ ReadRequestReceived - LifetimeOdometer
                 case SerialNumberUUID:
                     SerialNumber = value;
                     break;
-                case BatteryPercentUUID:
-                    BatteryPercent = value;
                     break;
                 case BatteryLow5UUID:
                     BatteryLow5 = value;
@@ -1340,7 +1520,7 @@ ReadRequestReceived - LifetimeOdometer
 
                     var batteryVoltage = (uint)data[0];
                     var cellID = (uint)data[1];
-                    var batteryVoltageDisplay = batteryVoltage / 50.0;
+                    //var batteryVoltageDisplay = batteryVoltage / 50.0;
 
 
                     SetBatteryCellValue(cellID, batteryVoltage);
