@@ -22,6 +22,8 @@
 	<string>10.0</string>
 	<key>CFBundleDisplayName</key>
 	<string>OWCE</string>
+	<key>CFBundleSpokenName</key>
+	<string>Onewheel Community Edition</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.owcommunity.owce</string>
 	<key>UILaunchStoryboardName</key>
