@@ -48,5 +48,7 @@
 	<string>This app needs access to location when open.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Access bluetooth to connect to your Onewheel</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Access bluetooth to connect to your Onewheel</string>
 </dict>
 </plist>
