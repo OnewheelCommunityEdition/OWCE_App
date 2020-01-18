@@ -1452,7 +1452,6 @@ ReadRequestReceived - LifetimeOdometer
                 case SerialNumberUUID:
                     SerialNumber = value;
                     break;
-                    break;
                 case BatteryLow5UUID:
                     BatteryLow5 = value;
                     break;
