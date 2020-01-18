@@ -35,6 +35,7 @@
     <AndroidLinkMode>None</AndroidLinkMode>
     <AndroidUseAapt2>false</AndroidUseAapt2>
     <AndroidDexTool>d8</AndroidDexTool>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,6 +51,7 @@
     <AndroidLinkTool>r8</AndroidLinkTool>
     <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
     <AndroidUseAapt2>false</AndroidUseAapt2>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
