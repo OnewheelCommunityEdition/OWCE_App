@@ -489,15 +489,6 @@ namespace OWCE
             set { if (_lifetimeAmpHours.AlmostEqualTo(value) == false) { _lifetimeAmpHours = value; OnPropertyChanged(); } }
         }
 
-        /*
-        private float _batteryCells = 0;
-        public float BatteryCells
-        {
-            get { return _batteryCells; }
-            set { if (_batteryCells != value) { _batteryCells = value; OnPropertyChanged(); } }
-        }
-        */
-
         private float _lastErrorCode = 0;
         public float LastErrorCode
         {
