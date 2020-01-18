@@ -50,5 +50,9 @@
 	<string>Access bluetooth to connect to your Onewheel</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Access bluetooth to connect to your Onewheel</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-central</string>
+	</array>
 </dict>
 </plist>
