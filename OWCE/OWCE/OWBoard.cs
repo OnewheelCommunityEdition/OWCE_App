@@ -1204,8 +1204,19 @@ ReadRequestReceived - LifetimeOdometer
         {
             if (data == null)
                 return;
-            
+
             uuid = uuid.ToUpper();
+
+
+            if (initialData)
+            {
+                _initialEvents.Add(new OWBoardEvent()
+                {
+                    Uuid = uuid,
+                    Data = ByteString.CopyFrom(data),
+                    Timestamp = DateTime.UtcNow.Ticks,
+                });
+            }
 
             // If our system is little endian, reverse the array.
             if (BitConverter.IsLittleEndian)
@@ -1235,16 +1246,6 @@ ReadRequestReceived - LifetimeOdometer
 
             var value = BitConverter.ToUInt16(data, 0);
 
-
-            if (initialData)
-            {
-                _initialEvents.Add(new OWBoardEvent()
-                {
-                    Uuid = uuid,
-                    Data = ByteString.CopyFrom(data),
-                    Timestamp = DateTime.UtcNow.Ticks,
-                });
-            }
 
             if (_isLogging)
             {
