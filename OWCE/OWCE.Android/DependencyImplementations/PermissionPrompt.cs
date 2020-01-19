@@ -19,22 +19,19 @@ namespace OWCE.Droid.DependencyImplementations
                 var permissionStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(locationPermission);
 
 
-                if (true || permissionStatus != Plugin.Permissions.Abstractions.PermissionStatus.Granted)
+                if (permissionStatus != Plugin.Permissions.Abstractions.PermissionStatus.Granted)
                 {
-                    bool shouldRequest = await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(locationPermission);
-                    if (shouldRequest)
-                    {
-                        await Application.Current.MainPage.DisplayAlert("Oops", "In order to access board details in a bluetooth scan your phones location permission needs to be enabled.\n(Yeah, that is as confusing as it sounds)", "Ok");
-                    }
+                    await Application.Current.MainPage.DisplayAlert("Oops", "In order to for bluetooth to scan for your board you need to enable location permission.\n(Yeah, that is as confusing as it sounds)", "Ok");
+
 
                     var result = await CrossPermissions.Current.RequestPermissionsAsync(locationPermission);
-
-                    permissionStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(locationPermission);
+                    
+                    permissionStatus = result[locationPermission];
                 }
 
                 if (permissionStatus == Plugin.Permissions.Abstractions.PermissionStatus.Denied)
                 {
-                    var shouldOpenSettings = await Application.Current.MainPage.DisplayAlert("Error", "In order to access board details in a bluetooth scan your phones location permission needs to be enabled.\n(Yeah, that is as confusing as it sounds)", "Open Settings", "Cancel");
+                    var shouldOpenSettings = await Application.Current.MainPage.DisplayAlert("Error", "In order to for bluetooth to scan for your board you need to enable location permission.\n(Yeah, that is as confusing as it sounds)", "Open Settings", "Cancel");
                     if (shouldOpenSettings)
                     {
                         AppInfo.ShowSettingsUI();
