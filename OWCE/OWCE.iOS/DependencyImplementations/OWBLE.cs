@@ -393,6 +393,11 @@ namespace OWCE.MacOS.DependencyImplementations
             return Task.CompletedTask;
             //throw new NotImplementedException();
         }
-#endregion
+
+        public bool BluetoothEnabled()
+        {
+            return _centralManager.State == CBCentralManagerState.PoweredOn;
+        }
+        #endregion
     }
 }

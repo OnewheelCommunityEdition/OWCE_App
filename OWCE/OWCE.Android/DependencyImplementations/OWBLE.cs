@@ -633,6 +633,24 @@ namespace OWCE.Droid.DependencyImplementations
 
             return Task.CompletedTask;
         }
+
+        public bool BluetoothEnabled()
+        {
+            var bluetoothAdapter = Android.Bluetooth.BluetoothAdapter.DefaultAdapter;
+            if (bluetoothAdapter == null)
+            {
+                // Device does not support Bluetooth
+                return false;
+            }
+            else if (bluetoothAdapter.IsEnabled == false)
+            {
+                // Bluetooth is not enabled
+                return false;
+            }
+
+            // Bluetooth is enabled 
+            return true;
+        }
         #endregion
     }
 }

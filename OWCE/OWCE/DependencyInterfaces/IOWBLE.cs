@@ -18,5 +18,7 @@ namespace OWCE.DependencyInterfaces
         Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool important = false);
         Task SubscribeValue(string characteristicGuid, bool important = false);
         Task UnsubscribeValue(string characteristicGuid, bool important = false);
+
+        bool BluetoothEnabled();
     }
 }

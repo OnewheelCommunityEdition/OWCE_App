@@ -93,6 +93,11 @@ namespace OWCE
             if (_isScanning)
                 return;
 
+            if (App.Current.OWBLE.BluetoothEnabled() == false)
+            {
+                await DisplayAlert("Error", "Bluetooth is not enabled on your device. Please enable bluetooth and try scan for boards again.", "Ok");
+                return;
+            }
 
             if (await DependencyService.Get<DependencyInterfaces.IPermissionPrompt>().PromptBLEPermission() == false)
             {
