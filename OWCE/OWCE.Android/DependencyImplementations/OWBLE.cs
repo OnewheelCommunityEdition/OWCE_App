@@ -36,10 +36,11 @@ namespace OWCE.Droid.DependencyImplementations
             public BluetoothGattCharacteristic Characteristic { get; private set; }
             public byte[] Data { get; set; }
 
-            public OWBLE_QueueItem(BluetoothGattCharacteristic characteristic, OWBLE_QueueItemOperationType operationType)
+            public OWBLE_QueueItem(BluetoothGattCharacteristic characteristic, OWBLE_QueueItemOperationType operationType, byte[] data = null)
             {
                 Characteristic = characteristic;
-                OperationType = OperationType;
+                OperationType = operationType;
+                Data = data; 
             }
         }
 
@@ -582,7 +583,7 @@ namespace OWCE.Droid.DependencyImplementations
             }
 
 
-            _gattOperationQueue.Enqueue(new OWBLE_QueueItem(_characteristics[uuid], OWBLE_QueueItemOperationType.Write));
+            _gattOperationQueue.Enqueue(new OWBLE_QueueItem(_characteristics[uuid], OWBLE_QueueItemOperationType.Write, data));
 
             ProcessQueue();
 
