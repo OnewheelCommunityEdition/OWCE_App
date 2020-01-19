@@ -303,10 +303,15 @@ namespace OWCE.Droid.DependencyImplementations
                 _connectTaskCompletionSource.SetResult(false);
             }
         }
-               
+
+        private int _queueNumber = 0;
+
         private void ProcessQueue()
         {
-            Debug.WriteLine($"ProcessQueue: {_gattOperationQueue.Count}");
+            var queueNumber = _queueNumber;
+            ++_queueNumber;
+
+            Debug.WriteLine($"ProcessQueue {queueNumber}: {_gattOperationQueue.Count}");
             if (_gattOperationQueue.Count == 0)
             {
                 return;
@@ -324,41 +329,46 @@ namespace OWCE.Droid.DependencyImplementations
                     bool didRead = _bluetoothGatt.ReadCharacteristic(item.Characteristic);
                     if (didRead == false)
                     {
-                        Debug.WriteLine($"ERROR: Unable to read {item.Characteristic.Uuid}");
+                        Debug.WriteLine($"ERROR {queueNumber}: Unable to read {item.Characteristic.Uuid}");
                     }
                     break;
                 case OWBLE_QueueItemOperationType.Write:
-                    item.Characteristic.SetValue(item.Data);
+                    bool didSetValue = item.Characteristic.SetValue(item.Data);
                     bool didWrite = _bluetoothGatt.WriteCharacteristic(item.Characteristic);
                     if (didWrite == false)
                     {
-                        Debug.WriteLine($"ERROR: Unable to write {item.Characteristic.Uuid}");
+                        Debug.WriteLine($"ERROR {queueNumber}: Unable to write {item.Characteristic.Uuid}");
                     }
                     break;
                 case OWBLE_QueueItemOperationType.Subscribe:
                     bool didSubscribe = _bluetoothGatt.SetCharacteristicNotification(item.Characteristic, true);
                     if (didSubscribe == false)
                     {
-                        Debug.WriteLine($"ERROR: Unable to subscribe {item.Characteristic.Uuid}");
+                        Debug.WriteLine($"ERROR {queueNumber}: Unable to subscribe {item.Characteristic.Uuid}");
                     }
 
-                    /* This is also sometimes required (e.g. for heart rate monitors) to enable notifications/indications
-        // see: https://developer.bluetooth.org/gatt/descriptors/Pages/DescriptorViewer.aspx?u=org.bluetooth.descriptor.gatt.client_characteristic_configuration.xml
+                    var subscribeDescriptor = item.Characteristic.GetDescriptor(UUID.FromString("00002902-0000-1000-8000-00805f9b34fb"));
+                    bool didSetSubscribeDescriptor = subscribeDescriptor.SetValue(BluetoothGattDescriptor.EnableNotificationValue.ToArray());
+                    bool didWriteSubscribeDescriptor = _bluetoothGatt.WriteDescriptor(subscribeDescriptor);
 
-                    BluetoothGattDescriptor descriptor = ch.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"));
-        if(descriptor != null) {
-            byte[] val = enabled ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE;
-            descriptor.setValue(val);
-            mBluetoothGatt.writeDescriptor(descriptor);
-        }
-        */
+
+                    _gattOperationQueueProcessing = false;
+                    ProcessQueue();
+
                     break;
                 case OWBLE_QueueItemOperationType.Unsubscribe:
                     bool didUnsubscribe = _bluetoothGatt.SetCharacteristicNotification(item.Characteristic, false);
                     if (didUnsubscribe == false)
                     {
-                        Debug.WriteLine($"ERROR: Unable to unsubscribe {item.Characteristic.Uuid}");
+                        Debug.WriteLine($"ERROR {queueNumber}: Unable to unsubscribe {item.Characteristic.Uuid}");
                     }
+
+                    var unsubscribeDescriptor = item.Characteristic.GetDescriptor(UUID.FromString("00002902-0000-1000-8000-00805f9b34fb"));
+                    var didSetUnsubscribeDescriptor = unsubscribeDescriptor.SetValue(BluetoothGattDescriptor.DisableNotificationValue.ToArray());
+                    var didWriteUnsubscribeDescriptor = _bluetoothGatt.WriteDescriptor(unsubscribeDescriptor);
+
+                    _gattOperationQueueProcessing = false;
+                    ProcessQueue();
                     break;
             }
         }
