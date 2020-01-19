@@ -146,9 +146,9 @@ namespace OWCE.Droid.DependencyImplementations
         }
 
 
-        Dictionary<UUID, BluetoothGattCharacteristic> _characteristics = new Dictionary<UUID, BluetoothGattCharacteristic>();
-        Dictionary<UUID, TaskCompletionSource<byte[]>> _readQueue = new Dictionary<UUID, TaskCompletionSource<byte[]>>();
-        Dictionary<UUID, TaskCompletionSource<byte[]>> _writeQueue = new Dictionary<UUID, TaskCompletionSource<byte[]>>();
+        Dictionary<string, BluetoothGattCharacteristic> _characteristics = new Dictionary<string, BluetoothGattCharacteristic>();
+        Dictionary<string, TaskCompletionSource<byte[]>> _readQueue = new Dictionary<string, TaskCompletionSource<byte[]>>();
+        Dictionary<string, TaskCompletionSource<byte[]>> _writeQueue = new Dictionary<string, TaskCompletionSource<byte[]>>();
 
         private void OnServicesDiscovered(BluetoothGatt gatt, GattStatus status)
         {
@@ -162,7 +162,7 @@ namespace OWCE.Droid.DependencyImplementations
             
             foreach (var characteristic in service.Characteristics)
             {
-                _characteristics.Add(characteristic.Uuid, characteristic);
+                _characteristics.Add(characteristic.Uuid.ToString().ToLower(), characteristic);
             }
 
             if (_connectTaskCompletionSource.Task.IsCanceled == false)
@@ -365,7 +365,7 @@ namespace OWCE.Droid.DependencyImplementations
 
         private void OnCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, GattStatus status)
         {
-            var uuid = characteristic.Uuid;
+            var uuid = characteristic.Uuid.ToString().ToLower();
 
             if (_readQueue.ContainsKey(uuid))
             {
@@ -381,7 +381,7 @@ namespace OWCE.Droid.DependencyImplementations
 
         private void OnCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, GattStatus status)
         {
-            var uuid = characteristic.Uuid;
+            var uuid = characteristic.Uuid.ToString().ToLower();
 
             if (_writeQueue.ContainsKey(uuid))
             {
@@ -506,7 +506,7 @@ namespace OWCE.Droid.DependencyImplementations
             if (_bluetoothGatt == null)
                 return null;
 
-            var uuid = UUID.FromString(characteristicGuid);
+            var uuid = characteristicGuid.ToLower();
 
             // TODO: Check for connected devices?
             if (_characteristics.ContainsKey(uuid) == false)
@@ -552,7 +552,7 @@ namespace OWCE.Droid.DependencyImplementations
                 return null;
             }
 
-            var uuid = UUID.FromString(characteristicGuid);
+            var uuid = characteristicGuid.ToLower();
 
             // TODO: Check for connected devices?
             if (_characteristics.ContainsKey(uuid) == false)
@@ -595,7 +595,7 @@ namespace OWCE.Droid.DependencyImplementations
             if (_bluetoothGatt == null)
                 return null;
 
-            var uuid = UUID.FromString(characteristicGuid);
+            var uuid = characteristicGuid.ToLower();
 
             // TODO: Check for connected devices?
             if (_characteristics.ContainsKey(uuid) == false)
@@ -618,7 +618,7 @@ namespace OWCE.Droid.DependencyImplementations
             if (_bluetoothGatt == null)
                 return null;
 
-            var uuid = UUID.FromString(characteristicGuid);
+            var uuid = characteristicGuid.ToLower();
 
             // TODO: Check for connected devices?
             if (_characteristics.ContainsKey(uuid) == false)
