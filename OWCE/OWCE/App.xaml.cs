@@ -39,13 +39,6 @@ namespace OWCE
             }
             InitializeComponent();
 
-            /*
-            var owBoard = new OWBoard();
-            owBoard.BatteryPercent = 96;
-            owBoard.RPM = 22;
-            */
-            //MainPage = new NavigationPage(new BoardPage(owBoard)); 
-
             MainPage = new NavigationPage(new BoardListPage());
             //MainPage = new MainMasterDetailPage();
         }
