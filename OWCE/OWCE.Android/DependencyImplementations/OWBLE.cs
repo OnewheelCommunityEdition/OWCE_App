@@ -309,7 +309,6 @@ namespace OWCE.Droid.DependencyImplementations
             Debug.WriteLine($"ProcessQueue: {_gattOperationQueue.Count}");
             if (_gattOperationQueue.Count == 0)
             {
-                _gattOperationQueueProcessing = false;
                 return;
             }
 
