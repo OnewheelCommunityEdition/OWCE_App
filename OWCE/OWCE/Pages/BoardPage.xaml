@@ -4,13 +4,9 @@
              Title="{Binding Board.Name}"
              xmlns:gauge="clr-namespace:Syncfusion.SfGauge.XForms;assembly=Syncfusion.SfGauge.XForms"
              xmlns:converters="clr-namespace:OWCE.Converters"
+             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
              >
 
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <converters:TempConverter x:Key="tempConverter" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
 
     <ContentPage.Content>
         <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" >
@@ -65,8 +61,23 @@
 
                 
             </AbsoluteLayout>
+
+            <CollectionView ItemsSource="{Binding Board.SelectedBoardDetailsList}" ItemTemplate="{StaticResource DetailTemplateSelector}">
+                <CollectionView.Footer>
+                    <StackLayout Padding="20">
+                       <yummy:PancakeView Style="{StaticResource PancakeButtonStyle}">
+                            <Label Text="Disconnect" Style="{StaticResource LabelButtonStyle}" />
+                            <yummy:PancakeView.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="Disconnect_Tapped" />
+                            </yummy:PancakeView.GestureRecognizers>
+                        </yummy:PancakeView>
+                    </StackLayout>
+                </CollectionView.Footer>
+            </CollectionView>
             
+                 <!--
              <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="End">
+
                 <StackLayout Padding="20,0,20,0">
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
                     
@@ -83,13 +94,7 @@
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
 
-                    <!--
-                    <StackLayout Orientation="Horizontal" HeightRequest="40">
-                        <Label Text="MaxDisplaySpeed" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-                        <Label Text="{Binding Board.MaxDisplaySpeed}" HorizontalOptions="End" VerticalOptions="Center" />
-                    </StackLayout>
-                    <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-                    -->
+                    
                     
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="SerialNumber" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
@@ -111,20 +116,7 @@
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
                     
-                    <!--
-                    <StackLayout Orientation="Horizontal" HeightRequest="40">
-                        <Label Text="BatteryLow5" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-                        <Label Text="{Binding Board.BatteryLow5}" HorizontalOptions="End" VerticalOptions="Center" />
-                    </StackLayout>
-                    <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-
-                    
-                    <StackLayout Orientation="Horizontal" HeightRequest="40">
-                        <Label Text="BatteryLow20" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-                        <Label Text="{Binding Board.BatteryLow20}" HorizontalOptions="End" VerticalOptions="Center" />
-                    </StackLayout>
-                    <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-                    -->
+                   
                     
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="BatterySerial" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
@@ -174,13 +166,13 @@
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
 
-                    <!--
+                   
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="LightMode" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
                         <Label Text="{Binding Board.LightMode}" HorizontalOptions="End" VerticalOptions="Center" />
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-
+                  
                     
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="FrontLightMode" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
@@ -194,7 +186,7 @@
                         <Label Text="{Binding Board.RearLightMode}" HorizontalOptions="End" VerticalOptions="Center" />
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-                    -->
+                    
                     
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="StatusError" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
@@ -304,13 +296,7 @@
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
 
-                    <!--
-                    <StackLayout Orientation="Horizontal" HeightRequest="40">
-                        <Label Text="SafetyHeadroom" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-                        <Label Text="{Binding Board.SafetyHeadroom}" HorizontalOptions="End" VerticalOptions="Center" />
-                    </StackLayout>
-                    <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-                    -->
+
                     
                     <StackLayout Orientation="Horizontal" HeightRequest="40">
                         <Label Text="HardwareRevision" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
@@ -332,60 +318,14 @@
                     </StackLayout>
                     <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
 
-                    <!--
-                    <StackLayout Orientation="Horizontal" HeightRequest="40">
-                        <Label Text="LastErrorCode" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-                        <Label Text="{Binding Board.LastErrorCode}" HorizontalOptions="End" VerticalOptions="Center" />
-                    </StackLayout>
-                    <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-
                     
-                    <StackLayout Orientation="Horizontal" HeightRequest="40">
-                        <Label Text="UNKNOWN1" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-                        <Label Text="{Binding Board.UNKNOWN1}" HorizontalOptions="End" VerticalOptions="Center" />
-                    </StackLayout>
-                    <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-                    
-                    
-                    <StackLayout Orientation="Horizontal" HeightRequest="40">
-                        <Label Text="UNKNOWN2" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-                        <Label Text="{Binding Board.UNKNOWN2}" HorizontalOptions="End" VerticalOptions="Center" />
-                    </StackLayout>
-                    <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-
-                    
-                    
-                    <StackLayout Orientation="Horizontal" HeightRequest="40">
-                        <Label Text="UNKNOWN3" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-                        <Label Text="{Binding Board.UNKNOWN3}" HorizontalOptions="End" VerticalOptions="Center" />
-                    </StackLayout>
-                    <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-
-                    
-                    
-                    <StackLayout Orientation="Horizontal" HeightRequest="40">
-                        <Label Text="UNKNOWN4" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-                        <Label Text="{Binding Board.UNKNOWN4}" HorizontalOptions="End" VerticalOptions="Center" />
-                    </StackLayout>
-                    <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-
-                    <StackLayout Orientation="Horizontal" HeightRequest="40">
-                        <Label Text="RSSI" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-                        <Label Text="{Binding Board.RSSI}" HorizontalOptions="End" VerticalOptions="Center" />
-                    </StackLayout>
-                    <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-                    
-                    <Button x:Name="LogDataButton" HorizontalOptions="FillAndExpand" VerticalOptions="End" Text="Start Logging Data" Clicked="LogData_Clicked" />
-                     -->
-                    
-                    <Button HorizontalOptions="FillAndExpand" VerticalOptions="End" Text="Disconnect" Clicked="Disconnect_Clicked" />
-                   
                 </StackLayout>
+                
 
 
             </ScrollView>
         
-          
+           -->
             
           
                       

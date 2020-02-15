@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OWCE.App">
+<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:converters="clr-namespace:OWCE.Converters" xmlns:templateselectors="clr-namespace:OWCE.TemplateSelectors" x:Class="OWCE.App" xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView">
     <Application.Resources>
         <ResourceDictionary>
 
@@ -34,11 +34,112 @@
                 <Setter Property="BackgroundColor" Value="{StaticResource lightBackgroundColor}" />
             </Style>
             
+            <Style TargetType="CollectionView">
+                <Setter Property="BackgroundColor" Value="{StaticResource lightBackgroundColor}" />
+            </Style>
             
             <Style TargetType="Button">
                 <Setter Property="TextColor" Value="{StaticResource textColor}" />
                 <Setter Property="BackgroundColor" Value="Transparent" />
             </Style>
+
+
+            <converters:TempConverter x:Key="tempConverter" />
+            <converters:DivideByTwo x:Key="divideByTwo" />
+
+             <Style x:Key="PancakeButtonStyle" TargetType="yummy:PancakeView">
+                <Setter Property="BorderColor" Value="White" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Padding" Value="10" />
+                <Setter Property="CornerRadius" Value="{Binding Height, Source={RelativeSource Self}, Converter={StaticResource divideByTwo}}" />
+            </Style>
+
+            <Style x:Key="LabelButtonStyle" TargetType="Label">
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+
+
+            <DataTemplate x:Key="NormalTemplate">
+                <StackLayout Orientation="Horizontal" Padding="20">
+                <Label Text="{Binding Name}" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
+                    <Label Text="{Binding Value}" HorizontalOptions="End" VerticalOptions="Center" />
+                    </StackLayout>
+            </DataTemplate>
+            <DataTemplate x:Key="VoltageTemplate">
+                 <StackLayout Orientation="Horizontal" Padding="20">
+                    <Label Text="{Binding Name}" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
+                    <Label Text="{Binding Value}" HorizontalOptions="End" VerticalOptions="Center" />
+                </StackLayout>
+            </DataTemplate>
+            <DataTemplate x:Key="TemperatureTemplate">
+                <StackLayout Orientation="Horizontal" Padding="20">
+                    <Label Text="{Binding Name}" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
+                    <Label Text="{Binding Value, Converter={StaticResource tempConverter}}" HorizontalOptions="End" VerticalOptions="Center" />
+                </StackLayout>
+            </DataTemplate>
+            <DataTemplate x:Key="SpeedTemplate">
+                <StackLayout Orientation="Horizontal" Padding="20">
+                    <Label Text="{Binding Name}" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
+                    <Label Text="{Binding Value}" HorizontalOptions="End" VerticalOptions="Center" />
+                </StackLayout>
+            </DataTemplate>
+            <DataTemplate x:Key="BatteryCellTemplate">
+                <StackLayout Orientation="Horizontal" Padding="20">
+                    <Label Text="Battery cells" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
+                    <Grid HorizontalOptions="End" VerticalOptions="Center">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="0" Grid.Column="0" Text="{Binding BatteryCell0}" />
+                        <Label Grid.Row="0" Grid.Column="1" Text="{Binding BatteryCell1}" />
+                        <Label Grid.Row="0" Grid.Column="2" Text="{Binding BatteryCell2}" />
+                        <Label Grid.Row="0" Grid.Column="3" Text="{Binding BatteryCell3}" />
+                            
+                        <Label Grid.Row="1" Grid.Column="0" Text="{Binding BatteryCell4}" />
+                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding BatteryCell5}" />
+                        <Label Grid.Row="1" Grid.Column="2" Text="{Binding BatteryCell6}" />
+                        <Label Grid.Row="1" Grid.Column="3" Text="{Binding BatteryCell7}" />
+
+                        <Label Grid.Row="2" Grid.Column="0" Text="{Binding BatteryCell8}" />
+                        <Label Grid.Row="2" Grid.Column="1" Text="{Binding BatteryCell9}" />
+                        <Label Grid.Row="2" Grid.Column="2" Text="{Binding BatteryCell10}" />
+                        <Label Grid.Row="2" Grid.Column="3" Text="{Binding BatteryCell11}" />
+
+                        <Label Grid.Row="3" Grid.Column="0" Text="{Binding BatteryCell12}" />
+                        <Label Grid.Row="3" Grid.Column="1" Text="{Binding BatteryCell13}" />
+                        <Label Grid.Row="3" Grid.Column="2" Text="{Binding BatteryCell14}" />
+                        <Label Grid.Row="3" Grid.Column="3" Text="{Binding BatteryCell15}" />
+                    </Grid>
+                </StackLayout>
+            </DataTemplate>
+
+        
+            <DataTemplate x:Key="AngleTemplate">
+                <StackLayout Orientation="Horizontal" Padding="20">
+                    <Label Text="{Binding Name}" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
+                    <Label Text="{Binding Value, StringFormat='{0:F2}&#x00B0;'}" HorizontalOptions="End" VerticalOptions="Center" />
+                </StackLayout>
+            </DataTemplate>
+        
+            <templateselectors:BoardDetailTemplateSelector x:Key="DetailTemplateSelector"
+                                             Normal="{StaticResource NormalTemplate}"
+                                             Voltage="{StaticResource VoltageTemplate}"
+                                             Temperature="{StaticResource TemperatureTemplate}"
+                                             Speed="{StaticResource SpeedTemplate}"
+                                             BatteryCells="{StaticResource BatteryCellTemplate}"
+                                             Angle="{StaticResource AngleTemplate}"
+                                                />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

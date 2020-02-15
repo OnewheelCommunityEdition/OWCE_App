@@ -14,6 +14,7 @@ using OWCE.Protobuf;
 //using Plugin.Geolocator.Abstractions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using System.Collections.ObjectModel;
 
 namespace OWCE
 {
@@ -213,14 +214,8 @@ namespace OWCE
             }
         }
 
+        private BoardDetail _serialNumber = new AngleBoardDetail("Serial number");
 
-
-        private int _serialNumber = 0;
-        public int SerialNumber
-        {
-            get { return _serialNumber; }
-            set { if (_serialNumber != value) { _serialNumber = value; OnPropertyChanged(); } }
-        }
 
         private int _rideMode = 0;
         public int RideMode
@@ -268,32 +263,17 @@ namespace OWCE
             set { if (_batterySerial != value) { _batterySerial = value; OnPropertyChanged(); } }
         }
 
-        private float _pitch = 0;
-        public float Pitch
-        {
-            get { return _pitch; }
-            set { if (_pitch.AlmostEqualTo(value) == false) { _pitch = value; OnPropertyChanged(); } }
-        }
+ 
 
-        private float _yaw = 0;
-        public float Yaw
-        {
-            get { return _yaw; }
-            set { if (_yaw.AlmostEqualTo(value) == false) { _yaw = value; OnPropertyChanged(); } }
-        }
+        private AngleBoardDetail _pitch = new AngleBoardDetail("Pitch");
+        private AngleBoardDetail _yaw = new AngleBoardDetail("Yaw");
+        private AngleBoardDetail _roll = new AngleBoardDetail("Roll");
 
         private float _tripOdometer = 0;
         public float TripOdometer
         {
             get { return _tripOdometer; }
             set { if (_tripOdometer.AlmostEqualTo(value) == false) { _tripOdometer = value; OnPropertyChanged(); } }
-        }
-
-        private float _roll = 0;
-        public float Roll
-        {
-            get { return _roll; }
-            set { if (_roll.AlmostEqualTo(value) == false) { _roll = value; OnPropertyChanged(); } }
         }
 
         private int _rpm = 0;
@@ -384,12 +364,7 @@ namespace OWCE
             set { if (_motorTemperature != value) { _motorTemperature = value; OnPropertyChanged(); } }
         }
 
-        private UInt16 _firmwareRevision = 0;
-        public UInt16 FirmwareRevision
-        {
-            get { return _firmwareRevision; }
-            set { if (_firmwareRevision != value) { _firmwareRevision = value; OnPropertyChanged(); } }
-        }
+        private BoardDetail _firmwareRevision = new BoardDetail("Firmware");
 
         private float _currentAmps = 0;
         public float CurrentAmps
@@ -426,20 +401,11 @@ namespace OWCE
             set { if (_batteryTemperature != value) { _batteryTemperature = value; OnPropertyChanged(); } }
         }
 
-        private float _batteryVoltage = 0;
-        public float BatteryVoltage
-        {
-            get { return _batteryVoltage; }
-            set { if (_batteryVoltage.AlmostEqualTo(value) == false) { _batteryVoltage = value; OnPropertyChanged(); } }
-        }
+        private VoltageBoardDetail _batteryVoltage = new VoltageBoardDetail("Battery voltage");
 
-        private int _safetyHeadroom = 0;
-        public int SafetyHeadroom
-        {
-            get { return _safetyHeadroom; }
-            set { if (_safetyHeadroom != value) { _safetyHeadroom = value; OnPropertyChanged(); } }
-        }
 
+        private BoardDetail _safetyHeadroom = new BoardDetail("Safety headroom");
+        
         private int _hardwareRevision = 0;
         public int HardwareRevision
         {
@@ -651,8 +617,21 @@ namespace OWCE
         private Ride _currentRide = null;
         private bool _keepHandshakeBackgroundRunning = false;
 
+        public List<BoardDetail> FullBoardDetailsList { get; } = new List<BoardDetail>();
+        public ObservableCollection<BoardDetail> SelectedBoardDetailsList { get; } = new ObservableCollection<BoardDetail>();
+
         public OWBoard()
         {
+            FullBoardDetailsList.Add(_pitch);
+            SelectedBoardDetailsList.Add(_pitch);
+
+            FullBoardDetailsList.Add(_yaw);
+            SelectedBoardDetailsList.Add(_yaw);
+
+            FullBoardDetailsList.Add(_roll);
+            SelectedBoardDetailsList.Add(_roll);
+
+
         }
 
         public void Init()
@@ -901,7 +880,7 @@ namespace OWCE
                 BatteryCell15 = String.Empty;
             }
 
-            if (HardwareRevision > 3000 && FirmwareRevision > 4000)
+            if (HardwareRevision > 3000 && _firmwareRevision.Value > 4000)
             {
                 await Handshake();
                 _keepHandshakeBackgroundRunning = true;
@@ -911,7 +890,7 @@ namespace OWCE
                     {
                         try
                         {
-                            byte[] fwRev = GetBytesForBoardFromUInt16(FirmwareRevision, FirmwareRevisionUUID);
+                            byte[] fwRev = GetBytesForBoardFromUInt16((UInt16)_firmwareRevision.Value, FirmwareRevisionUUID);
                             await App.Current.OWBLE.WriteValue(OWBoard.FirmwareRevisionUUID, fwRev);
                         }
                         catch (Exception err)
@@ -1050,7 +1029,7 @@ ReadRequestReceived - LifetimeOdometer
             await App.Current.OWBLE.SubscribeValue(OWBoard.SerialReadUUID, true);
 
             // Data does not send until this is triggered. 
-            byte[] firmwareRevision = GetBytesForBoardFromUInt16(FirmwareRevision, FirmwareRevisionUUID);
+            byte[] firmwareRevision = GetBytesForBoardFromUInt16((UInt16)_firmwareRevision.Value, FirmwareRevisionUUID);
 
             var didWrite = await App.Current.OWBLE.WriteValue(OWBoard.FirmwareRevisionUUID, firmwareRevision, true);
 
@@ -1060,7 +1039,7 @@ ReadRequestReceived - LifetimeOdometer
             // TODO: Restore _characteristics[OWBoard.SerialReadUUID].ValueUpdated -= SerialRead_ValueUpdated;
             if (byteArray.Length == 20)
             {
-                if (FirmwareRevision >= 4141) // Pint or XR with 4210 hardware 
+                if (_firmwareRevision.Value >= 4141) // Pint or XR with 4210 hardware 
                 {
                     // Get bytes 3 through to 19 (start 3, length 16)
                     var apiKeyArray = new byte[16];
@@ -1446,7 +1425,7 @@ ReadRequestReceived - LifetimeOdometer
             switch (uuid)
             {
                 case SerialNumberUUID:
-                    SerialNumber = value;
+                    _serialNumber.Value = value;
                     break;
                 case BatteryLow5UUID:
                     BatteryLow5 = value;
@@ -1458,13 +1437,13 @@ ReadRequestReceived - LifetimeOdometer
                     BatterySerial = value;
                     break;
                 case PitchUUID:
-                    Pitch = 0.1f * (1800 - value);
+                    _pitch.Value = 0.1f * (1800 - value);
                     break;
                 case RollUUID:
-                    Roll = 0.1f * (1800 - value);
+                    _roll.Value = 0.1f * (1800 - value);
                     break;
                 case YawUUID:
-                    Yaw = 0.1f * (1800 - value);
+                    _yaw.Value = 0.1f * (1800 - value);
                     break;
                 case TripOdometerUUID:
                     TripOdometer = value;
@@ -1485,7 +1464,7 @@ ReadRequestReceived - LifetimeOdometer
                     StatusError = value;
                     break;
                 case FirmwareRevisionUUID:
-                    FirmwareRevision = value;
+                    _firmwareRevision.Value = value;
                     break;
                 case CurrentAmpsUUID:
                     CurrentAmps = 0.1f * value;
@@ -1497,10 +1476,10 @@ ReadRequestReceived - LifetimeOdometer
                     TripRegenAmpHours = 0.1f * value;
                     break;
                 case BatteryVoltageUUID:
-                    BatteryVoltage = 0.1f * value;
+                    _batteryVoltage.Value = 0.1f * value;
                     break;
                 case SafetyHeadroomUUID:
-                    SafetyHeadroom = value;
+                    _safetyHeadroom.Value = value;
                     break;
                 case HardwareRevisionUUID:
                     HardwareRevision = value;

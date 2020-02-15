@@ -31,6 +31,7 @@
   <ItemGroup>
     <Folder Include="Pages\" />
     <Folder Include="Extensions\" />
+    <Folder Include="TemplateSelectors\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="App.xaml.cs">

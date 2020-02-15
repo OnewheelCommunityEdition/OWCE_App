@@ -34,6 +34,11 @@ namespace OWCE.Pages
 
             NavigationPage.SetHasBackButton(this, false);
 
+            ToolbarItems.Add(new ToolbarItem("Info", null, () =>
+            {
+                Navigation.PushModalAsync(new NavigationPage(new BoardDetailsPage(Board)));
+            }));
+
         }
 
         protected override void OnAppearing()
@@ -66,9 +71,13 @@ namespace OWCE.Pages
             return false;
         }
 
-        async void Disconnect_Clicked(object sender, System.EventArgs e)
+        async void Disconnect_Tapped(System.Object sender, System.EventArgs e)
         {
-            await DisconnectAndPop();
+            var result = await DisplayActionSheet("Are you sure you want to disconnect?", "Cancel", "Disconnect");
+            if (result == "Disconnect")
+            {
+                await DisconnectAndPop();
+            }
         }
 
         private async Task DisconnectAndPop()
