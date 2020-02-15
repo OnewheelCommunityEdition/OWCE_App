@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OWCE.Pages.MainMasterPage" Title="MainMasterPage" Icon="hamburger.png"> 
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OWCE.Pages.MainMasterPage" Title="MainMasterPage" IconImageSource="hamburger.png"> 
     <ContentPage.Resources>
         <Style TargetType="StackLayout">
             <Setter Property="BackgroundColor" Value="{StaticResource darkBackgroundColor}" />
