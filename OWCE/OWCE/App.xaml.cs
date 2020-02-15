@@ -39,7 +39,33 @@ namespace OWCE
             }
             InitializeComponent();
 
-            MainPage = new NavigationPage(new BoardListPage());
+            bool showNote = false;
+            bool neverRemindMe = Preferences.Get("third_party_remind_me_never", false);
+
+            if (VersionTracking.IsFirstLaunchForCurrentBuild)
+            {
+                Preferences.Set("third_party_seen_message_on_this_version", false);
+            }
+
+
+            if (neverRemindMe == false && VersionTracking.IsFirstLaunchForCurrentBuild)
+            {
+                bool seenMessageOnThisVersion = Preferences.Get("third_party_seen_message_on_this_version", false);
+                if (seenMessageOnThisVersion == false)
+                {
+                    showNote = true;
+                }
+            }
+
+            if (showNote)
+            {
+                MainPage = new NavigationPage(new Pages.ThirdPartyNotePage());
+            }
+            else
+            {
+                MainPage = new NavigationPage(new BoardListPage());
+            }
+
             //MainPage = new MainMasterDetailPage();
         }
 
