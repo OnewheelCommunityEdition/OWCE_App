@@ -874,6 +874,19 @@ namespace OWCE
             var firmwareRevision = await App.Current.OWBLE.ReadValue(FirmwareRevisionUUID);
             SetValue(FirmwareRevisionUUID, firmwareRevision, true);
 
+
+            if (_firmwareRevision.Value >= 5000)
+            {
+                MessagingCenter.Send<OWBoard>(this, "invalid_board_pint");
+                return;
+            }
+            else if (_firmwareRevision.Value >= 4141)
+            {
+                MessagingCenter.Send<OWBoard>(this, "invalid_board_xr4141");
+                return;
+            }
+
+
             // Hide 16th cell on XR and Pint.
             if (HardwareRevision >= 4000)
             {
@@ -1041,6 +1054,7 @@ ReadRequestReceived - LifetimeOdometer
             {
                 if (_firmwareRevision.Value >= 4141) // Pint or XR with 4210 hardware 
                 {
+                    /*
                     // Get bytes 3 through to 19 (start 3, length 16)
                     var apiKeyArray = new byte[16];
                     Array.Copy(byteArray, 3, apiKeyArray, 0, 16);
@@ -1055,6 +1069,7 @@ ReadRequestReceived - LifetimeOdometer
                         // Feed it back to the app how we normally would.
                         await App.Current.OWBLE.WriteValue(OWBoard.SerialWriteUUID, tokenArray);
                     }
+                    */
                 }
                 else
                 {
@@ -1121,6 +1136,7 @@ ReadRequestReceived - LifetimeOdometer
             return false;
         }
 
+        /*
         private async Task<byte[]> FetchToken(string apiKey)
         {
             if (String.IsNullOrWhiteSpace(_name))
@@ -1227,6 +1243,7 @@ ReadRequestReceived - LifetimeOdometer
 
             return null;
         }
+        */
 
 
         private byte[] GetBytesForBoardFromUInt16(UInt16 value, string uuidHint = null)

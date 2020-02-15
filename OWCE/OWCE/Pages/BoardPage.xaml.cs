@@ -50,6 +50,26 @@ namespace OWCE.Pages
                 _initialSubscirbe = true;
                 _ = Board.SubscribeToBLE();
             }
+
+            MessagingCenter.Subscribe<OWBoard>(this, "invalid_board_pint", async (board) =>
+            {
+                await DisplayAlert("Sorry", "Onewheel Pint is currently not supported.\n\nWell... it is, but the workaround to get it to work could get your IP blocked by Future Motion. Hopefully a workaround is available in the future.", "Ok");
+                await DisconnectAndPop();
+            });
+
+            MessagingCenter.Subscribe<OWBoard>(this, "invalid_board_xr4141", async (board) =>
+            {
+                await DisplayAlert("Sorry", "Onewheel XR with firmware greater than 4141 is currently not supported. Well... it is, but the workaround to get it to work could get your IP blocked by Future Motion. Hopefully a workaround is available in the future.", "Ok");
+                await DisconnectAndPop();
+            });
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            MessagingCenter.Unsubscribe<OWBoard>(this, "invalid_board_pint");
+            MessagingCenter.Unsubscribe<OWBoard>(this, "invalid_board_xr4141");
         }
 
         protected override void OnSizeAllocated(double width, double height)
