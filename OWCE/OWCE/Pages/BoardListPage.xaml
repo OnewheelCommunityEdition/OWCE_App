@@ -42,11 +42,9 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout VerticalOptions="FillAndExpand" Orientation="Horizontal" Padding="20,8,0,8" Opacity="{Binding IsAvailable, Converter={StaticResource boardIsAvailableOpacityConverter}}">
-                            <StackLayout WidthRequest="76" VerticalOptions="Center">
-                                <Image Source="{Binding BoardIcon}" VerticalOptions="Center" HorizontalOptions="Start"/>
-                            </StackLayout>
-                            <Label Text="{Binding Name}" VerticalOptions="FillAndExpand" VerticalTextAlignment="Center" />
+                        <StackLayout VerticalOptions="FillAndExpand" Orientation="Horizontal" Padding="20,8" Opacity="{Binding IsAvailable, Converter={StaticResource boardIsAvailableOpacityConverter}}">
+                            <Label Text="{Binding Name}" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
+                            <Label Text="{Binding BoardModelString}" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="End"/>
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

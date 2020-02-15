@@ -115,22 +115,18 @@ namespace OWCE
         */
 
 
-        public string BoardIcon
+        public string BoardModelString
         {
             get
             {
-                switch (BoardType)
+                return BoardType switch
                 {
-                    case OWBoardType.V1:
-                        return "ow_icon_v1.png";
-                    case OWBoardType.Plus:
-                        return "ow_icon_plus.png";
-                    case OWBoardType.XR:
-                        return "ow_icon_xr.png";
-                    case OWBoardType.Pint:
-                        return "ow_icon.png"; // TODO: Update icon
-                }
-                return "ow_icon.png";
+                    OWBoardType.V1 => "V1",
+                    OWBoardType.Plus => "Plus",
+                    OWBoardType.XR => "XR",
+                    OWBoardType.Pint => "Pint",
+                    _ => String.Empty,
+                };
             }
         }
 
