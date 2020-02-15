@@ -2,7 +2,7 @@
 
 using Xamarin.Forms;
 
-namespace OWCE
+namespace OWCE.Pages
 {
     public class MainMasterDetailPage : MasterDetailPage
     {

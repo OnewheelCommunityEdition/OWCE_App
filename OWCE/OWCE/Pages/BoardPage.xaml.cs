@@ -7,7 +7,7 @@ using System.Net;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace OWCE
+namespace OWCE.Pages
 {
     public partial class BoardPage : ContentPage
     {

@@ -6,6 +6,7 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Xamarin.Essentials;
 using OWCE.DependencyInterfaces;
+using OWCE.Pages;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace OWCE
@@ -59,7 +60,7 @@ namespace OWCE
 
             if (showNote)
             {
-                MainPage = new NavigationPage(new Pages.ThirdPartyNotePage());
+                MainPage = new NavigationPage(new ThirdPartyNotePage());
             }
             else
             {

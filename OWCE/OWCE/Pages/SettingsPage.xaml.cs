@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace OWCE
+namespace OWCE.Pages
 {
     public partial class SettingsPage : ContentPage
     {

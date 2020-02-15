@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace OWCE
+namespace OWCE.Pages
 {
     public partial class BoardListPage : ContentPage
     {

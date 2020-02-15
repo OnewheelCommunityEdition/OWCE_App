@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace OWCE
+namespace OWCE.Pages
 {
     public partial class MainMasterPage : ContentPage
     {

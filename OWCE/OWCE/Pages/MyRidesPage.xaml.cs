@@ -5,7 +5,7 @@ using System.IO;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace OWCE
+namespace OWCE.Pages
 {
     public partial class MyRidesPage : ContentPage
     {
