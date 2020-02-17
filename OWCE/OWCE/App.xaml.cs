@@ -58,6 +58,9 @@ namespace OWCE
                 }
             }
 
+            //MainPage = new NavigationPage(new BoardDetailsPage(new MockOWBoard()));
+            //return;
+
             if (showNote)
             {
                 MainPage = new NavigationPage(new ThirdPartyNotePage());

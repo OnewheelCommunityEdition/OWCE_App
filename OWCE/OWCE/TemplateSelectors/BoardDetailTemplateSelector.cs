@@ -1,42 +1,69 @@
-﻿using System;
+﻿using OWCE.Models;
 using Xamarin.Forms;
 
 namespace OWCE.TemplateSelectors
 {
     public class BoardDetailTemplateSelector : DataTemplateSelector
     {
-        public DataTemplate Normal { get; set; }
-        public DataTemplate Voltage { get; set; }
-        public DataTemplate Temperature { get; set; }
-        public DataTemplate Speed { get; set; }
-        public DataTemplate BatteryCells { get; set; }
-        public DataTemplate Angle { get; set; }
-
+        public DataTemplate AmpTemplate { get; set; }
+        public DataTemplate AmpHoursTemplate { get; set; }
+        public DataTemplate AngleTemplate { get; set; }
+        public DataTemplate BatteryCellsTemplate { get; set; }
+        public DataTemplate DistanceTemplate { get; set; }
+        public DataTemplate FloatTemplate { get; set; }
+        public DataTemplate IntTemplate { get; set; }
+        public DataTemplate SpeedTemplate { get; set; }
+        public DataTemplate StringTemplate { get; set; }
+        public DataTemplate TemperatureTemplate { get; set; }
+        public DataTemplate VoltageTemplate { get; set; }
+        
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            if (item is AngleBoardDetail)
+            if (item is AmpBoardDetail)
             {
-                return Angle;
+                return AmpTemplate;
             }
-            if (item is BatteryCellsBoardDetail)
+            else if (item is AmpHoursBoardDetail)
             {
-                return BatteryCells;
+                return AmpHoursTemplate;
             }
-            else if (item is TemperatureBoardDetail)
+            else if (item is AngleBoardDetail)
             {
-                return Temperature;
+                return AngleTemplate;
             }
-            else if (item is VoltageBoardDetail)
+            else if (item is BatteryCellsBoardDetail)
             {
-                return Voltage;
+                return BatteryCellsTemplate;
+            }
+            else if (item is DistanceBoardDetail)
+            {
+                return DistanceTemplate;
             }
             else if (item is SpeedBoardDetail)
             {
-                return Speed;
+                return SpeedTemplate;
             }
-            else if (item is BoardDetail)
+            else if (item is TemperatureBoardDetail)
             {
-                return Normal;
+                return TemperatureTemplate;
+            }
+            else if (item is VoltageBoardDetail)
+            {
+                return VoltageTemplate;
+            }
+
+            // These are moved to the bottom so the subclass of them will still get hit.
+            if (item is FloatBoardDetail)
+            {
+                return FloatTemplate;
+            }
+            else if (item is IntBoardDetail)
+            {
+                return IntTemplate;
+            }
+            else if (item is StringBoardDetail)
+            {
+                return StringTemplate;
             }
 
             return null;

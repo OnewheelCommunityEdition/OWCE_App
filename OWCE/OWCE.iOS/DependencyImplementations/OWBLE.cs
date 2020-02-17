@@ -95,7 +95,7 @@ namespace OWCE.MacOS.DependencyImplementations
                 }
             }
 
-            BoardConnected?.Invoke(_board);
+            BoardConnected?.Invoke(new OWBoard(_board));
         }
 
         [Export("peripheral:didUpdateValueForCharacteristic:error:")]
@@ -122,7 +122,20 @@ namespace OWCE.MacOS.DependencyImplementations
                     var data = characteristic.Value;
                     dataBytes = new byte[data.Length];
                     System.Runtime.InteropServices.Marshal.Copy(data.Bytes, dataBytes, 0, Convert.ToInt32(data.Length));
+
+                    // Don't reveres for serial read or write
+                    var characteristicGuid = characteristic.UUID.ToString();
+                    if (OWBoard.SerialWriteUUID.Equals(characteristicGuid, StringComparison.InvariantCultureIgnoreCase) == false &&
+                        OWBoard.SerialReadUUID.Equals(characteristicGuid, StringComparison.InvariantCultureIgnoreCase) == false)
+                    {
+                        // If our system is little endian, reverse the array.
+                        if (BitConverter.IsLittleEndian)
+                        {
+                            Array.Reverse(dataBytes);
+                        }
+                    }
                 }
+
 
                 if (_notifyList.Contains(characteristic.UUID))
                 {
@@ -160,6 +173,17 @@ namespace OWCE.MacOS.DependencyImplementations
             {
                 dataBytes = new byte[data.Length];
                 System.Runtime.InteropServices.Marshal.Copy(data.Bytes, dataBytes, 0, Convert.ToInt32(data.Length));
+
+                var characteristicGuid = characteristic.UUID.ToString();
+                if (OWBoard.SerialWriteUUID.Equals(characteristicGuid, StringComparison.InvariantCultureIgnoreCase) == false &&
+                    OWBoard.SerialReadUUID.Equals(characteristicGuid, StringComparison.InvariantCultureIgnoreCase) == false)
+                {
+                    // If our system is little endian, reverse the array.
+                    if (BitConverter.IsLittleEndian)
+                    {
+                        Array.Reverse(dataBytes);
+                    }
+                }
             }
             else
             {
@@ -180,8 +204,6 @@ namespace OWCE.MacOS.DependencyImplementations
 
             var services = _peripheral.Services;
             _peripheral.DiscoverServices(new CBUUID[] { OWBoard.ServiceUUID.ToCBUUID() });
-
-            //this.BoardConnected?.Invoke(_board);
         }
 
 
@@ -190,7 +212,7 @@ namespace OWCE.MacOS.DependencyImplementations
         {
             Debug.WriteLine("CentralManager_DiscoveredPeripheral: "+ peripheral.Name);
 
-            OWBoard board = new OWBoard()
+            var board = new OWBaseBoard()
             {
                 ID = peripheral.Identifier.ToString(),
                 Name = peripheral.Name ?? "Onewheel",
@@ -239,15 +261,15 @@ namespace OWCE.MacOS.DependencyImplementations
         #endregion
 
         TaskCompletionSource<bool> _connectionCompletionSource = null;
-        OWBoard _board;
+        OWBaseBoard _board;
 
         #region IOWBLE
         public Action<BluetoothState> BLEStateChanged { get; set; }
-        public Action<OWBoard> BoardDiscovered { get; set; }
+        public Action<OWBaseBoard> BoardDiscovered { get; set; }
         public Action<OWBoard> BoardConnected { get; set; }
         public Action<string, byte[]> BoardValueChanged { get; set; }
 
-        public Task<bool> Connect(OWBoard board)
+        public Task<bool> Connect(OWBaseBoard board)
         {
             _connectionCompletionSource = new TaskCompletionSource<bool>();
 
@@ -336,8 +358,25 @@ namespace OWCE.MacOS.DependencyImplementations
                 return null;
             }
 
+            byte[] dataCopy = null;
+            if (data != null)
+            {
+                dataCopy = new byte[data.Length];
+                Array.Copy(data, dataCopy, data.Length);
+            }
+
+            if (OWBoard.SerialWriteUUID.Equals(characteristicGuid, StringComparison.InvariantCultureIgnoreCase) == false &&
+                OWBoard.SerialReadUUID.Equals(characteristicGuid, StringComparison.InvariantCultureIgnoreCase) == false)
+            {
+                // If our system is little endian, reverse the array.
+                if (BitConverter.IsLittleEndian)
+                {
+                    Array.Reverse(dataCopy);
+                }
+            }
+
             var characteristic = _characteristics[cbuuid];
-            var nsData = NSData.FromArray(data);
+            var nsData = NSData.FromArray(dataCopy);
 
             var taskCompletionSource = new TaskCompletionSource<byte[]>();
 

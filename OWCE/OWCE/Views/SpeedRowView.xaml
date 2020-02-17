@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OWCE.Views.SpeedRowView" xmlns:models="clr-namespace:OWCE.Models" xmlns:converters="clr-namespace:OWCE.Converters" x:DataType="models:SpeedBoardDetail">
+    <ContentView.Resources>
+        <converters:SpeedConverter x:Key="speedConverter" />
+    </ContentView.Resources>
+    <StackLayout Orientation="Horizontal" Padding="20">
+        <Label Text="{Binding Name}" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
+        <Label Text="{Binding Value, Converter={StaticResource speedConverter}, ConverterParameter='DisplayUnits'}" HorizontalOptions="End" VerticalOptions="Center" />
+    </StackLayout>
+</ContentView>

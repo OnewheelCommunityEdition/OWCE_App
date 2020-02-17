@@ -63,7 +63,7 @@ namespace OWCE.Droid.DependencyImplementations
             {
                 Debug.WriteLine("OnScanResult");
                 
-                OWBoard board = new OWBoard()
+                var board = new OWBaseBoard()
                 {
                     ID = result.Device.Address,
                     Name = result.Device.Name ?? "Onewheel",
@@ -94,7 +94,7 @@ namespace OWCE.Droid.DependencyImplementations
             {
                 Debug.WriteLine("OnLeScan");
                 
-                OWBoard board = new OWBoard()
+                var board = new OWBaseBoard()
                 {
                     ID = device.JniIdentityHashCode.ToString(),
                     Name = device.Name ?? "Onewheel",
@@ -184,7 +184,7 @@ namespace OWCE.Droid.DependencyImplementations
             if (_connectTaskCompletionSource.Task.IsCanceled == false)
             {
                 _connectTaskCompletionSource.SetResult(true);
-                BoardConnected?.Invoke(_board);
+                BoardConnected?.Invoke(new OWBoard(_board));
             }
         }
 
@@ -259,7 +259,7 @@ namespace OWCE.Droid.DependencyImplementations
 
 
         TaskCompletionSource<bool> _connectTaskCompletionSource = null;
-        private OWBoard _board = null;
+        private OWBaseBoard _board = null;
 
         //private OWBLE_BroadcastReceiver _broadcastReceiver;
         private OWBLE_ScanCallback _scanCallback;
@@ -391,7 +391,21 @@ namespace OWCE.Droid.DependencyImplementations
             {
                 var readItem = _readQueue[uuid];
                 _readQueue.Remove(uuid);
-                readItem.SetResult(characteristic.GetValue());
+
+                var dataBytes = characteristic.GetValue();
+
+
+                if (OWBoard.SerialWriteUUID.Equals(uuid, StringComparison.InvariantCultureIgnoreCase) == false &&
+                    OWBoard.SerialReadUUID.Equals(uuid, StringComparison.InvariantCultureIgnoreCase) == false)
+                {
+                    // If our system is little endian, reverse the array.
+                    if (BitConverter.IsLittleEndian)
+                    {
+                        Array.Reverse(dataBytes);
+                    }
+                }
+
+                readItem.SetResult(dataBytes);
             }
 
             _gattOperationQueueProcessing = false;
@@ -407,7 +421,22 @@ namespace OWCE.Droid.DependencyImplementations
             {
                 var writeItem = _writeQueue[uuid];
                 _writeQueue.Remove(uuid);
-                writeItem.SetResult(characteristic.GetValue());
+
+                var dataBytes = characteristic.GetValue();
+
+                if (OWBoard.SerialWriteUUID.Equals(uuid, StringComparison.InvariantCultureIgnoreCase) == false &&
+                    OWBoard.SerialReadUUID.Equals(uuid, StringComparison.InvariantCultureIgnoreCase) == false)
+                {
+                    // If our system is little endian, reverse the array.
+                    if (BitConverter.IsLittleEndian)
+                    {
+                        Array.Reverse(dataBytes);
+                    }
+                }
+
+
+
+                writeItem.SetResult(dataBytes);
             }
 
             _gattOperationQueueProcessing = false;
@@ -421,7 +450,19 @@ namespace OWCE.Droid.DependencyImplementations
 
             if (_notifyList.Contains(uuid))
             {
-                BoardValueChanged.Invoke(uuid, characteristic.GetValue());
+                var dataBytes = characteristic.GetValue();
+
+                if (OWBoard.SerialWriteUUID.Equals(uuid, StringComparison.InvariantCultureIgnoreCase) == false &&
+                   OWBoard.SerialReadUUID.Equals(uuid, StringComparison.InvariantCultureIgnoreCase) == false)
+                {
+                    // If our system is little endian, reverse the array.
+                    if (BitConverter.IsLittleEndian)
+                    {
+                        Array.Reverse(dataBytes);
+                    }
+                }
+
+                BoardValueChanged.Invoke(uuid, dataBytes);
             }
         }
 
@@ -475,11 +516,11 @@ namespace OWCE.Droid.DependencyImplementations
 
         #region IOWBLE
         public Action<BluetoothState> BLEStateChanged { get; set; }
-        public Action<OWBoard> BoardDiscovered { get; set; }
+        public Action<OWBaseBoard> BoardDiscovered { get; set; }
         public Action<OWBoard> BoardConnected { get; set; }
         public Action<string, byte[]> BoardValueChanged { get; set; }
 
-        public Task<bool> Connect(OWBoard board)
+        public Task<bool> Connect(OWBaseBoard board)
         {
             _board = board;
 
@@ -652,8 +693,25 @@ namespace OWCE.Droid.DependencyImplementations
                 _writeQueue.Add(uuid, taskCompletionSource);
             }
 
+            byte[] dataBytes = null;
+            if (data != null)
+            {
+                dataBytes = new byte[data.Length];
+                Array.Copy(data, dataBytes, data.Length);
+            
+                if (OWBoard.SerialWriteUUID.Equals(uuid, StringComparison.InvariantCultureIgnoreCase) == false &&
+                       OWBoard.SerialReadUUID.Equals(uuid, StringComparison.InvariantCultureIgnoreCase) == false)
+                {
+                    // If our system is little endian, reverse the array.
+                    if (BitConverter.IsLittleEndian)
+                    {
+                        Array.Reverse(dataBytes);
+                    }
+                }
+            }
 
-            _gattOperationQueue.Enqueue(new OWBLE_QueueItem(_characteristics[uuid], OWBLE_QueueItemOperationType.Write, data));
+
+            _gattOperationQueue.Enqueue(new OWBLE_QueueItem(_characteristics[uuid], OWBLE_QueueItemOperationType.Write, dataBytes));
 
             ProcessQueue();
 

@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Globalization;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace OWCE.Converters
 {
-    public class TempConverter : IValueConverter
+    public class DistanceConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is int tempCelsius)
+            if (value is float distanceInMiles)
             {
-                if (App.Current.MetricDisplay)
+                if (App.Current.MetricDisplay == false)
                 {
-                    return $"{tempCelsius}°C";
+                    return $"{distanceInMiles:F0}mi";
                 }
 
-                var tempFahrenheit = (int)(tempCelsius * 1.8f) + 32;
-                return $"{tempFahrenheit}°F";
+                var distanceKilometers = distanceInMiles * 1.60934;
+                return $"{distanceKilometers:F0}km";
             }
 
             return "Unknown";

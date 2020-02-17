@@ -11,7 +11,7 @@ namespace OWCE.Pages
 {
     public partial class BoardListPage : ContentPage
     {
-        public ObservableCollection<OWBoard> Boards { get; internal set; } = new ObservableCollection<OWBoard>();
+        public ObservableCollection<OWBaseBoard> Boards { get; private set; } = new ObservableCollection<OWBaseBoard>();
 
         // Used to dertermine if the board is still found.
         private List<OWBoard> _foundInLastScan = null;
@@ -47,31 +47,11 @@ namespace OWCE.Pages
             BindingContext = this;
 
 #if DEBUG
-            Boards.Add(new OWBoard()
-            {
-                Name = "Onewheel v1",
-                BoardType = OWBoardType.V1,
-            });
-            Boards.Add(new OWBoard()
-            {
-                Name = "Onewheel Plus",
-                BoardType = OWBoardType.Plus,
-            });
-            Boards.Add(new OWBoard()
-            {
-                Name = "Onewheel XR",
-                BoardType = OWBoardType.XR,
-            });
-            Boards.Add(new OWBoard()
-            {
-                Name = "Onewheel Pint",
-                BoardType = OWBoardType.Pint,
-            });
-            Boards.Add(new OWBoard()
-            {
-                Name = "Onewheel unknown",
-                BoardType = OWBoardType.Unknown,
-            });
+            Boards.Add(new MockOWBoard("Onewheel V1", OWBoardType.V1));
+            Boards.Add(new MockOWBoard("Onewheel Plus", OWBoardType.Plus));
+            Boards.Add(new MockOWBoard("Onewheel XR", OWBoardType.XR));
+            Boards.Add(new MockOWBoard("Onewheel Pint", OWBoardType.Pint));
+            Boards.Add(new MockOWBoard("Onewheel unknown", OWBoardType.Unknown));
 #endif
         }
 
@@ -134,17 +114,17 @@ namespace OWCE.Pages
         void OWBLE_BoardConnected(OWBoard board)
         {
             System.Diagnostics.Debug.WriteLine($"Device connected {board.Name} {board.ID}");
-            if (board == _selectedBoard && _selectedBoard != null)
+            if (_selectedBoard != null && _selectedBoard.Equals(board))
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
                     Hud.Dismiss();
-                    await Navigation.PushAsync(new BoardPage(_selectedBoard));
+                    await Navigation.PushAsync(new BoardPage(board));
                 });
             }
         }
 
-        void OWBLE_BoardDiscovered(OWBoard board)
+        void OWBLE_BoardDiscovered(OWBaseBoard board)
         {
             System.Diagnostics.Debug.WriteLine($"Device detected {board.Name} {board.ID}");
             var boardIndex = Boards.IndexOf(board);
@@ -170,7 +150,7 @@ namespace OWCE.Pages
             }
         }
 
-        OWBoard _selectedBoard = null;
+        OWBaseBoard _selectedBoard = null;
         public async void DeviceListView_ItemSelected(object sender, Xamarin.Forms.SelectedItemChangedEventArgs e)
         {
             if (e.SelectedItem == null)
@@ -178,7 +158,7 @@ namespace OWCE.Pages
 
             DeviceListView.SelectedItem = null;
 
-            if (e.SelectedItem is OWBoard board)
+            if (e.SelectedItem is OWBaseBoard board)
             {
                 if (board.IsAvailable)
                 {

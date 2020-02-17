@@ -32,6 +32,8 @@
     <Folder Include="Pages\" />
     <Folder Include="Extensions\" />
     <Folder Include="TemplateSelectors\" />
+    <Folder Include="Views\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="App.xaml.cs">
@@ -54,6 +56,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Remove=".DS_Store" />
+    <None Remove="**/.DS_Store" />
   </ItemGroup>
 </Project>

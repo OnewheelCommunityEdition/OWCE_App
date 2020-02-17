@@ -15,6 +15,7 @@ using OWCE.Protobuf;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
+using OWCE.Models;
 
 namespace OWCE
 {
@@ -27,7 +28,7 @@ namespace OWCE
         Pint,
     };
 
-    public class OWBoard : object, IEquatable<OWBoard>, INotifyPropertyChanged
+    public class OWBoard : OWBaseBoard
     {
         public static readonly Guid ServiceUUID = new Guid("E659F300-EA98-11E3-AC10-0800200C9A66");
         public const string SerialNumberUUID = "E659F301-EA98-11E3-AC10-0800200C9A66";
@@ -65,30 +66,34 @@ namespace OWCE
         public const string UNKNOWN3UUID = "E659F31F-EA98-11E3-AC10-0800200C9A66";
         public const string UNKNOWN4UUID = "E659F320-EA98-11E3-AC10-0800200C9A66";
 
-       
+        protected IntBoardDetail _serialNumber = new IntBoardDetail("Serial number");
+        protected IntBoardDetail _batteryPercent = new IntBoardDetail("Battery percent");
+        protected IntBoardDetail _batteryLow5 = new IntBoardDetail("Battery low 5");
+        protected IntBoardDetail _batteryLow20 = new IntBoardDetail("Battery low 20");
+        protected IntBoardDetail _batterySerial = new IntBoardDetail("Battery serial number");
+        protected AngleBoardDetail _pitch = new AngleBoardDetail("Pitch");
+        protected AngleBoardDetail _yaw = new AngleBoardDetail("Yaw");
+        protected AngleBoardDetail _roll = new AngleBoardDetail("Roll");
+        protected DistanceBoardDetail _tripOdometer = new DistanceBoardDetail("Trip odometer");
+        protected SpeedBoardDetail _speed = new SpeedBoardDetail("Speed");
+        protected IntBoardDetail _statusError = new IntBoardDetail("Error status");
+        protected TemperatureBoardDetail _controllerTemperature = new TemperatureBoardDetail("Controller temperature");
+        protected TemperatureBoardDetail _motorTemperature = new TemperatureBoardDetail("Motor temperature");
+        protected IntBoardDetail _firmwareRevision = new IntBoardDetail("Firmware");
+        protected AmpBoardDetail _currentAmps = new AmpBoardDetail("Current power draw");
+        protected AmpHoursBoardDetail _tripAmpHours = new AmpHoursBoardDetail("Trip usage");
+        protected AmpHoursBoardDetail _tripRegenAmpHours = new AmpHoursBoardDetail("Trip regen");
+        protected TemperatureBoardDetail _unknownTemperature = new TemperatureBoardDetail("Unknown temperature");
+        protected TemperatureBoardDetail _batteryTemperature = new TemperatureBoardDetail("Battery temperature");
+        protected VoltageBoardDetail _batteryVoltage = new VoltageBoardDetail("Battery voltage");
+        protected IntBoardDetail _safetyHeadroom = new IntBoardDetail("Safety headroom");
+        protected DistanceBoardDetail _lifetimeOdometer = new DistanceBoardDetail("Lifetime odometer");
+        protected AmpHoursBoardDetail _lifetimeAmpHours = new AmpHoursBoardDetail("Lifetime amp hours");
+        protected FloatBoardDetail _lastErrorCode = new FloatBoardDetail("Last error code");
+        protected BatteryCellsBoardDetail _batteryCells = new BatteryCellsBoardDetail("Battery cells");
 
-        private string _id = String.Empty;
-        //[SQLite.PrimaryKey]
-        public string ID
-        {
-            get { return _id; }
-            set { if (_id != value) { _id = value; OnPropertyChanged(); } }
-        }
-
-        private string _name = String.Empty;
-        public string Name
-        {
-            get { return _name; }
-            set { if (_name != value) { _name = value; OnPropertyChanged(); } }
-        }
 
 
-        private bool _isAvailable = false;
-        public bool IsAvailable
-        {
-            get { return _isAvailable; }
-            set { if (_isAvailable != value) { _isAvailable = value; OnPropertyChanged(); } }
-        }
 
 
         private OWBoardType _boardType = OWBoardType.Unknown;
@@ -97,24 +102,6 @@ namespace OWCE
             get { return _boardType; }
             set { if (_boardType != value) { _boardType = value; OnPropertyChanged(); } }
         }
-
-        private Object _nativePeripheral = null;
-        public Object NativePeripheral
-        {
-            get { return _nativePeripheral; }
-            set { if (_nativePeripheral != value) { _nativePeripheral = value; } }
-        }
-
-        /*
-        private IDevice _device = null;
-        //[SQLite.Ignore]
-        public IDevice Device
-        {
-            get { return _device; }
-            set { if (_device != value) { _device = value; OnPropertyChanged(); } }
-        }
-        */
-
 
         public string BoardModelString
         {
@@ -214,9 +201,12 @@ namespace OWCE
             }
         }
 
-        private BoardDetail _serialNumber = new AngleBoardDetail("Serial number");
+        public SpeedBoardDetail Speed
+        {
+            get { return _speed; }
+        }
 
-
+        
         private int _rideMode = 0;
         public int RideMode
         {
@@ -235,92 +225,12 @@ namespace OWCE
             }
         }
 
-        private int _batteryPercent = 0;
-        public int BatteryPercent
-        {
-            get { return _batteryPercent; }
-            set { if (_batteryPercent != value) { _batteryPercent = value; OnPropertyChanged(); } }
-        }
 
-        private int _batteryLow5 = 0;
-        public int BatteryLow5
-        {
-            get { return _batteryLow5; }
-            set { if (_batteryLow5 != value) { _batteryLow5 = value; OnPropertyChanged(); } }
-        }
+        private IntBoardDetail _rpm = new IntBoardDetail("Rotations per minute");
 
-        private int _batteryLow20 = 0;
-        public int BatteryLow20
-        {
-            get { return _batteryLow20; }
-            set { if (_batteryLow20 != value) { _batteryLow20 = value; OnPropertyChanged(); } }
-        }
 
-        private int _batterySerial = 0;
-        public int BatterySerial
-        {
-            get { return _batterySerial; }
-            set { if (_batterySerial != value) { _batterySerial = value; OnPropertyChanged(); } }
-        }
 
- 
 
-        private AngleBoardDetail _pitch = new AngleBoardDetail("Pitch");
-        private AngleBoardDetail _yaw = new AngleBoardDetail("Yaw");
-        private AngleBoardDetail _roll = new AngleBoardDetail("Roll");
-
-        private float _tripOdometer = 0;
-        public float TripOdometer
-        {
-            get { return _tripOdometer; }
-            set { if (_tripOdometer.AlmostEqualTo(value) == false) { _tripOdometer = value; OnPropertyChanged(); } }
-        }
-
-        private int _rpm = 0;
-        public int RPM
-        {
-            get { return _rpm; }
-            set
-            {
-                if (_rpm != value)
-                {
-                    _rpm = value;
-                    OnPropertyChanged();
-
-                    var circumference = 910f; //mm
-                    var radius = circumference / (2f * (float)Math.PI) / 1000f; // In meters
-                    var radPerSecond = (((float)Math.PI * 2f) / 60f) * _rpm;
-                    var speedInMetersPerSecond = radius * radPerSecond;
-
-                    if (App.Current.MetricDisplay)
-                    {
-                        var speedInKilometersPerHour = speedInMetersPerSecond * 3.6f;
-                        Speed = speedInKilometersPerHour;
-                    }
-                    else
-                    {
-                        var speedInMilesPerHour = speedInMetersPerSecond * 2.23694f;
-                        Speed = speedInMilesPerHour;
-                    }
-
-                    /*
-                    Debug.WriteLine("RPM: " + _rpm);
-                    Debug.WriteLine("m/s: " + speedInMetersPerSecond);
-                    Debug.WriteLine("km/h: " + speedInKilometersPerHour);
-                    */
-                    // TODO: Metric check
-                    // TODO: Convert RPM to speed.
-                    //Speed = _rpm;
-                }
-            }
-        }
-
-        private float _speed = 0;
-        public float Speed
-        {
-            get { return _speed; }
-            set { if (_speed.AlmostEqualTo(value) == false) { _speed = value; OnPropertyChanged(); } }
-        }
 
         private bool _lightMode = false;
         public bool LightMode
@@ -343,69 +253,9 @@ namespace OWCE
             set { if (_rearLightMode != value) { _rearLightMode = value; OnPropertyChanged(); } }
         }
 
-        private int _statusError = 0;
-        public int StatusError
-        {
-            get { return _statusError; }
-            set { if (_statusError != value) { _statusError = value; OnPropertyChanged(); } }
-        }
-
-        private int _controllerTemperature = 0;
-        public int ControllerTemperature
-        {
-            get { return _controllerTemperature; }
-            set { if (_controllerTemperature != value) { _controllerTemperature = value; OnPropertyChanged(); } }
-        }
-
-        private int _motorTemperature = 0;
-        public int MotorTemperature
-        {
-            get { return _motorTemperature; }
-            set { if (_motorTemperature != value) { _motorTemperature = value; OnPropertyChanged(); } }
-        }
-
-        private BoardDetail _firmwareRevision = new BoardDetail("Firmware");
-
-        private float _currentAmps = 0;
-        public float CurrentAmps
-        {
-            get { return _currentAmps; }
-            set { if (_currentAmps.AlmostEqualTo(value) == false) { _currentAmps = value; OnPropertyChanged(); } }
-        }
-
-        private float _tripAmpHours = 0;
-        public float TripAmpHours
-        {
-            get { return _tripAmpHours; }
-            set { if (_tripAmpHours.AlmostEqualTo(value) == false) { _tripAmpHours = value; OnPropertyChanged(); } }
-        }
-
-        private float _tripRegenAmpHours = 0;
-        public float TripRegenAmpHours
-        {
-            get { return _tripRegenAmpHours; }
-            set { if (_tripRegenAmpHours.AlmostEqualTo(value) == false) { _tripRegenAmpHours = value; OnPropertyChanged(); } }
-        }
-
-        private int _unknownTemperature = 0;
-        public int UnknownTemperature
-        {
-            get { return _unknownTemperature; }
-            set { if (_unknownTemperature != value) { _unknownTemperature = value; OnPropertyChanged(); } }
-        }
-
-        private int _batteryTemperature = 0;
-        public int BatteryTemperature
-        {
-            get { return _batteryTemperature; }
-            set { if (_batteryTemperature != value) { _batteryTemperature = value; OnPropertyChanged(); } }
-        }
-
-        private VoltageBoardDetail _batteryVoltage = new VoltageBoardDetail("Battery voltage");
 
 
-        private BoardDetail _safetyHeadroom = new BoardDetail("Safety headroom");
-        
+
         private int _hardwareRevision = 0;
         public int HardwareRevision
         {
@@ -437,26 +287,7 @@ namespace OWCE
             }
         }
 
-        private float _lifetimeOdometer = 0;
-        public float LifetimeOdometer
-        {
-            get { return _lifetimeOdometer; }
-            set { if (_lifetimeOdometer.AlmostEqualTo(value) == false) { _lifetimeOdometer = value; OnPropertyChanged(); } }
-        }
 
-        private float _lifetimeAmpHours = 0;
-        public float LifetimeAmpHours
-        {
-            get { return _lifetimeAmpHours; }
-            set { if (_lifetimeAmpHours.AlmostEqualTo(value) == false) { _lifetimeAmpHours = value; OnPropertyChanged(); } }
-        }
-
-        private float _lastErrorCode = 0;
-        public float LastErrorCode
-        {
-            get { return _lastErrorCode; }
-            set { if (_lastErrorCode.AlmostEqualTo(value) == false) { _lastErrorCode = value; OnPropertyChanged(); } }
-        }
 
         private float _UNKNOWN1 = 0;
         public float UNKNOWN1
@@ -493,150 +324,100 @@ namespace OWCE
             set { if (_rssi != value) { _rssi = value; OnPropertyChanged(); } }
         }
 
-        private Dictionary<uint, uint> _batteryCells = new Dictionary<uint, uint>();
-        public Dictionary<uint, uint> BatteryCells
-        {
-            get { return _batteryCells; }
-        }
-
-
-
-        private string _batteryCell0 = "-";
-        public string BatteryCell0
-        {
-            get { return _batteryCell0; }
-            set { if (_batteryCell0 != value) { _batteryCell0 = value; OnPropertyChanged(); } }
-        }
-
-        private string _batteryCell1 = "-";
-        public string BatteryCell1
-        {
-            get { return _batteryCell1; }
-            set { if (_batteryCell1 != value) { _batteryCell1 = value; OnPropertyChanged(); } }
-        }
-
-        private string _batteryCell2 = "-";
-        public string BatteryCell2
-        {
-            get { return _batteryCell2; }
-            set { if (_batteryCell2 != value) { _batteryCell2 = value; OnPropertyChanged(); } }
-        }
-
-        private string _batteryCell3 = "-";
-        public string BatteryCell3
-        {
-            get { return _batteryCell3; }
-            set { if (_batteryCell3 != value) { _batteryCell3 = value; OnPropertyChanged(); } }
-        }
-
-        private string _batteryCell4 = "-";
-        public string BatteryCell4
-        {
-            get { return _batteryCell4; }
-            set { if (_batteryCell4 != value) { _batteryCell4 = value; OnPropertyChanged(); } }
-        }
-
-        private string _batteryCell5 = "-";
-        public string BatteryCell5
-        {
-            get { return _batteryCell5; }
-            set { if (_batteryCell5 != value) { _batteryCell5 = value; OnPropertyChanged(); } }
-        }
-        private string _batteryCell6 = "-";
-        public string BatteryCell6
-        {
-            get { return _batteryCell6; }
-            set { if (_batteryCell6 != value) { _batteryCell6 = value; OnPropertyChanged(); } }
-        }
-
-        private string _batteryCell7 = "-";
-        public string BatteryCell7
-        {
-            get { return _batteryCell7; }
-            set { if (_batteryCell7 != value) { _batteryCell7 = value; OnPropertyChanged(); } }
-        }
-
-        private string _batteryCell8 = "-";
-        public string BatteryCell8
-        {
-            get { return _batteryCell8; }
-            set { if (_batteryCell8 != value) { _batteryCell8 = value; OnPropertyChanged(); } }
-        }
-
-        private string _batteryCell9 = "-";
-        public string BatteryCell9
-        {
-            get { return _batteryCell9; }
-            set { if (_batteryCell9 != value) { _batteryCell9 = value; OnPropertyChanged(); } }
-        }
-
-        private string _batteryCell10 = "-";
-        public string BatteryCell10
-        {
-            get { return _batteryCell10; }
-            set { if (_batteryCell10 != value) { _batteryCell10 = value; OnPropertyChanged(); } }
-        }
-
-        private string _batteryCell11 = "-";
-        public string BatteryCell11
-        {
-            get { return _batteryCell11; }
-            set { if (_batteryCell11 != value) { _batteryCell11 = value; OnPropertyChanged(); } }
-        }
-
-        private string _batteryCell12 = "-";
-        public string BatteryCell12
-        {
-            get { return _batteryCell12; }
-            set { if (_batteryCell12 != value) { _batteryCell12 = value; OnPropertyChanged(); } }
-        }
-
-        private string _batteryCell13 = "-";
-        public string BatteryCell13
-        {
-            get { return _batteryCell13; }
-            set { if (_batteryCell13 != value) { _batteryCell13 = value; OnPropertyChanged(); } }
-        }
-
-        private string _batteryCell14 = "-";
-        public string BatteryCell14
-        {
-            get { return _batteryCell14; }
-            set { if (_batteryCell14 != value) { _batteryCell14 = value; OnPropertyChanged(); } }
-        }
-
-        private string _batteryCell15 = "-";
-        public string BatteryCell15
-        {
-            get { return _batteryCell15; }
-            set { if (_batteryCell15 != value) { _batteryCell15 = value; OnPropertyChanged(); } }
-        }
 
         private OWBoardEventList _events = new OWBoardEventList();
         private List<OWBoardEvent> _initialEvents = new List<OWBoardEvent>();
         private Ride _currentRide = null;
         private bool _keepHandshakeBackgroundRunning = false;
 
-        public List<BoardDetail> FullBoardDetailsList { get; } = new List<BoardDetail>();
-        public ObservableCollection<BoardDetail> SelectedBoardDetailsList { get; } = new ObservableCollection<BoardDetail>();
+        public List<BaseBoardDetail> FullBoardDetailsList { get; } = new List<BaseBoardDetail>();
+        public ObservableCollection<BaseBoardDetail> SelectedBoardDetailsList { get; } = new ObservableCollection<BaseBoardDetail>();
 
         public OWBoard()
         {
-            FullBoardDetailsList.Add(_pitch);
-            SelectedBoardDetailsList.Add(_pitch);
 
-            FullBoardDetailsList.Add(_yaw);
-            SelectedBoardDetailsList.Add(_yaw);
+        }
 
-            FullBoardDetailsList.Add(_roll);
-            SelectedBoardDetailsList.Add(_roll);
-
-
+        public OWBoard(OWBaseBoard baseBoard)
+        {
+            _id = baseBoard.ID;
+            _name = baseBoard.Name;
+            _isAvailable = baseBoard.IsAvailable;
+            _nativePeripheral = baseBoard.NativePeripheral;
         }
 
         public void Init()
         {
             App.Current.OWBLE.BoardValueChanged += OWBLE_BoardValueChanged;
+            
+            FullBoardDetailsList.Add(_serialNumber);
+            FullBoardDetailsList.Add(_batterySerial);
+
+            FullBoardDetailsList.Add(_batteryPercent);
+            SelectedBoardDetailsList.Add(_batteryPercent);
+
+            FullBoardDetailsList.Add(_batteryLow5);
+            SelectedBoardDetailsList.Add(_batteryLow5);
+
+            FullBoardDetailsList.Add(_batteryLow20);
+            SelectedBoardDetailsList.Add(_batteryLow20);
+
+            FullBoardDetailsList.Add(_pitch);
+            FullBoardDetailsList.Add(_yaw);
+            FullBoardDetailsList.Add(_roll);
+
+            
+            FullBoardDetailsList.Add(_rpm);
+            SelectedBoardDetailsList.Add(_rpm);
+
+            FullBoardDetailsList.Add(_speed);
+            SelectedBoardDetailsList.Add(_speed);
+
+            FullBoardDetailsList.Add(_statusError);
+            SelectedBoardDetailsList.Add(_statusError);
+
+            FullBoardDetailsList.Add(_controllerTemperature);
+            SelectedBoardDetailsList.Add(_controllerTemperature);
+
+            FullBoardDetailsList.Add(_motorTemperature);
+            SelectedBoardDetailsList.Add(_motorTemperature);
+
+            FullBoardDetailsList.Add(_firmwareRevision);
+            SelectedBoardDetailsList.Add(_firmwareRevision);
+
+            FullBoardDetailsList.Add(_currentAmps);
+            SelectedBoardDetailsList.Add(_currentAmps);
+
+            FullBoardDetailsList.Add(_tripAmpHours);
+            SelectedBoardDetailsList.Add(_tripAmpHours);
+
+            FullBoardDetailsList.Add(_tripRegenAmpHours);
+            SelectedBoardDetailsList.Add(_tripRegenAmpHours);
+
+            FullBoardDetailsList.Add(_unknownTemperature);
+            SelectedBoardDetailsList.Add(_unknownTemperature);
+
+            FullBoardDetailsList.Add(_batteryTemperature);
+            SelectedBoardDetailsList.Add(_batteryTemperature);
+
+            FullBoardDetailsList.Add(_batteryVoltage);
+            SelectedBoardDetailsList.Add(_batteryVoltage);
+
+            FullBoardDetailsList.Add(_safetyHeadroom);
+            SelectedBoardDetailsList.Add(_safetyHeadroom);
+
+            FullBoardDetailsList.Add(_lifetimeOdometer);
+            SelectedBoardDetailsList.Add(_lifetimeOdometer);
+
+            FullBoardDetailsList.Add(_lifetimeAmpHours);
+            SelectedBoardDetailsList.Add(_lifetimeAmpHours);
+
+            FullBoardDetailsList.Add(_lastErrorCode);
+            SelectedBoardDetailsList.Add(_lastErrorCode);
+
+            FullBoardDetailsList.Add(_batteryCells);
+            SelectedBoardDetailsList.Add(_batteryCells);
+           
         }
 
 
@@ -660,93 +441,9 @@ namespace OWCE
             SetValue(characteristicGuid, data);
         }
 
-        public void SetBatteryCellValue(uint cell, uint value)
-        {
-            _batteryCells[cell] = value;
+        
 
-            // 1/50 = 0.02
-            var voltageString = (0.02f * value).ToString("F2") + "V";
-            switch (cell)
-            {
-                case 0:
-                    BatteryCell0 = voltageString;
-                    break;
-                case 1:
-                    BatteryCell1 = voltageString;
-                    break;
-                case 2:
-                    BatteryCell2 = voltageString;
-                    break;
-                case 3:
-                    BatteryCell3 = voltageString;
-                    break;
-                case 4:
-                    BatteryCell4 = voltageString;
-                    break;
-                case 5:
-                    BatteryCell5 = voltageString;
-                    break;
-                case 6:
-                    BatteryCell6 = voltageString;
-                    break;
-                case 7:
-                    BatteryCell7 = voltageString;
-                    break;
-                case 8:
-                    BatteryCell8 = voltageString;
-                    break;
-                case 9:
-                    BatteryCell9 = voltageString;
-                    break;
-                case 10:
-                    BatteryCell10 = voltageString;
-                    break;
-                case 11:
-                    BatteryCell11 = voltageString;
-                    break;
-                case 12:
-                    BatteryCell12 = voltageString;
-                    break;
-                case 13:
-                    BatteryCell13 = voltageString;
-                    break;
-                case 14:
-                    BatteryCell14 = voltageString;
-                    break;
-                case 15:
-                    BatteryCell15 = voltageString;
-                    break;
-            }
-
-
-            OnPropertyChanged("BatteryCells");
-        }
-
-        public bool Equals(OWBoard otherBoard)
-        {
-            return otherBoard.ID == ID;
-        }
-
-        public override int GetHashCode()
-        {
-            return this.ID.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is OWBoard otherBoard)
-            {
-                return Equals(otherBoard);
-            }
-
-            return false;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+       
 
         // TODO: Restore, Dictionary<string, ICharacteristic> _characteristics = new Dictionary<string, ICharacteristic>();
 
@@ -821,6 +518,7 @@ namespace OWCE
                 HardwareRevisionUUID,
                 LifetimeOdometerUUID,
                 LifetimeAmpHoursUUID,
+                RideModeUUID,
                 //BatteryCellsUUID,
                 //LastErrorCodeUUID,
                 //SerialRead,
@@ -855,6 +553,7 @@ namespace OWCE
                 BatteryTemperatureUUID,
                 BatteryVoltageUUID,
                 SafetyHeadroomUUID,
+                RideModeUUID,
                 //HardwareRevisionUUID,
                 LifetimeOdometerUUID,
                 LifetimeAmpHoursUUID,
@@ -890,21 +589,21 @@ namespace OWCE
             // Hide 16th cell on XR and Pint.
             if (HardwareRevision >= 4000)
             {
-                BatteryCell15 = String.Empty;
+                _batteryCells.SetCell(15, null);
             }
 
             if (HardwareRevision > 3000 && _firmwareRevision.Value > 4000)
             {
                 await Handshake();
                 _keepHandshakeBackgroundRunning = true;
-                Xamarin.Forms.Device.StartTimer(TimeSpan.FromSeconds(15), () =>
+                Device.StartTimer(TimeSpan.FromSeconds(15), () =>
                 {
                     Task.Run(async () =>
                     {
                         try
                         {
-                            byte[] fwRev = GetBytesForBoardFromUInt16((UInt16)_firmwareRevision.Value, FirmwareRevisionUUID);
-                            await App.Current.OWBLE.WriteValue(OWBoard.FirmwareRevisionUUID, fwRev);
+                            byte[] firmwareRevision = GetBytesForBoardFromUInt16((UInt16)_firmwareRevision.Value, FirmwareRevisionUUID);
+                            await App.Current.OWBLE.WriteValue(OWBoard.FirmwareRevisionUUID, firmwareRevision);
                         }
                         catch (Exception err)
                         {
@@ -925,6 +624,12 @@ namespace OWCE
             foreach (var characteristic in characteristicsToReadNow)
             {
                 var data = await App.Current.OWBLE.ReadValue(characteristic);
+                var intValue = BitConverter.ToUInt16(data);
+
+                if (characteristic == LifetimeOdometerUUID)
+                {
+                    int blahsda = 0;
+                }
                 SetValue(characteristic, data, true);
             }
 
@@ -1259,8 +964,6 @@ ReadRequestReceived - LifetimeOdometer
             }
 
             var bytes = BitConverter.GetBytes(value);
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(bytes);
             return bytes;
 
 
@@ -1384,24 +1087,21 @@ ReadRequestReceived - LifetimeOdometer
                 });
             }
 
-            // If our system is little endian, reverse the array.
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(data);
 
             if (data.Length != 2)
                 return;
 
             if (uuid == TemperatureUUID)
             {
-                ControllerTemperature = (int)data[0];
-                MotorTemperature = (int)data[1];
+                _controllerTemperature.Value = data[0];
+                _motorTemperature.Value = data[1];
 
                 return;
             }
             else if (uuid == BatteryTemperatureUUID)
             {
-                BatteryTemperature = (int)data[0];
-                UnknownTemperature = (int)data[1];
+                _batteryTemperature.Value = data[0];
+                _unknownTemperature.Value = data[1];
 
                 return;
             }
@@ -1409,11 +1109,11 @@ ReadRequestReceived - LifetimeOdometer
             {
                 if (data[0] > 0)
                 {
-                    BatteryPercent = data[0];
+                    _batteryPercent.Value = data[0];
                 }
                 else if (data[1] > 0)
                 {
-                    BatteryPercent = data[1];
+                    _batteryPercent.Value = data[1];
                 }
             }
 
@@ -1445,13 +1145,13 @@ ReadRequestReceived - LifetimeOdometer
                     _serialNumber.Value = value;
                     break;
                 case BatteryLow5UUID:
-                    BatteryLow5 = value;
+                    _batteryLow5.Value = value;
                     break;
                 case BatteryLow20UUID:
-                    BatteryLow20 = value;
+                    _batteryLow20.Value = value;
                     break;
                 case BatterySerialUUID:
-                    BatterySerial = value;
+                    _batterySerial.Value = value;
                     break;
                 case PitchUUID:
                     _pitch.Value = 0.1f * (1800 - value);
@@ -1463,10 +1163,17 @@ ReadRequestReceived - LifetimeOdometer
                     _yaw.Value = 0.1f * (1800 - value);
                     break;
                 case TripOdometerUUID:
-                    TripOdometer = value;
+                    _tripOdometer.Value = value;
                     break;
                 case RpmUUID:
-                    RPM = value;
+                    if (_rpm.Value != value)
+                    { 
+                        _rpm.Value = value;
+    
+                        var speedInMetersPerSecond = _tyreRadius * RadConvert * _rpm.Value;
+                        _speed.Value = speedInMetersPerSecond;
+                    }
+
                     break;
                 case LightModeUUID:
                     LightMode = (value == 1);
@@ -1478,19 +1185,19 @@ ReadRequestReceived - LifetimeOdometer
                     RearLightMode = value;
                     break;
                 case StatusErrorUUID:
-                    StatusError = value;
+                    _statusError.Value = value;
                     break;
                 case FirmwareRevisionUUID:
                     _firmwareRevision.Value = value;
                     break;
                 case CurrentAmpsUUID:
-                    CurrentAmps = 0.1f * value;
+                    _currentAmps.Value = 0.1f * value;
                     break;
                 case TripAmpHoursUUID:
-                    TripAmpHours = 0.1f * value;
+                    _tripAmpHours.Value = 0.1f * value;
                     break;
                 case TripRegenAmpHoursUUID:
-                    TripRegenAmpHours = 0.1f * value;
+                    _tripRegenAmpHours.Value = 0.1f * value;
                     break;
                 case BatteryVoltageUUID:
                     _batteryVoltage.Value = 0.1f * value;
@@ -1502,10 +1209,10 @@ ReadRequestReceived - LifetimeOdometer
                     HardwareRevision = value;
                     break;
                 case LifetimeOdometerUUID:
-                    LifetimeOdometer = (float)value;
+                    _lifetimeOdometer.Value = value;
                     break;
                 case LifetimeAmpHoursUUID:
-                    LifetimeAmpHours = value;
+                    _lifetimeAmpHours.Value = value;
                     break;
                 case BatteryCellsUUID:
 
@@ -1513,8 +1220,8 @@ ReadRequestReceived - LifetimeOdometer
                     var cellID = (uint)data[1];
                     //var batteryVoltageDisplay = batteryVoltage / 50.0;
 
+                    _batteryCells.SetCell(cellID, batteryVoltage);
 
-                    SetBatteryCellValue(cellID, batteryVoltage);
                     //batteryVoltageCells[cellIdentifier] = (double)var3 / 50.0D;
                     //Debug.WriteLine($"BatteryCellsUUID: {cellID} {batteryVoltage} {batteryVoltageDisplay} ");
 

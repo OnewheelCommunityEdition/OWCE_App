@@ -17,8 +17,8 @@ namespace OWCE.Pages
         {
             get
             {
-                var unit = App.Current.MetricDisplay ? "kmph" : "mph";
-                return $"Speed ({unit})";
+                var unit = App.Current.MetricDisplay ? "km/h" : "mph";
+                return unit; // return $"Speed ({unit})";
             }
         }
 

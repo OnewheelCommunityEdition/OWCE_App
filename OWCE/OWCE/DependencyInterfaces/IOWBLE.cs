@@ -6,11 +6,11 @@ namespace OWCE.DependencyInterfaces
     public interface IOWBLE
     {
         Action<BluetoothState> BLEStateChanged { get; set; }
-        Action<OWBoard> BoardDiscovered { get; set; }
+        Action<OWBaseBoard> BoardDiscovered { get; set; }
         Action<OWBoard> BoardConnected { get; set; }
         Action<string, byte[]> BoardValueChanged { get; set; }
 
-        Task<bool> Connect(OWBoard board);
+        Task<bool> Connect(OWBaseBoard board);
         Task Disconnect();
         Task StartScanning(int timeout = 15);
         void StopScanning();
