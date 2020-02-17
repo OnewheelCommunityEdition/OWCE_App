@@ -1,13 +1,13 @@
 Onewheel Community Edition (OWCE) App
 ===========
 
-A cross-platform app for use with the [Onewheel](https://onewheel.com/) V1, Plus and XR boards from Future Motion.
+A cross-platform app for use with the [Onewheel](https://onewheel.com/) V1, Plus and XR boards from Future Motion. It currently does not support XR with hardware greater than 4210, or the Onewheel Pint.
 
 NOTE: Onewheel Community Edition app is not endorsed by or affiliated with Future Motion in any way.
 
-Written in C# with ([Xamarin](http://www.xamarin.com))
+Written in C# with [Xamarin](http://www.xamarin.com)
 
-Open Source Project by ([@beeradmoore](http://www.twitter.com/beeradmoore)) 
+Open Source Project by [@beeradmoore](http://www.twitter.com/beeradmoore) 
 
 ## Available (soon) for free on:
 * Android and WearOS: Available on Google Play
