@@ -91,6 +91,7 @@ namespace OWCE
         protected AmpHoursBoardDetail _lifetimeAmpHours = new AmpHoursBoardDetail("Lifetime amp hours");
         protected FloatBoardDetail _lastErrorCode = new FloatBoardDetail("Last error code");
         protected BatteryCellsBoardDetail _batteryCells = new BatteryCellsBoardDetail("Battery cells");
+        protected IntBoardDetail _rpm = new IntBoardDetail("Rotations per minute");
 
 
 
@@ -226,8 +227,7 @@ namespace OWCE
         }
 
 
-        private IntBoardDetail _rpm = new IntBoardDetail("Rotations per minute");
-
+        
 
 
 
