@@ -91,6 +91,10 @@
                 <views:SpeedRowView />
             </DataTemplate>
 
+            <DataTemplate x:Key="RideModeTemplate" x:DataType="models:RideModeBoardDetail">
+                <views:RideModeRowView />
+            </DataTemplate>
+
             <DataTemplate x:Key="StringTemplate" x:DataType="models:StringBoardDetail">
                 <views:StringRowView />
             </DataTemplate>
@@ -113,6 +117,7 @@
                                              FloatTemplate="{StaticResource FloatTemplate}"
                                              IntTemplate="{StaticResource IntTemplate}"
                                              SpeedTemplate="{StaticResource SpeedTemplate}"
+                                             RideModeTemplate="{StaticResource RideModeTemplate}"
                                              StringTemplate="{StaticResource StringTemplate}"
                                              TemperatureTemplate="{StaticResource TemperatureTemplate}"
                                              VoltageTemplate="{StaticResource VoltageTemplate}"

@@ -13,6 +13,7 @@ namespace OWCE.TemplateSelectors
         public DataTemplate FloatTemplate { get; set; }
         public DataTemplate IntTemplate { get; set; }
         public DataTemplate SpeedTemplate { get; set; }
+        public DataTemplate RideModeTemplate { get; set; }
         public DataTemplate StringTemplate { get; set; }
         public DataTemplate TemperatureTemplate { get; set; }
         public DataTemplate VoltageTemplate { get; set; }
@@ -42,6 +43,10 @@ namespace OWCE.TemplateSelectors
             else if (item is SpeedBoardDetail)
             {
                 return SpeedTemplate;
+            }
+            else if (item is RideModeBoardDetail)
+            {
+                return RideModeTemplate;
             }
             else if (item is TemperatureBoardDetail)
             {

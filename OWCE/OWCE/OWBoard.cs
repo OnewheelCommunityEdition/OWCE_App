@@ -93,6 +93,7 @@ namespace OWCE
         protected BatteryCellsBoardDetail _batteryCells = new BatteryCellsBoardDetail("Battery cells");
         protected IntBoardDetail _rpm = new IntBoardDetail("Rotations per minute");
         protected IntBoardDetail _hardwareRevision = new IntBoardDetail("Hardware revision");
+        protected RideModeBoardDetail _rideMode = new RideModeBoardDetail("Ride mode");
 
 
 
@@ -101,8 +102,19 @@ namespace OWCE
         private OWBoardType _boardType = OWBoardType.Unknown;
         public OWBoardType BoardType
         {
-            get { return _boardType; }
-            set { if (_boardType != value) { _boardType = value; OnPropertyChanged(); } }
+            get
+            {
+                return _boardType;
+            }
+            set
+            {
+                if (_boardType != value)
+                {
+                    _boardType = value;
+                    _rideMode.BoardType = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
         public string BoardModelString
@@ -126,59 +138,82 @@ namespace OWCE
             {
                 if (App.Current.MetricDisplay)
                 {
-                    switch (RideMode)
+                    if (_boardType == OWBoardType.V1)
                     {
-                        // v1
-                        case 1: // Classic
-                            return 19;
-                        case 2: // Extreme
-                            return 24; // 15
-                        case 3: // Extreme
-                            return 24; // 15
-
-                        // Plus/XR
-                        case 4: // Sequoia
-                            return 19; // 12
-                        case 5: // Cruz
-                            return 24; //15
-                        case 6: // Mission
-                            return 30; // 19
-                        case 7: // Elevated
-                            return 30; // 19
-                        case 8: // Delirium
-                            return 32; // 20
+                        return _rideMode.Value switch
+                        {
+                            1 => 19, // Classic
+                            2 => 24, // Extreme
+                            3 => 24, // Elevated
+                            _ => 24, // Unknown
+                        };
+                    }
+                    else if (_boardType == OWBoardType.Plus || _boardType == OWBoardType.XR)
+                    {
+                        return _rideMode.Value switch
+                        {
+                            4 => 19, // Sequoia
+                            5 => 24, // Cruz
+                            6 => 30, // Mission
+                            7 => 30, // Elevated
+                            8 => 32, // Delirium
+                            9 => 32, // Custom
+                            _ => 32, // Unknown
+                        };
+                    }
+                    else if (_boardType == OWBoardType.Pint)
+                    {
+                        return _rideMode.Value switch
+                        {
+                            5 => 19, // Redwood
+                            6 => 26, // Pacific
+                            7 => 26, // Elevated
+                            8 => 26, // Skyline
+                            _ => 26, // Unknown
+                        };
                     }
 
-                    // New ride mode?
-                    return 30;
+                    return 32;
                 }
                 else
                 {
-                    switch (RideMode)
+                    if (_boardType == OWBoardType.V1)
                     {
-                        // v1
-                        case 1: // Classic
-                            return 12;
-                        case 2: // Extreme
-                            return 15;
-                        case 3: // Extreme
-                            return 15;
-
-                        // Plus/XR
-                        case 4: // Sequoia
-                            return 12;
-                        case 5: // Cruz
-                            return 15;
-                        case 6: // Mission
-                            return 19;
-                        case 7: // Elevated
-                            return 19;
-                        case 8: // Delirium
-                            return 20;
+                        return _rideMode.Value switch
+                        {
+                            1 => 12, // Classic
+                            2 => 15, // Extreme
+                            3 => 15, // Elevated
+                            _ => 15, // Unknown
+                        };
+                    }
+                    else if (_boardType == OWBoardType.Plus || _boardType == OWBoardType.XR)
+                    {
+                        return _rideMode.Value switch
+                        {
+                            4 => 12, // Sequoia
+                            5 => 15, // Cruz
+                            6 => 19, // Mission
+                            7 => 19, // Elevated
+                            8 => 20, // Delirium
+                            9 => 20, // Custom
+                            _ => 20, // Unknown
+                        };
+                    }
+                    else if (_boardType == OWBoardType.Pint)
+                    {
+                        return _rideMode.Value switch
+                        {
+                            5 => 12, // Redwood
+                            6 => 16, // Pacific
+                            7 => 16, // Elevated
+                            8 => 16, // Skyline
+                            _ => 16, // Unknown
+                        };
                     }
 
                     // New ride mode?
-                    return 19;
+                    return 20;
                 }
             }
         }
@@ -209,23 +244,6 @@ namespace OWCE
         }
 
         
-        private int _rideMode = 0;
-        public int RideMode
-        {
-            get { return _rideMode; }
-            set
-            {
-                if (_rideMode != value)
-                {
-                    _rideMode = value;
-                    OnPropertyChanged();
-
-                    // Update these values because their display is based on ride mode.
-                    OnPropertyChanged("MaxDisplaySpeed");
-                    OnPropertyChanged("MaxRecommendedSpeed");
-                }
-            }
-        }
 
 
         
@@ -331,6 +349,9 @@ namespace OWCE
 
             FullBoardDetailsList.Add(_batteryLow20);
             SelectedBoardDetailsList.Add(_batteryLow20);
+
+            FullBoardDetailsList.Add(_rideMode);
+            SelectedBoardDetailsList.Add(_rideMode);
 
             FullBoardDetailsList.Add(_pitch);
             FullBoardDetailsList.Add(_yaw);
@@ -1144,6 +1165,13 @@ ReadRequestReceived - LifetimeOdometer
                         _speed.Value = speedInMetersPerSecond;
                     }
 
+                    break;
+                case RideModeUUID:
+                    _rideMode.Value = value;
+
+                    // Fire these updates as well.
+                    OnPropertyChanged("MaxDisplaySpeed");
+                    OnPropertyChanged("MaxRecommendedSpeed");
                     break;
                 case LightModeUUID:
                     LightMode = (value == 1);
