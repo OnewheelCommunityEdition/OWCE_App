@@ -589,7 +589,7 @@ namespace OWCE
             // Hide 16th cell on XR and Pint.
             if (HardwareRevision >= 4000)
             {
-                _batteryCells.SetCell(15, null);
+                _batteryCells.IgnoreCell(15);
             }
 
             if (HardwareRevision > 3000 && _firmwareRevision.Value > 4000)

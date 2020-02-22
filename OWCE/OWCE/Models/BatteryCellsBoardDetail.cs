@@ -24,22 +24,48 @@ namespace OWCE.Models
 
 
         private Dictionary<uint, uint> _cells = new Dictionary<uint, uint>();
+        private List<uint> _ignoredCells = new List<uint>();
 
         public BatteryCellsBoardDetail(string name) : base(name)
         {
 
         }
 
-        public void SetCell(uint cellID, uint? value)
+        public void IgnoreCell(uint cellID)
         {
-            _cells[cellID] = value ?? 0;
-
-            var voltageString = String.Empty;
-            if (value != null)
+            if (_ignoredCells.Contains(cellID) == false)
             {
-                voltageString = (0.02f * value ?? 0).ToString("F2") + "V";
+                _ignoredCells.Add(cellID);
             }
 
+            SetCellVoltageString(cellID, String.Empty);
+        }
+
+        public void SetCell(uint cellID, uint value)
+        {
+            _cells[cellID] = value;
+
+            if (_ignoredCells.Contains(cellID))
+            {
+                return;
+            }
+
+            var voltageString = (0.02f * value).ToString("F2") + "V";
+            SetCellVoltageString(cellID, voltageString);
+        }
+
+        public uint GetCell(uint id)
+        {
+            if (_cells.ContainsKey(id))
+            {
+                return _cells[id];
+            }
+
+            return 0;
+        }
+
+        private void SetCellVoltageString(uint cellID, string voltageString)
+        {
             switch (cellID)
             {
                 case 0:
@@ -107,16 +133,6 @@ namespace OWCE.Models
                     OnPropertyChanged("BatteryCell15");
                     break;
             }
-        }
-
-        public uint GetCell(uint id)
-        {
-            if (_cells.ContainsKey(id))
-            {
-                return _cells[id];
-            }
-
-            return 0;
         }
     }
 }
