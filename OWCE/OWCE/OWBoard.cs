@@ -92,6 +92,7 @@ namespace OWCE
         protected FloatBoardDetail _lastErrorCode = new FloatBoardDetail("Last error code");
         protected BatteryCellsBoardDetail _batteryCells = new BatteryCellsBoardDetail("Battery cells");
         protected IntBoardDetail _rpm = new IntBoardDetail("Rotations per minute");
+        protected IntBoardDetail _hardwareRevision = new IntBoardDetail("Hardware revision");
 
 
 
@@ -255,37 +256,6 @@ namespace OWCE
 
 
 
-
-        private int _hardwareRevision = 0;
-        public int HardwareRevision
-        {
-            get { return _hardwareRevision; }
-            set
-            {
-                if (_hardwareRevision != value)
-                {
-                    _hardwareRevision = value;
-                    OnPropertyChanged();
-
-                    if (_hardwareRevision >= 1 && _hardwareRevision <= 2999)
-                    {
-                        BoardType = OWBoardType.V1;
-                    }
-                    else if (_hardwareRevision >= 3000 && _hardwareRevision <= 3999)
-                    {
-                        BoardType = OWBoardType.Plus;
-                    }
-                    else if (_hardwareRevision >= 4000 && _hardwareRevision <= 4999)
-                    {
-                        BoardType = OWBoardType.XR;
-                    }
-                    else if (_hardwareRevision >= 5000 && _hardwareRevision <= 5999)
-                    {
-                        BoardType = OWBoardType.Pint;
-                    }
-                }
-            }
-        }
 
 
 
@@ -587,12 +557,12 @@ namespace OWCE
 
 
             // Hide 16th cell on XR and Pint.
-            if (HardwareRevision >= 4000)
+            if (_hardwareRevision.Value >= 4000)
             {
                 _batteryCells.IgnoreCell(15);
             }
 
-            if (HardwareRevision > 3000 && _firmwareRevision.Value > 4000)
+            if (_hardwareRevision.Value > 3000 && _firmwareRevision.Value > 4000)
             {
                 await Handshake();
                 _keepHandshakeBackgroundRunning = true;
@@ -1206,7 +1176,25 @@ ReadRequestReceived - LifetimeOdometer
                     _safetyHeadroom.Value = value;
                     break;
                 case HardwareRevisionUUID:
-                    HardwareRevision = value;
+                    _hardwareRevision.Value = value;
+
+                    if (value >= 1 && value <= 2999)
+                    {
+                        BoardType = OWBoardType.V1;
+                    }
+                    else if (value >= 3000 && value <= 3999)
+                    {
+                        BoardType = OWBoardType.Plus;
+                    }
+                    else if (value >= 4000 && value <= 4999)
+                    {
+                        BoardType = OWBoardType.XR;
+                    }
+                    else if (value >= 5000 && value <= 5999)
+                    {
+                        BoardType = OWBoardType.Pint;
+                    }
+
                     break;
                 case LifetimeOdometerUUID:
                     _lifetimeOdometer.Value = value;
