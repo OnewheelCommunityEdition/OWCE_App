@@ -1084,15 +1084,15 @@ ReadRequestReceived - LifetimeOdometer
 
             if (uuid == TemperatureUUID)
             {
-                _controllerTemperature.Value = data[0];
-                _motorTemperature.Value = data[1];
+                _motorTemperature.Value = data[0];
+                _controllerTemperature.Value = data[1];
 
                 return;
             }
             else if (uuid == BatteryTemperatureUUID)
             {
-                _batteryTemperature.Value = data[0];
-                _unknownTemperature.Value = data[1];
+                _unknownTemperature.Value = data[0];
+                _batteryTemperature.Value = data[1];
 
                 return;
             }
