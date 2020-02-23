@@ -337,78 +337,66 @@ namespace OWCE
         public void Init()
         {
             App.Current.OWBLE.BoardValueChanged += OWBLE_BoardValueChanged;
-            
+
+
             FullBoardDetailsList.Add(_serialNumber);
             FullBoardDetailsList.Add(_batterySerial);
-
-            FullBoardDetailsList.Add(_batteryPercent);
-            SelectedBoardDetailsList.Add(_batteryPercent);
-
-            FullBoardDetailsList.Add(_batteryLow5);
-            SelectedBoardDetailsList.Add(_batteryLow5);
-
-            FullBoardDetailsList.Add(_batteryLow20);
-            SelectedBoardDetailsList.Add(_batteryLow20);
-
-            FullBoardDetailsList.Add(_rideMode);
-            SelectedBoardDetailsList.Add(_rideMode);
-
+            FullBoardDetailsList.Add(_hardwareRevision);
+            FullBoardDetailsList.Add(_firmwareRevision);
             FullBoardDetailsList.Add(_pitch);
             FullBoardDetailsList.Add(_yaw);
             FullBoardDetailsList.Add(_roll);
-
-            
             FullBoardDetailsList.Add(_rpm);
-            SelectedBoardDetailsList.Add(_rpm);
-
             FullBoardDetailsList.Add(_speed);
-            SelectedBoardDetailsList.Add(_speed);
-
-            FullBoardDetailsList.Add(_statusError);
-            SelectedBoardDetailsList.Add(_statusError);
-
-            FullBoardDetailsList.Add(_controllerTemperature);
-            SelectedBoardDetailsList.Add(_controllerTemperature);
-
-            FullBoardDetailsList.Add(_motorTemperature);
-            SelectedBoardDetailsList.Add(_motorTemperature);
-
-            FullBoardDetailsList.Add(_firmwareRevision);
-            SelectedBoardDetailsList.Add(_firmwareRevision);
-
-            FullBoardDetailsList.Add(_currentAmps);
-            SelectedBoardDetailsList.Add(_currentAmps);
-
-            FullBoardDetailsList.Add(_tripAmpHours);
-            SelectedBoardDetailsList.Add(_tripAmpHours);
-
-            FullBoardDetailsList.Add(_tripRegenAmpHours);
-            SelectedBoardDetailsList.Add(_tripRegenAmpHours);
-
-            FullBoardDetailsList.Add(_unknownTemperature);
-            SelectedBoardDetailsList.Add(_unknownTemperature);
-
-            FullBoardDetailsList.Add(_batteryTemperature);
-            SelectedBoardDetailsList.Add(_batteryTemperature);
-
+            FullBoardDetailsList.Add(_rideMode);
+            FullBoardDetailsList.Add(_batteryPercent);
             FullBoardDetailsList.Add(_batteryVoltage);
-            SelectedBoardDetailsList.Add(_batteryVoltage);
-
-            FullBoardDetailsList.Add(_safetyHeadroom);
-            SelectedBoardDetailsList.Add(_safetyHeadroom);
-
-            FullBoardDetailsList.Add(_lifetimeOdometer);
-            SelectedBoardDetailsList.Add(_lifetimeOdometer);
-
-            FullBoardDetailsList.Add(_lifetimeAmpHours);
-            SelectedBoardDetailsList.Add(_lifetimeAmpHours);
-
-            FullBoardDetailsList.Add(_lastErrorCode);
-            SelectedBoardDetailsList.Add(_lastErrorCode);
-
+            FullBoardDetailsList.Add(_currentAmps);
             FullBoardDetailsList.Add(_batteryCells);
+            FullBoardDetailsList.Add(_controllerTemperature);
+            FullBoardDetailsList.Add(_motorTemperature);
+            FullBoardDetailsList.Add(_batteryTemperature);
+            FullBoardDetailsList.Add(_unknownTemperature);
+            FullBoardDetailsList.Add(_tripOdometer);
+            FullBoardDetailsList.Add(_tripAmpHours);
+            FullBoardDetailsList.Add(_tripRegenAmpHours);
+            FullBoardDetailsList.Add(_lifetimeOdometer);
+            FullBoardDetailsList.Add(_lifetimeAmpHours);
+            //FullBoardDetailsList.Add(_lastErrorCode);
+            //FullBoardDetailsList.Add(_statusError);
+            //FullBoardDetailsList.Add(_safetyHeadroom);
+            //FullBoardDetailsList.Add(_batteryLow5);
+            //FullBoardDetailsList.Add(_batteryLow20);
+
+
+            //SelectedBoardDetailsList.Add(_serialNumber);
+            //SelectedBoardDetailsList.Add(_batterySerial);
+            //SelectedBoardDetailsList.Add(_hardwareRevision);
+            //SelectedBoardDetailsList.Add(_firmwareRevision);
+            //SelectedBoardDetailsList.Add(_pitch);
+            //SelectedBoardDetailsList.Add(_yaw);
+            //SelectedBoardDetailsList.Add(_roll);
+            //SelectedBoardDetailsList.Add(_rpm);
+            //SelectedBoardDetailsList.Add(_speed);
+            SelectedBoardDetailsList.Add(_rideMode);
+            SelectedBoardDetailsList.Add(_batteryPercent);
+            SelectedBoardDetailsList.Add(_batteryVoltage);
+            SelectedBoardDetailsList.Add(_currentAmps);
             SelectedBoardDetailsList.Add(_batteryCells);
-           
+            SelectedBoardDetailsList.Add(_controllerTemperature);
+            SelectedBoardDetailsList.Add(_motorTemperature);
+            SelectedBoardDetailsList.Add(_batteryTemperature);
+            SelectedBoardDetailsList.Add(_unknownTemperature);
+            SelectedBoardDetailsList.Add(_tripOdometer);
+            SelectedBoardDetailsList.Add(_tripAmpHours);
+            SelectedBoardDetailsList.Add(_tripRegenAmpHours);
+            //SelectedBoardDetailsList.Add(_lifetimeOdometer);
+            //SelectedBoardDetailsList.Add(_lifetimeAmpHours);
+            //SelectedBoardDetailsList.Add(_lastErrorCode);
+            //SelectedBoardDetailsList.Add(_statusError);
+            //SelectedBoardDetailsList.Add(_safetyHeadroom);
+            //SelectedBoardDetailsList.Add(_batteryLow5);
+            //SelectedBoardDetailsList.Add(_batteryLow20);
         }
 
 
