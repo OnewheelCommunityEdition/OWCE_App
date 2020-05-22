@@ -59,7 +59,7 @@ namespace OWCE.Pages
 
             MessagingCenter.Subscribe<OWBoard>(this, "invalid_board_xr4141", async (board) =>
             {
-                await DisplayAlert("Sorry", "Onewheel XR with firmware greater than 4141 is currently not supported. Well... it is, but the workaround to get it to work could get your IP blocked by Future Motion. Hopefully a workaround is available in the future.", "Ok");
+                await DisplayAlert("Sorry", "Onewheel XR with hardware version greater than 4210 is currently not supported.\n\nWell... it is, but the workaround to get it to work could get your IP blocked by Future Motion. Hopefully a workaround is available in the future.", "Ok");
                 await DisconnectAndPop();
             });
         }
