@@ -35,10 +35,13 @@ namespace OWCE.Pages
 
         private void Settings_Tapped(object sender, System.EventArgs e)
         {
+            Navigation.PushModalAsync(new NavigationPage(new SettingsPage()));
+            /*
             if (Parent is MainMasterDetailPage masterDetailPage)
             {
                 masterDetailPage.GoToSettingsPage();
             }
+            */
         }
     }
 }

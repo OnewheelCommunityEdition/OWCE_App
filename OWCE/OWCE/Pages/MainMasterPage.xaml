@@ -1,51 +1,62 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OWCE.Pages.MainMasterPage" Title="MainMasterPage" IconImageSource="hamburger.png"> 
+
     <ContentPage.Resources>
         <Style TargetType="StackLayout">
             <Setter Property="BackgroundColor" Value="{StaticResource darkBackgroundColor}" />
         </Style>
+
+         <Style TargetType="Image">
+            <Setter Property="WidthRequest" Value="20" />
+            <Setter Property="HeightRequest" Value="20" />
+        </Style>
+
+         <Style TargetType="Label">
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="VerticalTextAlignment" Value="Center" />
+        </Style>
     </ContentPage.Resources>
-    
-    
-    <StackLayout BackgroundColor="{StaticResource darkBackgroundColor}" Padding="20,40,20,20">
-        <StackLayout Orientation="Horizontal" BackgroundColor="Transparent" >
+    <StackLayout Padding="20,40,20,20">
+
+        <!--<StackLayout Orientation="Horizontal" BackgroundColor="Transparent" >
             <Button CornerRadius="40" WidthRequest="80" HeightRequest="80" BackgroundColor="White" />
             <StackLayout Orientation="Vertical" VerticalOptions="Center" Spacing="0">
                 <Label FontAttributes="Bold" Text="Some User"/>
                 <Label Text="1234 miles"/>
              </StackLayout>
         </StackLayout>
+        -->
         
-        
-        <StackLayout Orientation="Horizontal" Padding="0,20,0,0">
+        <!--
+        <StackLayout Orientation="Horizontal" Padding="10" Spacing="20">
             <StackLayout.GestureRecognizers>
                 <TapGestureRecognizer Tapped="Onewheels_Tapped"/>
             </StackLayout.GestureRecognizers>
-            <Image WidthRequest="20" HeightRequest="20" Source="menu_onewheels.png" />
-            <Label Text="Onewheels" />
+            <Image Source="menu_onewheels.png" />
+            <Label Text="Onewheels" FontSize="18" />
         </StackLayout>
         
-        <StackLayout Orientation="Horizontal" Padding="0,12,0,0">
+        <StackLayout Orientation="Horizontal" Padding="10" Spacing="20">
             <StackLayout.GestureRecognizers>
                 <TapGestureRecognizer Tapped="MyRides_Tapped"/>
             </StackLayout.GestureRecognizers>
-            <Image WidthRequest="20" HeightRequest="20" Source="menu_myrides.png" />
+            <Image Source="menu_myrides.png" />
             <Label Text="My Rides" />
         </StackLayout>
         
-        <StackLayout Orientation="Horizontal" Padding="0,12,0,0">
+        <StackLayout Orientation="Horizontal" Padding="10" Spacing="20">
             <StackLayout.GestureRecognizers>
                 <TapGestureRecognizer Tapped="Leaderboards_Tapped"/>
             </StackLayout.GestureRecognizers>
-            <Image WidthRequest="20" HeightRequest="20" Source="menu_leaderboards.png" />
+            <Image Source="menu_leaderboards.png" />
             <Label Text="Leaderboards" />
         </StackLayout>
-        
-        <StackLayout Orientation="Horizontal" Padding="0,12,0,0">
+        -->
+        <StackLayout Orientation="Horizontal" Padding="10" Spacing="10">
             <StackLayout.GestureRecognizers>
                 <TapGestureRecognizer Tapped="Settings_Tapped"/>
             </StackLayout.GestureRecognizers>
-            <Image WidthRequest="20" HeightRequest="20" Source="menu_settings.png" />
+            <Image Source="menu_settings.png" />
             <Label Text="Settings" />
         </StackLayout>
         

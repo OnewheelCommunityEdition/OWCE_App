@@ -40,37 +40,30 @@ namespace OWCE
             }
             InitializeComponent();
 
-            bool showNote = false;
-            bool neverRemindMe = Preferences.Get("third_party_remind_me_never", false);
-
-            if (VersionTracking.IsFirstLaunchForCurrentBuild)
-            {
-                Preferences.Set("third_party_seen_message_on_this_version", false);
-            }
-
-
-            if (neverRemindMe == false && VersionTracking.IsFirstLaunchForCurrentBuild)
-            {
-                bool seenMessageOnThisVersion = Preferences.Get("third_party_seen_message_on_this_version", false);
-                if (seenMessageOnThisVersion == false)
-                {
-                    showNote = true;
-                }
-            }
-
             //MainPage = new NavigationPage(new BoardDetailsPage(new MockOWBoard()));
             //return;
 
-            if (showNote)
-            {
-                MainPage = new NavigationPage(new ThirdPartyNotePage());
-            }
-            else
-            {
-                MainPage = new NavigationPage(new BoardListPage());
-            }
+            MainPage = new MainMasterDetailPage();
+        }
 
-            //MainPage = new MainMasterDetailPage();
+        void ProceedToApp()
+        {
+            /*
+            // This method works great for iOS, but on Android it flashes the screen which is annoying.
+
+            var newPage = new NavigationPage(new BoardListPage());
+            await Navigation.PushModalAsync(newPage);
+            if (DeviceInfo.Platform == DevicePlatform.Android)
+            {
+                // Android will crash without first popping modal.
+                await Navigation.PopModalAsync(false);
+            }
+            ((App)Application.Current).MainPage = newPage;
+
+
+            //await Navigation.PushAsync(new BoardListPage());
+            //Navigation.RemovePage(this);
+            */
         }
 
         protected override void OnStart()

@@ -43,20 +43,8 @@ namespace OWCE.Pages
 
         async void ProceedToApp()
         {
-            // This method works great for iOS, but on Android it flashes the screen which is annoying.
-
-            var newPage = new NavigationPage(new BoardListPage());
-            await Navigation.PushModalAsync(newPage);
-            if (DeviceInfo.Platform == DevicePlatform.Android)
-            {
-                // Android will crash without first popping modal.
-                await Navigation.PopModalAsync(false);
-            }
-            ((App)Application.Current).MainPage = newPage;
-            
-
-            //await Navigation.PushAsync(new BoardListPage());
-            //Navigation.RemovePage(this);
+            await Navigation.PopModalAsync();
+           // ((App)Application.Current).ProceedToApp();
         }
     }
 }
