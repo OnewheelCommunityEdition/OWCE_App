@@ -15,21 +15,16 @@ namespace OWCE.Droid.DependencyImplementations
         {
             if ((int)Android.OS.Build.VERSION.SdkInt >= 23)
             {
-                var locationPermission = Plugin.Permissions.Abstractions.Permission.Location;
-                var permissionStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(locationPermission);
+                var permissionStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
 
-
-                if (permissionStatus != Plugin.Permissions.Abstractions.PermissionStatus.Granted)
+                if (permissionStatus != PermissionStatus.Granted)
                 {
                     await Application.Current.MainPage.DisplayAlert("Oops", "In order to for bluetooth to scan for your board you need to enable location permission.\n(Yeah, that is as confusing as it sounds)", "Ok");
 
-
-                    var result = await CrossPermissions.Current.RequestPermissionsAsync(locationPermission);
-                    
-                    permissionStatus = result[locationPermission];
+                    permissionStatus = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();                    
                 }
 
-                if (permissionStatus == Plugin.Permissions.Abstractions.PermissionStatus.Denied)
+                if (permissionStatus == PermissionStatus.Denied)
                 {
                     var shouldOpenSettings = await Application.Current.MainPage.DisplayAlert("Error", "In order to for bluetooth to scan for your board you need to enable location permission.\n(Yeah, that is as confusing as it sounds)", "Open Settings", "Cancel");
                     if (shouldOpenSettings)
@@ -38,7 +33,6 @@ namespace OWCE.Droid.DependencyImplementations
                     }
                     return false;
                 }
-
             }
 
             return true;

@@ -277,10 +277,12 @@ namespace OWCE.Droid.DependencyImplementations
             /*
             _broadcastReceiver = new OWBLE_BroadcastReceiver(this);
             IntentFilter filter = new IntentFilter(BluetoothAdapter.ActionStateChanged);
-            Plugin.CurrentActivity.CrossCurrentActivity.Current.AppContext.RegisterReceiver(_broadcastReceiver, filter);
+            Xamarin.Essentials.Platform.AppContext.RegisterReceiver(_broadcastReceiver, filter);
             */
 
-            BluetoothManager manager = Plugin.CurrentActivity.CrossCurrentActivity.Current.Activity.GetSystemService(Context.BluetoothService) as BluetoothManager;
+
+
+            BluetoothManager manager = Xamarin.Essentials.Platform.CurrentActivity.GetSystemService(Context.BluetoothService) as BluetoothManager;
             _adapter = manager.Adapter;
         }
 
@@ -298,7 +300,7 @@ namespace OWCE.Droid.DependencyImplementations
             if (_adapter == null || !_adapter.IsEnabled)
             {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ActionRequestEnable);
-                Plugin.CurrentActivity.CrossCurrentActivity.Current.Activity.StartActivityForResult(enableBtIntent, MainActivity.REQUEST_ENABLE_BT);
+                Xamarin.Essentials.Platform.CurrentActivity.StartActivityForResult(enableBtIntent, MainActivity.REQUEST_ENABLE_BT);
             }
         }
         
@@ -529,7 +531,7 @@ namespace OWCE.Droid.DependencyImplementations
             if (board.NativePeripheral is BluetoothDevice device)
             {
                 _gattCallback = new OWBLE_BluetoothGattCallback(this);
-                _bluetoothGatt = device.ConnectGatt(Plugin.CurrentActivity.CrossCurrentActivity.Current.Activity, false, _gattCallback);
+                _bluetoothGatt = device.ConnectGatt(Xamarin.Essentials.Platform.CurrentActivity, false, _gattCallback);
             }
 
             return _connectTaskCompletionSource.Task;
