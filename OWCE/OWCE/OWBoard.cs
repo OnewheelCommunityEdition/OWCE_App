@@ -1076,13 +1076,14 @@ ReadRequestReceived - LifetimeOdometer
                     _firmwareRevision.Value = value;
                     break;
                 case CurrentAmpsUUID:
-                    _currentAmps.Value = 0.1f * value;
+                    var scaleFactor = (_boardType == OWBoardType.V1) ? 0.9f : 1.8f;
+                    _currentAmps.Value = (float)value * 0.001f * scaleFactor;
                     break;
                 case TripAmpHoursUUID:
-                    _tripAmpHours.Value = 0.1f * value;
+                    _tripAmpHours.Value = (float)value * 0.02f; // (value / 50)
                     break;
                 case TripRegenAmpHoursUUID:
-                    _tripRegenAmpHours.Value = 0.1f * value;
+                    _tripRegenAmpHours.Value = (float)value * 0.02f; // (value / 50)
                     break;
                 case BatteryVoltageUUID:
                     _batteryVoltage.Value = 0.1f * value;
