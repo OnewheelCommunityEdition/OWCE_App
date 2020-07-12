@@ -39,28 +39,13 @@ namespace OWCE.Pages
         {
             base.OnAppearing();
 
-            bool showNote = false;
-            bool neverRemindMe = Preferences.Get("third_party_remind_me_never", false);
-
-            if (VersionTracking.IsFirstLaunchForCurrentBuild)
+            if (VersionTracking.IsFirstLaunchForCurrentVersion)
             {
-                Preferences.Set("third_party_seen_message_on_this_version", false);
-            }
-
-
-            if (neverRemindMe == false && VersionTracking.IsFirstLaunchForCurrentBuild)
-            {
-                bool seenMessageOnThisVersion = Preferences.Get("third_party_seen_message_on_this_version", false);
-                if (seenMessageOnThisVersion == false)
+                var alert = new Popup.Alert("Onewheel Community Edition", "This is a third party app made by the community, for the community to give extra safety features & better data.\nThis is not the official app.It is not supported, endorsed or affiliated with Future Motion in any way.")
                 {
-                    showNote = true;
-                }
-            }
-
-            
-            if (showNote)
-            {
-                App.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(new ThirdPartyNotePage()));
+                    ButtonText = "OK",
+                };
+                PopupNavigation.Instance.PushAsync(alert, true);
             }
         }
     }
