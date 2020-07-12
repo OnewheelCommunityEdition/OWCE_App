@@ -35,6 +35,8 @@
     <Folder Include="TemplateSelectors\" />
     <Folder Include="Views\" />
     <Folder Include="Models\" />
+    <Folder Include="Resources\" />
+    <Folder Include="Resources\Fonts\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="App.xaml.cs">
