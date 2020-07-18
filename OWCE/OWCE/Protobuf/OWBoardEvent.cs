@@ -34,9 +34,9 @@ namespace OWCE.Protobuf
                   "Y2UuT1dCb2FyZEV2ZW50QhCqAg1PV0NFLlByb3RvYnVmYgZwcm90bzM="));
             descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
                 new pbr::FileDescriptor[] { },
-                new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::OWCE.Protobuf.OWBoardEvent), global::OWCE.Protobuf.OWBoardEvent.Parser, new[]{ "Uuid", "Timestamp", "Data" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::OWCE.Protobuf.OWBoardEventList), global::OWCE.Protobuf.OWBoardEventList.Parser, new[]{ "BoardEvents" }, null, null, null)
+                new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::OWCE.Protobuf.OWBoardEvent), global::OWCE.Protobuf.OWBoardEvent.Parser, new[]{ "Uuid", "Timestamp", "Data" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::OWCE.Protobuf.OWBoardEventList), global::OWCE.Protobuf.OWBoardEventList.Parser, new[]{ "BoardEvents" }, null, null, null, null)
                 }));
         }
         #endregion
@@ -47,6 +47,9 @@ namespace OWCE.Protobuf
     /// [START messages]
     /// </summary>
     public sealed partial class OWBoardEvent : pb::IMessage<OWBoardEvent>
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+#endif
     {
         private static readonly pb::MessageParser<OWBoardEvent> _parser = new pb::MessageParser<OWBoardEvent>(() => new OWBoardEvent());
         private pb::UnknownFieldSet _unknownFields;
@@ -242,13 +245,43 @@ namespace OWCE.Protobuf
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public void MergeFrom(pb::CodedInputStream input)
         {
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+            input.ReadRawMessage(this);
+#else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Uuid = input.ReadString();
+            break;
+          }
+          case 16: {
+            Timestamp = input.ReadInt64();
+            break;
+          }
+          case 26: {
+            Data = input.ReadBytes();
+            break;
+          }
+        }
+      }
+#endif
+        }
+
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input)
+        {
             uint tag;
             while ((tag = input.ReadTag()) != 0)
             {
                 switch (tag)
                 {
                     default:
-                        _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                        _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                         break;
                     case 10:
                         {
@@ -268,10 +301,14 @@ namespace OWCE.Protobuf
                 }
             }
         }
+#endif
 
     }
 
     public sealed partial class OWBoardEventList : pb::IMessage<OWBoardEventList>
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+#endif
     {
         private static readonly pb::MessageParser<OWBoardEventList> _parser = new pb::MessageParser<OWBoardEventList>(() => new OWBoardEventList());
         private pb::UnknownFieldSet _unknownFields;
@@ -397,22 +434,45 @@ namespace OWCE.Protobuf
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
         public void MergeFrom(pb::CodedInputStream input)
         {
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+            input.ReadRawMessage(this);
+#else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            boardEvents_.AddEntriesFrom(input, _repeated_boardEvents_codec);
+            break;
+          }
+        }
+      }
+#endif
+        }
+
+#if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+        void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input)
+        {
             uint tag;
             while ((tag = input.ReadTag()) != 0)
             {
                 switch (tag)
                 {
                     default:
-                        _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+                        _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
                         break;
                     case 10:
                         {
-                            boardEvents_.AddEntriesFrom(input, _repeated_boardEvents_codec);
+                            boardEvents_.AddEntriesFrom(ref input, _repeated_boardEvents_codec);
                             break;
                         }
                 }
             }
         }
+#endif
 
     }
 
