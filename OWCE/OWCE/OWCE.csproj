@@ -62,5 +62,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="**/.DS_Store" />
+    <None Remove="Fonts\SairaExtraCondensed-SemiBold.ttf" />
+    <None Remove="Resources\Fonts\SairaExtraCondensed-SemiBold.ttf" />
+    <None Remove="Resources\Fonts\SairaExtraCondensed-Bold.ttf" />
+    <None Remove="Resources\Fonts\SairaExtraCondensed-Black.ttf" />
+    <None Remove="Resources\Fonts\SairaExtraCondensed-Light.ttf" />
+    <None Remove="Resources\Fonts\SairaExtraCondensed-Medium.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-SemiBold.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-Bold.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-Black.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-Light.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-Medium.ttf" />
   </ItemGroup>
 </Project>
