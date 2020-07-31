@@ -42,11 +42,7 @@ namespace OWCE.Protobuf {
   /// <summary>
   /// [START messages]
   /// </summary>
-  public sealed partial class OWBoardEvent : pb::IMessage<OWBoardEvent>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
+  public sealed partial class OWBoardEvent : pb::IMessage<OWBoardEvent> {
     private static readonly pb::MessageParser<OWBoardEvent> _parser = new pb::MessageParser<OWBoardEvent>(() => new OWBoardEvent());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -207,9 +203,6 @@ namespace OWCE.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
         switch(tag) {
@@ -230,42 +223,11 @@ namespace OWCE.Protobuf {
           }
         }
       }
-    #endif
     }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 10: {
-            Uuid = input.ReadString();
-            break;
-          }
-          case 16: {
-            Timestamp = input.ReadInt64();
-            break;
-          }
-          case 26: {
-            Data = input.ReadBytes();
-            break;
-          }
-        }
-      }
-    }
-    #endif
 
   }
 
-  public sealed partial class OWBoardEventList : pb::IMessage<OWBoardEventList>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
+  public sealed partial class OWBoardEventList : pb::IMessage<OWBoardEventList> {
     private static readonly pb::MessageParser<OWBoardEventList> _parser = new pb::MessageParser<OWBoardEventList>(() => new OWBoardEventList());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -370,9 +332,6 @@ namespace OWCE.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
       uint tag;
       while ((tag = input.ReadTag()) != 0) {
         switch(tag) {
@@ -385,26 +344,7 @@ namespace OWCE.Protobuf {
           }
         }
       }
-    #endif
     }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 10: {
-            boardEvents_.AddEntriesFrom(ref input, _repeated_boardEvents_codec);
-            break;
-          }
-        }
-      }
-    }
-    #endif
 
   }
 
