@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:converters="clr-namespace:OWCE.Converters" xmlns:models="clr-namespace:OWCE.Models" xmlns:views="clr-namespace:OWCE.Views" xmlns:templateselectors="clr-namespace:OWCE.TemplateSelectors" x:Class="OWCE.App" xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView">
+<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:converters="clr-namespace:OWCE.Converters" xmlns:models="clr-namespace:OWCE.Models" xmlns:views="clr-namespace:OWCE.Views" x:Class="OWCE.App" xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView">
     <Application.Resources>
         <ResourceDictionary>
 

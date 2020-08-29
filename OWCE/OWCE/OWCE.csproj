@@ -32,7 +32,6 @@
   <ItemGroup>
     <Folder Include="Pages\" />
     <Folder Include="Extensions\" />
-    <Folder Include="TemplateSelectors\" />
     <Folder Include="Views\" />
     <Folder Include="Models\" />
     <Folder Include="Resources\" />
