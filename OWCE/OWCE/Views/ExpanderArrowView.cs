@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 using Xamarin.Forms.Shapes;
 
@@ -6,6 +7,25 @@ namespace OWCE.Views
 {
     public class ExpanderArrowView : ContentView
     {
+
+        public static readonly BindableProperty ArrowColorProperty = BindableProperty.Create(
+          "ArrowColor",
+          typeof(Color),
+          typeof(ExpanderArrowView),
+          Color.White);
+
+        public Color ArrowColor
+        {
+            get
+            {
+                return (Color)GetValue(ArrowColorProperty);
+            }
+            set
+            {
+                SetValue(ArrowColorProperty, value);
+            }
+        }
+
         public ExpanderArrowView()
         {
             HorizontalOptions = LayoutOptions.Start;
@@ -19,7 +39,7 @@ namespace OWCE.Views
                 HeightRequest = 15,
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center,
-                Stroke = Brush.White,
+                Stroke = new SolidColorBrush(ArrowColor),
                 StrokeThickness = 2,
                 StrokeLineJoin = PenLineJoin.Round,
                 Points = new PointCollection(),
@@ -29,6 +49,20 @@ namespace OWCE.Views
             polyLine.Points.Add(new Point(12.5, 4.5));
 
             Content = polyLine;
+        }
+
+        protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            base.OnPropertyChanged(propertyName);
+
+            if (ArrowColorProperty.PropertyName.Equals(propertyName))
+            {
+                if (Content is Polyline polyline)
+                {
+                    polyline.Stroke = new SolidColorBrush(ArrowColor);
+                    ForceLayout();
+                }
+            }
         }
     }
 }
