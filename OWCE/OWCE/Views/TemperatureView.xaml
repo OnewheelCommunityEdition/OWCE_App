@@ -3,7 +3,7 @@
     <ContentView.Resources>
         <converters:TemperatureConverter x:Key="temperatureConverter" />
     </ContentView.Resources>
-    <yummy:PancakeView x:Name="MainView" BackgroundColor="#00FFFF" Margin="16,0" Padding="0" CornerRadius="11" AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional" AbsoluteLayout.LayoutBounds="0.5,0.5,1,AutoSize">
+    <yummy:PancakeView x:Name="MainView" BackgroundColor="#00FFFF" Style="{StaticResource BoardDetailBlockBaseStyle}">
         <Grid BackgroundColor="#00FFFF"  RowDefinitions="36,36,36,36" RowSpacing="1">
 
             <Label Text="TEMPERATURES" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" CharacterSpacing="0.26" FontSize="16" Margin="20,6,0,0" />

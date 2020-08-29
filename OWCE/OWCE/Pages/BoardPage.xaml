@@ -5,7 +5,7 @@
              Title="{Binding Name}"
              >
     <ScrollView>
-        <StackLayout Spacing="16">
+        <StackLayout Spacing="16" Margin="0,16,0,0">
             <views:SpeedRangeDistanceView RPM="{Binding RPM}" WheelCircumference="{Binding WheelCircumference}" />
             <views:BatteryView BindingContext="{Binding .}" BatteryPercent="{Binding BatteryPercent}" BatteryVoltage="{Binding BatteryVoltage}" BatteryCells="{Binding BatteryCells}"  />
             <views:PowerView />

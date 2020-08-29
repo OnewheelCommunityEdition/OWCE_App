@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView" x:Class="OWCE.Views.AngleView" HeightRequest="140">
-    <yummy:PancakeView x:Name="MainView" BackgroundColor="#0000FF" Margin="16,0" Padding="0" CornerRadius="11" >
+    <yummy:PancakeView x:Name="MainView" BackgroundColor="#0000FF" Style="{StaticResource BoardDetailBlockBaseStyle}" >
         <AbsoluteLayout>
 
             <BoxView AbsoluteLayout.LayoutFlags="XProportional" AbsoluteLayout.LayoutBounds="0.5,70,500,200" AnchorX="0.5" AnchorY="0" x:Name="PitchView" Opacity="0.2" BackgroundColor="Black"  />

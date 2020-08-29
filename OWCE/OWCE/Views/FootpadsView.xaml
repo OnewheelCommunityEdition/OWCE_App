@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView" x:Class="OWCE.Views.FootpadsView" HeightRequest="140">
-    <yummy:PancakeView BackgroundColor="#E00172" Margin="16,0" Padding="0" CornerRadius="11" >
+    <yummy:PancakeView BackgroundColor="#E00172" Style="{StaticResource BoardDetailBlockBaseStyle}" >
         <Grid x:Name="x" HorizontalOptions="Fill" ColumnDefinitions="*,*" ColumnSpacing="0">
 
             <Label Text="L" Grid.Column="0" Opacity="0.35" TextColor="White" FontFamily="SairaExtraCondensed-Black" FontSize="96" HorizontalOptions="Center" VerticalOptions="Center"  />
