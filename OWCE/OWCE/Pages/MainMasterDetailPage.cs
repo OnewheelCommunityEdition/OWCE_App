@@ -44,20 +44,6 @@ namespace OWCE.Pages
             Detail = new NavigationPage(new MyRidesPage());
             this.IsPresented = false;
         }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-
-            if (VersionTracking.IsFirstLaunchForCurrentVersion)
-            {
-                var alert = new Popup.Alert("Onewheel Community Edition", "This is a third party app made by the community, for the community to give extra safety features & better data.\nThis is not the official app. It is not supported, endorsed or affiliated with Future Motion in any way.")
-                {
-                    ButtonText = "OK",
-                };
-                PopupNavigation.Instance.PushAsync(alert, true);
-            }
-        }
     }
 }
 

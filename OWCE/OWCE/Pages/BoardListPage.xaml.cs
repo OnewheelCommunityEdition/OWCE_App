@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -102,6 +103,7 @@ namespace OWCE.Pages
 
         Thickness _safeInsets;
 
+        bool _hasAppeared = false;
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -122,8 +124,43 @@ namespace OWCE.Pages
 
             //var board = new OWBoard(new OWBaseBoard("000000", "ow000000"));
             //(Path.Combine(App.Current.LogsDirectory, "25 July 2020 03/53/40 PM.bin"));
-            
-           // Navigation.PushAsync(new BoardPage(board));
+
+            // Navigation.PushAsync(new BoardPage(board));
+
+            if (_hasAppeared == false)
+            {
+                _hasAppeared = true;
+                // If this is the first launch of the current app we want to re-alert the user that this is a community driven app.
+                if (VersionTracking.IsFirstLaunchForCurrentVersion)
+                {
+                    var alert = new Popup.Alert("Onewheel Community Edition", "This is a third party app made by the community, for the community to give extra safety features & better data.\nThis is not the official app. It is not supported, endorsed or affiliated with Future Motion in any way.")
+                    {
+                        ButtonText = "OK",
+                    };
+                    PopupNavigation.Instance.PushAsync(alert, true);
+
+                    // Additionally if this is also the first launch ever, lets prompt them for bluetooth after they have dismissed the initial alert.
+                    if (VersionTracking.IsFirstLaunchEver)
+                    {
+                        alert.Disappearing += (sender, e) =>
+                        {
+                            var bluetoothPleaseAlert = new Popup.Alert("Bluetooth, please", "OWCE and your Onewheel use Bluetooth to communicate. We need your permission to connect.", new Command(async (object parameter) =>
+                            {
+                                if (parameter is Popup.Alert alertPage)
+                                {
+                                    await Rg.Plugins.Popup.Services.PopupNavigation.Instance.RemovePageAsync(alertPage);
+                                    App.Current.OWBLE.StartScanning();
+                                }
+                            }))
+                            {
+                                SuperTitleText = "Welcome",
+                                ButtonText = "OK",
+                            };
+                            PopupNavigation.Instance.PushAsync(bluetoothPleaseAlert, true);
+                        };
+                    }
+                }
+            }
 
             if (App.Current.OWBLE.ReadyToScan())
             {
