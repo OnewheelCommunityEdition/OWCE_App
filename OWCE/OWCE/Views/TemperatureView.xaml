@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OWCE.Views.TemperatureView" xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView" xmlns:converters="clr-namespace:OWCE.Converters">
+    <ContentView.Resources>
+        <converters:TemperatureConverter x:Key="temperatureConverter" />
+    </ContentView.Resources>
+    <yummy:PancakeView x:Name="MainView" BackgroundColor="#00FFFF" Margin="16,0" Padding="0" CornerRadius="11" AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional" AbsoluteLayout.LayoutBounds="0.5,0.5,1,AutoSize">
+        <Grid BackgroundColor="#00FFFF"  RowDefinitions="36,36,36,36" RowSpacing="1">
+
+            <Label Text="TEMPERATURES" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" CharacterSpacing="0.26" FontSize="16" Margin="20,6,0,0" />
+
+            <BoxView Grid.Row="1" BackgroundColor="#00CCCC" />
+            <BoxView Grid.Row="2" BackgroundColor="#00CCCC" />
+            <BoxView Grid.Row="3" BackgroundColor="#00CCCC" />
+
+
+            <BoxView x:Name="ControllerBarView" Grid.Row="1" HorizontalOptions="Start" BackgroundColor="#00B3B3" WidthRequest="0" />
+            <BoxView x:Name="MotorBarView" Grid.Row="2" HorizontalOptions="Start" BackgroundColor="#00B3B3" WidthRequest="0" />
+            <BoxView x:Name="BatteryBarView" Grid.Row="3" HorizontalOptions="Start" BackgroundColor="#00B3B3" WidthRequest="0" />
+
+            <Label Grid.Row="1" Text="Controller" VerticalOptions="Center" FontFamily="SairaExtraCondensed-Medium" TextColor="Black" CharacterSpacing="0.26" FontSize="16" Margin="20,0,0,0" />
+            <Label Grid.Row="2" Text="Motor" VerticalOptions="Center" FontFamily="SairaExtraCondensed-Medium" TextColor="Black" CharacterSpacing="0.26" FontSize="16" Margin="20,0,0,0" />
+            <Label Grid.Row="3" Text="Battery" VerticalOptions="Center" FontFamily="SairaExtraCondensed-Medium" TextColor="Black" CharacterSpacing="0.26" FontSize="16" Margin="20,0,0,0" />
+
+            <Label Grid.Row="1" Text="{Binding ControllerTemp, Converter={StaticResource temperatureConverter}}" VerticalOptions="Center" HorizontalOptions="End" FontFamily="SairaExtraCondensed-Black" TextColor="Black" CharacterSpacing="0.26" FontSize="22" Margin="0,0,20,0" />
+            <Label Grid.Row="2" Text="{Binding MotorTemp, Converter={StaticResource temperatureConverter}}" VerticalOptions="Center" HorizontalOptions="End" FontFamily="SairaExtraCondensed-Black" TextColor="Black" CharacterSpacing="0.26" FontSize="22" Margin="0,0,20,0" />
+            <Label Grid.Row="3" Text="{Binding BatteryTemp, Converter={StaticResource temperatureConverter}}" VerticalOptions="Center" HorizontalOptions="End" FontFamily="SairaExtraCondensed-Black" TextColor="Black" CharacterSpacing="0.26" FontSize="22" Margin="0,0,20,0" />
+
+        </Grid>
+    </yummy:PancakeView>
+</ContentView>

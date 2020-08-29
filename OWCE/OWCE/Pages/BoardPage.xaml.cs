@@ -11,8 +11,8 @@ namespace OWCE.Pages
 {
     public partial class BoardPage : ContentPage
     {
-        public OWBoard Board { get; internal set; }
-
+        public OWBoard Board { get; private set; }
+        /*
         public string SpeedHeader
         {
             get
@@ -20,62 +20,65 @@ namespace OWCE.Pages
                 var unit = App.Current.MetricDisplay ? "km/h" : "mph";
                 return unit; // return $"Speed ({unit})";
             }
-        }
+        }*/
 
         private bool _initialSubscirbe = false;
+
+        private OWBoard _board;
         public BoardPage(OWBoard board)
         {
             Board = board;
-            board.Init();
-
-            BindingContext = this;
-
+            //board.StartLogging();
             InitializeComponent();
+            BindingContext = board;
+
+            Board.Init();
+            // I really don't like this.
+            _ = Board.SubscribeToBLE();
+
+            //_board.PropertyChanged += Board_PropertyChanged;
+           
+
 
             NavigationPage.SetHasBackButton(this, false);
+        }
 
-            ToolbarItems.Add(new ToolbarItem("Info", null, () =>
+        private void Board_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            Console.WriteLine(e.PropertyName);
+
+            /*
+            if (e.PropertyName == "Yaw")
             {
-                Navigation.PushModalAsync(new NavigationPage(new BoardDetailsPage(Board)));
-            }));
-
+                this.AngleView.Yaw = Board.Yaw;
+            }
+            else if (e.PropertyName == "Roll")
+            {
+                this.AngleView.Roll = Board.Roll;
+            }
+            else if (e.PropertyName == "Pitch")
+            {
+                this.AngleView.Pitch = Board.Pitch;
+            }
+            Console.WriteLine("X: " + e.PropertyName);
+            */
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            if (_initialSubscirbe == false)
-            {
-                _initialSubscirbe = true;
-                _ = Board.SubscribeToBLE();
-            }
-
-            MessagingCenter.Subscribe<OWBoard>(this, "invalid_board_pint", async (board) =>
-            {
-                await DisplayAlert("Sorry", "Onewheel Pint is currently not supported.\n\nWell... it is, but the workaround to get it to work could get your IP blocked by Future Motion. Hopefully a workaround is available in the future.", "Ok");
-                await DisconnectAndPop();
-            });
-
-            MessagingCenter.Subscribe<OWBoard>(this, "invalid_board_xr4141", async (board) =>
-            {
-                await DisplayAlert("Sorry", "Onewheel XR with hardware version greater than 4210 is currently not supported.\n\nWell... it is, but the workaround to get it to work could get your IP blocked by Future Motion. Hopefully a workaround is available in the future.", "Ok");
-                await DisconnectAndPop();
-            });
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-
-            MessagingCenter.Unsubscribe<OWBoard>(this, "invalid_board_pint");
-            MessagingCenter.Unsubscribe<OWBoard>(this, "invalid_board_xr4141");
         }
 
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
 
+            /*
             if (GaugeAbsolueLayout.WidthRequest.AlmostEqualTo(width) == false)
             {
                 GaugeAbsolueLayout.WidthRequest = width;
@@ -83,11 +86,12 @@ namespace OWCE.Pages
                 GaugeAbsolueLayout.MinimumWidthRequest = width;
                 GaugeAbsolueLayout.MinimumHeightRequest = width;
             }
+            */
         }
 
         protected override bool OnBackButtonPressed()
         {
-            DisconnectAndPop();
+            //DisconnectAndPop();
             return false;
         }
 
@@ -102,12 +106,13 @@ namespace OWCE.Pages
 
         private async Task DisconnectAndPop()
         {
-            await Board.Disconnect();
+            //await Board.Disconnect();
             await Navigation.PopAsync();
         }
 
         private bool _isLogging = false;
 
+    
         /*
         private async void LogData_Clicked(object sender, System.EventArgs e)
         {

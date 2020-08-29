@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.ComponentModel;
+using UIKit;
+using System.Threading;
 
 #if __IOS__
 using OWCE.iOS.Extensions;
@@ -19,40 +22,167 @@ using OWCE.MacOS.Extensions;
 namespace OWCE.MacOS.DependencyImplementations
 #endif
 {
-    public class OWBLE : NSObject, IOWBLE, ICBCentralManagerDelegate, ICBPeripheralDelegate
+    public class OWBLE : NSObject, INotifyPropertyChanged, IOWBLE, ICBCentralManagerDelegate, ICBPeripheralDelegate
     {
+        DispatchQueue _dispatchQueue;
         CBCentralManager _centralManager;
         CBPeripheral _peripheral;
-        DispatchQueue _dispatchQueue;
+        CBService _service;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public Action<OWBaseBoard> BoardDiscovered { get; set; }
+        public Action<String> ErrorOccurred { get; set; }
+        TaskCompletionSource<bool> _connectionCompletionSource = null;
+        OWBaseBoard _board;
+        public Action<BluetoothState> BLEStateChanged { get; set; }
+        public Action<OWBoard> BoardConnected { get; set; }
+        public Action<string, byte[]> BoardValueChanged { get; set; }
+        Dictionary<CBUUID, TaskCompletionSource<byte[]>> _readQueue = new Dictionary<CBUUID, TaskCompletionSource<byte[]>>();
+        Dictionary<CBUUID, TaskCompletionSource<byte[]>> _writeQueue = new Dictionary<CBUUID, TaskCompletionSource<byte[]>>();
+        List<CBUUID> _notifyList = new List<CBUUID>();
+
+
+
+        bool _isScanning = false;
+        public bool IsScanning
+        {
+            get
+            {
+                return _isScanning;
+            }
+            set
+            {
+                if (_isScanning == value)
+                    return;
+
+                _isScanning = value;
+                OnPropertyChanged();
+            }
+        }
+
+        protected void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
 
         public OWBLE()
         {
-            _dispatchQueue = new DispatchQueue("CBCentralManager_Queue");
-            _centralManager = new CBCentralManager(this, _dispatchQueue);
+            //_dispatchQueue = new DispatchQueue("CBCentralManager_Queue");
+            //_centralManager = new CBCentralManager(this, _dispatchQueue);
         }
 
-        public async Task StartScanning(int timeout = 15)
+
+        public void Shutdown()
+        {
+            StopScanning();
+
+            if (_service != null)
+            {
+                _service.Dispose();
+                _service = null;
+            }
+
+            if (_peripheral != null)
+            {
+                _peripheral.Dispose();
+                _peripheral = null;
+            }
+
+            if (_centralManager != null)
+            {
+                _centralManager.Dispose();
+                _centralManager = null;
+            }
+
+            if (_dispatchQueue != null)
+            {
+                _dispatchQueue.Dispose();
+                _dispatchQueue = null;
+            }
+        }
+
+        public void StartScanning()
         {
             Debug.WriteLine("StartScanning");
 
-            _centralManager.ScanForPeripherals(new CBUUID[] { OWBoard.ServiceUUID.ToCBUUID() }, new PeripheralScanningOptions { AllowDuplicatesKey = true });
-
-            await Task.Delay(timeout * 1000);
-
-            StopScanning();
+            // If this is the first attempt to scan we create the centralManager.
+            // This will prompt the user for the "OWCE wants to use bluetooth" prompt.
+            if (_centralManager == null)
+            {
+                Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(() =>
+               {
+                   _dispatchQueue = new DispatchQueue("CBCentralManager_Scanner_Queue");
+                   _centralManager = new CBCentralManager(this, _dispatchQueue); // Prompt displays here, but not a blocking call.
+                });
+            }
+            else
+            {
+                if (_centralManager.State == CBCentralManagerState.PoweredOn)
+                {
+                    DoActualScan();
+                }
+                else if (_centralManager.State == CBCentralManagerState.PoweredOff)
+                {
+                    throw new Exception("Bluetooth is currently turned off.");
+                }
+                else if (_centralManager.State == CBCentralManagerState.Unauthorized) // User has rejected authorisation.
+                {
+                    throw new Exception("Bluetooth permissions is disabled for OWCE.");
+                }
+                else if (_centralManager.State == CBCentralManagerState.Resetting)
+                {
+                    throw new Exception("Bluetooth scanning is not supported on this device.");
+                }
+                else if (_centralManager.State == CBCentralManagerState.Unsupported)
+                {
+                    throw new Exception("Bluetooth scanning is not supported on this device.");
+                }
+            }
         }
 
         public void StopScanning()
         {
             Debug.WriteLine("StopScanning");
-            if (_centralManager.IsScanning)
+            if (_centralManager != null && _centralManager.IsScanning)
             {
                 _centralManager.StopScan();
             }
+            IsScanning = false;
         }
 
-        CBService _service;
+        private void DoActualScan()
+        {
+            if (_centralManager == null || _centralManager.IsScanning)
+            {
+                return;
+            }
 
+            if (_centralManager.State == CBCentralManagerState.PoweredOn)
+            {
+                _centralManager.ScanForPeripherals(new CBUUID[] { OWBoard.ServiceUUID.ToCBUUID() }, new PeripheralScanningOptions { AllowDuplicatesKey = true });
+                IsScanning = true;
+            }
+        }
+
+        public bool ReadyToScan()
+        {
+            if (UIDevice.CurrentDevice.CheckSystemVersion(13, 1))
+            {
+                // NotDetermined before prompt.
+
+                if (CBCentralManager.Authorization == CBManagerAuthorization.AllowedAlways)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        Dictionary<CBUUID, CBCharacteristic> _characteristics = new Dictionary<CBUUID, CBCharacteristic>();
+
+        #region ICBPeripheralDelegate
         [Export("peripheral:didDiscoverServices:")]
         public void DiscoveredService(CBPeripheral peripheral, NSError error)
         {
@@ -76,8 +206,7 @@ namespace OWCE.MacOS.DependencyImplementations
             }
         }
 
-        Dictionary<CBUUID, CBCharacteristic> _characteristics = new Dictionary<CBUUID, CBCharacteristic>();
-
+        
         [Export("peripheral:didDiscoverCharacteristicsForService:error:")]
         public void DiscoveredCharacteristic(CBPeripheral peripheral, CBService service, NSError error)
         {
@@ -95,7 +224,10 @@ namespace OWCE.MacOS.DependencyImplementations
                 }
             }
 
-            BoardConnected?.Invoke(new OWBoard(_board));
+            _connectionCompletionSource.SetResult(true);
+
+            //BoardConnected?.Invoke(null);
+            //BoardConnected?.Invoke(new OWBoard(_board));
         }
 
         [Export("peripheral:didUpdateValueForCharacteristic:error:")]
@@ -194,23 +326,13 @@ namespace OWCE.MacOS.DependencyImplementations
             _writeQueue.Remove(characteristic.UUID);
             task.SetResult(dataBytes);
         }
+        #endregion
 
-        #region CBCentralManager_Delegate
-        [Export("centralManager:didConnectPeripheral:")]
-        public void CentralManager_ConnectedPeripheral(CBCentralManager central, CBPeripheral peripheral)
-        {
-            Debug.WriteLine("CentralManager_ConnectedPeripheral: " + peripheral.Name);
-            _connectionCompletionSource.SetResult(true);
-
-            var services = _peripheral.Services;
-            _peripheral.DiscoverServices(new CBUUID[] { OWBoard.ServiceUUID.ToCBUUID() });
-        }
-
-
+        #region ICBCentralManagerDelegate
         [Export("centralManager:didDiscoverPeripheral:advertisementData:RSSI:")]
-        public void CentralManager_DiscoveredPeripheral(CBCentralManager central, CBPeripheral peripheral, NSDictionary advertisementData, NSNumber RSSI)
+        public void DiscoveredPeripheral(CBCentralManager central, CBPeripheral peripheral, NSDictionary advertisementData, NSNumber RSSI)
         {
-            Debug.WriteLine("CentralManager_DiscoveredPeripheral: "+ peripheral.Name);
+            Debug.WriteLine("CentralManager_DiscoveredPeripheral: " + peripheral.Name);
 
             var board = new OWBaseBoard()
             {
@@ -221,6 +343,15 @@ namespace OWCE.MacOS.DependencyImplementations
             };
 
             BoardDiscovered?.Invoke(board);
+        }
+
+        [Export("centralManager:didConnectPeripheral:")]
+        public void CentralManager_ConnectedPeripheral(CBCentralManager central, CBPeripheral peripheral)
+        {
+            Debug.WriteLine("CentralManager_ConnectedPeripheral: " + peripheral.Name);
+
+            var services = _peripheral.Services;
+            _peripheral.DiscoverServices(new CBUUID[] { OWBoard.ServiceUUID.ToCBUUID() });
         }
 
         [Export("centralManager:didDisconnectPeripheral:error:")]
@@ -250,7 +381,30 @@ namespace OWCE.MacOS.DependencyImplementations
 
         public void UpdatedState(CBCentralManager central)
         {
-            Debug.WriteLine("CentralManager_UpdatedState: " + central.State);
+            Debug.WriteLine("CBCentralManager_UpdatedState: " + central.State);
+            if (central.State == CBCentralManagerState.PoweredOn)
+            {
+                // Bluetooth chip is authorised and turned on, start scan.
+                DoActualScan();
+            }
+            else if (central.State == CBCentralManagerState.PoweredOff)
+            {
+                // User has turned off bluetooth.
+                StopScanning();
+                ErrorOccurred?.Invoke("Unable to scan for boards, bluetooth is currently disabled.");
+            }
+            else if (_centralManager.State == CBCentralManagerState.Unauthorized) // User has rejected authorisation.
+            {
+                ErrorOccurred?.Invoke("Unable to scan for boards without granting bluetooth permissions.");
+            }
+            else if (_centralManager.State == CBCentralManagerState.Resetting)
+            {
+                ErrorOccurred?.Invoke("Could not scan for boards at this time.");
+            }
+            else if (_centralManager.State == CBCentralManagerState.Unsupported)
+            {
+                ErrorOccurred?.Invoke("Bluetooth scanning is not supported on this device.");
+            }
         }
 
         private void CentralManager_WillRestoreState(object sender, CBWillRestoreEventArgs e)
@@ -260,16 +414,10 @@ namespace OWCE.MacOS.DependencyImplementations
         }
         #endregion
 
-        TaskCompletionSource<bool> _connectionCompletionSource = null;
-        OWBaseBoard _board;
-
+      
         #region IOWBLE
-        public Action<BluetoothState> BLEStateChanged { get; set; }
-        public Action<OWBaseBoard> BoardDiscovered { get; set; }
-        public Action<OWBoard> BoardConnected { get; set; }
-        public Action<string, byte[]> BoardValueChanged { get; set; }
-
-        public Task<bool> Connect(OWBaseBoard board)
+   
+        public Task<bool> Connect(OWBaseBoard board, CancellationToken cancellationToken)
         {
             _connectionCompletionSource = new TaskCompletionSource<bool>();
 
@@ -292,11 +440,10 @@ namespace OWCE.MacOS.DependencyImplementations
             }
             else
             {
-                // TODO Alert.
+                _connectionCompletionSource.SetResult(false);
             }
 
             return _connectionCompletionSource.Task;
-
         }
 
         public Task Disconnect()
@@ -305,12 +452,6 @@ namespace OWCE.MacOS.DependencyImplementations
             _centralManager.CancelPeripheralConnection(_peripheral);
             return Task.CompletedTask;
         }
-
-        Dictionary<CBUUID, TaskCompletionSource<byte[]>> _readQueue = new Dictionary<CBUUID, TaskCompletionSource<byte[]>>();
-        Dictionary<CBUUID, TaskCompletionSource<byte[]>> _writeQueue = new Dictionary<CBUUID, TaskCompletionSource<byte[]>>();
-        List<CBUUID> _notifyList = new List<CBUUID>();
-
-
 
         public Task<byte[]> ReadValue(string characteristicGuid, bool important = false)
         {
@@ -431,11 +572,6 @@ namespace OWCE.MacOS.DependencyImplementations
             
             return Task.CompletedTask;
             //throw new NotImplementedException();
-        }
-
-        public bool BluetoothEnabled()
-        {
-            return _centralManager.State == CBCentralManagerState.PoweredOn;
         }
         #endregion
     }

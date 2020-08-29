@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView" x:Class="OWCE.Views.AngleView" HeightRequest="140">
+    <yummy:PancakeView x:Name="MainView" BackgroundColor="#0000FF" Margin="16,0" Padding="0" CornerRadius="11" >
+        <AbsoluteLayout>
+
+            <BoxView AbsoluteLayout.LayoutFlags="XProportional" AbsoluteLayout.LayoutBounds="0.5,70,500,200" AnchorX="0.5" AnchorY="0" x:Name="PitchView" Opacity="0.2" BackgroundColor="Black"  />
+
+            <Label Text="BOARD ANGLE" FontFamily="SairaExtraCondensed-Bold" TextColor="White" CharacterSpacing="0.26" FontSize="16" Margin="20,6,0,0" />
+            <Label AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.5,0.5,AutoSize,AutoSize" Text="{Binding Pitch, StringFormat='{0:F0}°'}" TextColor="White" FontFamily="SairaExtraCondensed-Black" FontSize="80"  />
+
+            <yummy:PancakeView x:Name="RollView" CornerRadius="33" WidthRequest="66" HeightRequest="66" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.1666,0.5,AutoSize,AutoSize">
+                <yummy:PancakeView.Border>
+                    <yummy:Border Color="#38000000" Thickness="1" /> <!-- 38 is about 22% -->
+                </yummy:PancakeView.Border>
+
+                <BoxView VerticalOptions="End" HeightRequest="33" Opacity="0.34" BackgroundColor="Black" />
+            </yummy:PancakeView>
+
+            <yummy:PancakeView x:Name="YawView" CornerRadius="33" WidthRequest="66" HeightRequest="66" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.8333,0.5,AutoSize,AutoSize">
+                <yummy:PancakeView.Border>
+                    <yummy:Border Color="#38000000" Thickness="1" /> <!-- 38 is about 22% -->
+                </yummy:PancakeView.Border>
+
+                <BoxView VerticalOptions="End" HeightRequest="33" Opacity="0.34" BackgroundColor="Black" />
+            </yummy:PancakeView>
+
+            <Label Text="roll" Padding="0,0,0,30" FontSize="16" TextColor="White" FontFamily="SairaExtraCondensed-Medium" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.1666,0.5,AutoSize,AutoSize" />
+            <Label Text="{Binding Roll, StringFormat='{0:F0}°'}" Padding="0,30,0,0"  FontSize="40" TextColor="White" FontFamily="SairaExtraCondensed-Medium" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.1666,0.5,AutoSize,AutoSize" />
+                
+
+            <Label Text="yaw" Padding="0,0,0,30" FontSize="16" TextColor="White" FontFamily="SairaExtraCondensed-Medium" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.8333,0.5,AutoSize,AutoSize" />
+            <Label Text="{Binding Yaw, StringFormat='{0:F0}°'}" Padding="0,30,0,0"  FontSize="40" TextColor="White" FontFamily="SairaExtraCondensed-Medium" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.8333,0.5,AutoSize,AutoSize" />
+
+        </AbsoluteLayout>  
+    </yummy:PancakeView>
+</ContentView>

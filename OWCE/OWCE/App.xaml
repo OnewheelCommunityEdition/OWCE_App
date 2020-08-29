@@ -4,6 +4,13 @@
         <ResourceDictionary>
 
             
+            <Color x:Key="BackgroundGradientStart">#E6E6E6</Color>
+            <Color x:Key="BackgroundGradientEnd">#EEEEEE</Color>
+            <Color x:Key="BrightYellow">#ECEC00</Color>
+            <Color x:Key="ButtonBoarder">#DBDBDF</Color>
+          
+
+
             <Color x:Key="lightBackgroundColor">#23354d</Color>
             <Color x:Key="darkBackgroundColor">#1C2D41</Color>
             <Color x:Key="textColor">White</Color>
@@ -13,29 +20,33 @@
             </Style>
             
             <Style TargetType="NavigationPage">
-                <Setter Property="BarTextColor" Value="{StaticResource textColor}" />
-                <Setter Property="BackgroundColor" Value="{StaticResource darkBackgroundColor}" />
-                <Setter Property="BarBackgroundColor" Value="{StaticResource darkBackgroundColor}" />
+                <Setter Property="BarTextColor" Value="Black" />
+                <Setter Property="BackgroundColor" Value="{StaticResource BackgroundGradientStart}" />
+                <Setter Property="BarBackgroundColor" Value="{StaticResource BackgroundGradientStart}" />
             </Style>
 
             <Style TargetType="ContentPage">
-                <Setter Property="BackgroundColor" Value="{StaticResource lightBackgroundColor}" />
+                <Setter Property="BackgroundColor" Value="White" />
             </Style>
             
             <Style TargetType="ScrollView">
-                <Setter Property="BackgroundColor" Value="{StaticResource lightBackgroundColor}" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+            </Style>
+
+            <Style TargetType="RefreshView">
+                <Setter Property="BackgroundColor" Value="Transparent" />
             </Style>
             
             <Style TargetType="StackLayout">
-                <Setter Property="BackgroundColor" Value="{StaticResource lightBackgroundColor}" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
             </Style>
             
             <Style TargetType="ListView">
-                <Setter Property="BackgroundColor" Value="{StaticResource lightBackgroundColor}" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
             </Style>
             
             <Style TargetType="CollectionView">
-                <Setter Property="BackgroundColor" Value="{StaticResource lightBackgroundColor}" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
             </Style>
             
             <Style TargetType="Button">
@@ -59,69 +70,6 @@
             </Style>
             
             
-            <DataTemplate x:Key="AmpTemplate" x:DataType="models:AmpBoardDetail">
-                <views:AmpRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="AmpHoursTemplate" x:DataType="models:AmpHoursBoardDetail">
-                <views:AmpHoursRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="AngleTemplate" x:DataType="models:AngleBoardDetail">
-                <views:AngleRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="BatteryCellsTemplate" x:DataType="models:BatteryCellsBoardDetail">
-                <views:BatteryCellsRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="DistanceTemplate" x:DataType="models:DistanceBoardDetail">
-                <views:DistanceRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="FloatTemplate" x:DataType="models:FloatBoardDetail">
-                <views:FloatRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="IntTemplate" x:DataType="models:IntBoardDetail">
-                <views:IntRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="SpeedTemplate" x:DataType="models:SpeedBoardDetail">
-                <views:SpeedRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="RideModeTemplate" x:DataType="models:RideModeBoardDetail">
-                <views:RideModeRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="StringTemplate" x:DataType="models:StringBoardDetail">
-                <views:StringRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="TemperatureTemplate" x:DataType="models:TemperatureBoardDetail">
-                <views:TemperatureRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="VoltageTemplate" x:DataType="models:VoltageBoardDetail">
-                <views:VoltageRowView />
-            </DataTemplate>
-
-          
-            <templateselectors:BoardDetailTemplateSelector x:Key="DetailTemplateSelector"
-                                             AmpTemplate="{StaticResource AmpTemplate}"
-                                             AmpHoursTemplate="{StaticResource AmpHoursTemplate}"
-                                             AngleTemplate="{StaticResource AngleTemplate}"
-                                             BatteryCellsTemplate="{StaticResource BatteryCellsTemplate}"
-                                             DistanceTemplate="{StaticResource DistanceTemplate}"
-                                             FloatTemplate="{StaticResource FloatTemplate}"
-                                             IntTemplate="{StaticResource IntTemplate}"
-                                             SpeedTemplate="{StaticResource SpeedTemplate}"
-                                             RideModeTemplate="{StaticResource RideModeTemplate}"
-                                             StringTemplate="{StaticResource StringTemplate}"
-                                             TemperatureTemplate="{StaticResource TemperatureTemplate}"
-                                             VoltageTemplate="{StaticResource VoltageTemplate}"
-                                                />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

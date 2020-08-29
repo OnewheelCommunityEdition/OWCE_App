@@ -1,7 +1,0 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OWCE.Views.FloatRowView" xmlns:models="clr-namespace:OWCE.Models" x:DataType="models:FloatBoardDetail">
-    <StackLayout Orientation="Horizontal" Padding="20">
-        <Label Text="{Binding Name}" FontAttributes="Bold" HorizontalOptions="StartAndExpand" VerticalOptions="Center" />
-        <Label Text="{Binding Value, StringFormat='{0:F2}'}" HorizontalOptions="End" VerticalOptions="Center" />
-    </StackLayout>
-</ContentView>

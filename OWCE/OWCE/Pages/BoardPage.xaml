@@ -1,81 +1,17 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="OWCE.Pages.BoardPage"
-             Title="{Binding Board.Name}"
-             xmlns:gauge="clr-namespace:Syncfusion.SfGauge.XForms;assembly=Syncfusion.SfGauge.XForms"
-             xmlns:converters="clr-namespace:OWCE.Converters"
-             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:views="clr-namespace:OWCE.Views"
+             x:Class="OWCE.Pages.BoardPage"             
+             BackgroundColor="White"
+             Title="{Binding Name}"
              >
-    <ContentPage.Resources>
-        <converters:SpeedConverter x:Key="speedConverter" />
-    </ContentPage.Resources>
-
-    <ContentPage.Content>
-        <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" >
-        
-            <AbsoluteLayout x:Name="GaugeAbsolueLayout" HorizontalOptions="FillAndExpand" VerticalOptions="Start">
-                
-                
-                <gauge:SfCircularGauge Margin="20" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
-
-                    <gauge:SfCircularGauge.Headers>
-                        <gauge:Header Text="{Binding SpeedHeader}" ForegroundColor="White" TextSize="20" />
-                    </gauge:SfCircularGauge.Headers>
-
-                    <gauge:SfCircularGauge.Scales>
-                        <gauge:Scale Interval="1" ShowLabels="true" ShowFirstLabel="true" UseRangeColorForLabels="true" RimColor="Gray" ShowLastLabel="true" LabelColor="White" StartValue="0" EndValue="{Binding Board.MaxDisplaySpeed}">
-
-
-                        <!--
-                        <gauge:Scale.Ranges>
-                            <gauge:Range StartValue="0" EndValue="40"/>
-                        </gauge:Scale.Ranges>
-                            -->
-                            
-                            <gauge:Scale.Pointers>
-                                <gauge:NeedlePointer Value="{Binding Board.Speed.Value, Converter={StaticResource speedConverter}}" Color="White" EnableAnimation="true" AnimationDuration="0.25" />
-                                <gauge:RangePointer Value="{Binding Board.MaxRecommendedSpeed}" Color="White" EnableAnimation="true"  AnimationDuration="0.25" />
-                                <gauge:MarkerPointer Value="22" Color="Red" EnableAnimation="true" AnimationDuration="0.25" />
-                            </gauge:Scale.Pointers>
-                        </gauge:Scale>
-                    </gauge:SfCircularGauge.Scales>
-                </gauge:SfCircularGauge>
-                <Label AbsoluteLayout.LayoutBounds="0.5,0.9,AutoSize,AutoSize" AbsoluteLayout.LayoutFlags="PositionProportional" Text="{Binding Board.Speed.Value, Converter={StaticResource speedConverter}}" FontSize="50" FontAttributes="Bold" />
-
-                
-                <gauge:SfCircularGauge AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0.975,0.025,0.15,0.15">
-                    <gauge:SfCircularGauge.Scales>
-                        <gauge:Scale Interval="0" RimThickness="0" ShowTicks="false" ShowRim="false" StartAngle="180" SweepAngle="360" ShowLabels="false" ShowFirstLabel="true" StartValue="0" EndValue="100">
-                            <gauge:Scale.Ranges>
-                                <gauge:Range StartValue="0" Offset="1"  Thickness="10"   EndValue="{Binding Board.BatteryPercent.Value}">
-                                    <gauge:Range.GradientStops>
-                                        <gauge:GaugeGradientStop Value="0" Color="Red"/>
-                                        <gauge:GaugeGradientStop Value="15" Color="Orange"/>
-                                        <gauge:GaugeGradientStop Value="30" Color="Green"/>
-                                    </gauge:Range.GradientStops>
-                                </gauge:Range>
-                            </gauge:Scale.Ranges>
-                        </gauge:Scale>
-                     </gauge:SfCircularGauge.Scales>
-                    
-                </gauge:SfCircularGauge>
-                <Label AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0.975,0.025,0.15,0.15" Text="{Binding Board.BatteryPercent.Value}" FontSize="25" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
-                
-            </AbsoluteLayout>
-
-            <CollectionView ItemsSource="{Binding Board.SelectedBoardDetailsList}" ItemTemplate="{StaticResource DetailTemplateSelector}">
-                <CollectionView.Footer>
-                    <StackLayout Padding="20">
-                       <yummy:PancakeView Style="{StaticResource PancakeButtonStyle}">
-                            <Label Text="Disconnect" Style="{StaticResource LabelButtonStyle}" />
-                            <yummy:PancakeView.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="Disconnect_Tapped" />
-                            </yummy:PancakeView.GestureRecognizers>
-                        </yummy:PancakeView>
-                    </StackLayout>
-                </CollectionView.Footer>
-            </CollectionView>
-            
+    <ScrollView>
+        <StackLayout Spacing="16">
+            <views:SpeedRangeDistanceView RPM="{Binding RPM}" WheelCircumference="{Binding WheelCircumference}" />
+            <views:BatteryView BindingContext="{Binding .}" BatteryPercent="{Binding BatteryPercent}" BatteryCells="{Binding BatteryCells}"  />
+            <views:PowerView />
+            <views:TemperatureView BindingContext="{Binding .}" ControllerTemp="{Binding ControllerTemperature}" MotorTemp="{Binding MotorTemperature}" BatteryTemp="{Binding BatteryTemp}" />
+            <views:AngleView BindingContext="{Binding .}" Pitch="{Binding Pitch}" Yaw="{Binding Yaw}" Roll="{Binding Roll}"   />
+            <views:FootpadsView />
         </StackLayout>
-    </ContentPage.Content>
+    </ScrollView>        
 </ContentPage>

@@ -279,9 +279,6 @@ namespace OWCE.Droid.DependencyImplementations
             IntentFilter filter = new IntentFilter(BluetoothAdapter.ActionStateChanged);
             Xamarin.Essentials.Platform.AppContext.RegisterReceiver(_broadcastReceiver, filter);
             */
-
-
-
             BluetoothManager manager = Xamarin.Essentials.Platform.CurrentActivity.GetSystemService(Context.BluetoothService) as BluetoothManager;
             _adapter = manager.Adapter;
         }

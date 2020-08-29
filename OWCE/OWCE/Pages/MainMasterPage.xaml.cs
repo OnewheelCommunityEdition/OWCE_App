@@ -7,6 +7,7 @@ namespace OWCE.Pages
 {
     public partial class MainMasterPage : ContentPage
     {
+
         public MainMasterPage()
         {
             InitializeComponent();
@@ -42,6 +43,26 @@ namespace OWCE.Pages
                 masterDetailPage.GoToSettingsPage();
             }
             */
+        }
+
+
+        void StartRecording_Tapped(System.Object sender, System.EventArgs e)
+        {
+            MessagingCenter.Send<object>(this, "start_recording");
+        }
+
+        void StopRecording_Tapped(System.Object sender, System.EventArgs e)
+        {
+            MessagingCenter.Send<object>(this, "stop_recording");
+        }
+
+
+        public void Logs_Tapped(object sender, EventArgs e)
+        {
+            if (Parent is MainMasterDetailPage masterDetailPage)
+            {
+                masterDetailPage.GoToLogsPage();
+            }
         }
     }
 }

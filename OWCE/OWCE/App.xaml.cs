@@ -7,7 +7,20 @@ using Microsoft.AppCenter.Crashes;
 using Xamarin.Essentials;
 using OWCE.DependencyInterfaces;
 using OWCE.Pages;
+using System.IO;
+using System.Threading.Tasks;
+using System.Threading;
+using System.Diagnostics;
+using System.Linq;
 
+[assembly: ExportFont("SairaExtraCondensed-Black.ttf")]
+[assembly: ExportFont("SairaExtraCondensed-Bold.ttf")]
+[assembly: ExportFont("SairaExtraCondensed-SemiBold.ttf")]
+[assembly: ExportFont("SairaExtraCondensed-Light.ttf")]
+[assembly: ExportFont("SairaExtraCondensed-Medium.ttf")]
+
+
+//SairaExtraCondensed-SemiBold
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace OWCE
 {
@@ -16,23 +29,30 @@ namespace OWCE
         public static new App Current => Application.Current as App;
         public IOWBLE OWBLE { get; private set; }
 
+#if DEBUG
+        public const string OWCEApiServer = "api.dev.owce.app";
+#else
+        public const string OWCEApiServer = "api.owce.app";
+#endif
+
         public bool MetricDisplay
         {
             get; set;
         }
 
-        public bool SpeedDemon
-        {
-            get; set;
-        }
+        public string LogsDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "beta_ride_logs");
 
         public App()
         {
-            MetricDisplay = Preferences.Get("metric_display", System.Globalization.RegionInfo.CurrentRegion.IsMetric);
-            SpeedDemon = Preferences.Get("speed_demon", false);
+            Xamarin.Forms.Device.SetFlags(new string[] { "Shapes_Experimental", "Expander_Experimental" });
 
 
-            OWBLE = DependencyService.Get<IOWBLE>();
+            MetricDisplay = true; // Preferences.Get("metric_display", System.Globalization.RegionInfo.CurrentRegion.IsMetric);
+            
+            if (Directory.Exists(LogsDirectory) == false)
+            {
+                Directory.CreateDirectory(LogsDirectory);
+            }
 
             if (String.IsNullOrEmpty(AppConstants.SyncfusionLicense) == false)
             {
@@ -40,36 +60,63 @@ namespace OWCE
             }
             InitializeComponent();
 
-            //MainPage = new NavigationPage(new BoardDetailsPage(new MockOWBoard()));
-            //return;
-
-            MainPage = new MainMasterDetailPage();
-        }
-
-        void ProceedToApp()
-        {
-            /*
-            // This method works great for iOS, but on Android it flashes the screen which is annoying.
-
-            var newPage = new NavigationPage(new BoardListPage());
-            await Navigation.PushModalAsync(newPage);
-            if (DeviceInfo.Platform == DevicePlatform.Android)
+#if DEBUG
+            // If simulator or emulator use MockOWBLE.
+            if (DeviceInfo.DeviceType == DeviceType.Virtual)
             {
-                // Android will crash without first popping modal.
-                await Navigation.PopModalAsync(false);
+                OWBLE = new MockOWBLE();
             }
-            ((App)Application.Current).MainPage = newPage;
+            else
+            {
+                OWBLE = DependencyService.Get<IOWBLE>();
+            }
+#else
+            OWBLE = DependencyService.Get<IOWBLE>();
+#endif
+            MainPage = new MainMasterDetailPage();
+            //MainPage = new BoardListPage();
 
+          
 
-            //await Navigation.PushAsync(new BoardListPage());
-            //Navigation.RemovePage(this);
+            /*
+            Debug.WriteLine("Before 1");
+            Task.Run(async () =>
+            {
+                Debug.WriteLine("Before 2");
+                await Task.Delay(1000);
+                Debug.WriteLine("After 2");
+            });
+            Debug.WriteLine("After 1");
             */
         }
 
-        protected override void OnStart()
+        protected async override void OnStart()
         {
             // Handle when your app starts
             AppCenter.Start($"android={AppConstants.AppCenterAndroid};ios={AppConstants.AppCenteriOS}", typeof(Analytics), typeof(Crashes));
+
+
+            /*
+            var cancellationTokenSource = new CancellationTokenSource();
+
+            var file = Directory.GetFiles(App.Current.LogsDirectory, "*.bin").First();
+            var rand = new Random();
+            var baseBoard = new OWBaseBoard()
+            {
+                ID = "ow" + rand.Next(0, 999999).ToString("D6"),
+                Name = Path.GetFileNameWithoutExtension(file),
+                IsAvailable = true,
+                NativePeripheral = file,
+            };
+
+           
+            var board = await App.Current.ConnectToBoard(baseBoard, cancellationTokenSource.Token);
+            if (board != null)
+            {
+                //MainPage = new NavigationPage(new TestPage());
+                MainPage = new NavigationPage(new BoardPage(board)); // (new TestPage());
+            }
+            */
         }
 
         protected override void OnSleep()
@@ -80,6 +127,25 @@ namespace OWCE
         protected override void OnResume()
         {
             // Handle when your app resumes
+        }
+
+        internal async Task<OWBoard> ConnectToBoard(OWBaseBoard baseBoard, CancellationToken token)
+        {
+            var didConnect = await OWBLE.Connect(baseBoard, token);
+            if (didConnect)
+            {
+                return new OWBoard(OWBLE, baseBoard);
+            }
+
+            return null;
+        }
+
+        internal void DisconnectFromBoard()
+        {
+            /*
+            OWBLE.Disconnect();
+            OWBLE = null;
+            */
         }
     }
 }

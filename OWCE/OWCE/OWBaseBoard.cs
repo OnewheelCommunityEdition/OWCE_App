@@ -65,24 +65,23 @@ namespace OWCE
             set { if (_nativePeripheral != value) { _nativePeripheral = value; } }
         }
 
-        // Value is in milimeters.
-        protected float _tyreCircumference;
-        public float TyreCircumference
+        // Value is in millimeters.
+        protected float _wheelCircumference;
+        public float WheelCircumference
         {
             get
             {
-                return _tyreCircumference;
+                return _wheelCircumference;
             }
             set
             {
                 // Not checking against AlmostEqualTo, lets just update it regardless
-                _tyreCircumference = value;
+                _wheelCircumference = value;
                 OnPropertyChanged();
-
-                TyreRadius = _tyreCircumference / TwoPi / 1000f;
             }
         }
 
+        /*
         // Value is in meters.
         protected float _tyreRadius;
         public float TyreRadius
@@ -98,21 +97,105 @@ namespace OWCE
                 OnPropertyChanged();
             }
         }
+        */
+
+
+        protected OWBoardType _boardType = OWBoardType.Unknown;
+        public OWBoardType BoardType
+        {
+            get
+            {
+                return _boardType;
+            }
+            set
+            {
+                if (_boardType != value)
+                {
+                    _boardType = value;
+
+                    // TODO: Check for custom wheel circumference.
+
+                    /*
+                     * 11.5 inch wheel = 292.1 mm wheel
+                     * Radius = 292.1 / 2 = 146.05
+                     * Circumference = 2 * π * Radius
+                     * Circumference = 917.66mm
+                     * 
+                     * 10.5 inch wheel = 266.7 mm wheel
+                     * Radius = 266.7 / 2 = 133.35
+                     * Circumference = 2 * π * Radius
+                     * Circumference = 837.86mm
+                     */
+                    WheelCircumference = _boardType switch
+                    {
+                        OWBoardType.V1 => 917.66f,
+                        OWBoardType.Plus => 917.66f,
+                        OWBoardType.XR => 917.66f,
+                        OWBoardType.Pint => 837.86f,
+                        _ => 0f,
+                    };
+
+                    OnPropertyChanged();
+                    OnPropertyChanged("BoardModelStringShort");
+                    OnPropertyChanged("BoardModelStringLong");
+                    OnPropertyChanged("RideModeString");
+                }
+            }
+        }
+
+        public string BoardModelStringShort
+        {
+            get
+            {
+                return BoardType switch
+                {
+                    OWBoardType.V1 => "V1",
+                    OWBoardType.Plus => "Plus",
+                    OWBoardType.XR => "XR",
+                    OWBoardType.Pint => "Pint",
+                    _ => String.Empty,
+                };
+            }
+        }
+
+        public string BoardModelStringLong
+        {
+            get
+            {
+                return BoardType switch
+                {
+                    OWBoardType.V1 => "Onewheel V1",
+                    OWBoardType.Plus => "Onewheel+",
+                    OWBoardType.XR => "Onewheel+ XR",
+                    OWBoardType.Pint => "Onewheel Pint",
+                    _ => String.Empty,
+                };
+            }
+        }
 
         public const float TwoPi = (2f * (float)Math.PI);
         public const float RadConvert = (TwoPi / 60f);
 
 
-
         public OWBaseBoard()
         {
-            TyreCircumference = 910f;
+
         }
 
-        public OWBaseBoard(string id, string name) : base()
+        public OWBaseBoard(string id, string name) : this()
         {
             _id = id;
             _name = name;
+        }
+
+        public OWBaseBoard(OWBaseBoard baseBoard)
+        {
+            ID = baseBoard.ID;
+            Name = baseBoard.Name;
+            IsAvailable = baseBoard.IsAvailable;
+            NativePeripheral = baseBoard.NativePeripheral;
+            WheelCircumference = baseBoard.WheelCircumference;
+            BoardType = baseBoard.BoardType;
         }
 
         public bool Equals(OWBaseBoard otherBaseBoard)

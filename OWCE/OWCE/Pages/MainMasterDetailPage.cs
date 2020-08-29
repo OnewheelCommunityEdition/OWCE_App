@@ -1,4 +1,5 @@
 ﻿using System;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -12,14 +13,23 @@ namespace OWCE.Pages
         {
             Master = new MainMasterPage();
 
-            _mainBoardNavigationPage = new NavigationPage(new BoardListPage());
-
+            _mainBoardNavigationPage = new CustomNavigationPage(new BoardListPage());
             Detail = _mainBoardNavigationPage;
+
+            //Detail = new NavigationPage(new ListLogsPage());
+
+            this.MasterBehavior = MasterBehavior.Popover;
         }
 
         public void GoToBoardPage()
         {
             Detail = _mainBoardNavigationPage;
+            this.IsPresented = false;
+        }
+
+        public void GoToLogsPage()
+        {
+            Detail = new NavigationPage(new ListLogsPage());
             this.IsPresented = false;
         }
 

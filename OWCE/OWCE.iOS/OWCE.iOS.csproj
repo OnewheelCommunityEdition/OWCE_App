@@ -82,6 +82,10 @@
     <Compile Include="DependencyImplementations\OWBLE.cs" />
     <Compile Include="Extensions\GuidExtension.cs" />
     <Compile Include="DependencyImplementations\UserAgent.cs" />
+    <Compile Include="Renderers\CustomNavigationPageRenderer.cs" />
+    <Compile Include="Renderers\MainMasterDetailPageRenderer.cs" />
+    <Compile Include="Renderers\MainMasterPageRenderer.cs" />
+    <Compile Include="Renderers\ArcViewRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -153,10 +157,10 @@
     <ImageAsset Include="Assets.xcassets\menu_settings.imageset\menu_settings.png" />
     <ImageAsset Include="Assets.xcassets\menu_settings.imageset\menu_settings%402x.png" />
     <ImageAsset Include="Assets.xcassets\menu_settings.imageset\menu_settings%403x.png" />
-    <ImageAsset Include="Assets.xcassets\splash_icon.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\splash_icon.imageset\splash_icon.png" />
-    <ImageAsset Include="Assets.xcassets\splash_icon.imageset\splash_icon%402x.png" />
-    <ImageAsset Include="Assets.xcassets\splash_icon.imageset\splash_icon%403x.png" />
+    <ImageAsset Include="Assets.xcassets\burger_menu.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\burger_menu.imageset\burger_menu.png" />
+    <ImageAsset Include="Assets.xcassets\burger_menu.imageset\burger_menu%402x.png" />
+    <ImageAsset Include="Assets.xcassets\burger_menu.imageset\burger_menu%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -167,7 +171,7 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="4.7.0.1239" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1269" />
     <PackageReference Include="BTProgressHUD-updated" Version="1.8.1" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="Syncfusion.Xamarin.SfChart" Version="18.2.0.47" />
@@ -198,9 +202,23 @@
     <Folder Include="Assets.xcassets\ow_icon_xr.imageset\" />
     <Folder Include="Assets.xcassets\ow_icon.imageset\" />
     <Folder Include="Assets.xcassets\splash_icon.imageset\" />
+    <Folder Include="Renderers\" />
+    <Folder Include="Assets.xcassets\yellow_gradient.imageset\" />
+    <Folder Include="Assets.xcassets\splash_gradient.imageset\" />
+    <Folder Include="Assets.xcassets\splash-image.imageset\" />
+    <Folder Include="Assets.xcassets\splash_background.imageset\" />
+    <Folder Include="Assets.xcassets\burger_menu.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />
     <ITunesArtwork Include="iTunesArtwork%402x" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\splash_image.png" />
+    <BundleResource Include="Resources\splash_image%403x.png" />
+    <BundleResource Include="Resources\splash_image%402x.png" />
+    <BundleResource Include="Resources\splash_background.png" />
+    <BundleResource Include="Resources\splash_background%402x.png" />
+    <BundleResource Include="Resources\splash_background%403x.png" />
   </ItemGroup>
 </Project>
