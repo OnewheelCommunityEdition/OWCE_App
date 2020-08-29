@@ -51,7 +51,7 @@ namespace OWCE.Pages
 
             if (VersionTracking.IsFirstLaunchForCurrentVersion)
             {
-                var alert = new Popup.Alert("Onewheel Community Edition", "This is a third party app made by the community, for the community to give extra safety features & better data.\nThis is not the official app.It is not supported, endorsed or affiliated with Future Motion in any way.")
+                var alert = new Popup.Alert("Onewheel Community Edition", "This is a third party app made by the community, for the community to give extra safety features & better data.\nThis is not the official app. It is not supported, endorsed or affiliated with Future Motion in any way.")
                 {
                     ButtonText = "OK",
                 };
