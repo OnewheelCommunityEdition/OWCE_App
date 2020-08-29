@@ -54,10 +54,6 @@ namespace OWCE
                 Directory.CreateDirectory(LogsDirectory);
             }
 
-            if (String.IsNullOrEmpty(AppConstants.SyncfusionLicense) == false)
-            {
-                Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(AppConstants.SyncfusionLicense);
-            }
             InitializeComponent();
 
 #if DEBUG

@@ -16,7 +16,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="3.4.0" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="3.4.0" />
-    <PackageReference Include="Syncfusion.Xamarin.SfGauge" Version="18.2.0.47" />
     <PackageReference Include="Google.Protobuf" Version="3.12.4" />
     <PackageReference Include="RestSharp" Version="106.11.4" />
     <PackageReference Include="SharpZipLib" Version="1.2.0" />
@@ -25,7 +24,6 @@
     <PackageReference Include="Xam.Plugin.Geolocator" Version="4.5.0.6" />
     <PackageReference Include="System.Text.Json" Version="4.7.2" />
     <PackageReference Include="Xamarin.Forms.PancakeView" Version="2.1.0.714" />
-    <PackageReference Include="Syncfusion.Xamarin.SfChart" Version="18.2.0.47" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.3" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
   </ItemGroup>
