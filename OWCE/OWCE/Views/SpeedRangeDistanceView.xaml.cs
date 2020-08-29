@@ -7,6 +7,7 @@ namespace OWCE.Views
 {
     public partial class SpeedRangeDistanceView : ContentView
     {
+
         public static readonly BindableProperty RPMProperty = BindableProperty.Create(
           "RPM",
           typeof(int),
@@ -55,6 +56,21 @@ namespace OWCE.Views
             if (propertyName == BindingContextProperty.PropertyName)
             {
                 var bindingContext = BindingContext;
+            }
+        }
+
+        void ExpanderView_PropertyChanged(System.Object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (Expander.IsExpandedProperty.PropertyName.Equals(e.PropertyName))
+            {
+                if (ExpanderView.IsExpanded)
+                {
+                    ExpanderArrow.RotateTo(180, ExpanderView.ExpandAnimationLength, ExpanderView.ExpandAnimationEasing);
+                }
+                else
+                {
+                    ExpanderArrow.RotateTo(0, ExpanderView.CollapseAnimationLength, ExpanderView.CollapseAnimationEasing);
+                }
             }
         }
     }

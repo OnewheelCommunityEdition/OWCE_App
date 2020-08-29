@@ -3,50 +3,61 @@
     <ContentView.Resources>
         <converters:RpmToSpeedConverter x:Key="rpmToSpeedConverter" />
     </ContentView.Resources>
-    <yummy:PancakeView BackgroundColor="#FFFF00" Style="{StaticResource BoardDetailBlockBaseStyle}">
+    <yummy:PancakeView BackgroundColor="#FFFF00"  Style="{StaticResource BoardDetailBlockBaseStyle}">
+
+        <Expander x:Name="ExpanderView" HorizontalOptions="Fill" PropertyChanged="ExpanderView_PropertyChanged">
 
 
-        <Grid x:Name="GridThing" RowDefinitions="100,76" ColumnSpacing="0" RowSpacing="0" >
 
-            <!--
+            <Expander.Header>
+
+                <Grid x:Name="GridThing" RowDefinitions="100" ColumnSpacing="0" RowSpacing="0" >
+
+                    <!--
             726.4854811913 is 40km/h converted to rpm with a 917.66mm circumference wheel.
             -->
-            <views:ArcView x:Name="MainArcView" Current="{Binding RPM}" Maximum="726.4854811913" SizeChanged="MainArcView_SizeChanged" Margin="30,0" Minimum="0" />
+                    <views:ArcView x:Name="MainArcView" Current="{Binding RPM}" Maximum="726.4854811913" SizeChanged="MainArcView_SizeChanged" Margin="30,0" Minimum="0" />
 
 
-            <Label VerticalOptions="End" Margin="20,0">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="0 km" FontSize="16" TextColor="Black"  FontFamily="SairaExtraCondensed-Medium" />
-                        <Span Text=" ride" FontSize="16" TextColor="Black"  FontFamily="SairaExtraCondensed-Light" />
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+                    <Label VerticalOptions="End" Margin="20,0">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="0 km" FontSize="16" TextColor="Black"  FontFamily="SairaExtraCondensed-Medium" />
+                                <Span Text=" ride" FontSize="16" TextColor="Black"  FontFamily="SairaExtraCondensed-Light" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
 
 
-            <Label HorizontalOptions="End" VerticalOptions="End" Margin="20,0">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="lifetime " TextColor="Black"  FontSize="16" FontFamily="SairaExtraCondensed-Light" />
+                    <Label HorizontalOptions="End" VerticalOptions="End" Margin="20,0">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="lifetime " TextColor="Black"  FontSize="16" FontFamily="SairaExtraCondensed-Light" />
 
-                        <Span Text="3,214 km" TextColor="Black"  FontSize="16" FontFamily="SairaExtraCondensed-Medium" />
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+                                <Span Text="3,214 km" TextColor="Black"  FontSize="16" FontFamily="SairaExtraCondensed-Medium" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
 
-            <Label Text="SPEED" FontFamily="SairaExtraCondensed-Bold" TextColor="Black"   CharacterSpacing="0.26" FontSize="16" Margin="20,6,0,0" />
-            <Label Text="{Binding RPM, Converter={StaticResource rpmToSpeedConverter}, ConverterParameter={Binding WheelCircumference}, StringFormat='{0:F0}'}"  TextColor="Black"  FontFamily="SairaExtraCondensed-Black" FontSize="125" HorizontalOptions="Center" VerticalOptions="Start"  />
-         
-            <Label Text="km/h" TextColor="Black" FontFamily="SairaExtraCondensed-Black" FontSize="30" CharacterSpacing="0.97" HorizontalOptions="Center" VerticalOptions="End" VerticalTextAlignment="End" />
+                    <Label Text="SPEED" FontFamily="SairaExtraCondensed-Bold" TextColor="Black"   CharacterSpacing="0.26" FontSize="16" Margin="20,6,0,0" />
+                    <Label Text="{Binding RPM, Converter={StaticResource rpmToSpeedConverter}, ConverterParameter={Binding WheelCircumference}, StringFormat='{0:F0}'}"  TextColor="Black"  FontFamily="SairaExtraCondensed-Black" FontSize="125" HorizontalOptions="Center" VerticalOptions="Start"  />
+
+                    <Label Text="km/h" TextColor="Black" FontFamily="SairaExtraCondensed-Black" FontSize="30" CharacterSpacing="0.97" HorizontalOptions="Center" VerticalOptions="End" VerticalTextAlignment="End" />
 
 
-            <Grid Grid.Row="1" BackgroundColor="White" ColumnSpacing="0" ColumnDefinitions="Auto,Auto" Padding="10,0,0,0">
+                    <views:ExpanderArrowView x:Name="ExpanderArrow" HorizontalOptions="End" Margin="17,13" ArrowColor="#000000" />
+
+
+                </Grid>
+
+            </Expander.Header>
+
+            <Grid Grid.Row="1" HeightRequest="76" BackgroundColor="White" ColumnSpacing="0" ColumnDefinitions="Auto,Auto" Padding="10,0,0,0">
                 <Button Grid.Column="0" BackgroundColor="White" HorizontalOptions="Start" VerticalOptions="Center" CornerRadius="20" Margin="10,0,0,0" Padding="15,0" TextColor="Black" FontSize="18" FontFamily="SairaExtraCondensed-Bold" Text="Set alarm speed" BorderWidth="1" BorderColor="#DBDBDF" HeightRequest="40" />
 
                 <Button Grid.Column="1" BackgroundColor="White" HorizontalOptions="Start" VerticalOptions="Center" CornerRadius="20" Margin="10,0,0,0" Padding="15,0" TextColor="Black" FontSize="18" FontFamily="SairaExtraCondensed-Bold" Text="Mission" BorderWidth="1" BorderColor="#DBDBDF" HeightRequest="40" />
             </Grid>
-
-        </Grid>
+        </Expander>
     </yummy:PancakeView>
 
 
