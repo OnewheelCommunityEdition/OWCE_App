@@ -84,9 +84,8 @@ namespace OWCE.Pages
             InitializeComponent();
             BindingContext = this;
 
-            //_owble
-
-#if DEBUGx
+            /*
+#if DEBUG
             var rand = new Random();
             Boards.Add(new MockOWBoard($"ow{rand.Next(111111, 999999)}", OWBoardType.V1));
             Boards.Add(new MockOWBoard($"ow{rand.Next(111111, 999999)}", OWBoardType.Plus));
@@ -94,6 +93,7 @@ namespace OWCE.Pages
             Boards.Add(new MockOWBoard($"ow{rand.Next(111111, 999999)}", OWBoardType.Pint));
             Boards.Add(new MockOWBoard($"ow{rand.Next(111111, 999999)}", OWBoardType.Unknown));
 #endif
+            */
 
             Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
             _safeInsets = On<Xamarin.Forms.PlatformConfiguration.iOS>().SafeAreaInsets();
