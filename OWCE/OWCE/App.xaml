@@ -61,13 +61,31 @@
                 <Setter Property="BorderColor" Value="White" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="Padding" Value="10" />
-                <Setter Property="CornerRadius" Value="{Binding Height, Source={RelativeSource Self}, Converter={StaticResource divideByTwo}}" />
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="HeightRequest" Value="40" />
             </Style>
 
             <Style x:Key="LabelButtonStyle" TargetType="Label">
                 <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="FontAttributes" Value="Bold" />
             </Style>
+
+             <Style x:Key="BoardDetailBlockBaseStyle" TargetType="yummy:PancakeView">
+                <Setter Property="Margin" Value="16,0" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="CornerRadius" Value="11" />
+                <Setter Property="Shadow">
+                    <yummy:DropShadow Color="#000000" Opacity="0.14" Offset="0,1" BlurRadius="9" />
+                </Setter>
+            </Style>
+
+            <Style TargetType="Expander">
+                <Setter Property="ExpandAnimationEasing" Value="CubicInOut" />
+                <Setter Property="ExpandAnimationLength" Value="250" />
+                <Setter Property="CollapseAnimationEasing" Value="CubicInOut" />
+                <Setter Property="CollapseAnimationLength" Value="250" />
+            </Style>
+            
             
             
         </ResourceDictionary>

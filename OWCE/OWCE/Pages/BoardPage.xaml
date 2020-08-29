@@ -1,17 +1,27 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:views="clr-namespace:OWCE.Views"
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:views="clr-namespace:OWCE.Views" xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
              x:Class="OWCE.Pages.BoardPage"             
              BackgroundColor="White"
              Title="{Binding Name}"
              >
-    <ScrollView>
-        <StackLayout Spacing="16" Margin="0,16,0,0">
-            <views:SpeedRangeDistanceView RPM="{Binding RPM}" WheelCircumference="{Binding WheelCircumference}" />
-            <views:BatteryView BindingContext="{Binding .}" BatteryPercent="{Binding BatteryPercent}" BatteryVoltage="{Binding BatteryVoltage}" BatteryCells="{Binding BatteryCells}"  />
-            <views:PowerView />
-            <views:TemperatureView BindingContext="{Binding .}" ControllerTemp="{Binding ControllerTemperature}" MotorTemp="{Binding MotorTemperature}" BatteryTemp="{Binding BatteryTemp}" />
-            <views:AngleView BindingContext="{Binding .}" Pitch="{Binding Pitch}" Yaw="{Binding Yaw}" Roll="{Binding Roll}"   />
-            <views:FootpadsView />
-        </StackLayout>
-    </ScrollView>        
+    <Grid>
+        <yummy:PancakeView BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
+            <yummy:PancakeView.BackgroundGradientStops>
+                <yummy:GradientStopCollection>
+                    <yummy:GradientStop Color="{StaticResource BackgroundGradientStart}" Offset="0" />
+                    <yummy:GradientStop Color="{StaticResource BackgroundGradientEnd}" Offset="1" />
+                </yummy:GradientStopCollection>
+            </yummy:PancakeView.BackgroundGradientStops>
+        </yummy:PancakeView>
+        <ScrollView>
+            <StackLayout Spacing="16" Margin="0,16,0,0">
+                <views:SpeedRangeDistanceView RPM="{Binding RPM}" WheelCircumference="{Binding WheelCircumference}" />
+                <views:BatteryView BindingContext="{Binding .}" BatteryPercent="{Binding BatteryPercent}" BatteryVoltage="{Binding BatteryVoltage}" BatteryCells="{Binding BatteryCells}"  />
+                <views:PowerView />
+                <views:TemperatureView BindingContext="{Binding .}" ControllerTemp="{Binding ControllerTemperature}" MotorTemp="{Binding MotorTemperature}" BatteryTemp="{Binding BatteryTemp}" />
+                <views:AngleView BindingContext="{Binding .}" Pitch="{Binding Pitch}" Yaw="{Binding Yaw}" Roll="{Binding Roll}"   />
+                <views:FootpadsView />
+            </StackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>
