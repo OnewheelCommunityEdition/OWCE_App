@@ -53,6 +53,26 @@ namespace OWCE.Views
         }
 
 
+
+        public static readonly BindableProperty BatteryVoltageProperty = BindableProperty.Create(
+          "BatteryVoltage",
+          typeof(float),
+          typeof(BatteryView),
+          0f,
+          BindingMode.OneWay);
+
+        public float BatteryVoltage
+        {
+            get
+            {
+                return (float)GetValue(BatteryVoltageProperty);
+            }
+            set
+            {
+                SetValue(BatteryVoltageProperty, value);
+            }
+        }
+
         public static readonly BindableProperty BatteryCellsProperty = BindableProperty.Create(
           "BatteryCells",
           typeof(BatteryCells),

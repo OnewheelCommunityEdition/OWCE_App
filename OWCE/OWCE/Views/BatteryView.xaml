@@ -22,14 +22,7 @@
                         </Label.FormattedText>
                     </Label>
 
-                    <Label HorizontalOptions="End" VerticalOptions="End" Margin="20,0">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span Text="Average: " TextColor="White" FontSize="16" FontFamily="SairaExtraCondensed-Light" />
-                                <Span Text="{Binding BatteryCells.AverageCellVoltage, StringFormat='{0:F2}V'}" TextColor="White" FontSize="16" FontFamily="SairaExtraCondensed-Medium" />
-                            </FormattedString>
-                        </Label.FormattedText>
-                    </Label>
+                    <Label Text="{Binding BatteryVoltage, StringFormat='{0:F2}V'}" TextColor="White" FontSize="16" FontFamily="SairaExtraCondensed-Medium" HorizontalOptions="End"  VerticalOptions="End" Margin="20,0" />
 
 
                     <views:ExpanderArrowView x:Name="ExpanderArrow" HorizontalOptions="End" Margin="17,13" />
