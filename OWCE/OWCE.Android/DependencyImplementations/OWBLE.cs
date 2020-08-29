@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Android.Bluetooth;
 using Android.Bluetooth.LE;
@@ -184,7 +185,8 @@ namespace OWCE.Droid.DependencyImplementations
             if (_connectTaskCompletionSource.Task.IsCanceled == false)
             {
                 _connectTaskCompletionSource.SetResult(true);
-                BoardConnected?.Invoke(new OWBoard(_board));
+                // TODO: Fix this.
+                //BoardConnected?.Invoke(new OWBoard(_board));
             }
         }
 
@@ -519,7 +521,11 @@ namespace OWCE.Droid.DependencyImplementations
         public Action<OWBoard> BoardConnected { get; set; }
         public Action<string, byte[]> BoardValueChanged { get; set; }
 
-        public Task<bool> Connect(OWBaseBoard board)
+        public bool IsScanning => throw new NotImplementedException();
+
+        public Action<string> ErrorOccurred { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public Task<bool> Connect(OWBaseBoard board, CancellationToken cancellationToken)
         {
             _board = board;
 
@@ -551,7 +557,8 @@ namespace OWCE.Droid.DependencyImplementations
 
             return Task.CompletedTask;
         }
-        public async Task StartScanning(int timeout = 15)
+
+        public async void StartScanning()
         {
             if (_isScanning)
                 return;
@@ -584,7 +591,7 @@ namespace OWCE.Droid.DependencyImplementations
                 throw new NotImplementedException("Can't run bluetooth scans on device lower than Android 4.3");
             }
 
-            await Task.Delay(timeout * 1000);
+            await Task.Delay(15 * 1000);
 
             StopScanning();
         }
@@ -805,6 +812,17 @@ namespace OWCE.Droid.DependencyImplementations
 
             // Bluetooth is enabled 
             return true;
+        }
+
+        public bool ReadyToScan()
+        {
+            // TODO: Handle this.
+            return true;
+        }
+
+        public void Shutdown()
+        {
+            // TODO: Handle this.
         }
         #endregion
     }
