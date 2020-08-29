@@ -80,10 +80,10 @@
             </Style>
 
             <Style TargetType="Expander">
-                <Setter Property="ExpandAnimationEasing" Value="CubicInOut" />
-                <Setter Property="ExpandAnimationLength" Value="250" />
-                <Setter Property="CollapseAnimationEasing" Value="CubicInOut" />
-                <Setter Property="CollapseAnimationLength" Value="250" />
+                <Setter Property="ExpandAnimationEasing" Value="{x:Static Easing.CubicIn}" />
+                <Setter Property="ExpandAnimationLength" Value="200" />
+                <Setter Property="CollapseAnimationEasing" Value="{x:Static Easing.CubicOut}" />
+                <Setter Property="CollapseAnimationLength" Value="200" />
             </Style>
             
             
