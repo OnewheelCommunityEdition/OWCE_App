@@ -5,27 +5,23 @@
         <Grid BackgroundColor="#7F01FF" RowDefinitions="121">
             <BoxView BackgroundColor="#6601CC" VerticalOptions="Fill" HorizontalOptions="Start" WidthRequest="100" />
 
-
-            
-
-
                 <Label Text="CURRENT" FontFamily="SairaExtraCondensed-Bold" TextColor="White" CharacterSpacing="0.26" FontSize="16" Margin="20,6,0,0" />
-                <Label Text="117.9A"  TextColor="White"  FontFamily="SairaExtraCondensed-Black" FontSize="80" HorizontalOptions="Center" VerticalOptions="Start"  />
+                <Label Text="{Binding CurrentAmps, StringFormat='{0:F1}A'}"  TextColor="White"  FontFamily="SairaExtraCondensed-Black" FontSize="80" HorizontalOptions="Center" VerticalOptions="Start"  />
 
                 <Label VerticalOptions="End" Margin="20,0">
                     <Label.FormattedText>
                         <FormattedString>
-                            <Span Text="0.00 Ah" FontSize="16" TextColor="White" FontFamily="SairaExtraCondensed-Medium" />
+                            <Span Text="{Binding TripAmpHours, StringFormat='{0:F6} Ah'}" FontSize="16" TextColor="White" FontFamily="SairaExtraCondensed-Medium" />
                             <Span Text=" Trip usage" FontSize="16" TextColor="White" FontFamily="SairaExtraCondensed-Light" />
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
 
-                <Label HorizontalOptions="End" VerticalOptions="End" Margin="20,0">
+                <Label HorizontalTextAlignment="End" HorizontalOptions="Fill" VerticalOptions="End" Margin="20,0">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Trip regen: " TextColor="White" FontSize="16" FontFamily="SairaExtraCondensed-Light" />
-                            <Span Text="509.98 Ah" TextColor="White" FontSize="16" FontFamily="SairaExtraCondensed-Medium" />
+                            <Span Text="{Binding TripRegenAmpHours, StringFormat='{0:F6} Ah'}" TextColor="White" FontSize="16" FontFamily="SairaExtraCondensed-Medium" />
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
