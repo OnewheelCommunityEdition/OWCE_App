@@ -86,7 +86,7 @@ namespace OWCE
             */
         }
 
-        protected async override void OnStart()
+        protected override void OnStart()
         {
             // Handle when your app starts
             AppCenter.Start($"android={AppConstants.AppCenterAndroid};ios={AppConstants.AppCenteriOS}", typeof(Analytics), typeof(Crashes));
