@@ -58,8 +58,9 @@
             <converters:DivideByTwo x:Key="divideByTwo" />
 
              <Style x:Key="PancakeButtonStyle" TargetType="yummy:PancakeView">
-                <Setter Property="BorderColor" Value="White" />
-                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Border">
+                    <yummy:Border Color="White" Thickness="1" />
+                </Setter>
                 <Setter Property="Padding" Value="10" />
                 <Setter Property="CornerRadius" Value="20" />
                 <Setter Property="HeightRequest" Value="40" />
