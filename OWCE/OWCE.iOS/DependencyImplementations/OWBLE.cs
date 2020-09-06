@@ -28,6 +28,7 @@ namespace OWCE.MacOS.DependencyImplementations
         CBCentralManager _centralManager;
         CBPeripheral _peripheral;
         CBService _service;
+        bool _updatingRSSI = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -38,6 +39,7 @@ namespace OWCE.MacOS.DependencyImplementations
         public Action<BluetoothState> BLEStateChanged { get; set; }
         public Action<OWBoard> BoardConnected { get; set; }
         public Action<string, byte[]> BoardValueChanged { get; set; }
+        public Action<int> RSSIUpdated { get; set; }
         Dictionary<CBUUID, TaskCompletionSource<byte[]>> _readQueue = new Dictionary<CBUUID, TaskCompletionSource<byte[]>>();
         Dictionary<CBUUID, TaskCompletionSource<byte[]>> _writeQueue = new Dictionary<CBUUID, TaskCompletionSource<byte[]>>();
         List<CBUUID> _notifyList = new List<CBUUID>();
@@ -100,6 +102,27 @@ namespace OWCE.MacOS.DependencyImplementations
             {
                 _dispatchQueue.Dispose();
                 _dispatchQueue = null;
+            }
+        }
+
+        public void RequestRSSIUpdate()
+        {
+            if (_updatingRSSI)
+            {
+                return;
+            }
+
+            _updatingRSSI = true;
+            _peripheral?.ReadRSSI();            
+        }
+
+        [Export("peripheral:didReadRSSI:error:")]
+        public void RssiRead(CBPeripheral peripheral, NSNumber rssi, NSError error)
+        {
+            if (error == null)
+            {
+                RSSIUpdated?.Invoke(rssi.Int32Value);
+                _updatingRSSI = false;
             }
         }
 

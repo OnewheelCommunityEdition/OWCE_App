@@ -489,6 +489,8 @@ namespace OWCE
             _isAvailable = baseBoard.IsAvailable;
             _nativePeripheral = baseBoard.NativePeripheral;
             _owble.BoardValueChanged += OWBLE_BoardValueChanged;
+            _owble.RSSIUpdated += OWBLE_RSSIUpdated;
+
 
             MessagingCenter.Subscribe<object>(this, "start_recording", (source) =>
             {
@@ -570,13 +572,29 @@ namespace OWCE
             SetValue(characteristicGuid, data);
         }
 
-
+        private void OWBLE_RSSIUpdated(int rssi)
+        {
+            RSSI = rssi;
+        }
 
 
         // TODO: Restore, Dictionary<string, ICharacteristic> _characteristics = new Dictionary<string, ICharacteristic>();
 
         private void RSSIMonitor()
         {
+            Device.StartTimer(TimeSpan.FromSeconds(0.5), () =>
+            {
+                try
+                {
+                    App.Current.OWBLE.RequestRSSIUpdate();
+                }
+                catch (Exception err)
+                {
+                    System.Diagnostics.Debug.WriteLine("RSSI fetch error: " + err.Message);
+                }
+                return true;
+            });
+
             /*
             ThreadPool.QueueUserWorkItem(async (object state) =>
             {
@@ -616,7 +634,7 @@ namespace OWCE
             if (_nativePeripheral == null)
                 return;
 #endif
-            //RSSIMonitor();
+            RSSIMonitor();
 
 
             var characteristicsToReadNow = new List<string>()

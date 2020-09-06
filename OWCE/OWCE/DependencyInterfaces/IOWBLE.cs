@@ -11,6 +11,7 @@ namespace OWCE.DependencyInterfaces
         void StopScanning();
         bool ReadyToScan();
         void Shutdown();
+        void RequestRSSIUpdate();
 
         Task<bool> Connect(OWBaseBoard board, CancellationToken cancellationToken);
         Task Disconnect();
@@ -20,6 +21,7 @@ namespace OWCE.DependencyInterfaces
         Action<OWBaseBoard> BoardDiscovered { get; set; }
         Action<BluetoothState> BLEStateChanged { get; set; }
         Action<string, byte[]> BoardValueChanged { get; set; }
+        Action<int> RSSIUpdated { get; set; }
 
         Task<byte[]> ReadValue(string characteristicGuid, bool important = false);
         Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool important = false);

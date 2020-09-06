@@ -157,6 +157,12 @@ namespace OWCE.Droid.DependencyImplementations
                 Debug.WriteLine($"OnDescriptorWrite: {descriptor.Characteristic.Uuid}, {descriptor.Uuid}");
                 _owble.OnDescriptorWrite(gatt, descriptor, status);
             }
+
+            public override void OnReadRemoteRssi(BluetoothGatt gatt, int rssi, [GeneratedEnum] GattStatus status)
+            {
+                Debug.WriteLine($"OnReadRemoteRssi: {rssi}");
+                _owble.OnReadRemoteRssi(gatt, rssi, status);
+            }
         }
 
 
@@ -258,6 +264,7 @@ namespace OWCE.Droid.DependencyImplementations
         private bool _isScanning = false;
         private BluetoothAdapter _adapter;
         private BluetoothLeScanner _bleScanner;
+        bool _updatingRSSI = false;
 
 
         TaskCompletionSource<bool> _connectTaskCompletionSource = null;
@@ -514,12 +521,20 @@ namespace OWCE.Droid.DependencyImplementations
             ProcessQueue();
         }
 
+        public void OnReadRemoteRssi(BluetoothGatt gatt, int rssi, [GeneratedEnum] GattStatus status)
+        {
+            RSSIUpdated?.Invoke(rssi);
+            _updatingRSSI = false;
+        }
+
+
 
         #region IOWBLE
         public Action<BluetoothState> BLEStateChanged { get; set; }
         public Action<OWBaseBoard> BoardDiscovered { get; set; }
         public Action<OWBoard> BoardConnected { get; set; }
         public Action<string, byte[]> BoardValueChanged { get; set; }
+        public Action<int> RSSIUpdated { get; set; }
 
         public bool IsScanning => throw new NotImplementedException();
 
@@ -823,6 +838,17 @@ namespace OWCE.Droid.DependencyImplementations
         public void Shutdown()
         {
             // TODO: Handle this.
+        }
+
+        public void RequestRSSIUpdate()
+        {
+            if (_updatingRSSI)
+            {
+                return;
+            }
+
+            _updatingRSSI = true;
+            _bluetoothGatt?.ReadRemoteRssi();
         }
         #endregion
     }

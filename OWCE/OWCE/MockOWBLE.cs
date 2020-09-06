@@ -11,6 +11,7 @@ namespace OWCE
 {
     public class MockOWBLE : IOWBLE, INotifyPropertyChanged
     {
+        const string RSSIKey = "RSSI";
         public event PropertyChangedEventHandler PropertyChanged;
 
         string _logFilename;
@@ -47,7 +48,14 @@ namespace OWCE
                             Thread.Sleep((int)sleepDuration);
                         }
 
-                        BoardValueChanged.Invoke(currentEvent.Uuid, currentEvent.Data.ToByteArray());
+                        if (currentEvent.Uuid == RSSIKey)
+                        {
+                            RSSIUpdated?.Invoke(BitConverter.ToInt32(currentEvent.Data.ToByteArray()));
+                        }
+                        else
+                        {
+                            BoardValueChanged.Invoke(currentEvent.Uuid, currentEvent.Data.ToByteArray());
+                        }
 
                     }
                     while (fs.Position < fs.Length);
@@ -64,6 +72,7 @@ namespace OWCE
         public Action<OWBoard> BoardConnected { get; set; }
         public Action<string, byte[]> BoardValueChanged { get; set; }
         public Action<string> ErrorOccurred { get; set; }
+        public Action<int> RSSIUpdated { get; set; }
 
         bool _isScanning = false;
         public bool IsScanning
@@ -169,6 +178,11 @@ namespace OWCE
                 _messagePumpThread.Abort();
                 _messagePumpThread = null;
             }
+        }
+
+        public void RequestRSSIUpdate()
+        {
+
         }
 
 
