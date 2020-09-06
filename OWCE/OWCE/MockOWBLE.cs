@@ -29,12 +29,6 @@ namespace OWCE
                 Thread.Sleep(100);
             }
 
-            ushort firmwareRevision = 4034;
-            ushort hardwareRevision = 3206;
-
-            BoardValueChanged.Invoke(OWBoard.FirmwareRevisionUUID, BitConverter.GetBytes(firmwareRevision));
-            BoardValueChanged.Invoke(OWBoard.HardwareRevisionUUID, BitConverter.GetBytes(hardwareRevision));
-
             OWBoardEvent previousEvent = null;
             OWBoardEvent currentEvent = null;
             try
@@ -53,23 +47,6 @@ namespace OWCE
                             Thread.Sleep((int)sleepDuration);
                         }
 
-                        if (currentEvent.Uuid == OWBoard.FirmwareRevisionUUID)
-                        {
-                            int x = 0;
-
-                            /*
-                            if (currentEvent.da. >= 4000)
-                            {
-                                BatteryCells.CellCount = 15;
-                                BatteryCells.IgnoreCell(15);
-                                OnPropertyChanged("BatteryCells");
-                            }
-                            else
-                            {
-                                BatteryCells.CellCount = 16;
-                            }
-                            */
-                        }
                         BoardValueChanged.Invoke(currentEvent.Uuid, currentEvent.Data.ToByteArray());
 
                     }

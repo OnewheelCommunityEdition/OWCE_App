@@ -473,7 +473,7 @@ namespace OWCE
 
         bool _isLogging = false;
         OWBoardEventList _events = new OWBoardEventList();
-        List<OWBoardEvent> _initialEvents = new List<OWBoardEvent>();
+        List<OWBoardEvent> _initialEvents;
         Ride _currentRide = null;
         bool _keepHandshakeBackgroundRunning = false;
         List<byte> _handshakeBuffer = null;
@@ -508,32 +508,49 @@ namespace OWCE
 
         public virtual void Init()
         {
-            //StartLogging();
+#if DEBUG
+            if (DeviceInfo.DeviceType == DeviceType.Physical)
+            {
+                StartLogging();
+            }
+#endif
         }
 
+        void LogData(string characteristicGuid, byte[] data)
+        {
+            var byteString = ByteString.CopyFrom(data);
+#if DEBUG
+            // Remove serials from debug builds recording data.
+            if (characteristicGuid.Equals(SerialNumberUUID, StringComparison.InvariantCultureIgnoreCase))
+            {
+                byteString = ByteString.CopyFrom(BitConverter.GetBytes(123456));
+            }
+            else if (characteristicGuid.Equals(BatterySerialUUID, StringComparison.InvariantCultureIgnoreCase))
+            {
+                byteString = ByteString.CopyFrom(BitConverter.GetBytes(789123));
+            }
+#endif
 
+            _events.BoardEvents.Add(new OWBoardEvent()
+            {
+                Uuid = characteristicGuid,
+                Data = ByteString.CopyFrom(data),
+                Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+            });
+
+            if (_events.BoardEvents.Count > 1000)
+            {
+                SaveEvents();
+            }
+        }
 
         private void OWBLE_BoardValueChanged(string characteristicGuid, byte[] data)
         {
             //Debug.WriteLine($"{characteristicGuid} {BitConverter.ToString(data)}");
 
-
             if (_isLogging)
             {
-                if (characteristicGuid.Equals(SerialNumberUUID, StringComparison.InvariantCultureIgnoreCase) == false)
-                {
-                    _events.BoardEvents.Add(new OWBoardEvent()
-                    {
-                        Uuid = characteristicGuid,
-                        Data = ByteString.CopyFrom(data),
-                        Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
-                    });
-
-                    if (_events.BoardEvents.Count > 1000)
-                    {
-                        SaveEvents();
-                    }
-                }
+                LogData(characteristicGuid, data);
             }
 
 
@@ -1005,6 +1022,7 @@ namespace OWCE
             var bytes = BitConverter.GetBytes(value);
             return bytes;
         }
+
         private void SetValue(string uuid, byte[] data, bool initialData = false)
         {
             if (data == null)
@@ -1014,12 +1032,24 @@ namespace OWCE
 
             if (initialData)
             {
-                _initialEvents.Add(new OWBoardEvent()
+                if (_isLogging)
                 {
-                    Uuid = uuid,
-                    Data = ByteString.CopyFrom(data),
-                    Timestamp = DateTime.UtcNow.Ticks,
-                });
+                    LogData(uuid, data);
+                }
+                else
+                {
+                    if (_initialEvents == null)
+                    {
+                        _initialEvents = new List<OWBoardEvent>();
+                    }
+
+                    _initialEvents.Add(new OWBoardEvent()
+                    {
+                        Uuid = uuid,
+                        Data = ByteString.CopyFrom(data),
+                        Timestamp = DateTime.UtcNow.Ticks,
+                    });
+                }
             }
 
 
@@ -1236,8 +1266,10 @@ namespace OWCE
 
             _isLogging = true;
             _events = new OWBoardEventList();
-            _events.BoardEvents.AddRange(_initialEvents);
-
+            if (_initialEvents != null)
+            {
+                _events.BoardEvents.AddRange(_initialEvents);
+            }
 
             /*
             if (CrossGeolocator.Current.IsGeolocationAvailable)
