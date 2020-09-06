@@ -24,12 +24,12 @@
                 <BoxView VerticalOptions="End" HeightRequest="33" Opacity="0.34" BackgroundColor="Black" />
             </yummy:PancakeView>
 
-            <Label Text="roll" Padding="0,0,0,30" FontSize="16" TextColor="White" FontFamily="SairaExtraCondensed-Medium" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.1666,0.5,AutoSize,AutoSize" />
-            <Label Text="{Binding Roll, StringFormat='{0:F0}°'}" Padding="0,30,0,0"  FontSize="40" TextColor="White" FontFamily="SairaExtraCondensed-Medium" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.1666,0.5,AutoSize,AutoSize" />
+            <Label Text="roll" Padding="0,0,0,30" FontSize="16" WidthRequest="66" HorizontalTextAlignment="Center" TextColor="White" FontFamily="SairaExtraCondensed-Medium" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.1666,0.5,AutoSize,AutoSize" />
+            <Label Text="{Binding Roll, StringFormat='{0:F0}°'}" WidthRequest="66" HorizontalTextAlignment="Center" Padding="0,30,0,0"  FontSize="40" TextColor="White" FontFamily="SairaExtraCondensed-Medium" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.1666,0.5,AutoSize,AutoSize" />
                 
 
-            <Label Text="yaw" Padding="0,0,0,30" FontSize="16" TextColor="White" FontFamily="SairaExtraCondensed-Medium" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.8333,0.5,AutoSize,AutoSize" />
-            <Label Text="{Binding Yaw, StringFormat='{0:F0}°'}" Padding="0,30,0,0"  FontSize="40" TextColor="White" FontFamily="SairaExtraCondensed-Medium" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.8333,0.5,AutoSize,AutoSize" />
+            <Label Text="yaw" Padding="0,0,0,30" FontSize="16" WidthRequest="66" HorizontalTextAlignment="Center" TextColor="White" FontFamily="SairaExtraCondensed-Medium" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.8333,0.5,AutoSize,AutoSize" />
+            <Label Text="{Binding Yaw, StringFormat='{0:F0}°'}" WidthRequest="66" HorizontalTextAlignment="Center" Padding="0,30,0,0"  FontSize="40" TextColor="White" FontFamily="SairaExtraCondensed-Medium" AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="0.8333,0.5,AutoSize,AutoSize" />
 
         </AbsoluteLayout>  
     </yummy:PancakeView>
