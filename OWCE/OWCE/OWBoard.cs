@@ -594,38 +594,6 @@ namespace OWCE
                 }
                 return true;
             });
-
-            /*
-            ThreadPool.QueueUserWorkItem(async (object state) =>
-            {
-                while (_device.State == Plugin.BLE.Abstractions.DeviceState.Connected)
-                {
-                    try
-                    {
-                        bool didUpdate = await _device.UpdateRssiAsync();
-                        if (didUpdate)
-                        {
-                            RSSI = _device.Rssi;
-                            if (_isLogging)
-                            {
-                                _events.BoardEvents.Add(new OWBoardEvent()
-                                {
-                                    Uuid = "RSSI",
-                                    Data = ByteString.CopyFrom(BitConverter.GetBytes(_device.Rssi)),
-                                    Timestamp = DateTime.Now.Ticks,
-                                });
-                            }
-                        }
-                    }
-                    catch (Exception err)
-                    {
-                        System.Diagnostics.Debug.WriteLine("RSSI fetch error: " + err.Message);
-                    }
-                    await Task.Delay(1000);
-                }
-
-            });
-            */
         }
 
         internal async Task SubscribeToBLE()
