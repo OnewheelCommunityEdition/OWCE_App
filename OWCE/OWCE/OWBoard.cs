@@ -1153,10 +1153,24 @@ namespace OWCE
                     CurrentAmps = (float)value * 0.001f * scaleFactor;
                     break;
                 case TripAmpHoursUUID:
-                    TripAmpHours = (float)value * 0.02f; // (value / 50)
+                    if (BoardType == OWBoardType.V1)
+                    {
+                        TripAmpHours = (float)value * 0.00009f;
+                    }
+                    else
+                    {
+                        TripAmpHours = (float)value * 0.00018f;
+                    }
                     break;
                 case TripRegenAmpHoursUUID:
-                    TripRegenAmpHours = (float)value * 0.02f; // (value / 50)
+                    if (BoardType == OWBoardType.V1)
+                    {
+                        TripRegenAmpHours = (float)value * 0.00009f;
+                    }
+                    else
+                    {
+                        TripRegenAmpHours = (float)value * 0.00018f;
+                    }
                     break;
                 case BatteryVoltageUUID:
                     BatteryVoltage = 0.1f * value;
