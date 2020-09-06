@@ -24,7 +24,7 @@
                         </Label.FormattedText>
                     </Label>
 
-                    <Label Text="{Binding BatteryVoltage, StringFormat='{0:F2}V'}" TextColor="White" FontSize="16" FontFamily="SairaExtraCondensed-Medium" HorizontalOptions="End"  VerticalOptions="End" Margin="20,0" />
+                    <Label Text="{Binding BatteryVoltage, StringFormat='{0:F2}V'}" TextColor="White" FontSize="16" FontFamily="SairaExtraCondensed-Medium" HorizontalTextAlignment="End" HorizontalOptions="Fill" VerticalOptions="End" Margin="20,0" />
 
 
                     <views:ExpanderArrowView x:Name="ExpanderArrow" HorizontalOptions="End" Margin="17,13" />

@@ -29,7 +29,7 @@
                     </Label>
 
 
-                    <Label HorizontalOptions="End" VerticalOptions="End" Margin="20,0">
+                    <Label HorizontalTextAlignment="End" HorizontalOptions="Fill" VerticalOptions="End" Margin="20,0">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="lifetime " TextColor="Black"  FontSize="16" FontFamily="SairaExtraCondensed-Light" />
