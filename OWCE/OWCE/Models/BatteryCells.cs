@@ -113,16 +113,19 @@ namespace OWCE.Models
 
         public void SetCell(uint cellID, float voltage, string format = "F2")
         {
+            // Skip last cell on XR/Pint.
+            if (cellID == 15 && CellCount == 15)
+            {
+                return;
+            }
+
             if (_cells.ContainsKey(cellID) == false || _cells[cellID] != voltage)
             {
                 _cells[cellID] = voltage;
 
-                // TODO: How to handle this by reducing allocations. Spans?
-                var cells = _cells.Values.Where(v => v > 0);
-                LowestCellVoltage = cells.Min();
-                HighestCellVoltage = cells.Max();
-                AverageCellVoltage = cells.Average();
-                cells = null;
+                LowestCellVoltage = _cells.Values.Min();
+                HighestCellVoltage = _cells.Values.Max();
+                AverageCellVoltage = _cells.Values.Average();
             }
 
             if (_ignoredCells.Contains(cellID))
