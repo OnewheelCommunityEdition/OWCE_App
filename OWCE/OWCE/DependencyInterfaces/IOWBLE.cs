@@ -22,6 +22,10 @@ namespace OWCE.DependencyInterfaces
         Action<BluetoothState> BLEStateChanged { get; set; }
         Action<string, byte[]> BoardValueChanged { get; set; }
         Action<int> RSSIUpdated { get; set; }
+        Action BoardDisconnected { get; set; }
+        Action BoardReconnecting { get; set; }
+        Action BoardReconnected { get; set; }
+
 
         Task<byte[]> ReadValue(string characteristicGuid, bool important = false);
         Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool important = false);

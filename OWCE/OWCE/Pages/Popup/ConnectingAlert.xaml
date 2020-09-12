@@ -26,7 +26,7 @@
                 <Label Grid.Row="0" Text="{Binding SuperTitleText}" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="16" CharacterSpacing="-0.26" Margin="22,5,22,0" VerticalOptions="Start" />
                 <Label Grid.Row="1" Text="{Binding TitleText}" FontFamily="SairaExtraCondensed-Black" TextColor="Black" FontSize="36" HorizontalTextAlignment="Center" />
                 <Grid Grid.Row="2" RowDefinitions="Auto" ColumnDefinitions="Auto,Auto" HorizontalOptions="Center"  Margin="0,9,0,18" >
-                    <Label Grid.Column="0" Text="Connecting..." FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="24" VerticalOptions="Center" CharacterSpacing="0.26" />
+                    <Label Grid.Column="0" Text="{Binding ConnectingText}" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="24" VerticalOptions="Center" CharacterSpacing="0.26" />
                     <ActivityIndicator Grid.Column="1" IsRunning="True" Color="Black" WidthRequest="26" HeightRequest="26" VerticalOptions="Center" />
                 </Grid>
                 <Grid Grid.Row="3" BackgroundColor="White" HeightRequest="76">

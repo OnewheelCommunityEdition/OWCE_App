@@ -6,11 +6,17 @@ using RestSharp;
 using System.Net;
 using System.IO;
 using System.Threading.Tasks;
+using OWCE.Pages.Popup;
+using Rg.Plugins.Popup.Services;
+using System.Linq;
 
 namespace OWCE.Pages
 {
     public partial class BoardPage : ContentPage
     {
+        ConnectingAlert _reconnectingAlert;
+
+
         public OWBoard Board { get; private set; }
         /*
         public string SpeedHeader
@@ -24,7 +30,6 @@ namespace OWCE.Pages
 
         private bool _initialSubscirbe = false;
 
-        private OWBoard _board;
         public BoardPage(OWBoard board)
         {
             Board = board;
@@ -36,33 +41,50 @@ namespace OWCE.Pages
             // I really don't like this.
             _ = Board.SubscribeToBLE();
 
-            //_board.PropertyChanged += Board_PropertyChanged;
-           
+            App.Current.OWBLE.BoardDisconnected += OWBLE_BoardDisconnected;
+            App.Current.OWBLE.BoardReconnecting += OWBLE_BoardReconnecting;
+            App.Current.OWBLE.BoardReconnected += OWBLE_BoardReconnected;
 
 
             NavigationPage.SetHasBackButton(this, false);
         }
 
-        private void Board_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        private void OWBLE_BoardDisconnected()
         {
-            Console.WriteLine(e.PropertyName);
-
-            /*
-            if (e.PropertyName == "Yaw")
-            {
-                this.AngleView.Yaw = Board.Yaw;
-            }
-            else if (e.PropertyName == "Roll")
-            {
-                this.AngleView.Roll = Board.Roll;
-            }
-            else if (e.PropertyName == "Pitch")
-            {
-                this.AngleView.Pitch = Board.Pitch;
-            }
-            Console.WriteLine("X: " + e.PropertyName);
-            */
+            Console.WriteLine("OWBLE_BoardDisconnected");
         }
+
+        private void OWBLE_BoardReconnecting()
+        {
+            Console.WriteLine("OWBLE_BoardReconnecting");
+            
+            _reconnectingAlert = new ConnectingAlert(Board.Name, new Command(() =>
+            {
+                // TODO Disconnect.
+                PopupNavigation.Instance.RemovePageAsync(_reconnectingAlert);
+                _reconnectingAlert = null;
+            }), "Reconnecting...");
+            
+
+            if (PopupNavigation.Instance.PopupStack.Contains(_reconnectingAlert) == false)
+            {
+                PopupNavigation.Instance.PushAsync(_reconnectingAlert, true);
+            }
+
+        }
+
+        private void OWBLE_BoardReconnected()
+        {
+            Console.WriteLine("OWBLE_BoardReconnected");
+
+            if (PopupNavigation.Instance.PopupStack.Contains(_reconnectingAlert))
+            {
+                PopupNavigation.Instance.RemovePageAsync(_reconnectingAlert);
+                _reconnectingAlert = null;
+            }
+        }
+
+
 
         protected override void OnAppearing()
         {

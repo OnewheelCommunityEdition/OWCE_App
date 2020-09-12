@@ -73,6 +73,10 @@ namespace OWCE
         public Action<string, byte[]> BoardValueChanged { get; set; }
         public Action<string> ErrorOccurred { get; set; }
         public Action<int> RSSIUpdated { get; set; }
+        public Action BoardDisconnected { get; set; }
+        public Action BoardReconnecting { get; set; }
+        public Action BoardReconnected { get; set; }
+
 
         bool _isScanning = false;
         public bool IsScanning
@@ -91,6 +95,7 @@ namespace OWCE
             }
         }
 
+      
         protected void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
@@ -125,6 +130,7 @@ namespace OWCE
         public async Task Disconnect()
         {
             await Task.Delay(1000);
+            BoardDisconnected?.Invoke();
         }
 
         public Task<byte[]> ReadValue(string characteristicGuid, bool important = false)

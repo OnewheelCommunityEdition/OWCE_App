@@ -539,6 +539,9 @@ namespace OWCE.Droid.DependencyImplementations
         public bool IsScanning => throw new NotImplementedException();
 
         public Action<string> ErrorOccurred { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Action BoardDisconnected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Action BoardReconnecting { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Action BoardReconnected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public Task<bool> Connect(OWBaseBoard board, CancellationToken cancellationToken)
         {

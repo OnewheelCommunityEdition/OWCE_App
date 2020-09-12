@@ -35,14 +35,21 @@ namespace OWCE.MacOS.DependencyImplementations
         public Action<OWBaseBoard> BoardDiscovered { get; set; }
         public Action<String> ErrorOccurred { get; set; }
         TaskCompletionSource<bool> _connectionCompletionSource = null;
+        TaskCompletionSource<bool> _disconnectionCompletionSource = null;
+
         OWBaseBoard _board;
         public Action<BluetoothState> BLEStateChanged { get; set; }
         public Action<OWBoard> BoardConnected { get; set; }
         public Action<string, byte[]> BoardValueChanged { get; set; }
         public Action<int> RSSIUpdated { get; set; }
+        public Action BoardDisconnected { get; set; }
+        public Action BoardReconnecting { get; set; }
+        public Action BoardReconnected { get; set; }
         Dictionary<CBUUID, TaskCompletionSource<byte[]>> _readQueue = new Dictionary<CBUUID, TaskCompletionSource<byte[]>>();
         Dictionary<CBUUID, TaskCompletionSource<byte[]>> _writeQueue = new Dictionary<CBUUID, TaskCompletionSource<byte[]>>();
         List<CBUUID> _notifyList = new List<CBUUID>();
+        bool _requestingDisconnect = false;
+        bool _reconnecting = false;
 
 
 
@@ -373,20 +380,57 @@ namespace OWCE.MacOS.DependencyImplementations
         {
             Debug.WriteLine("CentralManager_ConnectedPeripheral: " + peripheral.Name);
 
-            var services = _peripheral.Services;
-            _peripheral.DiscoverServices(new CBUUID[] { OWBoard.ServiceUUID.ToCBUUID() });
+            if (_reconnecting)
+            {
+                _reconnecting = false;
+                BoardReconnected?.Invoke();
+            }
+            else
+            {
+                //_connectionCompletionSource.SetResult(true);
+
+                var services = _peripheral.Services;
+                _peripheral.DiscoverServices(new CBUUID[] { OWBoard.ServiceUUID.ToCBUUID() });
+            }
+
+
         }
 
         [Export("centralManager:didDisconnectPeripheral:error:")]
         public void CentralManager_DisconnectedPeripheral(CBCentralManager central, CBPeripheral peripheral, NSError error)
         {
             Debug.WriteLine("CentralManager_DisconnectedPeripheral");
+
+            BoardDisconnected?.Invoke();
+
+
+            if (_requestingDisconnect)
+            {
+                // Disconnect was because the user hit the disconnect button.
+                if (_disconnectionCompletionSource != null)
+                {
+                    _disconnectionCompletionSource.TrySetResult(true);
+                }
+            }
+            else
+            {
+                Reconnect();
+            }
         }
 
         [Export("centralManager:didFailToConnectPeripheral:error:")]
         public void CentralManager_FailedToConnectPeripheral(CBCentralManager central, CBPeripheral peripheral, NSError error)
         {
             Debug.WriteLine("CentralManager_FailedToConnectPeripheral");
+            if (_reconnecting)
+            {
+                Reconnect();
+            }
+            else
+            {
+                ErrorOccurred?.Invoke("Unable to connect to board.");
+            }
+
         }
 
         [Export("centralManager:didRetrieveConnectedPeripherals:")]
@@ -442,6 +486,9 @@ namespace OWCE.MacOS.DependencyImplementations
    
         public Task<bool> Connect(OWBaseBoard board, CancellationToken cancellationToken)
         {
+            _requestingDisconnect = false;
+            _reconnecting = false;
+
             _connectionCompletionSource = new TaskCompletionSource<bool>();
 
             if (board.NativePeripheral is CBPeripheral peripheral)
@@ -469,11 +516,32 @@ namespace OWCE.MacOS.DependencyImplementations
             return _connectionCompletionSource.Task;
         }
 
+        void Reconnect()
+        {
+            // Disconnect was because board lost connection.
+            BoardReconnecting?.Invoke();
+            _reconnecting = true;
+
+            var options = new PeripheralConnectionOptions()
+            {
+                NotifyOnDisconnection = true,
+#if __IOS__
+                NotifyOnConnection = true,
+                NotifyOnNotification = true,
+#endif
+            };
+
+            _centralManager.ConnectPeripheral(_peripheral, options);
+        }
+
+
         public Task Disconnect()
         {
             Debug.WriteLine("Disconnect");
+            _requestingDisconnect = true;
+            _disconnectionCompletionSource = new TaskCompletionSource<bool>();
             _centralManager.CancelPeripheralConnection(_peripheral);
-            return Task.CompletedTask;
+            return _disconnectionCompletionSource.Task;
         }
 
         public Task<byte[]> ReadValue(string characteristicGuid, bool important = false)
