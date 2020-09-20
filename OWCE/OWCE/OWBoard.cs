@@ -554,14 +554,14 @@ namespace OWCE
             SetValue(FirmwareRevisionUUID, firmwareRevision, true);
 
 
-            if (_firmwareRevision.Value >= 5000)
+            if (_hardwareRevision.Value >= 5300)
             {
                 MessagingCenter.Send<OWBoard>(this, "invalid_board_pint");
                 return;
             }
-            else if (_firmwareRevision.Value >= 4141)
+            else if (_hardwareRevision.Value >= 4210)
             {
-                MessagingCenter.Send<OWBoard>(this, "invalid_board_xr4141");
+                MessagingCenter.Send<OWBoard>(this, "invalid_board_xr4210");
                 return;
             }
 

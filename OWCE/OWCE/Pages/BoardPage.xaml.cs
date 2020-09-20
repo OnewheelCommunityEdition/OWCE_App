@@ -57,7 +57,7 @@ namespace OWCE.Pages
                 await DisconnectAndPop();
             });
 
-            MessagingCenter.Subscribe<OWBoard>(this, "invalid_board_xr4141", async (board) =>
+            MessagingCenter.Subscribe<OWBoard>(this, "invalid_board_xr4210", async (board) =>
             {
                 await DisplayAlert("Sorry", "Onewheel XR with hardware version greater than 4210 is currently not supported.\n\nWell... it is, but the workaround to get it to work could get your IP blocked by Future Motion. Hopefully a workaround is available in the future.", "Ok");
                 await DisconnectAndPop();
@@ -69,7 +69,7 @@ namespace OWCE.Pages
             base.OnDisappearing();
 
             MessagingCenter.Unsubscribe<OWBoard>(this, "invalid_board_pint");
-            MessagingCenter.Unsubscribe<OWBoard>(this, "invalid_board_xr4141");
+            MessagingCenter.Unsubscribe<OWBoard>(this, "invalid_board_xr4210");
         }
 
         protected override void OnSizeAllocated(double width, double height)
