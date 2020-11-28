@@ -142,6 +142,8 @@ namespace OWCE
         {
             IsScanning = true;
 
+            System.Diagnostics.Debug.WriteLine($"Logs directory: {App.Current.LogsDirectory}");
+
             var files = Directory.GetFiles(App.Current.LogsDirectory, "*.bin");
             var rand = new Random();
             foreach (var file in files)
@@ -171,7 +173,7 @@ namespace OWCE
             await Task.Delay(10);
         }
 
-        public async Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool important = false)
+        public async Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool overrideExistingQueue = false)
         {
             await Task.Delay(10);
             return null;

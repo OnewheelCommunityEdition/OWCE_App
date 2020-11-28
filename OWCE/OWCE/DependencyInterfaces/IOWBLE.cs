@@ -28,7 +28,7 @@ namespace OWCE.DependencyInterfaces
 
 
         Task<byte[]> ReadValue(string characteristicGuid, bool important = false);
-        Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool important = false);
+        Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool overrideExistingQueue = false);
         Task SubscribeValue(string characteristicGuid, bool important = false);
         Task UnsubscribeValue(string characteristicGuid, bool important = false);
     }

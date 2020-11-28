@@ -10,13 +10,20 @@ namespace OWCE.Converters
         {
             if (value is float distanceInMiles)
             {
+                var format = "F0";
+
+                if (parameter is string formatString)
+                {
+                    format = formatString;
+                }
+
                 if (App.Current.MetricDisplay == false)
                 {
-                    return $"{distanceInMiles:F0}mi";
+                    return $"{distanceInMiles.ToString(format)} mi";
                 }
 
                 var distanceKilometers = distanceInMiles * 1.60934;
-                return $"{distanceKilometers:F0}km";
+                return $"{distanceKilometers.ToString(format)} km";
             }
 
             return "Unknown";

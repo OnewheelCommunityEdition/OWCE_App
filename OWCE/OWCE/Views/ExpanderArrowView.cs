@@ -28,6 +28,7 @@ namespace OWCE.Views
 
         public ExpanderArrowView()
         {
+            InputTransparent = true;
             HorizontalOptions = LayoutOptions.Start;
             VerticalOptions = LayoutOptions.Start;
             WidthRequest = 15;

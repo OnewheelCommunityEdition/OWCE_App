@@ -30,6 +30,23 @@ namespace OWCE
         Pint,
     };
 
+    public struct RideModes
+    {
+        public const int V1_Classic = 1;
+        public const int V1_Extreme = 2;
+        public const int V1_Elevated = 3;
+        public const int PlusXR_Sequoia = 4;
+        public const int PlusXR_Cruz = 5;
+        public const int PlusXR_Mission = 6;
+        public const int PlusXR_Elevated = 7;
+        public const int PlusXR_Delirium = 8;
+        public const int PlusXR_Custom = 9;
+        public const int Pint_Redwood = 5;
+        public const int Pint_Pacific = 6;
+        public const int Pint_Elevated = 7;
+        public const int Pint_Skyline = 8;
+    }
+
     public class OWBoard : OWBaseBoard
     {
         public static readonly Guid ServiceUUID = new Guid("E659F300-EA98-11E3-AC10-0800200C9A66");
@@ -263,20 +280,26 @@ namespace OWCE
             set { if (_speed.AlmostEqualTo(value) == false) { _speed = value; OnPropertyChanged(); } }
         }
 
-        private int _hardwareRevision;
-        public int HardwareRevision
+        private ushort _hardwareRevision;
+        public ushort HardwareRevision
         {
             get { return _hardwareRevision; }
             set { if (_hardwareRevision != value) { _hardwareRevision = value; OnPropertyChanged(); } }
         }
 
-        private int _rideMode;
-        public int RideMode
+        private ushort _rideMode;
+        public ushort RideMode
         {
             get { return _rideMode; }
             set { if (_rideMode != value) { _rideMode = value; OnPropertyChanged(); OnPropertyChanged("RideModeString"); } }
         }
 
+        private ushort _incomingRideMode;
+        public ushort IncomingRideMode
+        {
+            get { return _incomingRideMode; }
+            set { if (_incomingRideMode != value) { _incomingRideMode = value; OnPropertyChanged(); } }
+        }
 
         public string RideModeString
         {
@@ -319,6 +342,13 @@ namespace OWCE
 
                 return "Unknown";
             }
+        }
+
+        private bool? _simpleStopEnabled = null;
+        public bool? SimpleStopEnabled
+        {
+            get { return _simpleStopEnabled; }
+            set { if (_simpleStopEnabled != value) { _simpleStopEnabled = value; OnPropertyChanged(); } }
         }
 
         /*
@@ -548,7 +578,7 @@ namespace OWCE
 
         private void OWBLE_BoardValueChanged(string characteristicGuid, byte[] data)
         {
-            //Debug.WriteLine($"{characteristicGuid} {BitConverter.ToString(data)}");
+            Debug.WriteLine($"{characteristicGuid} {BitConverter.ToString(data)}");
 
             if (_isLogging)
             {
@@ -630,7 +660,7 @@ namespace OWCE
                 //BatteryVoltageUUID,
                 //SafetyHeadroomUUID,
                 //HardwareRevisionUUID,
-                //LifetimeOdometerUUID,
+                LifetimeOdometerUUID,
                 //LifetimeAmpHoursUUID,
                 RideModeUUID,
                 //BatteryCellsUUID,
@@ -668,11 +698,11 @@ namespace OWCE
                 BatteryTemperatureUUID,
                 BatteryVoltageUUID,
                 //SafetyHeadroomUUID,
-                //RideModeUUID,
+                RideModeUUID,
                 //HardwareRevisionUUID,
                 LifetimeOdometerUUID,
                 LifetimeAmpHoursUUID,
-                BatteryCellsUUID,
+                //BatteryCellsUUID,
                 //LastErrorCodeUUID,
                 //SerialRead,
                 //SerialWrite,
@@ -724,12 +754,6 @@ namespace OWCE
             foreach (var characteristic in characteristicsToReadNow)
             {
                 var data = await _owble.ReadValue(characteristic);
-                var intValue = BitConverter.ToUInt16(data);
-
-                if (characteristic == LifetimeOdometerUUID)
-                {
-                    int blahsda = 0;
-                }
                 SetValue(characteristic, data, true);
             }
 
@@ -1170,18 +1194,25 @@ namespace OWCE
                     if (value >= 1 && value <= 2999)
                     {
                         BoardType = OWBoardType.V1;
+                        SimpleStopEnabled = null;
                     }
                     else if (value >= 3000 && value <= 3999)
                     {
                         BoardType = OWBoardType.Plus;
+                        SimpleStopEnabled = null;
                     }
                     else if (value >= 4000 && value <= 4999)
                     {
                         BoardType = OWBoardType.XR;
+                        SimpleStopEnabled = null;
                     }
                     else if (value >= 5000 && value <= 5999)
                     {
                         BoardType = OWBoardType.Pint;
+                        if (SimpleStopEnabled == null)
+                        {
+                            SimpleStopEnabled = false;
+                        }
                     }
 
                     if (HardwareRevision >= 4000)
@@ -1480,6 +1511,15 @@ namespace OWCE
             }
 
             return "Unknown";
+        }
+
+
+
+        public async void ChangeRideMode(ushort rideMode)
+        {
+            _incomingRideMode = rideMode;
+            byte[] rideModeBytes = BitConverter.GetBytes(rideMode);
+            var result = await App.Current.OWBLE.WriteValue(OWBoard.RideModeUUID, rideModeBytes, true);
         }
     }
 

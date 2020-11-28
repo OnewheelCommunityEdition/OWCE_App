@@ -46,7 +46,7 @@ namespace OWCE.MacOS.DependencyImplementations
         public Action BoardReconnecting { get; set; }
         public Action BoardReconnected { get; set; }
         Dictionary<CBUUID, TaskCompletionSource<byte[]>> _readQueue = new Dictionary<CBUUID, TaskCompletionSource<byte[]>>();
-        Dictionary<CBUUID, TaskCompletionSource<byte[]>> _writeQueue = new Dictionary<CBUUID, TaskCompletionSource<byte[]>>();
+        List<CharacteristicValueRequest> _writeQueue = new List<CharacteristicValueRequest>();
         List<CBUUID> _notifyList = new List<CBUUID>();
         bool _requestingDisconnect = false;
         bool _reconnecting = false;
@@ -324,7 +324,8 @@ namespace OWCE.MacOS.DependencyImplementations
                 return;
             }
 
-            if (_writeQueue.ContainsKey(characteristic.UUID) == false)
+            var writeCharacteristicValueRequest = _writeQueue.FirstOrDefault(t => t.CharacteristicId.Equals(characteristic.UUID));
+            if (writeCharacteristicValueRequest == null)
             {
                 return;
             }
@@ -352,9 +353,8 @@ namespace OWCE.MacOS.DependencyImplementations
                 dataBytes = null;
             }
 
-            var task = _writeQueue[characteristic.UUID];
-            _writeQueue.Remove(characteristic.UUID);
-            task.SetResult(dataBytes);
+            _writeQueue.Remove(writeCharacteristicValueRequest);
+            writeCharacteristicValueRequest.CompletionSource.SetResult(dataBytes);
         }
         #endregion
 
@@ -579,7 +579,7 @@ namespace OWCE.MacOS.DependencyImplementations
             return taskCompletionSource.Task;
         }
 
-        public Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool important = false)
+        public Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool overrideExistingQueue = false)
         {
             var cbuuid = CBUUID.FromString(characteristicGuid);
 
@@ -612,15 +612,14 @@ namespace OWCE.MacOS.DependencyImplementations
 
             var taskCompletionSource = new TaskCompletionSource<byte[]>();
 
-            if (important)
+            CharacteristicValueRequest characteristicValueRequest = new CharacteristicValueRequest(cbuuid, taskCompletionSource, nsData);
+
+
+            if (overrideExistingQueue)
             {
-                // TODO: Put this at the start of the queue.
-                _writeQueue.Add(cbuuid, taskCompletionSource);
+                _writeQueue.RemoveAll(t => t.CharacteristicId.Equals(cbuuid));
             }
-            else
-            {
-                _writeQueue.Add(cbuuid, taskCompletionSource);
-            }
+            _writeQueue.Add(characteristicValueRequest);
 
             _peripheral.WriteValue(nsData, characteristic, CBCharacteristicWriteType.WithResponse);
 

@@ -168,7 +168,7 @@ namespace OWCE.Droid.DependencyImplementations
 
         Dictionary<string, BluetoothGattCharacteristic> _characteristics = new Dictionary<string, BluetoothGattCharacteristic>();
         Dictionary<string, TaskCompletionSource<byte[]>> _readQueue = new Dictionary<string, TaskCompletionSource<byte[]>>();
-        Dictionary<string, TaskCompletionSource<byte[]>> _writeQueue = new Dictionary<string, TaskCompletionSource<byte[]>>();
+        List<CharacteristicValueRequest> _writeQueue = new List<CharacteristicValueRequest>();
         Dictionary<string, TaskCompletionSource<byte[]>> _subscribeQueue = new Dictionary<string, TaskCompletionSource<byte[]>>();
         Dictionary<string, TaskCompletionSource<byte[]>> _unsubscribeQueue = new Dictionary<string, TaskCompletionSource<byte[]>>();
         List<string> _notifyList = new List<string>();
@@ -425,10 +425,12 @@ namespace OWCE.Droid.DependencyImplementations
         {
             var uuid = characteristic.Uuid.ToString().ToLower();
 
-            if (_writeQueue.ContainsKey(uuid))
+            var writeCharacteristicValueRequest = _writeQueue.FirstOrDefault(t => t.CharacteristicId.Equals(uuid));
+
+
+            if (writeCharacteristicValueRequest != null)
             {
-                var writeItem = _writeQueue[uuid];
-                _writeQueue.Remove(uuid);
+                _writeQueue.Remove(writeCharacteristicValueRequest);
 
                 var dataBytes = characteristic.GetValue();
 
@@ -442,9 +444,7 @@ namespace OWCE.Droid.DependencyImplementations
                     }
                 }
 
-
-
-                writeItem.SetResult(dataBytes);
+                writeCharacteristicValueRequest.CompletionSource.SetResult(dataBytes);
             }
 
             _gattOperationQueueProcessing = false;
@@ -676,7 +676,7 @@ namespace OWCE.Droid.DependencyImplementations
             return taskCompletionSource.Task;
         }
 
-        public Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool important = false)
+        public Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool overrideExistingQueue = false)
         {
             Debug.WriteLine($"WriteValue: {characteristicGuid}");
             if (_bluetoothGatt == null)
@@ -707,16 +707,16 @@ namespace OWCE.Droid.DependencyImplementations
 
             var taskCompletionSource = new TaskCompletionSource<byte[]>();
 
-            if (important)
-            {
-                // TODO: Put this at the start of the queue.
-                _writeQueue.Add(uuid, taskCompletionSource);
-            }
-            else
-            {
-                _writeQueue.Add(uuid, taskCompletionSource);
-            }
+            CharacteristicValueRequest characteristicValueRequest = new CharacteristicValueRequest(uuid, taskCompletionSource, data);
 
+
+            if (overrideExistingQueue)
+            {
+                _writeQueue.RemoveAll(t => t.CharacteristicId.Equals(uuid));
+            }
+            _writeQueue.Add(characteristicValueRequest);
+
+           
             byte[] dataBytes = null;
             if (data != null)
             {

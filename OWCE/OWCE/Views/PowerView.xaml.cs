@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 
 namespace OWCE.Views
@@ -53,6 +54,17 @@ namespace OWCE.Views
         public PowerView()
         {
             InitializeComponent();
+        }
+
+        protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            base.OnPropertyChanged(propertyName);
+
+            if (CurrentAmpsProperty.PropertyName.Equals(propertyName))
+            {
+                // TODO: Animate this.
+                BackgroundBar.WidthRequest = (CurrentAmps / 20.0) * this.Width;
+            }
         }
     }
 }

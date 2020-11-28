@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace OWCE
@@ -230,6 +231,43 @@ namespace OWCE
         protected virtual void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public List<(string, ushort)> GetAvailableRideModes()
+        {
+            if (_boardType == OWBoardType.V1)
+            {
+                return new List<(string, ushort)>()
+                {
+                    ("Classic", RideModes.V1_Classic),
+                    ("Extreme", RideModes.V1_Extreme),
+                    ("Elevated", RideModes.V1_Elevated),
+                };
+            }
+            else if (_boardType == OWBoardType.Plus || _boardType == OWBoardType.XR)
+            {
+                return new List<(string, ushort)>()
+                {
+                    ("Sequoia", RideModes.PlusXR_Sequoia),
+                    ("Cruz", RideModes.PlusXR_Cruz),
+                    ("Mission", RideModes.PlusXR_Mission),
+                    ("Elevated", RideModes.PlusXR_Elevated),
+                    ("Delirium", RideModes.PlusXR_Delirium),
+                    ("Custom", RideModes.PlusXR_Custom),
+                };
+            }
+            else if (_boardType == OWBoardType.Pint)
+            {
+                return new List<(string, ushort)>()
+                {
+                    ("Redwood", RideModes.Pint_Redwood),
+                    ("Pacific", RideModes.Pint_Pacific),
+                    ("Elevated", RideModes.Pint_Elevated),
+                    ("Skyline", RideModes.Pint_Skyline),
+                };
+            }
+
+            return new List<(string, ushort)>();
         }
     }
 }

@@ -2,6 +2,7 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView" xmlns:views="clr-namespace:OWCE.Views" xmlns:converters="clr-namespace:OWCE.Converters" x:Class="OWCE.Views.SpeedRangeDistanceView">
     <ContentView.Resources>
         <converters:RpmToSpeedConverter x:Key="rpmToSpeedConverter" />
+        <converters:DistanceConverter x:Key="distanceConverter" />
     </ContentView.Resources>
     <yummy:PancakeView BackgroundColor="#FFFF00"  Style="{StaticResource BoardDetailBlockBaseStyle}">
 
@@ -22,7 +23,7 @@
                     <Label VerticalOptions="End" Margin="20,0">
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span Text="0 km" FontSize="16" TextColor="Black"  FontFamily="SairaExtraCondensed-Medium" />
+                                <Span Text="{Binding TripOdometer, Converter={StaticResource distanceConverter}, ConverterParameter='N1'}" FontSize="16" TextColor="Black"  FontFamily="SairaExtraCondensed-Medium" />
                                 <Span Text=" ride" FontSize="16" TextColor="Black"  FontFamily="SairaExtraCondensed-Light" />
                             </FormattedString>
                         </Label.FormattedText>
@@ -34,7 +35,7 @@
                             <FormattedString>
                                 <Span Text="lifetime " TextColor="Black"  FontSize="16" FontFamily="SairaExtraCondensed-Light" />
 
-                                <Span Text="3,214 km" TextColor="Black"  FontSize="16" FontFamily="SairaExtraCondensed-Medium" />
+                                <Span Text="{Binding LifetimeOdometer, Converter={StaticResource distanceConverter}, ConverterParameter='N0'}" TextColor="Black"  FontSize="16" FontFamily="SairaExtraCondensed-Medium" />
                             </FormattedString>
                         </Label.FormattedText>
                     </Label>

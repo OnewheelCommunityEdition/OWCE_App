@@ -3,7 +3,7 @@
 
      <yummy:PancakeView BackgroundColor="#7F01FF" Style="{StaticResource BoardDetailBlockBaseStyle}">
         <Grid BackgroundColor="#7F01FF" RowDefinitions="121">
-            <BoxView BackgroundColor="#6601CC" VerticalOptions="Fill" HorizontalOptions="Start" WidthRequest="100" />
+            <BoxView x:Name="BackgroundBar" BackgroundColor="#6601CC" VerticalOptions="Fill" HorizontalOptions="Start" />
 
                 <Label Text="CURRENT" FontFamily="SairaExtraCondensed-Bold" TextColor="White" CharacterSpacing="0.26" FontSize="16" Margin="20,6,0,0" />
                 <Label Text="{Binding CurrentAmps, StringFormat='{0:F1}A'}"  TextColor="White"  FontFamily="SairaExtraCondensed-Black" FontSize="80" HorizontalOptions="Center" VerticalOptions="Start"  />

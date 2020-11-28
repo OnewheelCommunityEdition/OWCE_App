@@ -9,9 +9,9 @@ namespace OWCE.Views
     {
 
         public static readonly BindableProperty RPMProperty = BindableProperty.Create(
-          "RPM",
-          typeof(int),
-          typeof(SpeedRangeDistanceView));
+            "RPM",
+            typeof(int),
+            typeof(SpeedRangeDistanceView));
 
         public int RPM
         {
@@ -23,9 +23,9 @@ namespace OWCE.Views
         }
 
         public static readonly BindableProperty WheelCircumferenceProperty = BindableProperty.Create(
-          "WheelCircumference",
-          typeof(float),
-          typeof(SpeedRangeDistanceView));
+            "WheelCircumference",
+            typeof(float),
+            typeof(SpeedRangeDistanceView));
 
         public float WheelCircumference
         {
@@ -35,6 +35,34 @@ namespace OWCE.Views
                 SetValue(WheelCircumferenceProperty, value);
             }
         }
+
+
+        public static readonly BindableProperty LifetimeOdometerProperty = BindableProperty.Create(
+            "LifetimeOdometer",
+            typeof(int),
+            typeof(SpeedRangeDistanceView));
+
+        public int LifetimeOdometer
+        {
+            get { return (int)GetValue(LifetimeOdometerProperty); }
+            set { SetValue(LifetimeOdometerProperty, value); }
+        }
+
+
+        public static readonly BindableProperty TripOdometerProperty = BindableProperty.Create(
+            "TripOdometer",
+            typeof(int),
+            typeof(SpeedRangeDistanceView));
+
+        public int TripOdometer
+        {
+            get { return (int)GetValue(TripOdometerProperty); }
+            set { SetValue(TripOdometerProperty, value); }
+        }
+
+        
+
+
 
         public SpeedRangeDistanceView()
         {

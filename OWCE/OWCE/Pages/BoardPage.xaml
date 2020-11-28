@@ -15,12 +15,13 @@
         </yummy:PancakeView>
         <ScrollView>
             <StackLayout Spacing="16" Margin="0,16,0,0">
-                <views:SpeedRangeDistanceView RPM="{Binding RPM}" WheelCircumference="{Binding WheelCircumference}" />
+                <views:SpeedRangeDistanceView RPM="{Binding RPM}" WheelCircumference="{Binding WheelCircumference}" LifetimeOdometer="{Binding LifetimeOdometer}" TripOdometer="{Binding TripOdometer}" />
                 <views:BatteryView BindingContext="{Binding .}" BatteryPercent="{Binding BatteryPercent}" BatteryVoltage="{Binding BatteryVoltage}" BatteryCells="{Binding BatteryCells}"  />
                 <views:PowerView BindingContext="{Binding .}" CurrentAmps="{Binding CurrentAmps}" TripAmpHours="{Binding TripAmpHours}" TripRegenAmpHours="{Binding TripRegenAmpHours}" />
+                <views:RideModeView BindingContext="{Binding .}" BoardType="{Binding BoardType}" SimpleStopEnabled="{Binding SimpleStopEnabled}" />
                 <views:TemperatureView BindingContext="{Binding .}" ControllerTemp="{Binding ControllerTemperature}" MotorTemp="{Binding MotorTemperature}" BatteryTemp="{Binding BatteryTemperature}" />
-                <views:AngleView BindingContext="{Binding .}" Pitch="{Binding Pitch}" Yaw="{Binding Yaw}" Roll="{Binding Roll}"   />
-                <views:FootpadsView />
+                <views:AngleView BindingContext="{Binding .}" Opacity="0.5" Pitch="{Binding Pitch}" Yaw="{Binding Yaw}" Roll="{Binding Roll}"   />
+                <views:FootpadsView Opacity="0.5" />
                 <Grid Padding="20,0">
                     <Label Grid.Row="0" Grid.Column="0" Text="Serial number" FontFamily="SairaExtraCondensed-SemiBold" FontSize="16" TextColor="#7F7F7F" />
                     <Label Grid.Row="1" Grid.Column="0" Text="Battery serial number" FontFamily="SairaExtraCondensed-SemiBold" FontSize="16" TextColor="#7F7F7F" />

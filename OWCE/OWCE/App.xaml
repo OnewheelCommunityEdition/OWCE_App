@@ -1,5 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:converters="clr-namespace:OWCE.Converters" xmlns:models="clr-namespace:OWCE.Models" xmlns:views="clr-namespace:OWCE.Views" x:Class="OWCE.App" xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView">
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:OWCE.Converters"
+             xmlns:models="clr-namespace:OWCE.Models"
+             xmlns:views="clr-namespace:OWCE.Views"
+             x:Class="OWCE.App"
+             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+>
     <Application.Resources>
         <ResourceDictionary>
 
@@ -69,6 +76,27 @@
             <Style x:Key="LabelButtonStyle" TargetType="Label">
                 <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+
+             <Style x:Key="RoundButtonStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="Margin" Value="10,0,0,0" />
+                <Setter Property="Padding" Value="15,0" />
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontFamily" Value="SairaExtraCondensed-Bold" />
+                <Setter Property="BorderWidth" Value="1" />
+                <Setter Property="BorderColor" Value="#DBDBDF" />
+                <Setter Property="HeightRequest" Value="40" />
+            </Style>
+
+            <Style x:Key="SelectedRoundButtonStyle" BasedOn="{StaticResource RoundButtonStyle}" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="Black" />               
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BorderColor" Value="#DBDBDF" />
             </Style>
 
              <Style x:Key="BoardDetailBlockBaseStyle" TargetType="yummy:PancakeView">
