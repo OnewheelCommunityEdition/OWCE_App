@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -18,7 +19,7 @@ using Xamarin.Forms;
 
 namespace OWCE.Droid.DependencyImplementations
 {
-    public class OWBLE : IOWBLE
+    public class OWBLE : Java.Lang.Object, IOWBLE, INotifyPropertyChanged
     {
         private enum OWBLE_QueueItemOperationType
         {
@@ -30,6 +31,9 @@ namespace OWCE.Droid.DependencyImplementations
 
         private Queue<OWBLE_QueueItem> _gattOperationQueue = new Queue<OWBLE_QueueItem>();
         private bool _gattOperationQueueProcessing = false;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
 
         private class OWBLE_QueueItem
         {
@@ -261,7 +265,6 @@ namespace OWCE.Droid.DependencyImplementations
         */
 
 
-        private bool _isScanning = false;
         private BluetoothAdapter _adapter;
         private BluetoothLeScanner _bleScanner;
         bool _updatingRSSI = false;
@@ -535,14 +538,36 @@ namespace OWCE.Droid.DependencyImplementations
         public Action<OWBoard> BoardConnected { get; set; }
         public Action<string, byte[]> BoardValueChanged { get; set; }
         public Action<int> RSSIUpdated { get; set; }
+        public Action BoardDisconnected { get; set; }
+        public Action BoardReconnecting { get; set; }
+        public Action BoardReconnected { get; set; }
+        public Action<String> ErrorOccurred { get; set; }
 
-        public bool IsScanning => throw new NotImplementedException();
 
-        public Action<string> ErrorOccurred { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public Action BoardDisconnected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public Action BoardReconnecting { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public Action BoardReconnected { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        bool _isScanning = false;
+        public bool IsScanning
+        {
+            get
+            {
+                return _isScanning;
+            }
+            set
+            {
+                if (_isScanning == value)
+                    return;
 
+                _isScanning = value;
+                OnPropertyChanged();
+            }
+        }
+
+        protected void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+
+       
         public Task<bool> Connect(OWBaseBoard board, CancellationToken cancellationToken)
         {
             _board = board;
