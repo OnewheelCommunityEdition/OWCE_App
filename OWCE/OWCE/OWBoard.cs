@@ -725,7 +725,23 @@ namespace OWCE
 
             if (HardwareRevision > 3000 && FirmwareRevision > 4000)
             {
-                await Handshake();
+                try
+                {
+                    await Handshake();
+                }
+                catch (Exceptions.HandshakeException handshakeException)
+                {
+                    await App.Current.MainPage.DisplayAlert("Error", handshakeException.Message, "Ok");
+                    if (handshakeException.ShouldDisconnect)
+                    {
+                        if (App.Current.MainPage.Navigation.ModalStack.Count == 1 && App.Current.MainPage.Navigation.ModalStack.FirstOrDefault() is Pages.CustomNavigationPage modalNavigationPage && modalNavigationPage.CurrentPage is Pages.BoardPage boardPage)
+                        {
+                            await boardPage.DisconnectAndPop();
+                        }
+                        return;
+                    }
+                }
+
                 _keepHandshakeBackgroundRunning = true;
                 Device.StartTimer(TimeSpan.FromSeconds(15), () =>
                 {
@@ -809,23 +825,23 @@ namespace OWCE
 
                     // This appears to be a static value from the board.
                     var arrayToMD5_part2 = new byte[] {
-                     217,    // D9
-                     37,     // 25
-                     95,     // 5F
-                     15,     // 0F
-                     35,     // 23
-                     53,     // 35
-                     78,     // 4E
-                     25,     // 19
-                     186,    // BA
-                     115,    // 73
-                     156,    // 9C
-                     205,    // CD
-                     196,    // C4
-                     169,    // A9
-                     23,     // 17
-                     101,    // 65
-                 };
+                         217,    // D9
+                         37,     // 25
+                         95,     // 5F
+                         15,     // 0F
+                         35,     // 23
+                         53,     // 35
+                         78,     // 4E
+                         25,     // 19
+                         186,    // BA
+                         115,    // 73
+                         156,    // 9C
+                         205,    // CD
+                         196,    // C4
+                         169,    // A9
+                         23,     // 17
+                         101,    // 65
+                     };
 
 
                     // New byte array we are going to MD5 hash. Part of the input string, part of this static string.
@@ -904,25 +920,36 @@ namespace OWCE
                         client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "application/json");
                         client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
 
-
                         var response = await client.GetAsync($"https://{App.OWCEApiServer}/v1/handshake/{deviceName}");
 
                         // We only care if we were successful, otherwise fallback to FM.
                         if (response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
                             var responseBody = await response.Content.ReadAsStringAsync();
-                            var owKey = JsonSerializer.Deserialize<OWKey>(responseBody);
+                            var keyResponse = JsonSerializer.Deserialize<KeyResponse>(responseBody);
 
-                            if (String.IsNullOrWhiteSpace(owKey.Key))
+                            if (String.IsNullOrWhiteSpace(keyResponse.Key) == false)
                             {
-                                throw new Exception("No key found.");
+                                await SecureStorage.SetAsync($"board_{deviceName}_key", apiKey);
+                                await SecureStorage.SetAsync($"board_{deviceName}_token", keyResponse.Key);
+
+                                var tokenArray = keyResponse.Key.StringToByteArray();
+                                return tokenArray;
                             }
+                        }
 
-                            await SecureStorage.SetAsync($"board_{deviceName}_key", apiKey);
-                            await SecureStorage.SetAsync($"board_{deviceName}_token", owKey.Key);
+                        var statusResponse = await client.GetAsync($"https://{App.OWCEApiServer}/v1/status/handshake");
+                        if (statusResponse.StatusCode != System.Net.HttpStatusCode.OK)
+                        {
+                            return null;
+                        }
 
-                            var tokenArray = owKey.Key.StringToByteArray();
-                            return tokenArray;
+                        var handshakeStatusResponseBody = await statusResponse.Content.ReadAsStringAsync();
+                        var handshakeStatusResponse = JsonSerializer.Deserialize<HandshakeStatusResponse>(handshakeStatusResponseBody);
+
+                        if (handshakeStatusResponse.Online == false)
+                        {
+                            throw new Exceptions.HandshakeException(handshakeStatusResponse.Message, true);
                         }
                     }
                 }
@@ -973,17 +1000,17 @@ namespace OWCE
                         if (response.IsSuccessStatusCode)
                         {
                             var responseBody = await response.Content.ReadAsStringAsync();
-                            var owKey = JsonSerializer.Deserialize<OWKey>(responseBody);
+                            var activationResponse = JsonSerializer.Deserialize<FMActivationResponse>(responseBody);
 
-                            if (String.IsNullOrWhiteSpace(owKey.Key))
+                            if (String.IsNullOrWhiteSpace(activationResponse.Key))
                             {
-                                throw new Exception("No key found.");
+                                throw new Exceptions.HandshakeException("Unable to fetch key. Please don't attempt this again. If you can, please report this to our Facebook page or discussion group.", true);
                             }
 
                             var keyRequest = new KeyRequest()
                             {
                                 APIKey = apiKey,
-                                BoardKey = owKey.Key,
+                                BoardKey = activationResponse.Key,
                                 DeviceName = deviceName,
                                 OWType = owType,
                             };
@@ -993,17 +1020,21 @@ namespace OWCE
 
 
                             await SecureStorage.SetAsync($"board_{deviceName}_key", apiKey);
-                            await SecureStorage.SetAsync($"board_{deviceName}_token", owKey.Key);
+                            await SecureStorage.SetAsync($"board_{deviceName}_token", activationResponse.Key);
 
-                            var tokenArray = owKey.Key.StringToByteArray();
+                            var tokenArray = activationResponse.Key.StringToByteArray();
                             return tokenArray;
                         }
                         else
                         {
-                            throw new Exception($"Unexpected response code ({response.StatusCode})");
+                            throw new Exceptions.HandshakeException($"Unexpected response code ({response.StatusCode}). Please don't attempt this again. If you can, please report this to our Facebook page or discussion group.", true);
                         }
                     }
                 }
+            }
+            catch (Exceptions.HandshakeException err)
+            {
+                throw err;
             }
             catch (Exception err)
             {
@@ -1520,15 +1551,6 @@ namespace OWCE
             _incomingRideMode = rideMode;
             byte[] rideModeBytes = BitConverter.GetBytes(rideMode);
             var result = await App.Current.OWBLE.WriteValue(OWBoard.RideModeUUID, rideModeBytes, true);
-        }
-    }
-
-    internal class OWKey
-    {
-        [System.Text.Json.Serialization.JsonPropertyName("key")]
-        public string Key
-        {
-            get; set;
         }
     }
 }

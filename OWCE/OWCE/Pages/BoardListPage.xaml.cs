@@ -304,7 +304,7 @@ namespace OWCE.Pages
                     await PopupNavigation.Instance.PopAllAsync();
                     if (board != null)
                     {
-                        await Navigation.PushAsync(new BoardPage(board));
+                        await Navigation.PushModalAsync(new CustomNavigationPage(new BoardPage(board)));
                     }
                     /*
                     try

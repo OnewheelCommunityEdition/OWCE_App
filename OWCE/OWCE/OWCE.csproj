@@ -38,6 +38,7 @@
     <Folder Include="Resources\Fonts\" />
     <Folder Include="Pages\Popup\" />
     <Folder Include="Network\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="App.xaml.cs">

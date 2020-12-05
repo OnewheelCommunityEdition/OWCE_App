@@ -126,10 +126,10 @@ namespace OWCE.Pages
             }
         }
 
-        private async Task DisconnectAndPop()
+        public async Task DisconnectAndPop()
         {
-            //await Board.Disconnect();
-            await Navigation.PopAsync();
+            await App.Current.OWBLE.Disconnect();
+            await Navigation.PopModalAsync();
         }
 
         private bool _isLogging = false;

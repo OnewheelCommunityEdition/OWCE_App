@@ -69,8 +69,8 @@ namespace OWCE
 #else
             OWBLE = DependencyService.Get<IOWBLE>();
 #endif
-            MainPage = new MainMasterDetailPage();
-            //MainPage = new BoardListPage();
+            //MainPage = new MainMasterDetailPage();
+            MainPage = new CustomNavigationPage(new BoardListPage());
 
           
 
