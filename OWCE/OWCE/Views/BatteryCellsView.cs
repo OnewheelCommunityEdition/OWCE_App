@@ -81,9 +81,7 @@ namespace OWCE.Views
                 }
                 else
                 {
-                    rows = 4;
-                    columns = 4;
-                    //   throw new Exception("Invalid battery cell layout.");
+                    return;
                 }
 
                 // Setup row definitions.
@@ -153,6 +151,10 @@ namespace OWCE.Views
                 {
                     UpdateCell(cellID);
                 }
+            }
+            else if (e.PropertyName.StartsWith("CellCount"))
+            {
+                SetupGrid();
             }
         }
 

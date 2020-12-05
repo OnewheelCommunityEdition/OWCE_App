@@ -702,7 +702,7 @@ namespace OWCE
                 //HardwareRevisionUUID,
                 LifetimeOdometerUUID,
                 LifetimeAmpHoursUUID,
-                //BatteryCellsUUID,
+                BatteryCellsUUID,
                 //LastErrorCodeUUID,
                 //SerialRead,
                 //SerialWrite,
