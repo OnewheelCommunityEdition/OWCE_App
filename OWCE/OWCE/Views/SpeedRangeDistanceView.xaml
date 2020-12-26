@@ -45,19 +45,15 @@
 
                     <Label Text="km/h" TextColor="Black" FontFamily="SairaExtraCondensed-Black" FontSize="30" CharacterSpacing="0.97" HorizontalOptions="Center" VerticalOptions="End" VerticalTextAlignment="End" />
 
-
-                    <views:ExpanderArrowView x:Name="ExpanderArrow" HorizontalOptions="End" Margin="17,13" ArrowColor="#000000" />
-
-
+                    <views:ExpanderArrowView x:Name="ExpanderArrow" HorizontalOptions="End" Margin="17,13" ArrowColor="#000000" IsVisible="false" />
                 </Grid>
 
             </Expander.Header>
-
+            <!--
             <Grid Grid.Row="1" HeightRequest="76" BackgroundColor="White" ColumnSpacing="0" ColumnDefinitions="Auto,Auto" Padding="10,0,0,0">
                 <Button Grid.Column="0" BackgroundColor="White" HorizontalOptions="Start" VerticalOptions="Center" CornerRadius="20" Margin="10,0,0,0" Padding="15,0" TextColor="Black" FontSize="18" FontFamily="SairaExtraCondensed-Bold" Text="Set alarm speed" BorderWidth="1" BorderColor="#DBDBDF" HeightRequest="40" />
-
-                <Button Grid.Column="1" BackgroundColor="White" HorizontalOptions="Start" VerticalOptions="Center" CornerRadius="20" Margin="10,0,0,0" Padding="15,0" TextColor="Black" FontSize="18" FontFamily="SairaExtraCondensed-Bold" Text="Mission" BorderWidth="1" BorderColor="#DBDBDF" HeightRequest="40" />
             </Grid>
+            -->
         </Expander>
     </yummy:PancakeView>
 
