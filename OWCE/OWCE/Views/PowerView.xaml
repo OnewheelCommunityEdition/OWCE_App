@@ -11,7 +11,7 @@
                 <Label VerticalOptions="End" Margin="20,0">
                     <Label.FormattedText>
                         <FormattedString>
-                            <Span Text="{Binding TripAmpHours, StringFormat='{0:F6} Ah'}" FontSize="16" TextColor="White" FontFamily="SairaExtraCondensed-Medium" />
+                            <Span Text="{Binding TripAmpHours, StringFormat='{0:F2} Ah'}" FontSize="16" TextColor="White" FontFamily="SairaExtraCondensed-Medium" />
                             <Span Text=" Trip usage" FontSize="16" TextColor="White" FontFamily="SairaExtraCondensed-Light" />
                         </FormattedString>
                     </Label.FormattedText>
@@ -21,7 +21,7 @@
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Trip regen: " TextColor="White" FontSize="16" FontFamily="SairaExtraCondensed-Light" />
-                            <Span Text="{Binding TripRegenAmpHours, StringFormat='{0:F6} Ah'}" TextColor="White" FontSize="16" FontFamily="SairaExtraCondensed-Medium" />
+                            <Span Text="{Binding TripRegenAmpHours, StringFormat='{0:F2} Ah'}" TextColor="White" FontSize="16" FontFamily="SairaExtraCondensed-Medium" />
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
