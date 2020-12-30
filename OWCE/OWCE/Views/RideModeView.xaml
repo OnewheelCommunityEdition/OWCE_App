@@ -24,16 +24,17 @@
                     <Label Text="{Binding RideModeString}" FontFamily="SairaExtraCondensed-Black" HorizontalOptions="Center" TextColor="White" CharacterSpacing="2.2" FontSize="60" Padding="0,16,0,16" />
 
 
-
+                    <!--
                     <Label Text="Simplestop is ON" IsVisible="{Binding SimpleStopEnabled, Converter={StaticResource IsTrueConverter}}" FontFamily="SairaExtraCondensed-SemiBold" TextColor="Magenta" HorizontalOptions="Center" VerticalOptions="End" FontSize="16" Margin="0,0,0,6" />
                     <Label Text="Simplestop is OFF" IsVisible="{Binding SimpleStopEnabled, Converter={StaticResource IsFalseConverter}}" FontFamily="SairaExtraCondensed-SemiBold" TextColor="White" HorizontalOptions="Center" VerticalOptions="End" FontSize="16" Margin="0,0,0,6" />
-
+                    -->
 
                     <views:ExpanderArrowView x:Name="ExpanderArrow" HorizontalOptions="End" Margin="17,13" />
 
                 </Grid>
             </Expander.Header>
             <Grid ColumnSpacing="0" RowSpacing="0" RowDefinitions="Auto,76,Auto" Margin="0" Padding="0">
+                <!--
                 <views:SwitchView Grid.Row="0" HorizontalOptions="Center">
                     <views:SwitchView.IsVisible>
                         <MultiBinding Converter="{StaticResource AnyTrueConverter}">
@@ -42,6 +43,7 @@
                         </MultiBinding>
                     </views:SwitchView.IsVisible>
                 </views:SwitchView>
+                -->
                 <CollectionView x:Name="RideModesCollectionView" HorizontalScrollBarVisibility="Never" ItemsLayout="HorizontalList" Grid.Row="1" HeightRequest="76" BackgroundColor="White">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="views:RideModeButton">
