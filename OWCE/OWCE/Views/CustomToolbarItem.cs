@@ -71,6 +71,7 @@ namespace OWCE.Views
 		{
 			MinimumWidthRequest = 30;
 			MinimumHeightRequest = 30;
+            VerticalOptions = LayoutOptions.FillAndExpand;
 
             TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer()
             {
