@@ -1,9 +1,64 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:views="clr-namespace:OWCE.Views" xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
-             x:Class="OWCE.Pages.BoardPage"             
-             BackgroundColor="White"
-             Title="{Binding Name}"
-             >
+<pages:BaseContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:OWCE.Pages"
+    xmlns:views="clr-namespace:OWCE.Views"
+    xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:rgpopup="http://rotorgames.com"
+    x:Class="OWCE.Pages.BoardPage"             
+    BackgroundColor="White"
+    Title="{Binding Name}">
+
+    <pages:BaseContentPage.Resources>
+        <rgpopup:PopupPage x:Key="SettingsPopupPage" x:Name="SettingsPopupPage">
+            <rgpopup:PopupPage.Animation>
+                <rgpopup:ScaleAnimation 
+                    PositionIn="Bottom"
+                    PositionOut="Bottom"
+                    DurationIn="200"
+                    DurationOut="200"
+                    EasingIn="SinOut"
+                    EasingOut="SinIn"
+                    HasBackgroundAnimation="True"/>
+            </rgpopup:PopupPage.Animation>
+
+            <Grid BackgroundColor="White" ColumnSpacing="0" RowSpacing="0" VerticalOptions="End" RowDefinitions="Auto,1,Auto,1,Auto">
+                <Label Grid.Row="0" Text="Settings" TextColor="Black" FontFamily="SairaExtraCondensed-SemiBold" FontSize="24" Padding="16,20" />
+                <BoxView Grid.Row="1" Background="#E4E4E4" HeightRequest="1" />
+
+                <Grid Grid.Row="2" RowDefinitions="30,30,30,30" ColumnDefinitions="53,*" Margin="16,20,16,8">
+                    <views:SettingsSwitch x:Name="ImperialSwitch" Grid.Row="0" Grid.Column="0" IsToggledChanged="ImperialSwitch_IsToggledChanged" />
+                    <Label Grid.Row="0" Grid.Column="1" Text="Imperial units (mph, F)" FontFamily="SairaExtraCondensed-Bold" TextColor="{Binding Source={x:Reference ImperialSwitch}, Path=CurrentColor}" FontSize="18" />
+
+                    <views:SettingsSwitch Grid.Row="1" Grid.Column="0" />
+                    <Label Grid.Row="1" Grid.Column="1" Text="Light theme" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18" />
+
+                    <views:SettingsSwitch Grid.Row="2" Grid.Column="0" />
+                    <Label Grid.Row="2" Grid.Column="1" Text="Board lights on" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18" />
+                    
+                    <views:SettingsSwitch Grid.Row="3" Grid.Column="0" />
+                    <Label Grid.Row="3" Grid.Column="1" Text="Show battery % calculation from voltage" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18" />
+
+                    <BoxView Color="White" Opacity="0.8" Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="2" />
+                    <Label TextColor="Black" Grid.Row="1" Text="Coming Soon" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="2" FontFamily="SairaExtraCondensed-Bold" />
+                </Grid>
+                <BoxView Grid.Row="3" Background="#E4E4E4" HeightRequest="1" />
+
+                <Grid Grid.Row="4" RowDefinitions="30,30" ColumnDefinitions="53,*" Margin="16,20,16,8">
+
+                    <Label Grid.Row="0" Grid.Column="1" Text="Connect another Onewheel" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18" />
+
+
+                    <Label Grid.Row="1" Grid.Column="1" Text="About this app" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18" />
+
+                    <BoxView Color="White" Opacity="0.8" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />
+
+                </Grid>
+            </Grid>
+        </rgpopup:PopupPage>
+    </pages:BaseContentPage.Resources>
+
     <Grid>
         <yummy:PancakeView BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
             <yummy:PancakeView.BackgroundGradientStops>
@@ -38,4 +93,4 @@
             </StackLayout>
         </ScrollView>
     </Grid>
-</ContentPage>
+</pages:BaseContentPage>

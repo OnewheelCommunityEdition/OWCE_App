@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 using OWCE.Pages.Popup;
 using Rg.Plugins.Popup.Services;
 using System.Linq;
+using OWCE.Views;
 
 namespace OWCE.Pages
 {
-    public partial class BoardPage : ContentPage
+    public partial class BoardPage : BaseContentPage
     {
         ConnectingAlert _reconnectingAlert;
 
@@ -30,7 +31,9 @@ namespace OWCE.Pages
 
         private bool _initialSubscirbe = false;
 
-        public BoardPage(OWBoard board)
+
+
+        public BoardPage(OWBoard board) : base()
         {
             Board = board;
             //board.StartLogging();
@@ -45,8 +48,22 @@ namespace OWCE.Pages
             App.Current.OWBLE.BoardReconnecting += OWBLE_BoardReconnecting;
             App.Current.OWBLE.BoardReconnected += OWBLE_BoardReconnected;
 
+            // Shift title to the right.
+            var titleLabel = GetTitleLabel();
+            titleLabel.HorizontalOptions = LayoutOptions.End;
+            titleLabel.Padding = new Thickness(0, 0, 16, 0);
 
-            NavigationPage.SetHasBackButton(this, false);
+      
+            var settingsToolbarItem = new CustomToolbarItem()
+            {
+                Position = CustomToolbarItemPosition.Left,
+                IconImageSource = "burger_menu",
+                Command = new Command(() =>
+                {
+                    PopupNavigation.Instance.PushAsync(SettingsPopupPage);
+                }),
+            };
+            CustomToolbarItems.Add(settingsToolbarItem);
         }
 
         private void OWBLE_BoardDisconnected()

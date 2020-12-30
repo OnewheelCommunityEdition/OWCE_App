@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using OWCE.DependencyInterfaces;
+using OWCE.Views;
 using Rg.Plugins.Popup.Extensions;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Essentials;
@@ -17,7 +18,7 @@ using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace OWCE.Pages
 {
-    public partial class BoardListPage : ContentPage
+    public partial class BoardListPage : BaseContentPage
     {
         public ObservableCollection<OWBaseBoard> Boards { get; private set; } = new ObservableCollection<OWBaseBoard>();
 
@@ -77,13 +78,76 @@ namespace OWCE.Pages
 
         //IOWScanner _owScanner;
         //public IOWScanner OWScanner => _owScanner;
-        
 
-        public BoardListPage()
+        Grid _scanningView;
+
+        public BoardListPage() : base()
         {
 
             InitializeComponent();
             BindingContext = this;
+
+            _scanningView = new Grid()
+            {
+                HorizontalOptions = LayoutOptions.End,
+                ColumnDefinitions = new ColumnDefinitionCollection()
+                {
+                    new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto) },
+                    new ColumnDefinition() { Width = new GridLength(26, GridUnitType.Absolute) },
+                },
+                ColumnSpacing = 18,
+            };
+            _scanningView.BindingContext = App.Current.OWBLE;
+            _scanningView.SetBinding(Grid.IsVisibleProperty, "IsScanning");
+
+            var scanningLabel = new Label()
+            {
+                Text = "Scanning...",
+                TextColor = Color.Black,
+                FontFamily = "SairaExtraCondensed-SemiBold",
+                FontSize = 24,
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.End,
+            };
+
+            var scanningActivityIndicator = new ActivityIndicator()
+            {
+                WidthRequest = 26,
+                HeightRequest = 26,
+                Color = Color.Black,
+                IsRunning = true,
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.End,
+
+            };
+
+            Grid.SetColumn(scanningLabel, 0);
+            Grid.SetColumn(scanningActivityIndicator, 1);
+
+            _scanningView.Children.Add(scanningLabel);
+            _scanningView.Children.Add(scanningActivityIndicator);
+
+            var scanningToolbarItem = new CustomToolbarItem();
+            scanningToolbarItem.Content = _scanningView;
+            CustomToolbarItems.Add(scanningToolbarItem);
+
+#if DEBUG
+            var popupPage = new Rg.Plugins.Popup.Pages.PopupPage(); 
+
+            // Secret debug menu.
+            var debugToolbarItem = new CustomToolbarItem()
+            {
+                Position = CustomToolbarItemPosition.Left,
+                IconImageSource = "burger_menu",
+                Command = new Command(() =>
+                {
+                    var debugMenu = new Popup.DebugBoardListPageSettingPopup();
+
+                    PopupNavigation.Instance.PushAsync(debugMenu);
+                }),
+            };
+            CustomToolbarItems.Add(debugToolbarItem);
+#endif
 
             /*
 #if DEBUG
@@ -95,10 +159,6 @@ namespace OWCE.Pages
             Boards.Add(new MockOWBoard($"ow{rand.Next(111111, 999999)}", OWBoardType.Unknown));
 #endif
             */
-
-            Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
-            _safeInsets = On<Xamarin.Forms.PlatformConfiguration.iOS>().SafeAreaInsets();
-            Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, true);
         }
 
         Thickness _safeInsets;
@@ -304,7 +364,7 @@ namespace OWCE.Pages
                     await PopupNavigation.Instance.PopAllAsync();
                     if (board != null)
                     {
-                        await Navigation.PushModalAsync(new CustomNavigationPage(new BoardPage(board)));
+                        await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(new BoardPage(board)));
                     }
                     /*
                     try

@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<pages:BaseContentPage  xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="OWCE.Pages.BoardListPage" 
+             x:Class="OWCE.Pages.BoardListPage"
+             xmlns:pages="clr-namespace:OWCE.Pages"
              xmlns:converters="clr-namespace:OWCE.Converters"
              xmlns:owce="clr-namespace:OWCE"
              xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
@@ -12,21 +13,6 @@
             <converters:BoardIsAvailableOpacityConverter x:Key="boardIsAvailableOpacityConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
-
-    <NavigationPage.TitleView>
-        <Grid ColumnDefinitions="*,26" ColumnSpacing="18">
-            <!--<Image Source="burger_menu.png" BackgroundColor="Red" HorizontalOptions="Start" WidthRequest="25" HeightRequest="25" Margin="0,5,0,0" VerticalOptions="Fill">
-                <Image.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="BurgerMenu_Tapped" />
-                </Image.GestureRecognizers>
-            </Image>-->
-       
-
-            <Label Text="Scanning..." TextColor="Black" FontFamily="SairaExtraCondensed-SemiBold" FontSize="24" HorizontalOptions="End" VerticalOptions="Center" IsVisible="{Binding OWBLE.IsScanning, Source={x:Static owce:App.Current}}" />
-            <ActivityIndicator Grid.Column="1" WidthRequest="26" HeightRequest="26" Color="Black" IsRunning="true" HorizontalOptions="End" IsVisible="{Binding OWBLE.IsScanning, Source={x:Static owce:App.Current}}" />
-        </Grid>
-    </NavigationPage.TitleView>
-
 
     <Grid>
 
@@ -155,4 +141,4 @@
  
         </ListView>
         -->
-</ContentPage>
+</pages:BaseContentPage>
