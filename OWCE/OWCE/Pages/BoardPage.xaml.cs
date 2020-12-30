@@ -36,9 +36,13 @@ namespace OWCE.Pages
         public BoardPage(OWBoard board) : base()
         {
             Board = board;
+
             //board.StartLogging();
             InitializeComponent();
             BindingContext = board;
+
+            ImperialSwitch.IsToggled = !App.Current.MetricDisplay;
+
 
             Board.Init();
             // I really don't like this.
@@ -151,7 +155,23 @@ namespace OWCE.Pages
 
         private bool _isLogging = false;
 
-    
+        void ImperialSwitch_IsToggledChanged(object sender, bool isToggled)
+        {
+            App.Current.MetricDisplay = !isToggled;
+            Preferences.Set("metric_display", !isToggled);
+
+            var speedBinding = SpeedRangeDistanceView.BindingContext;
+            SpeedRangeDistanceView.BindingContext = null;
+            SpeedRangeDistanceView.BindingContext = speedBinding;
+
+
+            var tempBinding = TemperatureView.BindingContext;
+            TemperatureView.BindingContext = null;
+            TemperatureView.BindingContext = tempBinding;
+
+            //this.ForceLayout();
+        }
+
         /*
         private async void LogData_Clicked(object sender, System.EventArgs e)
         {

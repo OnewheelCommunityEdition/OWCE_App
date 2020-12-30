@@ -43,7 +43,16 @@
                     <Label Text="SPEED" FontFamily="SairaExtraCondensed-Bold" TextColor="Black"   CharacterSpacing="0.26" FontSize="16" Margin="20,6,0,0" />
                     <Label Text="{Binding RPM, Converter={StaticResource rpmToSpeedConverter}, ConverterParameter={Binding WheelCircumference}, StringFormat='{0:F0}'}"  TextColor="Black"  FontFamily="SairaExtraCondensed-Black" FontSize="125" HorizontalOptions="Center" VerticalOptions="Start"  />
 
-                    <Label Text="km/h" TextColor="Black" FontFamily="SairaExtraCondensed-Black" FontSize="30" CharacterSpacing="0.97" HorizontalOptions="Center" VerticalOptions="End" VerticalTextAlignment="End" />
+                    <Label TextColor="Black" FontFamily="SairaExtraCondensed-Black" FontSize="30" CharacterSpacing="0.97" HorizontalOptions="Center" VerticalOptions="End" VerticalTextAlignment="End">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:Static Application.Current}, Path=MetricDisplay}" Value="true">
+                              <Setter Property="Text" Value="km/h" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:Static Application.Current}, Path=MetricDisplay}" Value="false">
+                              <Setter Property="Text" Value="mph" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
 
                     <views:ExpanderArrowView x:Name="ExpanderArrow" HorizontalOptions="End" Margin="17,13" ArrowColor="#000000" IsVisible="false" />
                 </Grid>

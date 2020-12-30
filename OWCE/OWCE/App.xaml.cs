@@ -35,9 +35,17 @@ namespace OWCE
         public const string OWCEApiServer = "api.owce.app";
 #endif
 
+
+        public static readonly BindableProperty MetricDisplayProperty = BindableProperty.Create(
+            nameof(MetricDisplay),
+            typeof(bool),
+            typeof(App),
+            false);
+
         public bool MetricDisplay
         {
-            get; set;
+            get { return (bool)GetValue(MetricDisplayProperty); }
+            set { SetValue(MetricDisplayProperty, value); }
         }
 
         public string LogsDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "beta_ride_logs");
@@ -47,7 +55,7 @@ namespace OWCE
             Xamarin.Forms.Device.SetFlags(new string[] { "Shapes_Experimental", "Expander_Experimental" });
 
 
-            MetricDisplay = true; // Preferences.Get("metric_display", System.Globalization.RegionInfo.CurrentRegion.IsMetric);
+            MetricDisplay = Preferences.Get("metric_display", System.Globalization.RegionInfo.CurrentRegion.IsMetric);
             
             if (Directory.Exists(LogsDirectory) == false)
             {
