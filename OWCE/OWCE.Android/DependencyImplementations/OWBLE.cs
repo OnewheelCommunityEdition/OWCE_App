@@ -603,10 +603,10 @@ namespace OWCE.Droid.DependencyImplementations
 
         public async void StartScanning()
         {
-            if (_isScanning)
+            if (IsScanning)
                 return;
 
-            _isScanning = true;
+            IsScanning = true;
 
             // TODO: Handle power on state.
 
@@ -641,7 +641,7 @@ namespace OWCE.Droid.DependencyImplementations
 
         public void StopScanning()
         {
-            if (_isScanning == false)
+            if (IsScanning == false)
                 return;
 
 
@@ -656,7 +656,7 @@ namespace OWCE.Droid.DependencyImplementations
 #pragma warning restore 0618
             }
 
-            _isScanning = false;
+            IsScanning = false;
         }
 
 
