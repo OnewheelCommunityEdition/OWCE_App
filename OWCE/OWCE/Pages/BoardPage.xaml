@@ -47,9 +47,14 @@
 
                 <Grid Grid.Row="4" RowDefinitions="30,30" ColumnDefinitions="53,*" Margin="16,20,16,8">
 
-                    <Label Grid.Row="0" Grid.Column="1" Text="Connect another Onewheel" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18" />
+                    <Image Grid.Row="0" Grid.Column="0" Source="settings_disconnect" WidthRequest="24" HeightRequest="24" />
+                    <Label Grid.Row="0" Grid.Column="1" Text="Connect another Onewheel" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Disconnect_Tapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
 
-
+                    <Image Grid.Row="1" Grid.Column="0" Source="settings_info" WidthRequest="24" HeightRequest="24" />
                     <Label Grid.Row="1" Grid.Column="1" Text="About this app" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18" />
 
                     <BoxView Color="White" Opacity="0.8" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" />

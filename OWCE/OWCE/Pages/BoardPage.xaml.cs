@@ -143,6 +143,7 @@ namespace OWCE.Pages
             var result = await DisplayActionSheet("Are you sure you want to disconnect?", "Cancel", "Disconnect");
             if (result == "Disconnect")
             {
+                await PopupNavigation.Instance.PopAllAsync();
                 await DisconnectAndPop();
             }
         }

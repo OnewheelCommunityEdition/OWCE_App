@@ -163,6 +163,14 @@
     <ImageAsset Include="Assets.xcassets\burger_menu.imageset\burger_menu.png" />
     <ImageAsset Include="Assets.xcassets\burger_menu.imageset\burger_menu%402x.png" />
     <ImageAsset Include="Assets.xcassets\burger_menu.imageset\burger_menu%403x.png" />
+    <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\settings_info.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\settings_info.imageset\settings_info.png" />
+    <ImageAsset Include="Assets.xcassets\settings_info.imageset\settings_info%402x.png" />
+    <ImageAsset Include="Assets.xcassets\settings_info.imageset\settings_info%403x.png" />
+    <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect.png" />
+    <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect%402x.png" />
+    <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -218,6 +226,8 @@
     <Folder Include="Assets.xcassets\splash-image.imageset\" />
     <Folder Include="Assets.xcassets\splash_background.imageset\" />
     <Folder Include="Assets.xcassets\burger_menu.imageset\" />
+    <Folder Include="Assets.xcassets\settings_disconnect.imageset\" />
+    <Folder Include="Assets.xcassets\settings_info.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />
