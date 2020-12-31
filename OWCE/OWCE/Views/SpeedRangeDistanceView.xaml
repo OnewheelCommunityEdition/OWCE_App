@@ -12,7 +12,7 @@
 
             <Expander.Header>
 
-                <Grid x:Name="GridThing" RowDefinitions="100" ColumnSpacing="0" RowSpacing="0" >
+                <Grid x:Name="GridThing" ColumnSpacing="0" RowSpacing="0" >
 
                     <!--
             726.4854811913 is 40km/h converted to rpm with a 917.66mm circumference wheel.

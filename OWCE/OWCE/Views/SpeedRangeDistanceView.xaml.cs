@@ -73,7 +73,7 @@ namespace OWCE.Views
         {
             if (MainArcView.Width > 0)
             {
-                GridThing.RowDefinitions[0].Height = MainArcView.Width * 0.523465704f;
+                //GridThing.RowDefinitions[0].Height = MainArcView.Width * 0.523465704f;
             }
         }
 
