@@ -53,8 +53,7 @@ namespace OWCE.Pages
 		public static readonly BindableProperty CustomToolbarItemsProperty = BindableProperty.Create(
 			nameof(CustomToolbarItems),
 			typeof(ObservableCollection<CustomToolbarItem>),
-			typeof(BaseContentPage),
-			new ObservableCollection<CustomToolbarItem>());
+			typeof(BaseContentPage));
 
 		public ObservableCollection<CustomToolbarItem> CustomToolbarItems
 		{
@@ -72,7 +71,9 @@ namespace OWCE.Pages
 
 		public BaseContentPage()
 		{
-            Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
+			CustomToolbarItems = new ObservableCollection<CustomToolbarItem>();
+
+			Xamarin.Forms.NavigationPage.SetHasNavigationBar(this, false);
 
 			CustomToolbarItems.CollectionChanged += (sender, e) =>
 			{
