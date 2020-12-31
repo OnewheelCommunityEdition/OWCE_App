@@ -718,11 +718,6 @@ namespace OWCE
             var firmwareRevision = await _owble.ReadValue(FirmwareRevisionUUID);
             SetValue(FirmwareRevisionUUID, firmwareRevision, true);
 
-
-            // Hide 16th cell on XR and Pint.
-           
-
-
             if (HardwareRevision > 3000 && FirmwareRevision > 4000)
             {
                 try

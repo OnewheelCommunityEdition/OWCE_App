@@ -94,6 +94,7 @@ namespace OWCE.Pages
 
         }
 
+
         private void OWBLE_BoardReconnected()
         {
             Console.WriteLine("OWBLE_BoardReconnected");
