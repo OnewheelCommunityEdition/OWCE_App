@@ -9,18 +9,15 @@ namespace OWCE.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is int tempCelsius)
-            {
-                if (App.Current.MetricDisplay)
-                {
-                    return $"{tempCelsius}°C";
-                }
+            var tempCelsius = System.Convert.ToInt32(value);
 
-                var tempFahrenheit = (int)(tempCelsius * 1.8f) + 32;
-                return $"{tempFahrenheit}°F";
+            if (App.Current.MetricDisplay)
+            {
+                return $"{tempCelsius:F0}°C";
             }
 
-            return "Unknown";
+            var tempFahrenheit = (int)(tempCelsius * 1.8f) + 32;
+            return $"{tempFahrenheit:F0}°F";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

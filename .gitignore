@@ -5,3 +5,4 @@ obj/
 OWCE/OWCE/AppConstants.cs
 AppConstants.cs
 packages/
+Protobuf/csharp/

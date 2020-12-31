@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+             x:Class="OWCE.Views.RideModeView"
+             xmlns:views="clr-namespace:OWCE.Views"
+             xmlns:converters="clr-namespace:OWCE.Converters">
+
+    <ContentView.Resources>
+        <converters:AllTrueMultiConverter x:Key="AllTrueConverter" />
+        <converters:AnyTrueMultiConverter x:Key="AnyTrueConverter" />
+        <converters:IsBoardTypeConverter x:Key="IsBoardTypeConverter" />
+        <converters:IsTrueConverter x:Key="IsTrueConverter" />
+        <converters:IsFalseConverter x:Key="IsFalseConverter" />
+        <converters:SelectedButtonConverter x:Key="SelectedButtonConverter" />
+    </ContentView.Resources>
+
+    <yummy:PancakeView BackgroundColor="#000000" Style="{StaticResource BoardDetailBlockBaseStyle}">
+        <Expander x:Name="ExpanderView" Margin="0" Padding="0" HorizontalOptions="Fill" PropertyChanged="ExpanderView_PropertyChanged">
+            <Expander.Header>
+                <Grid BackgroundColor="#000000"  AbsoluteLayout.LayoutFlags="WidthProportional" AbsoluteLayout.LayoutBounds="0,0,1,121">
+                    <Label Text="RIDE MODE" FontFamily="SairaExtraCondensed-Bold" TextColor="White" CharacterSpacing="0.26" FontSize="16" Margin="20,6,0,0" />
+
+                    <Label Text="{Binding RideModeString}" FontFamily="SairaExtraCondensed-Black" HorizontalOptions="Center" TextColor="White" CharacterSpacing="2.2" FontSize="60" Padding="0,16,0,16" />
+
+
+                    <!--
+                    <Label Text="Simplestop is ON" IsVisible="{Binding SimpleStopEnabled, Converter={StaticResource IsTrueConverter}}" FontFamily="SairaExtraCondensed-SemiBold" TextColor="Magenta" HorizontalOptions="Center" VerticalOptions="End" FontSize="16" Margin="0,0,0,6" />
+                    <Label Text="Simplestop is OFF" IsVisible="{Binding SimpleStopEnabled, Converter={StaticResource IsFalseConverter}}" FontFamily="SairaExtraCondensed-SemiBold" TextColor="White" HorizontalOptions="Center" VerticalOptions="End" FontSize="16" Margin="0,0,0,6" />
+                    -->
+
+                    <views:ExpanderArrowView x:Name="ExpanderArrow" HorizontalOptions="End" Margin="17,13" />
+
+                </Grid>
+            </Expander.Header>
+            <Grid ColumnSpacing="0" RowSpacing="0" RowDefinitions="Auto,76,Auto" Margin="0" Padding="0">
+                <!--
+                <views:SwitchView Grid.Row="0" HorizontalOptions="Center">
+                    <views:SwitchView.IsVisible>
+                        <MultiBinding Converter="{StaticResource AnyTrueConverter}">
+                            <Binding Path="SimpleStopEnabled" Converter="{StaticResource IsTrueConverter}" />
+                            <Binding Path="SimpleStopEnabled" Converter="{StaticResource IsFalseConverter}" />
+                        </MultiBinding>
+                    </views:SwitchView.IsVisible>
+                </views:SwitchView>
+                -->
+                <CollectionView x:Name="RideModesCollectionView" HorizontalScrollBarVisibility="Never" ItemsLayout="HorizontalList" Grid.Row="1" HeightRequest="76" BackgroundColor="White">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="views:RideModeButton">
+                            <Grid>
+                                <Button Text="{Binding Name}" Clicked="RideModeButton_Clicked" Style="{Binding IsSelected, Converter={StaticResource SelectedButtonConverter}}">
+                                    <!--
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup Name="SelectedStates">
+                                            <VisualState Name="SelectedState">
+                                                <VisualState.Setters>
+                                                    <Setter Property="Button.Style" Value="{StaticResource SelectedRoundButtonStyle}" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState Name="NormalState">
+                                                <VisualState.Setters>
+                                                    <Setter Property="Button.Style" Value="{StaticResource RoundButtonStyle}" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                    -->
+                                    <!--
+                                    <Button.Triggers>
+                                        <DataTrigger TargetType="Button" Binding="{Binding Source=BindingContext, Path=IsSelected}" Value="True">
+                                            <Setter Property="Style" Value="{StaticResource SelectedRoundButtonStyle}" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Button" Binding="{Binding Source=BindingContext, Path=IsSelected}" Value="False">
+                                            <Setter Property="Style" Value="{StaticResource RoundButtonStyle}" />
+                                        </DataTrigger>
+                                    </Button.Triggers>
+                                    -->
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <Button Grid.Row="2" HorizontalOptions="Center" FontSize="16" Padding="16,10,16,16" VerticalOptions="Center" Text="SET CUSTOM SHAPING" Font="SairaExtraCondensed-SemiBold" Clicked="SetCustomShaping_Clicked">
+                    <Button.IsVisible>
+                        <MultiBinding Converter="{StaticResource AnyTrueConverter}">
+                            <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Plus" />
+                            <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="XR" />
+                        </MultiBinding>
+                    </Button.IsVisible>
+                </Button>
+            </Grid>
+        </Expander>
+    </yummy:PancakeView>
+</ContentView>

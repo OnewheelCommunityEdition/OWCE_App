@@ -1,9 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:converters="clr-namespace:OWCE.Converters" xmlns:models="clr-namespace:OWCE.Models" xmlns:views="clr-namespace:OWCE.Views" xmlns:templateselectors="clr-namespace:OWCE.TemplateSelectors" x:Class="OWCE.App" xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView">
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:OWCE.Converters"
+             xmlns:models="clr-namespace:OWCE.Models"
+             xmlns:views="clr-namespace:OWCE.Views"
+             x:Class="OWCE.App"
+             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+>
     <Application.Resources>
         <ResourceDictionary>
 
             
+            <Color x:Key="BackgroundGradientStart">#E6E6E6</Color>
+            <Color x:Key="BackgroundGradientEnd">#EEEEEE</Color>
+            <Color x:Key="BrightYellow">#ECEC00</Color>
+            <Color x:Key="ButtonBoarder">#DBDBDF</Color>
+          
+
+
             <Color x:Key="lightBackgroundColor">#23354d</Color>
             <Color x:Key="darkBackgroundColor">#1C2D41</Color>
             <Color x:Key="textColor">White</Color>
@@ -13,29 +27,33 @@
             </Style>
             
             <Style TargetType="NavigationPage">
-                <Setter Property="BarTextColor" Value="{StaticResource textColor}" />
-                <Setter Property="BackgroundColor" Value="{StaticResource darkBackgroundColor}" />
-                <Setter Property="BarBackgroundColor" Value="{StaticResource darkBackgroundColor}" />
+                <Setter Property="BarTextColor" Value="Black" />
+                <Setter Property="BackgroundColor" Value="{StaticResource BackgroundGradientStart}" />
+                <Setter Property="BarBackgroundColor" Value="{StaticResource BackgroundGradientStart}" />
             </Style>
 
             <Style TargetType="ContentPage">
-                <Setter Property="BackgroundColor" Value="{StaticResource lightBackgroundColor}" />
+                <Setter Property="BackgroundColor" Value="White" />
             </Style>
             
             <Style TargetType="ScrollView">
-                <Setter Property="BackgroundColor" Value="{StaticResource lightBackgroundColor}" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+            </Style>
+
+            <Style TargetType="RefreshView">
+                <Setter Property="BackgroundColor" Value="Transparent" />
             </Style>
             
             <Style TargetType="StackLayout">
-                <Setter Property="BackgroundColor" Value="{StaticResource lightBackgroundColor}" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
             </Style>
             
             <Style TargetType="ListView">
-                <Setter Property="BackgroundColor" Value="{StaticResource lightBackgroundColor}" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
             </Style>
             
             <Style TargetType="CollectionView">
-                <Setter Property="BackgroundColor" Value="{StaticResource lightBackgroundColor}" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
             </Style>
             
             <Style TargetType="Button">
@@ -47,81 +65,58 @@
             <converters:DivideByTwo x:Key="divideByTwo" />
 
              <Style x:Key="PancakeButtonStyle" TargetType="yummy:PancakeView">
-                <Setter Property="BorderColor" Value="White" />
-                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Border">
+                    <yummy:Border Color="White" Thickness="1" />
+                </Setter>
                 <Setter Property="Padding" Value="10" />
-                <Setter Property="CornerRadius" Value="{Binding Height, Source={RelativeSource Self}, Converter={StaticResource divideByTwo}}" />
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="HeightRequest" Value="40" />
             </Style>
 
             <Style x:Key="LabelButtonStyle" TargetType="Label">
                 <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="FontAttributes" Value="Bold" />
             </Style>
+
+             <Style x:Key="RoundButtonStyle" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="White" />
+                <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="Margin" Value="10,0,0,0" />
+                <Setter Property="Padding" Value="15,0" />
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontFamily" Value="SairaExtraCondensed-Bold" />
+                <Setter Property="BorderWidth" Value="1" />
+                <Setter Property="BorderColor" Value="#DBDBDF" />
+                <Setter Property="HeightRequest" Value="40" />
+            </Style>
+
+            <Style x:Key="SelectedRoundButtonStyle" BasedOn="{StaticResource RoundButtonStyle}" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="Black" />               
+                <Setter Property="TextColor" Value="White" />
+                <Setter Property="BorderColor" Value="#DBDBDF" />
+            </Style>
+
+             <Style x:Key="BoardDetailBlockBaseStyle" TargetType="yummy:PancakeView">
+                <Setter Property="Margin" Value="16,0" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="CornerRadius" Value="11" />
+                <Setter Property="Shadow">
+                    <yummy:DropShadow Color="#000000" Opacity="0.14" Offset="0,1" BlurRadius="9" />
+                </Setter>
+            </Style>
+
+            <Style TargetType="Expander">
+                <Setter Property="ExpandAnimationEasing" Value="{x:Static Easing.CubicIn}" />
+                <Setter Property="ExpandAnimationLength" Value="200" />
+                <Setter Property="CollapseAnimationEasing" Value="{x:Static Easing.CubicOut}" />
+                <Setter Property="CollapseAnimationLength" Value="200" />
+            </Style>
             
             
-            <DataTemplate x:Key="AmpTemplate" x:DataType="models:AmpBoardDetail">
-                <views:AmpRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="AmpHoursTemplate" x:DataType="models:AmpHoursBoardDetail">
-                <views:AmpHoursRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="AngleTemplate" x:DataType="models:AngleBoardDetail">
-                <views:AngleRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="BatteryCellsTemplate" x:DataType="models:BatteryCellsBoardDetail">
-                <views:BatteryCellsRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="DistanceTemplate" x:DataType="models:DistanceBoardDetail">
-                <views:DistanceRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="FloatTemplate" x:DataType="models:FloatBoardDetail">
-                <views:FloatRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="IntTemplate" x:DataType="models:IntBoardDetail">
-                <views:IntRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="SpeedTemplate" x:DataType="models:SpeedBoardDetail">
-                <views:SpeedRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="RideModeTemplate" x:DataType="models:RideModeBoardDetail">
-                <views:RideModeRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="StringTemplate" x:DataType="models:StringBoardDetail">
-                <views:StringRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="TemperatureTemplate" x:DataType="models:TemperatureBoardDetail">
-                <views:TemperatureRowView />
-            </DataTemplate>
-
-            <DataTemplate x:Key="VoltageTemplate" x:DataType="models:VoltageBoardDetail">
-                <views:VoltageRowView />
-            </DataTemplate>
-
-          
-            <templateselectors:BoardDetailTemplateSelector x:Key="DetailTemplateSelector"
-                                             AmpTemplate="{StaticResource AmpTemplate}"
-                                             AmpHoursTemplate="{StaticResource AmpHoursTemplate}"
-                                             AngleTemplate="{StaticResource AngleTemplate}"
-                                             BatteryCellsTemplate="{StaticResource BatteryCellsTemplate}"
-                                             DistanceTemplate="{StaticResource DistanceTemplate}"
-                                             FloatTemplate="{StaticResource FloatTemplate}"
-                                             IntTemplate="{StaticResource IntTemplate}"
-                                             SpeedTemplate="{StaticResource SpeedTemplate}"
-                                             RideModeTemplate="{StaticResource RideModeTemplate}"
-                                             StringTemplate="{StaticResource StringTemplate}"
-                                             TemperatureTemplate="{StaticResource TemperatureTemplate}"
-                                             VoltageTemplate="{StaticResource VoltageTemplate}"
-                                                />
+            
         </ResourceDictionary>
     </Application.Resources>
 </Application>

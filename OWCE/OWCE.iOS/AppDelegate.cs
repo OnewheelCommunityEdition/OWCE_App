@@ -22,7 +22,7 @@ namespace OWCE.iOS
         //
         public override bool FinishedLaunching(UIApplication uiApplication, NSDictionary launchOptions)
         {
-            _ = new Syncfusion.SfGauge.XForms.iOS.SfGaugeRenderer();
+            Rg.Plugins.Popup.Popup.Init();
 
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());

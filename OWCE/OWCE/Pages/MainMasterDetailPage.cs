@@ -1,4 +1,5 @@
 ﻿using System;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -12,14 +13,23 @@ namespace OWCE.Pages
         {
             Master = new MainMasterPage();
 
-            _mainBoardNavigationPage = new NavigationPage(new BoardListPage());
-
+            _mainBoardNavigationPage = new CustomNavigationPage(new BoardListPage());
             Detail = _mainBoardNavigationPage;
+
+            //Detail = new NavigationPage(new ListLogsPage());
+
+            this.MasterBehavior = MasterBehavior.Popover;
         }
 
         public void GoToBoardPage()
         {
             Detail = _mainBoardNavigationPage;
+            this.IsPresented = false;
+        }
+
+        public void GoToLogsPage()
+        {
+            Detail = new NavigationPage(new ListLogsPage());
             this.IsPresented = false;
         }
 
@@ -33,35 +43,6 @@ namespace OWCE.Pages
         {
             Detail = new NavigationPage(new MyRidesPage());
             this.IsPresented = false;
-        }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-
-            bool showNote = false;
-            bool neverRemindMe = Preferences.Get("third_party_remind_me_never", false);
-
-            if (VersionTracking.IsFirstLaunchForCurrentBuild)
-            {
-                Preferences.Set("third_party_seen_message_on_this_version", false);
-            }
-
-
-            if (neverRemindMe == false && VersionTracking.IsFirstLaunchForCurrentBuild)
-            {
-                bool seenMessageOnThisVersion = Preferences.Get("third_party_seen_message_on_this_version", false);
-                if (seenMessageOnThisVersion == false)
-                {
-                    showNote = true;
-                }
-            }
-
-            
-            if (showNote)
-            {
-                App.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(new ThirdPartyNotePage()));
-            }
         }
     }
 }

@@ -52,12 +52,39 @@
             <Label Text="Leaderboards" />
         </StackLayout>
         -->
+
         <StackLayout Orientation="Horizontal" Padding="10" Spacing="10">
             <StackLayout.GestureRecognizers>
                 <TapGestureRecognizer Tapped="Settings_Tapped"/>
             </StackLayout.GestureRecognizers>
             <Image Source="menu_settings.png" />
             <Label Text="Settings" />
+        </StackLayout>
+        
+       
+        <StackLayout Orientation="Horizontal" Padding="10" Spacing="10">
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="StartRecording_Tapped"/>
+            </StackLayout.GestureRecognizers>
+            <Image Source="menu_settings.png" />
+            <Label Text="Start Recording" />
+        </StackLayout>
+        
+       
+        <StackLayout Orientation="Horizontal" Padding="10" Spacing="10">
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="StopRecording_Tapped"/>
+            </StackLayout.GestureRecognizers>
+            <Image Source="menu_settings.png" />
+            <Label Text="Stop Recording" />
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal" Padding="10" Spacing="10">
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="Logs_Tapped"/>
+            </StackLayout.GestureRecognizers>
+            <Image Source="menu_settings.png" />
+            <Label Text="Logs" />
         </StackLayout>
         
     </StackLayout>

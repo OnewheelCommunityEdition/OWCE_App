@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Android.Bluetooth;
 using Android.Bluetooth.LE;
@@ -17,7 +19,7 @@ using Xamarin.Forms;
 
 namespace OWCE.Droid.DependencyImplementations
 {
-    public class OWBLE : IOWBLE
+    public class OWBLE : Java.Lang.Object, IOWBLE, INotifyPropertyChanged
     {
         private enum OWBLE_QueueItemOperationType
         {
@@ -29,6 +31,9 @@ namespace OWCE.Droid.DependencyImplementations
 
         private Queue<OWBLE_QueueItem> _gattOperationQueue = new Queue<OWBLE_QueueItem>();
         private bool _gattOperationQueueProcessing = false;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
 
         private class OWBLE_QueueItem
         {
@@ -156,12 +161,18 @@ namespace OWCE.Droid.DependencyImplementations
                 Debug.WriteLine($"OnDescriptorWrite: {descriptor.Characteristic.Uuid}, {descriptor.Uuid}");
                 _owble.OnDescriptorWrite(gatt, descriptor, status);
             }
+
+            public override void OnReadRemoteRssi(BluetoothGatt gatt, int rssi, [GeneratedEnum] GattStatus status)
+            {
+                Debug.WriteLine($"OnReadRemoteRssi: {rssi}");
+                _owble.OnReadRemoteRssi(gatt, rssi, status);
+            }
         }
 
 
         Dictionary<string, BluetoothGattCharacteristic> _characteristics = new Dictionary<string, BluetoothGattCharacteristic>();
         Dictionary<string, TaskCompletionSource<byte[]>> _readQueue = new Dictionary<string, TaskCompletionSource<byte[]>>();
-        Dictionary<string, TaskCompletionSource<byte[]>> _writeQueue = new Dictionary<string, TaskCompletionSource<byte[]>>();
+        List<CharacteristicValueRequest> _writeQueue = new List<CharacteristicValueRequest>();
         Dictionary<string, TaskCompletionSource<byte[]>> _subscribeQueue = new Dictionary<string, TaskCompletionSource<byte[]>>();
         Dictionary<string, TaskCompletionSource<byte[]>> _unsubscribeQueue = new Dictionary<string, TaskCompletionSource<byte[]>>();
         List<string> _notifyList = new List<string>();
@@ -184,7 +195,8 @@ namespace OWCE.Droid.DependencyImplementations
             if (_connectTaskCompletionSource.Task.IsCanceled == false)
             {
                 _connectTaskCompletionSource.SetResult(true);
-                BoardConnected?.Invoke(new OWBoard(_board));
+                // TODO: Fix this.
+                //BoardConnected?.Invoke(new OWBoard(_board));
             }
         }
 
@@ -253,9 +265,9 @@ namespace OWCE.Droid.DependencyImplementations
         */
 
 
-        private bool _isScanning = false;
         private BluetoothAdapter _adapter;
         private BluetoothLeScanner _bleScanner;
+        bool _updatingRSSI = false;
 
 
         TaskCompletionSource<bool> _connectTaskCompletionSource = null;
@@ -279,9 +291,6 @@ namespace OWCE.Droid.DependencyImplementations
             IntentFilter filter = new IntentFilter(BluetoothAdapter.ActionStateChanged);
             Xamarin.Essentials.Platform.AppContext.RegisterReceiver(_broadcastReceiver, filter);
             */
-
-
-
             BluetoothManager manager = Xamarin.Essentials.Platform.CurrentActivity.GetSystemService(Context.BluetoothService) as BluetoothManager;
             _adapter = manager.Adapter;
         }
@@ -419,10 +428,12 @@ namespace OWCE.Droid.DependencyImplementations
         {
             var uuid = characteristic.Uuid.ToString().ToLower();
 
-            if (_writeQueue.ContainsKey(uuid))
+            var writeCharacteristicValueRequest = _writeQueue.FirstOrDefault(t => t.CharacteristicId.Equals(uuid));
+
+
+            if (writeCharacteristicValueRequest != null)
             {
-                var writeItem = _writeQueue[uuid];
-                _writeQueue.Remove(uuid);
+                _writeQueue.Remove(writeCharacteristicValueRequest);
 
                 var dataBytes = characteristic.GetValue();
 
@@ -436,9 +447,7 @@ namespace OWCE.Droid.DependencyImplementations
                     }
                 }
 
-
-
-                writeItem.SetResult(dataBytes);
+                writeCharacteristicValueRequest.CompletionSource.SetResult(dataBytes);
             }
 
             _gattOperationQueueProcessing = false;
@@ -515,14 +524,51 @@ namespace OWCE.Droid.DependencyImplementations
             ProcessQueue();
         }
 
+        public void OnReadRemoteRssi(BluetoothGatt gatt, int rssi, [GeneratedEnum] GattStatus status)
+        {
+            RSSIUpdated?.Invoke(rssi);
+            _updatingRSSI = false;
+        }
+
+
 
         #region IOWBLE
         public Action<BluetoothState> BLEStateChanged { get; set; }
         public Action<OWBaseBoard> BoardDiscovered { get; set; }
         public Action<OWBoard> BoardConnected { get; set; }
         public Action<string, byte[]> BoardValueChanged { get; set; }
+        public Action<int> RSSIUpdated { get; set; }
+        public Action BoardDisconnected { get; set; }
+        public Action BoardReconnecting { get; set; }
+        public Action BoardReconnected { get; set; }
+        public Action<String> ErrorOccurred { get; set; }
 
-        public Task<bool> Connect(OWBaseBoard board)
+
+        bool _isScanning = false;
+        public bool IsScanning
+        {
+            get
+            {
+                return _isScanning;
+            }
+            set
+            {
+                if (_isScanning == value)
+                    return;
+
+                _isScanning = value;
+                OnPropertyChanged();
+            }
+        }
+
+        protected void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+
+       
+        public Task<bool> Connect(OWBaseBoard board, CancellationToken cancellationToken)
         {
             _board = board;
 
@@ -554,12 +600,13 @@ namespace OWCE.Droid.DependencyImplementations
 
             return Task.CompletedTask;
         }
-        public async Task StartScanning(int timeout = 15)
+
+        public async void StartScanning()
         {
-            if (_isScanning)
+            if (IsScanning)
                 return;
 
-            _isScanning = true;
+            IsScanning = true;
 
             // TODO: Handle power on state.
 
@@ -587,14 +634,14 @@ namespace OWCE.Droid.DependencyImplementations
                 throw new NotImplementedException("Can't run bluetooth scans on device lower than Android 4.3");
             }
 
-            await Task.Delay(timeout * 1000);
+            await Task.Delay(15 * 1000);
 
             StopScanning();
         }
 
         public void StopScanning()
         {
-            if (_isScanning == false)
+            if (IsScanning == false)
                 return;
 
 
@@ -609,7 +656,7 @@ namespace OWCE.Droid.DependencyImplementations
 #pragma warning restore 0618
             }
 
-            _isScanning = false;
+            IsScanning = false;
         }
 
 
@@ -654,7 +701,7 @@ namespace OWCE.Droid.DependencyImplementations
             return taskCompletionSource.Task;
         }
 
-        public Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool important = false)
+        public Task<byte[]> WriteValue(string characteristicGuid, byte[] data, bool overrideExistingQueue = false)
         {
             Debug.WriteLine($"WriteValue: {characteristicGuid}");
             if (_bluetoothGatt == null)
@@ -685,16 +732,16 @@ namespace OWCE.Droid.DependencyImplementations
 
             var taskCompletionSource = new TaskCompletionSource<byte[]>();
 
-            if (important)
-            {
-                // TODO: Put this at the start of the queue.
-                _writeQueue.Add(uuid, taskCompletionSource);
-            }
-            else
-            {
-                _writeQueue.Add(uuid, taskCompletionSource);
-            }
+            CharacteristicValueRequest characteristicValueRequest = new CharacteristicValueRequest(uuid, taskCompletionSource, data);
 
+
+            if (overrideExistingQueue)
+            {
+                _writeQueue.RemoveAll(t => t.CharacteristicId.Equals(uuid));
+            }
+            _writeQueue.Add(characteristicValueRequest);
+
+           
             byte[] dataBytes = null;
             if (data != null)
             {
@@ -808,6 +855,28 @@ namespace OWCE.Droid.DependencyImplementations
 
             // Bluetooth is enabled 
             return true;
+        }
+
+        public bool ReadyToScan()
+        {
+            // TODO: Handle this.
+            return true;
+        }
+
+        public void Shutdown()
+        {
+            // TODO: Handle this.
+        }
+
+        public void RequestRSSIUpdate()
+        {
+            if (_updatingRSSI)
+            {
+                return;
+            }
+
+            _updatingRSSI = true;
+            _bluetoothGatt?.ReadRemoteRssi();
         }
         #endregion
     }

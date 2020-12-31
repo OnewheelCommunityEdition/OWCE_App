@@ -16,6 +16,8 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
 using OWCE.Models;
+using OWCE.Network;
+using OWCE.DependencyInterfaces;
 
 namespace OWCE
 {
@@ -27,6 +29,23 @@ namespace OWCE
         XR,
         Pint,
     };
+
+    public struct RideModes
+    {
+        public const int V1_Classic = 1;
+        public const int V1_Extreme = 2;
+        public const int V1_Elevated = 3;
+        public const int PlusXR_Sequoia = 4;
+        public const int PlusXR_Cruz = 5;
+        public const int PlusXR_Mission = 6;
+        public const int PlusXR_Elevated = 7;
+        public const int PlusXR_Delirium = 8;
+        public const int PlusXR_Custom = 9;
+        public const int Pint_Redwood = 5;
+        public const int Pint_Pacific = 6;
+        public const int Pint_Elevated = 7;
+        public const int Pint_Skyline = 8;
+    }
 
     public class OWBoard : OWBaseBoard
     {
@@ -66,72 +85,273 @@ namespace OWCE
         public const string UNKNOWN3UUID = "E659F31F-EA98-11E3-AC10-0800200C9A66";
         public const string UNKNOWN4UUID = "E659F320-EA98-11E3-AC10-0800200C9A66";
 
-        protected IntBoardDetail _serialNumber = new IntBoardDetail("Serial number");
-        protected IntBoardDetail _batteryPercent = new IntBoardDetail("Battery percent");
-        protected IntBoardDetail _batteryLow5 = new IntBoardDetail("Battery low 5");
-        protected IntBoardDetail _batteryLow20 = new IntBoardDetail("Battery low 20");
-        protected IntBoardDetail _batterySerial = new IntBoardDetail("Battery serial number");
-        protected AngleBoardDetail _pitch = new AngleBoardDetail("Pitch");
-        protected AngleBoardDetail _yaw = new AngleBoardDetail("Yaw");
-        protected AngleBoardDetail _roll = new AngleBoardDetail("Roll");
-        protected DistanceBoardDetail _tripOdometer = new DistanceBoardDetail("Trip odometer");
-        protected SpeedBoardDetail _speed = new SpeedBoardDetail("Speed");
-        protected IntBoardDetail _statusError = new IntBoardDetail("Error status");
-        protected TemperatureBoardDetail _controllerTemperature = new TemperatureBoardDetail("Controller temperature");
-        protected TemperatureBoardDetail _motorTemperature = new TemperatureBoardDetail("Motor temperature");
-        protected IntBoardDetail _firmwareRevision = new IntBoardDetail("Firmware");
-        protected AmpBoardDetail _currentAmps = new AmpBoardDetail("Current power draw");
-        protected AmpHoursBoardDetail _tripAmpHours = new AmpHoursBoardDetail("Trip usage");
-        protected AmpHoursBoardDetail _tripRegenAmpHours = new AmpHoursBoardDetail("Trip regen");
-        protected TemperatureBoardDetail _unknownTemperature = new TemperatureBoardDetail("Unknown temperature");
-        protected TemperatureBoardDetail _batteryTemperature = new TemperatureBoardDetail("Battery temperature");
-        protected VoltageBoardDetail _batteryVoltage = new VoltageBoardDetail("Battery voltage");
-        protected IntBoardDetail _safetyHeadroom = new IntBoardDetail("Safety headroom");
-        protected DistanceBoardDetail _lifetimeOdometer = new DistanceBoardDetail("Lifetime odometer");
-        protected AmpHoursBoardDetail _lifetimeAmpHours = new AmpHoursBoardDetail("Lifetime amp hours");
-        protected FloatBoardDetail _lastErrorCode = new FloatBoardDetail("Last error code");
-        protected BatteryCellsBoardDetail _batteryCells = new BatteryCellsBoardDetail("Battery cells");
-        protected IntBoardDetail _rpm = new IntBoardDetail("Rotations per minute");
-        protected IntBoardDetail _hardwareRevision = new IntBoardDetail("Hardware revision");
-        protected RideModeBoardDetail _rideMode = new RideModeBoardDetail("Ride mode");
+        private int _serialNumber;
+        public int SerialNumber
+        {
+            get { return _serialNumber; }
+            set { if (_serialNumber != value) { _serialNumber = value; OnPropertyChanged(); } }
+        }
+
+        private int _batteryPercent;
+        public int BatteryPercent
+        {
+            get { return _batteryPercent; }
+            set { if (_batteryPercent != value) { _batteryPercent = value; OnPropertyChanged(); } }
+        }
+
+        private int _batteryLow5;
+        public int BatteryLow5
+        {
+            get { return _batteryLow5; }
+            set { if (_batteryLow5 != value) { _batteryLow5 = value; OnPropertyChanged(); } }
+        }
+
+        private int _batteryLow20;
+        public int BatteryLow20
+        {
+            get { return _batteryLow20; }
+            set { if (_batteryLow20 != value) { _batteryLow20 = value; OnPropertyChanged(); } }
+        }
+
+        private int _batterySerial;
+        public int BatterySerial
+        {
+            get { return _batterySerial; }
+            set { if (_batterySerial != value) { _batterySerial = value; OnPropertyChanged(); } }
+        }
+
+        float _pitch;
+        public float Pitch
+        {
+            get { return _pitch; }
+            set { if (_pitch.AlmostEqualTo(value) == false) { _pitch = value; OnPropertyChanged(); } }
+        }
+
+        float _yaw;
+        public float Yaw
+        {
+            get { return _yaw; }
+            set { if (_yaw.AlmostEqualTo(value) == false) { _yaw = value; OnPropertyChanged(); } }
+        }
+
+        float _roll;
+        public float Roll
+        {
+            get { return _roll; }
+            set { if (_roll.AlmostEqualTo(value) == false) { _roll = value; OnPropertyChanged(); } }
+        }
+
+        /*
+        float _yyy;
+        public float YYY
+        {
+            get { return _yyy; }
+            set { if (_yyy.AlmostEqualTo(value) == false) { _yyy = value; OnPropertyChanged(); } }
+        }
+
+        private int _xxx;
+        public int XXX
+        {
+            get { return _xxx; }
+            set { if (_xxx != value) { _xxx = value; OnPropertyChanged(); } }
+        }
+        */
 
 
 
+        private int _tripOdometer;
+        public int TripOdometer
+        {
+            get { return _tripOdometer; }
+            set { if (_tripOdometer != value) { _tripOdometer = value; OnPropertyChanged(); } }
+        }
+
+        private int _statusError;
+        public int StatusError
+        {
+            get { return _statusError; }
+            set { if (_statusError != value) { _statusError = value; OnPropertyChanged(); } }
+        }
+
+        float _controllerTemperature;
+        public float ControllerTemperature
+        {
+            get { return _controllerTemperature; }
+            set { if (_controllerTemperature.AlmostEqualTo(value) == false) { _controllerTemperature = value; OnPropertyChanged(); } }
+        }
 
 
-        private OWBoardType _boardType = OWBoardType.Unknown;
-        public OWBoardType BoardType
+        float _motorTemperature;
+        public float MotorTemperature
+        {
+            get { return _motorTemperature; }
+            set { if (_motorTemperature.AlmostEqualTo(value) == false) { _motorTemperature = value; OnPropertyChanged(); } }
+        }
+
+        private int _firmwareRevision;
+        public int FirmwareRevision
+        {
+            get { return _firmwareRevision; }
+            set { if (_firmwareRevision != value) { _firmwareRevision = value; OnPropertyChanged(); } }
+        }
+
+        float _currentAmps;
+        public float CurrentAmps
+        {
+            get { return _currentAmps; }
+            set { if (_currentAmps.AlmostEqualTo(value) == false) { _currentAmps = value; OnPropertyChanged(); } }
+        }
+
+
+        float _tripAmpHours;
+        public float TripAmpHours
+        {
+            get { return _tripAmpHours; }
+            set { if (_tripAmpHours.AlmostEqualTo(value) == false) { _tripAmpHours = value; OnPropertyChanged(); } }
+        }
+
+        float _tripRegenAmpHours;
+        public float TripRegenAmpHours
+        {
+            get { return _tripRegenAmpHours; }
+            set { if (_tripRegenAmpHours.AlmostEqualTo(value) == false) { _tripRegenAmpHours = value; OnPropertyChanged(); } }
+        }
+
+        float _batteryTemperature;
+        public float BatteryTemperature
+        {
+            get { return _batteryTemperature; }
+            set { if (_batteryTemperature.AlmostEqualTo(value) == false) { _batteryTemperature = value; OnPropertyChanged(); } }
+        }
+
+        float _batteryVoltage;
+        public float BatteryVoltage
+        {
+            get { return _batteryVoltage; }
+            set { if (_batteryVoltage.AlmostEqualTo(value) == false) { _batteryVoltage = value; OnPropertyChanged(); } }
+        }
+
+        private int _safetyHeadroom;
+        public int SafetyHeadroom
+        {
+            get { return _safetyHeadroom; }
+            set { if (_safetyHeadroom != value) { _safetyHeadroom = value; OnPropertyChanged(); } }
+        }
+
+        float _lifetimeOdometer;
+        public float LifetimeOdometer
+        {
+            get { return _lifetimeOdometer; }
+            set { if (_lifetimeOdometer.AlmostEqualTo(value) == false) { _lifetimeOdometer = value; OnPropertyChanged(); } }
+        }
+
+        float _lifetimeAmpHours;
+        public float LifetimeAmpHours
+        {
+            get { return _lifetimeAmpHours; }
+            set { if (_lifetimeAmpHours.AlmostEqualTo(value) == false) { _lifetimeAmpHours = value; OnPropertyChanged(); } }
+        }
+
+        float _lastErrorCode;
+        public float LastErrorCode
+        {
+            get { return _lastErrorCode; }
+            set { if (_lastErrorCode.AlmostEqualTo(value) == false) { _lastErrorCode = value; OnPropertyChanged(); } }
+        }
+
+        BatteryCells _batteryCells = new BatteryCells();
+        public BatteryCells BatteryCells
+        {
+            get { return _batteryCells; }
+        }
+
+        private int _rpm;
+        public int RPM
+        {
+            get { return _rpm; }
+            set { if (_rpm != value) { _rpm = value; OnPropertyChanged(); } }
+        }
+
+        // Value is stored in meters per second.
+        float _speed;
+        public float Speed
+        {
+            get { return _speed; }
+            set { if (_speed.AlmostEqualTo(value) == false) { _speed = value; OnPropertyChanged(); } }
+        }
+
+        private ushort _hardwareRevision;
+        public ushort HardwareRevision
+        {
+            get { return _hardwareRevision; }
+            set { if (_hardwareRevision != value) { _hardwareRevision = value; OnPropertyChanged(); } }
+        }
+
+        private ushort _rideMode;
+        public ushort RideMode
+        {
+            get { return _rideMode; }
+            set { if (_rideMode != value) { _rideMode = value; OnPropertyChanged(); OnPropertyChanged("RideModeString"); } }
+        }
+
+        private ushort _incomingRideMode;
+        public ushort IncomingRideMode
+        {
+            get { return _incomingRideMode; }
+            set { if (_incomingRideMode != value) { _incomingRideMode = value; OnPropertyChanged(); } }
+        }
+
+        public string RideModeString
         {
             get
             {
-                return _boardType;
-            }
-            set
-            {
-                if (_boardType != value)
+                if (_boardType == OWBoardType.V1)
                 {
-                    _boardType = value;
-                    _rideMode.BoardType = value;
-                    OnPropertyChanged();
+                    return _rideMode switch
+                    {
+                        1 => "Classic",
+                        2 => "Extreme",
+                        3 => "Elevated",
+                        _ => "Unknown",
+                    };
                 }
-            }
-        }
-
-        public string BoardModelString
-        {
-            get
-            {
-                return BoardType switch
+                else if (_boardType == OWBoardType.Plus || _boardType == OWBoardType.XR)
                 {
-                    OWBoardType.V1 => "V1",
-                    OWBoardType.Plus => "Plus",
-                    OWBoardType.XR => "XR",
-                    OWBoardType.Pint => "Pint",
-                    _ => String.Empty,
-                };
+                    return _rideMode switch
+                    {
+                        4 => "Sequoia",
+                        5 => "Cruz",
+                        6 => "Mission",
+                        7 => "Elevated",
+                        8 => "Delirium",
+                        9 => "Custom",
+                        _ => "Unknown",
+                    };
+                }
+                else if (_boardType == OWBoardType.Pint)
+                {
+                    return _rideMode switch
+                    {
+                        5 => "Redwood",
+                        6 => "Pacific",
+                        7 => "Elevated",
+                        8 => "Skyline",
+                        _ => "Unknown",
+                    };
+                }
+
+                return "Unknown";
             }
         }
 
+        private bool? _simpleStopEnabled = null;
+        public bool? SimpleStopEnabled
+        {
+            get { return _simpleStopEnabled; }
+            set { if (_simpleStopEnabled != value) { _simpleStopEnabled = value; OnPropertyChanged(); } }
+        }
+
+        /*
         public int MaxRecommendedSpeed
         {
             get
@@ -140,7 +360,7 @@ namespace OWCE
                 {
                     if (_boardType == OWBoardType.V1)
                     {
-                        return _rideMode.Value switch
+                        return _rideMode switch
                         {
                             1 => 19, // Classic
                             2 => 24, // Extreme
@@ -150,7 +370,7 @@ namespace OWCE
                     }
                     else if (_boardType == OWBoardType.Plus || _boardType == OWBoardType.XR)
                     {
-                        return _rideMode.Value switch
+                        return _rideMode switch
                         {
                             4 => 19, // Sequoia
                             5 => 24, // Cruz
@@ -163,7 +383,7 @@ namespace OWCE
                     }
                     else if (_boardType == OWBoardType.Pint)
                     {
-                        return _rideMode.Value switch
+                        return _rideMode switch
                         {
                             5 => 19, // Redwood
                             6 => 26, // Pacific
@@ -179,7 +399,7 @@ namespace OWCE
                 {
                     if (_boardType == OWBoardType.V1)
                     {
-                        return _rideMode.Value switch
+                        return _rideMode switch
                         {
                             1 => 12, // Classic
                             2 => 15, // Extreme
@@ -189,7 +409,7 @@ namespace OWCE
                     }
                     else if (_boardType == OWBoardType.Plus || _boardType == OWBoardType.XR)
                     {
-                        return _rideMode.Value switch
+                        return _rideMode switch
                         {
                             4 => 12, // Sequoia
                             5 => 15, // Cruz
@@ -202,7 +422,7 @@ namespace OWCE
                     }
                     else if (_boardType == OWBoardType.Pint)
                     {
-                        return _rideMode.Value switch
+                        return _rideMode switch
                         {
                             5 => 12, // Redwood
                             6 => 16, // Pacific
@@ -217,36 +437,8 @@ namespace OWCE
                 }
             }
         }
+        */
 
-        public int MaxDisplaySpeed
-        {
-            get
-            {
-                if (App.Current.SpeedDemon == false)
-                {
-                    return MaxRecommendedSpeed;
-                }
-
-                if (App.Current.MetricDisplay)
-                {
-                    return 50;
-                }
-                else
-                {
-                    return 30;
-                }
-            }
-        }
-
-        public SpeedBoardDetail Speed
-        {
-            get { return _speed; }
-        }
-
-        
-
-
-        
 
 
 
@@ -271,11 +463,6 @@ namespace OWCE
             get { return _rearLightMode; }
             set { if (_rearLightMode != value) { _rearLightMode = value; OnPropertyChanged(); } }
         }
-
-
-
-
-
 
         private float _UNKNOWN1 = 0;
         public float UNKNOWN1
@@ -305,104 +492,99 @@ namespace OWCE
             set { if (_UNKNOWN4.AlmostEqualTo(value) == false) { _UNKNOWN4 = value; OnPropertyChanged(); } }
         }
 
-        private int _rssi = 0;
+        int _rssi = 0;
         public int RSSI
         {
             get { return _rssi; }
             set { if (_rssi != value) { _rssi = value; OnPropertyChanged(); } }
         }
 
+        IOWBLE _owble;
 
-        private OWBoardEventList _events = new OWBoardEventList();
-        private List<OWBoardEvent> _initialEvents = new List<OWBoardEvent>();
-        private Ride _currentRide = null;
-        private bool _keepHandshakeBackgroundRunning = false;
+        bool _isLogging = false;
+        OWBoardEventList _events = new OWBoardEventList();
+        List<OWBoardEvent> _initialEvents;
+        Ride _currentRide = null;
+        bool _keepHandshakeBackgroundRunning = false;
+        List<byte> _handshakeBuffer = null;
+        bool _isHandshaking = false;
+        TaskCompletionSource<byte[]> _handshakeTaskCompletionSource = null;
 
-        public List<BaseBoardDetail> FullBoardDetailsList { get; } = new List<BaseBoardDetail>();
-        public ObservableCollection<BaseBoardDetail> SelectedBoardDetailsList { get; } = new ObservableCollection<BaseBoardDetail>();
-
-        public OWBoard()
+        public OWBoard(IOWBLE owble, OWBaseBoard baseBoard) : base(baseBoard)
         {
 
-        }
-
-        public OWBoard(OWBaseBoard baseBoard)
-        {
+            _owble = owble;
             _id = baseBoard.ID;
             _name = baseBoard.Name;
             _isAvailable = baseBoard.IsAvailable;
             _nativePeripheral = baseBoard.NativePeripheral;
+            _owble.BoardValueChanged += OWBLE_BoardValueChanged;
+            _owble.RSSIUpdated += OWBLE_RSSIUpdated;
+
+
+            MessagingCenter.Subscribe<object>(this, "start_recording", (source) =>
+            {
+                if (_isLogging)
+                    return;
+
+                StartLogging();
+            });
+            MessagingCenter.Subscribe<object>(this, "stop_recording", (source) =>
+            {
+                if (_isLogging)
+                {
+                    StopLogging();
+                }
+            });
         }
 
-        public void Init()
+        public virtual void Init()
         {
-            App.Current.OWBLE.BoardValueChanged += OWBLE_BoardValueChanged;
-
-
-            FullBoardDetailsList.Add(_serialNumber);
-            FullBoardDetailsList.Add(_batterySerial);
-            FullBoardDetailsList.Add(_hardwareRevision);
-            FullBoardDetailsList.Add(_firmwareRevision);
-            FullBoardDetailsList.Add(_pitch);
-            FullBoardDetailsList.Add(_yaw);
-            FullBoardDetailsList.Add(_roll);
-            FullBoardDetailsList.Add(_rpm);
-            FullBoardDetailsList.Add(_speed);
-            FullBoardDetailsList.Add(_rideMode);
-            FullBoardDetailsList.Add(_batteryPercent);
-            FullBoardDetailsList.Add(_batteryVoltage);
-            FullBoardDetailsList.Add(_currentAmps);
-            FullBoardDetailsList.Add(_batteryCells);
-            FullBoardDetailsList.Add(_controllerTemperature);
-            FullBoardDetailsList.Add(_motorTemperature);
-            FullBoardDetailsList.Add(_batteryTemperature);
-            FullBoardDetailsList.Add(_unknownTemperature);
-            FullBoardDetailsList.Add(_tripOdometer);
-            FullBoardDetailsList.Add(_tripAmpHours);
-            FullBoardDetailsList.Add(_tripRegenAmpHours);
-            FullBoardDetailsList.Add(_lifetimeOdometer);
-            FullBoardDetailsList.Add(_lifetimeAmpHours);
-            //FullBoardDetailsList.Add(_lastErrorCode);
-            //FullBoardDetailsList.Add(_statusError);
-            //FullBoardDetailsList.Add(_safetyHeadroom);
-            //FullBoardDetailsList.Add(_batteryLow5);
-            //FullBoardDetailsList.Add(_batteryLow20);
-
-
-            //SelectedBoardDetailsList.Add(_serialNumber);
-            //SelectedBoardDetailsList.Add(_batterySerial);
-            //SelectedBoardDetailsList.Add(_hardwareRevision);
-            //SelectedBoardDetailsList.Add(_firmwareRevision);
-            //SelectedBoardDetailsList.Add(_pitch);
-            //SelectedBoardDetailsList.Add(_yaw);
-            //SelectedBoardDetailsList.Add(_roll);
-            //SelectedBoardDetailsList.Add(_rpm);
-            //SelectedBoardDetailsList.Add(_speed);
-            SelectedBoardDetailsList.Add(_rideMode);
-            SelectedBoardDetailsList.Add(_batteryPercent);
-            SelectedBoardDetailsList.Add(_batteryVoltage);
-            SelectedBoardDetailsList.Add(_currentAmps);
-            SelectedBoardDetailsList.Add(_batteryCells);
-            SelectedBoardDetailsList.Add(_controllerTemperature);
-            SelectedBoardDetailsList.Add(_motorTemperature);
-            SelectedBoardDetailsList.Add(_batteryTemperature);
-            SelectedBoardDetailsList.Add(_unknownTemperature);
-            SelectedBoardDetailsList.Add(_tripOdometer);
-            SelectedBoardDetailsList.Add(_tripAmpHours);
-            SelectedBoardDetailsList.Add(_tripRegenAmpHours);
-            //SelectedBoardDetailsList.Add(_lifetimeOdometer);
-            //SelectedBoardDetailsList.Add(_lifetimeAmpHours);
-            //SelectedBoardDetailsList.Add(_lastErrorCode);
-            //SelectedBoardDetailsList.Add(_statusError);
-            //SelectedBoardDetailsList.Add(_safetyHeadroom);
-            //SelectedBoardDetailsList.Add(_batteryLow5);
-            //SelectedBoardDetailsList.Add(_batteryLow20);
+#if DEBUG
+            if (DeviceInfo.DeviceType == DeviceType.Physical)
+            {
+                StartLogging();
+            }
+#endif
         }
 
+        void LogData(string characteristicGuid, byte[] data)
+        {
+            var byteString = ByteString.CopyFrom(data);
+#if DEBUG
+            // Remove serials from debug builds recording data.
+            if (characteristicGuid.Equals(SerialNumberUUID, StringComparison.InvariantCultureIgnoreCase))
+            {
+                byteString = ByteString.CopyFrom(BitConverter.GetBytes(123456));
+            }
+            else if (characteristicGuid.Equals(BatterySerialUUID, StringComparison.InvariantCultureIgnoreCase))
+            {
+                byteString = ByteString.CopyFrom(BitConverter.GetBytes(789123));
+            }
+#endif
+
+            _events.BoardEvents.Add(new OWBoardEvent()
+            {
+                Uuid = characteristicGuid,
+                Data = ByteString.CopyFrom(data),
+                Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+            });
+
+            if (_events.BoardEvents.Count > 1000)
+            {
+                SaveEvents();
+            }
+        }
 
         private void OWBLE_BoardValueChanged(string characteristicGuid, byte[] data)
         {
             Debug.WriteLine($"{characteristicGuid} {BitConverter.ToString(data)}");
+
+            if (_isLogging)
+            {
+                LogData(characteristicGuid, data);
+            }
+
 
             if (_isHandshaking && characteristicGuid.Equals(SerialReadUUID, StringComparison.CurrentCultureIgnoreCase))
             {
@@ -420,45 +602,28 @@ namespace OWCE
             SetValue(characteristicGuid, data);
         }
 
-        
+        private void OWBLE_RSSIUpdated(int rssi)
+        {
+            RSSI = rssi;
+        }
 
-       
 
         // TODO: Restore, Dictionary<string, ICharacteristic> _characteristics = new Dictionary<string, ICharacteristic>();
 
         private void RSSIMonitor()
         {
-            /*
-            ThreadPool.QueueUserWorkItem(async (object state) =>
+            Device.StartTimer(TimeSpan.FromSeconds(0.5), () =>
             {
-                while (_device.State == Plugin.BLE.Abstractions.DeviceState.Connected)
+                try
                 {
-                    try
-                    {
-                        bool didUpdate = await _device.UpdateRssiAsync();
-                        if (didUpdate)
-                        {
-                            RSSI = _device.Rssi;
-                            if (_isLogging)
-                            {
-                                _events.BoardEvents.Add(new OWBoardEvent()
-                                {
-                                    Uuid = "RSSI",
-                                    Data = ByteString.CopyFrom(BitConverter.GetBytes(_device.Rssi)),
-                                    Timestamp = DateTime.Now.Ticks,
-                                });
-                            }
-                        }
-                    }
-                    catch (Exception err)
-                    {
-                        System.Diagnostics.Debug.WriteLine("RSSI fetch error: " + err.Message);
-                    }
-                    await Task.Delay(1000);
+                    App.Current.OWBLE.RequestRSSIUpdate();
                 }
-
+                catch (Exception err)
+                {
+                    System.Diagnostics.Debug.WriteLine("RSSI fetch error: " + err.Message);
+                }
+                return true;
             });
-            */
         }
 
         internal async Task SubscribeToBLE()
@@ -467,9 +632,9 @@ namespace OWCE
             if (_nativePeripheral == null)
                 return;
 #endif
-            //RSSIMonitor();
+            RSSIMonitor();
 
-            
+
             var characteristicsToReadNow = new List<string>()
             {
                 SerialNumberUUID,
@@ -495,7 +660,7 @@ namespace OWCE
                 //BatteryVoltageUUID,
                 //SafetyHeadroomUUID,
                 //HardwareRevisionUUID,
-                //LifetimeOdometerUUID,
+                LifetimeOdometerUUID,
                 //LifetimeAmpHoursUUID,
                 RideModeUUID,
                 //BatteryCellsUUID,
@@ -533,7 +698,7 @@ namespace OWCE
                 BatteryTemperatureUUID,
                 BatteryVoltageUUID,
                 //SafetyHeadroomUUID,
-                //RideModeUUID,
+                RideModeUUID,
                 //HardwareRevisionUUID,
                 LifetimeOdometerUUID,
                 LifetimeAmpHoursUUID,
@@ -547,34 +712,31 @@ namespace OWCE
                 //UNKNOWN4UUID,
             };
 
-          
-            var hardwareRevision = await App.Current.OWBLE.ReadValue(HardwareRevisionUUID);
+
+            var hardwareRevision = await _owble.ReadValue(HardwareRevisionUUID);
             SetValue(HardwareRevisionUUID, hardwareRevision, true);
-            var firmwareRevision = await App.Current.OWBLE.ReadValue(FirmwareRevisionUUID);
+            var firmwareRevision = await _owble.ReadValue(FirmwareRevisionUUID);
             SetValue(FirmwareRevisionUUID, firmwareRevision, true);
 
-
-            if (_hardwareRevision.Value >= 5300)
+            if (HardwareRevision > 3000 && FirmwareRevision > 4000)
             {
-                MessagingCenter.Send<OWBoard>(this, "invalid_board_pint");
-                return;
-            }
-            else if (_hardwareRevision.Value >= 4210)
-            {
-                MessagingCenter.Send<OWBoard>(this, "invalid_board_xr4210");
-                return;
-            }
+                try
+                {
+                    await Handshake();
+                }
+                catch (Exceptions.HandshakeException handshakeException)
+                {
+                    await App.Current.MainPage.DisplayAlert("Error", handshakeException.Message, "Ok");
+                    if (handshakeException.ShouldDisconnect)
+                    {
+                        if (App.Current.MainPage.Navigation.ModalStack.Count == 1 && App.Current.MainPage.Navigation.ModalStack.FirstOrDefault() is Pages.CustomNavigationPage modalNavigationPage && modalNavigationPage.CurrentPage is Pages.BoardPage boardPage)
+                        {
+                            await boardPage.DisconnectAndPop();
+                        }
+                        return;
+                    }
+                }
 
-
-            // Hide 16th cell on XR and Pint.
-            if (_hardwareRevision.Value >= 4000)
-            {
-                _batteryCells.IgnoreCell(15);
-            }
-
-            if (_hardwareRevision.Value > 3000 && _firmwareRevision.Value > 4000)
-            {
-                await Handshake();
                 _keepHandshakeBackgroundRunning = true;
                 Device.StartTimer(TimeSpan.FromSeconds(15), () =>
                 {
@@ -582,8 +744,8 @@ namespace OWCE
                     {
                         try
                         {
-                            byte[] firmwareRevision = GetBytesForBoardFromUInt16((UInt16)_firmwareRevision.Value, FirmwareRevisionUUID);
-                            await App.Current.OWBLE.WriteValue(OWBoard.FirmwareRevisionUUID, firmwareRevision);
+                            byte[] firmwareRevision = GetBytesForBoardFromUInt16((UInt16)FirmwareRevision, FirmwareRevisionUUID);
+                            await _owble.WriteValue(OWBoard.FirmwareRevisionUUID, firmwareRevision);
                         }
                         catch (Exception err)
                         {
@@ -597,114 +759,18 @@ namespace OWCE
 
             foreach (var characteristic in characteristicsToSubscribeTo)
             {
-                //characteristic.ValueUpdated += Characteristic_ValueUpdated;
-                await App.Current.OWBLE.SubscribeValue(characteristic);
+                await _owble.SubscribeValue(characteristic);
             }
 
             foreach (var characteristic in characteristicsToReadNow)
             {
-                var data = await App.Current.OWBLE.ReadValue(characteristic);
-                var intValue = BitConverter.ToUInt16(data);
-
-                if (characteristic == LifetimeOdometerUUID)
-                {
-                    int blahsda = 0;
-                }
+                var data = await _owble.ReadValue(characteristic);
                 SetValue(characteristic, data, true);
             }
 
-
-            /*
-            var readTasks = new Dictionary<string, Task<byte[]>>();
-            //var readTask = new List<Task<byte[]>>();
-           
-            foreach (var characteristic in _characteristics)
-            {
-                var uuid = characteristic.u.ToUpper();
-                if (characteristic.CanRead)
-                {
-                    //byte[] data = await char    acteristic.ReadAsync();
-
-                    //Console.Write
-                    //   readTasks.Add(charac              theTask = characteristic.ReadAsync();
-
-                    readTasks.Add(uuid, characteristic.ReadAsync());
-                    //theTask = characteristic.ReadAsync();
-                }
-
-                if (characteristic.CanUpdate)
-                {
-                    if (characteristicsToSubscribeTo.Contains(uuid))
-                    {
-                        characteristic.ValueUpdated += Characteristic_ValueUpdated;
-                        await characteristic.StartUpdatesAsync();
-                    }
-                }
-            }
-
-            await Task.WhenAll(readTasks.Values.ToArray());
-
-
-            foreach (var key in readTasks.Keys)
-            {
-                System.Diagnostics.Debug.WriteLine(key);
-                SetValue(key, readTasks[key].Result, true);
-            }
-            */
-
-
-
-            /*
-
-            ReadRequestReceived - RideMode
-CharacteristicSubscribed - RideMode
-ReadRequestReceived - BatteryRemaining
-CharacteristicSubscribed - BatteryRemaining
-ReadRequestReceived - TiltAnglePitch
-CharacteristicSubscribed - TiltAnglePitch
-ReadRequestReceived - TiltAngleRoll
-CharacteristicSubscribed - TiltAngleRoll
-ReadRequestReceived - TiltAngleYaw
-CharacteristicSubscribed - TiltAngleYaw
-ReadRequestReceived - Odometer
-CharacteristicSubscribed - Odometer
-ReadRequestReceived - SpeedRpm
-CharacteristicSubscribed - SpeedRpm
-ReadRequestReceived - LightingMode
-CharacteristicSubscribed - LightingMode
-ReadRequestReceived - LightsFront
-CharacteristicSubscribed - LightsFront
-ReadRequestReceived - LightsBack
-ReadRequestReceived - StatusError
-CharacteristicSubscribed - StatusError
-ReadRequestReceived - Temperature
-ReadRequestReceived - FirmwareRevision
-ReadRequestReceived - CurrentAmps
-CharacteristicSubscribed - CurrentAmps
-ReadRequestReceived - TripTotalAmpHours
-CharacteristicSubscribed - TripTotalAmpHours
-ReadRequestReceived - TripRegenAmpHours
-CharacteristicSubscribed - TripRegenAmpHours
-ReadRequestReceived - BatteryTemp
-ReadRequestReceived - BatteryVoltage
-CharacteristicSubscribed - BatteryVoltage
-ReadRequestRe
-        HardwareRevision
-CharacteristicSubscribed - HardwareRevision
-ReadRequestReceived - LifetimeOdometer
-CharacteristicSubscribed - LifetimeOdometer
-ReadRequestReceived - BatteryCells
-Characteristic
-        d - BatteryCells
-ReadRequestReceived - LastErrorCode
-CharacteristicSubscribed - LastErrorCode
-ReadRequestReceived - LifetimeOdometer
-*/
         }
 
-        private List<byte> _handshakeBuffer = null;
-        private bool _isHandshaking = false;
-        private TaskCompletionSource<byte[]> _handshakeTaskCompletionSource = null;
+
 
         private async Task<bool> Handshake()
         {
@@ -712,34 +778,21 @@ ReadRequestReceived - LifetimeOdometer
             _handshakeTaskCompletionSource = new TaskCompletionSource<byte[]>();
             _handshakeBuffer = new List<byte>();
 
-            //var rideMode = await _characteristics[OWBoard.RideModeUUID].ReadAsync();
-            //await _characteristics[OWBoard.RideModeUUID].StartUpdatesAsync();
-
-            //var batteryPercent = await _characteristics[OWBoard.BatteryPercentUUID].ReadAsync();
-            //await _characteristics[OWBoard.BatteryPercentUUID].StartUpdatesAsync();
-
-            //_characteristics[OWBoard.UNKNOWN1UUID].ValueUpdated += SerialRead_ValueUpdated;
-            //_characteristics[OWBoard.UNKNOWN1UUID].ValueUpdated += SerialRead_ValueUpdated;
-            // TODO: Restore _characteristics[OWBoard.SerialReadUUID].ValueUpdated += SerialRead_ValueUpdated;
-
-            //await _characteristics[OWBoard.UNKNOWN1UUID].StartUpdatesAsync();
-            //await _characteristics[OWBoard.UNKNOWN2UUID].StartUpdatesAsync();
-            await App.Current.OWBLE.SubscribeValue(OWBoard.SerialReadUUID, true);
+            await _owble.SubscribeValue(OWBoard.SerialReadUUID, true);
 
             // Data does not send until this is triggered. 
-            byte[] firmwareRevision = GetBytesForBoardFromUInt16((UInt16)_firmwareRevision.Value, FirmwareRevisionUUID);
+            byte[] firmwareRevision = GetBytesForBoardFromUInt16((UInt16)FirmwareRevision, FirmwareRevisionUUID);
 
-            var didWrite = await App.Current.OWBLE.WriteValue(OWBoard.FirmwareRevisionUUID, firmwareRevision, true);
+            var didWrite = await _owble.WriteValue(OWBoard.FirmwareRevisionUUID, firmwareRevision, true);
 
             var byteArray = await _handshakeTaskCompletionSource.Task;
-            
-            await App.Current.OWBLE.UnsubscribeValue(OWBoard.SerialReadUUID, true);
+
+            await _owble.UnsubscribeValue(OWBoard.SerialReadUUID, true);
             // TODO: Restore _characteristics[OWBoard.SerialReadUUID].ValueUpdated -= SerialRead_ValueUpdated;
             if (byteArray.Length == 20)
             {
-                if (_firmwareRevision.Value >= 4141) // Pint or XR with 4210 hardware 
+                if (FirmwareRevision >= 4141) // Pint or XR with 4210 hardware 
                 {
-                    /*
                     // Get bytes 3 through to 19 (start 3, length 16)
                     var apiKeyArray = new byte[16];
                     Array.Copy(byteArray, 3, apiKeyArray, 0, 16);
@@ -752,9 +805,8 @@ ReadRequestReceived - LifetimeOdometer
                     if (tokenArray != null)
                     {
                         // Feed it back to the app how we normally would.
-                        await App.Current.OWBLE.WriteValue(OWBoard.SerialWriteUUID, tokenArray);
+                        await _owble.WriteValue(OWBoard.SerialWriteUUID, tokenArray);
                     }
-                    */
                 }
                 else
                 {
@@ -768,23 +820,23 @@ ReadRequestReceived - LifetimeOdometer
 
                     // This appears to be a static value from the board.
                     var arrayToMD5_part2 = new byte[] {
-                        217,    // D9
-                        37,     // 25
-                        95,     // 5F
-                        15,     // 0F
-                        35,     // 23
-                        53,     // 35
-                        78,     // 4E
-                        25,     // 19
-                        186,    // BA
-                        115,    // 73
-                        156,    // 9C
-                        205,    // CD
-                        196,    // C4
-                        169,    // A9
-                        23,     // 17
-                        101,    // 65
-                    };
+                         217,    // D9
+                         37,     // 25
+                         95,     // 5F
+                         15,     // 0F
+                         35,     // 23
+                         53,     // 35
+                         78,     // 4E
+                         25,     // 19
+                         186,    // BA
+                         115,    // 73
+                         156,    // 9C
+                         205,    // CD
+                         196,    // C4
+                         169,    // A9
+                         23,     // 17
+                         101,    // 65
+                     };
 
 
                     // New byte array we are going to MD5 hash. Part of the input string, part of this static string.
@@ -815,13 +867,12 @@ ReadRequestReceived - LifetimeOdometer
                     Debug.WriteLine($"Input: {inputString}");
                     Debug.WriteLine($"Output: {outputString}");
 
-                    await App.Current.OWBLE.WriteValue(OWBoard.SerialWriteUUID, outputArray);
+                    await _owble.WriteValue(OWBoard.SerialWriteUUID, outputArray);
                 }
             }
             return false;
         }
 
-        /*
         private async Task<byte[]> FetchToken(string apiKey)
         {
             if (String.IsNullOrWhiteSpace(_name))
@@ -830,6 +881,11 @@ ReadRequestReceived - LifetimeOdometer
             }
             var deviceName = _name.ToLower();
             deviceName = deviceName.Replace("ow", String.Empty);
+
+
+            //SecureStorage.Remove($"board_{deviceName}_token");
+            //SecureStorage.Remove($"board_{deviceName}_key");
+
             var key = await SecureStorage.GetAsync($"board_{deviceName}_key");
 
             // If the API key has changed delete the stored token.
@@ -838,97 +894,153 @@ ReadRequestReceived - LifetimeOdometer
                 SecureStorage.Remove($"board_{deviceName}_token");
             }
 
+
+            // If we already have a token lets use it.
             var token = await SecureStorage.GetAsync($"board_{deviceName}_token");
-
-            if (String.IsNullOrEmpty(token))
-            {
-                try
-                {
-                    using (var handler = new HttpClientHandler())
-                    {
-                        handler.AutomaticDecompression = System.Net.DecompressionMethods.GZip;
-
-                        using (var client = new HttpClient())
-                        {
-                            // Match headers as best as possible.
-                            client.DefaultRequestHeaders.Clear();
-                            client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "application/json");
-                            client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
-                            client.DefaultRequestHeaders.TryAddWithoutValidation("Connection", "keep-alive");
-                            client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "en-us");
-                            client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Basic Og==");
-                            client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip");
-
-                            var platform = DeviceInfo.Platform;
-                            if (platform == DevicePlatform.Android)
-                            {
-                                var userAgent = DependencyService.Get<DependencyInterfaces.IUserAgent>();
-                                var systemUserAgent = await userAgent.GetSystemUserAgent();
-                                client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", systemUserAgent);
-                            }
-                            else if (platform == DevicePlatform.iOS)
-                            {
-                                client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Onewheel/0 CFNetwork/1121.2.2 Darwin/19.2.0");
-                            }
-                            else
-                            {
-                                client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Onewheel/0 CFNetwork/1121.2.2 Darwin/19.2.0");
-                            }
-                            client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
-                            client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
-
-                            string owType = _boardType switch
-                            {
-                                OWBoardType.XR => "xr",
-                                OWBoardType.Pint => "pint",
-                                _ => "",
-                            };
-
-                            // Request unlock key based on board name, board type, and token.
-                            var url = $"https://app.onewheel.com/wp-json/fm/v2/activation/{deviceName}?owType={owType}&apiKey={apiKey}";
-                            var response = await client.GetAsync(url);
-
-                            if (response.IsSuccessStatusCode)
-                            {
-                                var responseBody = await response.Content.ReadAsStringAsync();
-                                var owKey = JsonSerializer.Deserialize<OWKey>(responseBody);
-
-                                if (String.IsNullOrWhiteSpace(owKey.Key))
-                                {
-                                    throw new Exception("No key found.");
-                                }
-
-                                await SecureStorage.SetAsync($"board_{deviceName}_key", apiKey);
-                                await SecureStorage.SetAsync($"board_{deviceName}_token", owKey.Key);
-
-                                var tokenArray = owKey.Key.StringToByteArray();
-                                return tokenArray;
-                            }
-                            else
-                            {
-                                throw new Exception($"Unexpected response code ({response.StatusCode})");
-                            }
-                        }
-                    }
-                }
-                catch (Exception err)
-                {
-                    Debug.WriteLine($"ERROR: {err.Message}");
-
-                    SecureStorage.Remove($"board_{deviceName}_token");
-                    SecureStorage.Remove($"board_{deviceName}_key");
-
-                }
-            }
-            else
+            if (String.IsNullOrEmpty(token) == false)
             {
                 var tokenArray = token.StringToByteArray();
                 return tokenArray;
             }
 
+            try
+            {
+                // First lets fetch it from OWCE servers.
+                using (var handler = new HttpClientHandler())
+                {
+                    handler.AutomaticDecompression = System.Net.DecompressionMethods.GZip;
+
+                    using (var client = new HttpClient())
+                    {
+                        client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "application/json");
+                        client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
+
+                        var response = await client.GetAsync($"https://{App.OWCEApiServer}/v1/handshake/{deviceName}");
+
+                        // We only care if we were successful, otherwise fallback to FM.
+                        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            var responseBody = await response.Content.ReadAsStringAsync();
+                            var keyResponse = JsonSerializer.Deserialize<KeyResponse>(responseBody);
+
+                            if (String.IsNullOrWhiteSpace(keyResponse.Key) == false)
+                            {
+                                await SecureStorage.SetAsync($"board_{deviceName}_key", apiKey);
+                                await SecureStorage.SetAsync($"board_{deviceName}_token", keyResponse.Key);
+
+                                var tokenArray = keyResponse.Key.StringToByteArray();
+                                return tokenArray;
+                            }
+                        }
+
+                        var statusResponse = await client.GetAsync($"https://{App.OWCEApiServer}/v1/status/handshake");
+                        if (statusResponse.StatusCode != System.Net.HttpStatusCode.OK)
+                        {
+                            return null;
+                        }
+
+                        var handshakeStatusResponseBody = await statusResponse.Content.ReadAsStringAsync();
+                        var handshakeStatusResponse = JsonSerializer.Deserialize<HandshakeStatusResponse>(handshakeStatusResponseBody);
+
+                        if (handshakeStatusResponse.Online == false)
+                        {
+                            throw new Exceptions.HandshakeException(handshakeStatusResponse.Message, true);
+                        }
+                    }
+                }
+
+                // If we never found the key in OWCE servers lets fetch it from FM servers.
+                using (var handler = new HttpClientHandler())
+                {
+                    handler.AutomaticDecompression = System.Net.DecompressionMethods.GZip;
+
+                    using (var client = new HttpClient())
+                    {
+                        // Match headers as best as possible.
+                        client.DefaultRequestHeaders.Clear();
+                        client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "application/json");
+                        client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
+                        client.DefaultRequestHeaders.TryAddWithoutValidation("Connection", "keep-alive");
+                        client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "en-us");
+                        client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Basic Og==");
+                        client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip");
+
+                        var platform = DeviceInfo.Platform;
+                        if (platform == DevicePlatform.Android)
+                        {
+                            var userAgent = DependencyService.Get<DependencyInterfaces.IUserAgent>();
+                            var systemUserAgent = await userAgent.GetSystemUserAgent();
+                            client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", systemUserAgent);
+                        }
+                        else if (platform == DevicePlatform.iOS)
+                        {
+                            client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Onewheel/0 CFNetwork/1121.2.2 Darwin/19.2.0");
+                        }
+                        else
+                        {
+                            client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Onewheel/0 CFNetwork/1121.2.2 Darwin/19.2.0");
+                        }
+
+                        string owType = _boardType switch
+                        {
+                            OWBoardType.XR => "xr",
+                            OWBoardType.Pint => "pint",
+                            _ => "",
+                        };
+
+                        // Request unlock key based on board name, board type, and token.
+                        var url = $"https://app.onewheel.com/wp-json/fm/v2/activation/{deviceName}?owType={owType}&apiKey={apiKey}";
+                        var response = await client.GetAsync(url);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var responseBody = await response.Content.ReadAsStringAsync();
+                            var activationResponse = JsonSerializer.Deserialize<FMActivationResponse>(responseBody);
+
+                            if (String.IsNullOrWhiteSpace(activationResponse.Key))
+                            {
+                                throw new Exceptions.HandshakeException("Unable to fetch key. Please don't attempt this again. If you can, please report this to our Facebook page or discussion group.", true);
+                            }
+
+                            var keyRequest = new KeyRequest()
+                            {
+                                APIKey = apiKey,
+                                BoardKey = activationResponse.Key,
+                                DeviceName = deviceName,
+                                OWType = owType,
+                            };
+                            var keyRequestJson = JsonSerializer.Serialize(keyRequest);
+                            var httpContent = new StringContent(keyRequestJson, System.Text.Encoding.UTF8, "application/json");
+                            response = await client.PutAsync($"https://{App.OWCEApiServer}/v1/handshake/{deviceName}", httpContent);
+
+
+                            await SecureStorage.SetAsync($"board_{deviceName}_key", apiKey);
+                            await SecureStorage.SetAsync($"board_{deviceName}_token", activationResponse.Key);
+
+                            var tokenArray = activationResponse.Key.StringToByteArray();
+                            return tokenArray;
+                        }
+                        else
+                        {
+                            throw new Exceptions.HandshakeException($"Unexpected response code ({response.StatusCode}). Please don't attempt this again. If you can, please report this to our Facebook page or discussion group.", true);
+                        }
+                    }
+                }
+            }
+            catch (Exceptions.HandshakeException err)
+            {
+                throw err;
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine($"ERROR: {err.Message}");
+
+                SecureStorage.Remove($"board_{deviceName}_token");
+                SecureStorage.Remove($"board_{deviceName}_key");
+            }
+
             return null;
         }
-        */
 
 
         private byte[] GetBytesForBoardFromUInt16(UInt16 value, string uuidHint = null)
@@ -954,15 +1066,26 @@ ReadRequestReceived - LifetimeOdometer
 
             uuid = uuid.ToUpper();
 
-
             if (initialData)
             {
-                _initialEvents.Add(new OWBoardEvent()
+                if (_isLogging)
                 {
-                    Uuid = uuid,
-                    Data = ByteString.CopyFrom(data),
-                    Timestamp = DateTime.UtcNow.Ticks,
-                });
+                    LogData(uuid, data);
+                }
+                else
+                {
+                    if (_initialEvents == null)
+                    {
+                        _initialEvents = new List<OWBoardEvent>();
+                    }
+
+                    _initialEvents.Add(new OWBoardEvent()
+                    {
+                        Uuid = uuid,
+                        Data = ByteString.CopyFrom(data),
+                        Timestamp = DateTime.UtcNow.Ticks,
+                    });
+                }
             }
 
 
@@ -971,15 +1094,21 @@ ReadRequestReceived - LifetimeOdometer
 
             if (uuid == TemperatureUUID)
             {
-                _motorTemperature.Value = data[0];
-                _controllerTemperature.Value = data[1];
+                MotorTemperature = data[0];
+                ControllerTemperature = data[1];
 
                 return;
             }
             else if (uuid == BatteryTemperatureUUID)
             {
-                _unknownTemperature.Value = data[0];
-                _batteryTemperature.Value = data[1];
+                if (_boardType == OWBoardType.V1 || _boardType == OWBoardType.Plus)
+                {
+                    BatteryTemperature = data[1];
+                }
+                else
+                {
+                    BatteryTemperature = data[0];
+                }
 
                 return;
             }
@@ -987,11 +1116,11 @@ ReadRequestReceived - LifetimeOdometer
             {
                 if (data[0] > 0)
                 {
-                    _batteryPercent.Value = data[0];
+                    BatteryPercent = data[0];
                 }
                 else if (data[1] > 0)
                 {
-                    _batteryPercent.Value = data[1];
+                    BatteryPercent = data[1];
                 }
             }
 
@@ -999,66 +1128,37 @@ ReadRequestReceived - LifetimeOdometer
             var value = BitConverter.ToUInt16(data, 0);
 
 
-            if (_isLogging)
-            {
-                //  var boardEvent = new OWBoardEvent();
-                // boardEvent.write
-                //boardEvent.WriteDelimitedTo()
-                _events.BoardEvents.Add(new OWBoardEvent()
-                {
-                    Uuid = uuid,
-                    Data = ByteString.CopyFrom(data),
-                    Timestamp = DateTime.UtcNow.Ticks,
-                });
-
-                if (_events.BoardEvents.Count > 1000)
-                {
-                    SaveEvents();
-                }
-            }
-
             switch (uuid)
             {
                 case SerialNumberUUID:
-                    _serialNumber.Value = value;
+                    SerialNumber = value;
                     break;
                 case BatteryLow5UUID:
-                    _batteryLow5.Value = value;
+                    BatteryLow5 = value;
                     break;
                 case BatteryLow20UUID:
-                    _batteryLow20.Value = value;
+                    BatteryLow20 = value;
                     break;
                 case BatterySerialUUID:
-                    _batterySerial.Value = value;
+                    BatterySerial = value;
                     break;
                 case PitchUUID:
-                    _pitch.Value = 0.1f * (1800 - value);
+                    Pitch = 0.1f * (1800 - value);
                     break;
                 case RollUUID:
-                    _roll.Value = 0.1f * (1800 - value);
+                    Roll = 0.1f * (1800 - value);
                     break;
                 case YawUUID:
-                    _yaw.Value = 0.1f * (1800 - value);
+                    Yaw = 0.1f * (1800 - value);
                     break;
                 case TripOdometerUUID:
-                    _tripOdometer.Value = value;
+                    TripOdometer = value;
                     break;
                 case RpmUUID:
-                    if (_rpm.Value != value)
-                    { 
-                        _rpm.Value = value;
-    
-                        var speedInMetersPerSecond = _tyreRadius * RadConvert * _rpm.Value;
-                        _speed.Value = speedInMetersPerSecond;
-                    }
-
+                    RPM = value;
                     break;
                 case RideModeUUID:
-                    _rideMode.Value = value;
-
-                    // Fire these updates as well.
-                    OnPropertyChanged("MaxDisplaySpeed");
-                    OnPropertyChanged("MaxRecommendedSpeed");
+                    RideMode = value;
                     break;
                 case LightModeUUID:
                     LightMode = (value == 1);
@@ -1070,131 +1170,163 @@ ReadRequestReceived - LifetimeOdometer
                     RearLightMode = value;
                     break;
                 case StatusErrorUUID:
-                    _statusError.Value = value;
+                    StatusError = value;
                     break;
                 case FirmwareRevisionUUID:
-                    _firmwareRevision.Value = value;
+                    FirmwareRevision = value;
                     break;
                 case CurrentAmpsUUID:
-                    var scaleFactor = (_boardType == OWBoardType.V1) ? 0.9f : 1.8f;
-                    _currentAmps.Value = (float)value * 0.001f * scaleFactor;
+
+                    
+                    var scaleFactor = _boardType switch {
+                        OWBoardType.V1 => 0.9f,
+                        OWBoardType.Plus => 1.8f,
+                        OWBoardType.XR => 2.0f,
+                        OWBoardType.Pint => 2.0f,
+                        _ => throw new Exception("Unknown board type"),
+                    };
+
+                    CurrentAmps = (float)value * 0.001f * scaleFactor;
                     break;
                 case TripAmpHoursUUID:
-                    _tripAmpHours.Value = (float)value * 0.02f; // (value / 50)
+                    if (BoardType == OWBoardType.V1)
+                    {
+                        TripAmpHours = (float)value * 0.00009f;
+                    }
+                    else
+                    {
+                        TripAmpHours = (float)value * 0.00018f;
+                    }
                     break;
                 case TripRegenAmpHoursUUID:
-                    _tripRegenAmpHours.Value = (float)value * 0.02f; // (value / 50)
+                    if (BoardType == OWBoardType.V1)
+                    {
+                        TripRegenAmpHours = (float)value * 0.00009f;
+                    }
+                    else
+                    {
+                        TripRegenAmpHours = (float)value * 0.00018f;
+                    }
                     break;
                 case BatteryVoltageUUID:
-                    _batteryVoltage.Value = 0.1f * value;
+                    BatteryVoltage = 0.1f * value;
                     break;
                 case SafetyHeadroomUUID:
-                    _safetyHeadroom.Value = value;
+                    SafetyHeadroom = value;
                     break;
                 case HardwareRevisionUUID:
-                    _hardwareRevision.Value = value;
+                    HardwareRevision = value;
 
                     if (value >= 1 && value <= 2999)
                     {
                         BoardType = OWBoardType.V1;
+                        SimpleStopEnabled = null;
                     }
                     else if (value >= 3000 && value <= 3999)
                     {
                         BoardType = OWBoardType.Plus;
+                        SimpleStopEnabled = null;
                     }
                     else if (value >= 4000 && value <= 4999)
                     {
                         BoardType = OWBoardType.XR;
+                        SimpleStopEnabled = null;
                     }
                     else if (value >= 5000 && value <= 5999)
                     {
                         BoardType = OWBoardType.Pint;
+                        if (SimpleStopEnabled == null)
+                        {
+                            SimpleStopEnabled = false;
+                        }
+                    }
+
+                    if (HardwareRevision >= 4000)
+                    {
+                        BatteryCells.CellCount = 15;
+                        BatteryCells.IgnoreCell(15);
+                        OnPropertyChanged("BatteryCells");
+                    }
+                    else
+                    {
+                        BatteryCells.CellCount = 16;
                     }
 
                     break;
                 case LifetimeOdometerUUID:
-                    _lifetimeOdometer.Value = value;
+                    LifetimeOdometer = value;
                     break;
                 case LifetimeAmpHoursUUID:
-                    _lifetimeAmpHours.Value = value;
+                    LifetimeAmpHours = value;
                     break;
                 case BatteryCellsUUID:
 
-                    var batteryVoltage = (uint)data[0];
-                    var cellID = (uint)data[1];
-                    //var batteryVoltageDisplay = batteryVoltage / 50.0;
+                    // Different battery cell logic for XR 4210+ and Pint.
+                    if (FirmwareRevision >= 4141)
+                    {
+                        var cellID = (uint)((value & 0xF000) >> 12);
+                        var batteryVoltage = (value & 0x0FFF) * 0.0011f;
+                        BatteryCells.SetCell(cellID, batteryVoltage, "F3");
+                    }
+                    else
+                    {
+                        var cellID = (uint)data[1];
+                        var batteryVoltage = (float)data[0] * 0.02f;
+                        BatteryCells.SetCell(cellID, batteryVoltage);
+                    }
 
-                    _batteryCells.SetCell(cellID, batteryVoltage);
-
-                    //batteryVoltageCells[cellIdentifier] = (double)var3 / 50.0D;
-                    //Debug.WriteLine($"BatteryCellsUUID: {cellID} {batteryVoltage} {batteryVoltageDisplay} ");
+                    OnPropertyChanged("BatteryCells");
 
                     break;
                 case LastErrorCodeUUID:
 
                     break;
                 case UNKNOWN1UUID:
-                    _UNKNOWN1 = value;
+                    UNKNOWN1 = value;
                     break;
                 case UNKNOWN2UUID:
-                    _UNKNOWN2 = value;
+                    UNKNOWN2 = value;
                     break;
                 case UNKNOWN3UUID:
-                    _UNKNOWN3 = value;
+                    UNKNOWN3 = value;
                     break;
                 case UNKNOWN4UUID:
-                    _UNKNOWN4 = value;
+                    UNKNOWN4 = value;
                     break;
             }
         }
 
-        /*Disconnect
-        void SerialRead_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e)
-        {
-            string uuid = e.Characteristic.Uuid.ToUpper();
-            Debug.WriteLine($"SerialRead_ValueUpdated - {uuid}");
-            if (_isHandshaking && uuid == SerialReadUUID)
-            {
-                _handshakeBuffer.AddRange(e.Characteristic.Value);
-                if (_handshakeBuffer.Count == 20)
-                {
-                    _isHandshaking = false;
-                    _handshakeTaskCompletionSource.SetResult(_handshakeBuffer.ToArray<byte>());
-                }
-            }
-        }
-
-        void Characteristic_ValueUpdated(object sender, Plugin.BLE.Abstractions.EventArgs.CharacteristicUpdatedEventArgs e)
-        {
-            string uuid = e.Characteristic.Uuid.ToUpper();
-            SetValue(uuid, e.Characteristic.Value);
-        }
-        */
-
+        /*
         public async Task Disconnect()
         {
-            App.Current.OWBLE.BoardValueChanged -= OWBLE_BoardValueChanged;
+            _owble.BoardValueChanged -= OWBLE_BoardValueChanged;
             _keepHandshakeBackgroundRunning = false;
-            await App.Current.OWBLE.Disconnect();
+            await _owble.Disconnect();
             //await CrossBluetoothLE.Current.Adapter.DisconnectDeviceAsync(_device);
         }
-
-        private bool _isLogging = false;
+        */
         //private long _currentRunStart = 0;
         //public long CurrentRunStart { get{ return _currentRunStart; } }
 
-        public async Task StartLogging()
+
+        public void StartLogging()
         {
+            var filename = DateTime.Now.ToString("dd MMMM yyyy hh:mm:ss tt") + ".bin";
+
             // _currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             //_logDirectory = Path.Combine(FileSystem.CacheDirectory, _currentRunStart.ToString());
             var currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            _currentRide = new Ride($"{currentRunStart}.dat");
+            _currentRide = new Ride(filename);
+
+            //_currentLogFile = Path.Combine(App.Current.LogsDirectory, filename);
 
 
             _isLogging = true;
             _events = new OWBoardEventList();
-            _events.BoardEvents.AddRange(_initialEvents);
-
+            if (_initialEvents != null)
+            {
+                _events.BoardEvents.AddRange(_initialEvents);
+            }
 
             /*
             if (CrossGeolocator.Current.IsGeolocationAvailable)
@@ -1210,54 +1342,25 @@ ReadRequestReceived - LifetimeOdometer
             */
         }
 
-        public async Task<string> StopLogging()
+        public string StopLogging()
         {
             _isLogging = false;
             _currentRide.EndTime = DateTime.Now;
+            Hud.Show("Saving");
 
-
-            Hud.Show("Compressing data");
             /*
-            await CrossGeolocator.Current.StopListeningAsync(); ;
-
+            await CrossGeolocator.Current.StopListeningAsync(); 
             CrossGeolocator.Current.PositionChanged -= PositionChanged;
             CrossGeolocator.Current.PositionError -= PositionError;
             */
 
             SaveEvents();
 
-
-            var logFilePath = _currentRide.GetLogFilePath();
-            string datFileName = Path.GetFileName(logFilePath);
-            var zipPath = Path.Combine(FileSystem.CacheDirectory, $"{datFileName}.zip");
-
-            using (FileStream fs = File.Create(zipPath))
-            {
-                using (ICSharpCode.SharpZipLib.Zip.ZipOutputStream zipStream = new ICSharpCode.SharpZipLib.Zip.ZipOutputStream(fs))
-                {
-                    zipStream.SetLevel(3);
-
-                    //FileInfo inFileInfo = new FileInfo(inputPath);
+            Hud.Dismiss();
 
 
-                    ICSharpCode.SharpZipLib.Zip.ZipEntry newEntry = new ICSharpCode.SharpZipLib.Zip.ZipEntry(datFileName);
-                    newEntry.DateTime = DateTime.UtcNow;
-                    zipStream.PutNextEntry(newEntry);
 
-                    byte[] buffer = new byte[4096];
-                    using (FileStream streamReader = File.OpenRead(logFilePath))
-                    {
-                        ICSharpCode.SharpZipLib.Core.StreamUtils.Copy(streamReader, zipStream, buffer);
-                    }
-
-                    zipStream.CloseEntry();
-                    zipStream.IsStreamOwner = true;
-                    zipStream.Close();
-                }
-            }
-
-
-            return zipPath;
+            return String.Empty;
         }
 
 
@@ -1340,29 +1443,16 @@ ReadRequestReceived - LifetimeOdometer
             {
                 var oldEvents = _events;
                 _events = new OWBoardEventList();
-
-                using (FileStream fs = new FileStream(_currentRide.GetLogFilePath(), FileMode.Append, FileAccess.Write))
+                var logPath = _currentRide.GetLogFilePath();
+                using (FileStream fs = new FileStream(logPath, FileMode.Append, FileAccess.Write))
                 {
                     foreach (var owBoardEvent in oldEvents.BoardEvents)
                     {
                         owBoardEvent.WriteDelimitedTo(fs);
                     }
-
-                    /*
-                    using (StreamWriter sw = new StreamWriter(fs))
-                    {
-                        sw.WriteLine(myNewCSVLine);
-                    }
-                    */
                 }
                 //long currentRunEnd = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 // var outputFile = Path.Combine(_logDirectory, $"{currentRunEnd}.dat");
-                /*
-                using (var output = File.Create(outputFile))
-                {
-                    oldEvents.WriteTo(output);
-                }
-                */
             }
             catch (Exception err)
             {
@@ -1448,14 +1538,14 @@ ReadRequestReceived - LifetimeOdometer
 
             return "Unknown";
         }
-    }
 
-    internal class OWKey
-    {
-        [System.Text.Json.Serialization.JsonPropertyName("key")]
-        public string Key
+
+
+        public async void ChangeRideMode(ushort rideMode)
         {
-            get; set;
+            _incomingRideMode = rideMode;
+            byte[] rideModeBytes = BitConverter.GetBytes(rideMode);
+            var result = await App.Current.OWBLE.WriteValue(OWBoard.RideModeUUID, rideModeBytes, true);
         }
     }
 }

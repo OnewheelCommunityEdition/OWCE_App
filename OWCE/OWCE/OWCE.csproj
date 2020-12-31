@@ -14,27 +14,31 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="3.2.1" />
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="3.2.1" />
-    <PackageReference Include="Syncfusion.Xamarin.SfGauge" Version="18.1.0.53" />
-    <PackageReference Include="Google.Protobuf" Version="3.12.1" />
-    <PackageReference Include="RestSharp" Version="106.11.4" />
-    <PackageReference Include="SharpZipLib" Version="1.2.0" />
-    <PackageReference Include="Xamarin.Forms" Version="4.6.0.800" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.0.0" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.0.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.14.0" />
+    <PackageReference Include="RestSharp" Version="106.11.7" />
+    <PackageReference Include="SharpZipLib" Version="1.3.1" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.1821" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.6.0" />
     <PackageReference Include="Xam.Plugin.Geolocator" Version="4.5.0.6" />
-    <PackageReference Include="System.Text.Json" Version="4.7.2" />
-    <PackageReference Include="Xamarin.Forms.PancakeView" Version="1.4.2" />
-    <PackageReference Include="Syncfusion.Xamarin.SfChart" Version="18.1.0.53" />
+    <PackageReference Include="System.Text.Json" Version="5.0.0" />
+    <PackageReference Include="Xamarin.Forms.PancakeView" Version="2.3.0.759" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.9" />
+    <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
   </ItemGroup>
 
 
   <ItemGroup>
     <Folder Include="Pages\" />
     <Folder Include="Extensions\" />
-    <Folder Include="TemplateSelectors\" />
     <Folder Include="Views\" />
     <Folder Include="Models\" />
+    <Folder Include="Resources\" />
+    <Folder Include="Resources\Fonts\" />
+    <Folder Include="Pages\Popup\" />
+    <Folder Include="Network\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="App.xaml.cs">
@@ -58,5 +62,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="**/.DS_Store" />
+    <None Remove="Fonts\SairaExtraCondensed-SemiBold.ttf" />
+    <None Remove="Resources\Fonts\SairaExtraCondensed-SemiBold.ttf" />
+    <None Remove="Resources\Fonts\SairaExtraCondensed-Bold.ttf" />
+    <None Remove="Resources\Fonts\SairaExtraCondensed-Black.ttf" />
+    <None Remove="Resources\Fonts\SairaExtraCondensed-Light.ttf" />
+    <None Remove="Resources\Fonts\SairaExtraCondensed-Medium.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-SemiBold.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-Bold.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-Black.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-Light.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-Medium.ttf" />
   </ItemGroup>
 </Project>

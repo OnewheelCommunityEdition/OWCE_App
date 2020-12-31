@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView" x:Class="OWCE.Views.PowerView">
+
+     <yummy:PancakeView BackgroundColor="#7F01FF" Style="{StaticResource BoardDetailBlockBaseStyle}">
+        <Grid BackgroundColor="#7F01FF" RowDefinitions="121">
+            <BoxView x:Name="BackgroundBar" WidthRequest="0" BackgroundColor="#6601CC" VerticalOptions="Fill" HorizontalOptions="Start" />
+
+                <Label Text="CURRENT" FontFamily="SairaExtraCondensed-Bold" TextColor="White" CharacterSpacing="0.26" FontSize="16" Margin="20,6,0,0" />
+                <Label Text="{Binding CurrentAmps, StringFormat='{0:F1}A'}"  TextColor="White"  FontFamily="SairaExtraCondensed-Black" FontSize="80" HorizontalOptions="Center" VerticalOptions="Start"  />
+
+                <Label VerticalOptions="End" Margin="20,0">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding TripAmpHours, StringFormat='{0:F2} Ah'}" FontSize="16" TextColor="White" FontFamily="SairaExtraCondensed-Medium" />
+                            <Span Text=" Trip usage" FontSize="16" TextColor="White" FontFamily="SairaExtraCondensed-Light" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+
+                <Label HorizontalTextAlignment="End" HorizontalOptions="Fill" VerticalOptions="End" Margin="20,0">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Trip regen: " TextColor="White" FontSize="16" FontFamily="SairaExtraCondensed-Light" />
+                            <Span Text="{Binding TripRegenAmpHours, StringFormat='{0:F2} Ah'}" TextColor="White" FontSize="16" FontFamily="SairaExtraCondensed-Medium" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+                
+
+        </Grid>
+    </yummy:PancakeView>
+
+</ContentView>

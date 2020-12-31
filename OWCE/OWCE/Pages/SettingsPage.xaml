@@ -9,13 +9,7 @@
             </StackLayout>
             <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
             
-            
-            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" HeightRequest="50">
-                <Label Text="Speed demon" VerticalOptions="Center" HorizontalOptions="FillAndExpand"/>
-                <Switch x:Name="SpeedDemon" Toggled="SpeedDemon_Toggled" VerticalOptions="Center" HorizontalOptions="End" />
-            </StackLayout>
-            <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
-            
+         
         </StackLayout>
     </ScrollView>
 </ContentPage>
