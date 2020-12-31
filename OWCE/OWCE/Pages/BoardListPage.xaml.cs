@@ -209,7 +209,7 @@ namespace OWCE.Pages
                                 if (parameter is Popup.Alert alertPage)
                                 {
                                     await Rg.Plugins.Popup.Services.PopupNavigation.Instance.RemovePageAsync(alertPage);
-                                    App.Current.OWBLE.StartScanning();
+                                    StartScanning();
                                 }
                             }))
                             {

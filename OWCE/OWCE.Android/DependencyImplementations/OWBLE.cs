@@ -13,6 +13,7 @@ using Android.Runtime;
 using Java.Util;
 using OWCE.DependencyInterfaces;
 using OWCE.Droid.Extensions;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(OWCE.Droid.DependencyImplementations.OWBLE))]
@@ -860,7 +861,8 @@ namespace OWCE.Droid.DependencyImplementations
         public bool ReadyToScan()
         {
             // TODO: Handle this.
-            return true;
+
+            return false;
         }
 
         public void Shutdown()
