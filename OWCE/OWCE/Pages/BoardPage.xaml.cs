@@ -41,6 +41,8 @@ namespace OWCE.Pages
             InitializeComponent();
             BindingContext = board;
 
+            AppVersionLabel.Text = $"{AppInfo.VersionString} (build {AppInfo.BuildString})";
+
             ImperialSwitch.IsToggled = !App.Current.MetricDisplay;
 
 
