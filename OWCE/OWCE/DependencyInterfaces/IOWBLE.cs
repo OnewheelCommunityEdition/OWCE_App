@@ -9,7 +9,7 @@ namespace OWCE.DependencyInterfaces
         public bool IsScanning { get; }
         void StartScanning();
         void StopScanning();
-        bool ReadyToScan();
+        Task<bool> ReadyToScan();
         void Shutdown();
         void RequestRSSIUpdate();
 

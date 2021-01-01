@@ -194,9 +194,9 @@ namespace OWCE
         }
 
 
-        public bool ReadyToScan()
+        public Task<bool> ReadyToScan()
         {
-            return true;
+            return Task.FromResult<bool>(true);
         }
     }
 }

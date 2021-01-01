@@ -164,7 +164,7 @@ namespace OWCE.Pages
         Thickness _safeInsets;
 
         bool _hasAppeared = false;
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
 
@@ -197,7 +197,7 @@ namespace OWCE.Pages
                     {
                         ButtonText = "OK",
                     };
-                    PopupNavigation.Instance.PushAsync(alert, true);
+                    await PopupNavigation.Instance.PushAsync(alert, true);
 
                     // Additionally if this is also the first launch ever, lets prompt them for bluetooth after they have dismissed the initial alert.
                     if (VersionTracking.IsFirstLaunchEver)
@@ -209,7 +209,7 @@ namespace OWCE.Pages
                                 if (parameter is Popup.Alert alertPage)
                                 {
                                     await Rg.Plugins.Popup.Services.PopupNavigation.Instance.RemovePageAsync(alertPage);
-                                    StartScanning();
+                                    await StartScanning();
                                 }
                             }))
                             {
@@ -219,12 +219,16 @@ namespace OWCE.Pages
                             PopupNavigation.Instance.PushAsync(bluetoothPleaseAlert, true);
                         };
                     }
+                    else
+                    {
+                        await StartScanning(); 
+                    }
                 }
             }
 
-            if (App.Current.OWBLE.ReadyToScan())
+            if (await App.Current.OWBLE.ReadyToScan())
             {
-                App.Current.OWBLE.StartScanning();
+                await StartScanning();
             }
         }
 

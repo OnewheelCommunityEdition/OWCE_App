@@ -196,7 +196,7 @@ namespace OWCE.MacOS.DependencyImplementations
             }
         }
 
-        public bool ReadyToScan()
+        public Task<bool> ReadyToScan()
         {
             if (UIDevice.CurrentDevice.CheckSystemVersion(13, 1))
             {
@@ -204,12 +204,13 @@ namespace OWCE.MacOS.DependencyImplementations
 
                 if (CBCentralManager.Authorization == CBManagerAuthorization.AllowedAlways)
                 {
-                    return true;
+                    return Task.FromResult<bool>(true);
                 }
             }
 
-            return false;
+            return Task.FromResult<bool>(false);
         }
+
         Dictionary<CBUUID, CBCharacteristic> _characteristics = new Dictionary<CBUUID, CBCharacteristic>();
 
         #region ICBPeripheralDelegate

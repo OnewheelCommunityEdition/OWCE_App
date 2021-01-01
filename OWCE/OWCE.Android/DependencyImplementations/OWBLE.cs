@@ -858,9 +858,13 @@ namespace OWCE.Droid.DependencyImplementations
             return true;
         }
 
-        public bool ReadyToScan()
+        public async Task<bool> ReadyToScan()
         {
-            // TODO: Handle this.
+            var permissionStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+            if (permissionStatus == PermissionStatus.Granted || permissionStatus == PermissionStatus.Restricted)
+            {
+                return true;
+            }
 
             return false;
         }
