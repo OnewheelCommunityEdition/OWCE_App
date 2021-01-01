@@ -78,8 +78,8 @@
                 <views:SpeedRangeDistanceView x:Name="SpeedRangeDistanceView" HeightRequest="180" RPM="{Binding RPM}" WheelCircumference="{Binding WheelCircumference}" LifetimeOdometer="{Binding LifetimeOdometer}" TripOdometer="{Binding TripOdometer}" />
                 <views:BatteryView BindingContext="{Binding .}" BatteryPercent="{Binding BatteryPercent}" BatteryVoltage="{Binding BatteryVoltage}" BatteryCells="{Binding BatteryCells}"  />
                 <views:PowerView BindingContext="{Binding .}" CurrentAmps="{Binding CurrentAmps}" TripAmpHours="{Binding TripAmpHours}" TripRegenAmpHours="{Binding TripRegenAmpHours}" />
-                <views:RideModeView BindingContext="{Binding .}" BoardType="{Binding BoardType}" SimpleStopEnabled="{Binding SimpleStopEnabled}" />
                 <views:TemperatureView x:Name="TemperatureView" BindingContext="{Binding .}" ControllerTemp="{Binding ControllerTemperature}" MotorTemp="{Binding MotorTemperature}" BatteryTemp="{Binding BatteryTemperature}" />
+                <views:RideModeView BindingContext="{Binding .}" BoardType="{Binding BoardType}" SimpleStopEnabled="{Binding SimpleStopEnabled}" />
                 <views:AngleView BindingContext="{Binding .}" Pitch="{Binding Pitch}" Yaw="{Binding Yaw}" Roll="{Binding Roll}"   />
                 <views:FootpadsView IsVisible="false" Opacity="0.5" />
                 <Grid Padding="20,0">
