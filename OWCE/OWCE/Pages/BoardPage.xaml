@@ -88,12 +88,14 @@
                     <Label Grid.Row="2" Grid.Column="0" Text="Hardware revision" FontFamily="SairaExtraCondensed-SemiBold" FontSize="16" TextColor="#7F7F7F" />
                     <Label Grid.Row="3" Grid.Column="0" Text="Firmware" FontFamily="SairaExtraCondensed-SemiBold" FontSize="16" TextColor="#7F7F7F" />
                     <Label Grid.Row="4" Grid.Column="0" Text="RSSI" FontFamily="SairaExtraCondensed-SemiBold" FontSize="16" TextColor="#7F7F7F" />
+                    <Label Grid.Row="5" Grid.Column="0" Text="App Version" FontFamily="SairaExtraCondensed-SemiBold" FontSize="16" TextColor="#7F7F7F" />
 
                     <Label Grid.Row="0" Grid.Column="1" Text="{Binding SerialNumber}" FontFamily="SairaExtraCondensed-SemiBold" FontSize="16" TextColor="#7F7F7F" HorizontalOptions="End" />
                     <Label Grid.Row="1" Grid.Column="1" Text="{Binding BatterySerial}" FontFamily="SairaExtraCondensed-SemiBold" FontSize="16" TextColor="#7F7F7F" HorizontalOptions="End" />
                     <Label Grid.Row="2" Grid.Column="1" Text="{Binding HardwareRevision}" FontFamily="SairaExtraCondensed-SemiBold" FontSize="16" TextColor="#7F7F7F" HorizontalOptions="End" />
                     <Label Grid.Row="3" Grid.Column="1" Text="{Binding FirmwareRevision}" FontFamily="SairaExtraCondensed-SemiBold" FontSize="16" TextColor="#7F7F7F" HorizontalOptions="End" />
                     <Label Grid.Row="4" Grid.Column="1" Text="{Binding RSSI}" FontFamily="SairaExtraCondensed-SemiBold" FontSize="16" TextColor="#7F7F7F" HorizontalOptions="End" />
+                    <Label Grid.Row="5" Grid.Column="1" x:Name="AppVersionLabel" FontFamily="SairaExtraCondensed-SemiBold" FontSize="16" TextColor="#7F7F7F" HorizontalOptions="End" />
                 </Grid>
             </StackLayout>
         </ScrollView>
