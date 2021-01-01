@@ -202,6 +202,13 @@ namespace OWCE
             set { if (_currentAmps.AlmostEqualTo(value) == false) { _currentAmps = value; OnPropertyChanged(); } }
         }
 
+        bool _isRegen;
+        public bool IsRegen
+        {
+            get { return _isRegen; }
+            set { if (_isRegen != value) { _isRegen = value; OnPropertyChanged(); } }
+        }
+
 
         float _tripAmpHours;
         public float TripAmpHours
@@ -1176,8 +1183,9 @@ namespace OWCE
                     FirmwareRevision = value;
                     break;
                 case CurrentAmpsUUID:
+                    // Appears the first 4 bits are 0000 if power loss, 1111 if regen.
+                    IsRegen = (value >> 12) == 15;
 
-                    
                     var scaleFactor = _boardType switch {
                         OWBoardType.V1 => 0.9f,
                         OWBoardType.Plus => 1.8f,
@@ -1186,7 +1194,8 @@ namespace OWCE
                         _ => throw new Exception("Unknown board type"),
                     };
 
-                    CurrentAmps = (float)value * 0.001f * scaleFactor;
+                    // That bitwise operaion is to remove the possiblity of 1111 at the start of the data indicating regen.
+                    CurrentAmps = (float)(value & 0b0000111111111111) * 0.001f * scaleFactor;
                     break;
                 case TripAmpHoursUUID:
                     if (BoardType == OWBoardType.V1)

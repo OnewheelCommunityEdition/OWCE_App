@@ -21,6 +21,20 @@ namespace OWCE.Views
             }
         }
 
+        public static readonly BindableProperty IsRegenProperty = BindableProperty.Create(
+            "IsRegen",
+            typeof(bool),
+            typeof(PowerView));
+
+        public bool IsRegen
+        {
+            get { return (bool)GetValue(IsRegenProperty); }
+            set
+            {
+                SetValue(IsRegenProperty, value);
+            }
+        }
+
 
         public static readonly BindableProperty TripAmpHoursProperty = BindableProperty.Create(
             "TripAmpHours",
