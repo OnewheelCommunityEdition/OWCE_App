@@ -17,17 +17,9 @@ namespace OWCE.Converters
         {
             if (value is int rpm) // && parameter is float wheelCircumfrence)
             {
-                // TODO: Not use static wheel circumfrence. 
-                var metersPerSecond = 917.66f * rpm * MillimetersPerMinuteToMetersPerSecond;
-                
-                if (App.Current.MetricDisplay)
-                {
-                    return metersPerSecond * 3.6f; // kmph
-                }
-                else
-                {
-                    return metersPerSecond * 2.23694f; // mph
-                }
+                // TODO: Not use static wheel circumfrence. This converter is not currently being used for UI or reporting.
+                float wheelCircumference = 917.66f;
+                return ConvertSpeedValueFromRpm(rpm, wheelCircumference, App.Current.MetricDisplay);
             }
 
             return 0.0f;
@@ -36,6 +28,20 @@ namespace OWCE.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+
+        public static float ConvertSpeedValueFromRpm(int rpm, float wheelCircumference, bool isMetric)
+        {
+            var metersPerSecond = wheelCircumference * (float)rpm * MillimetersPerMinuteToMetersPerSecond;
+
+            if (isMetric)
+            {
+                return metersPerSecond * 3.6f; // kmph
+            }
+            else
+            {
+                return metersPerSecond * 2.23694f; // mph
+            }
         }
     }
 }

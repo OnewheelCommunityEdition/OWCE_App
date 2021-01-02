@@ -42,10 +42,70 @@ namespace OWCE
             typeof(App),
             false);
 
+        public static readonly BindableProperty SpeedReportingProperty = BindableProperty.Create(
+            nameof(SpeedReporting),
+            typeof(bool),
+            typeof(App),
+            false);
+
+        public static readonly BindableProperty SpeedReportingBaselineTimeoutProperty = BindableProperty.Create(
+            nameof(SpeedReportingBaselineTimeout),
+            typeof(int),
+            typeof(App),
+            15);
+
+        public static readonly BindableProperty SpeedReportingMinimumProperty = BindableProperty.Create(
+            nameof(SpeedReportingMinimum),
+            typeof(int),
+            typeof(App),
+            10);
+
+        public static readonly BindableProperty BatteryPercentReportingProperty = BindableProperty.Create(
+            nameof(BatteryPercentReporting),
+            typeof(bool),
+            typeof(App),
+            false);
+
+        public static readonly BindableProperty BatteryPercentInferredBasedOnVoltageProperty = BindableProperty.Create(
+            nameof(BatteryPercentInferredBasedOnVoltage),
+            typeof(bool),
+            typeof(App),
+            false);
+
         public bool MetricDisplay
         {
             get { return (bool)GetValue(MetricDisplayProperty); }
             set { SetValue(MetricDisplayProperty, value); }
+        }
+
+        public bool SpeedReporting
+        {
+            get { return (bool)GetValue(SpeedReportingProperty); }
+            set { SetValue(SpeedReportingProperty, value); }
+        }
+
+        public int SpeedReportingBaselineTimeout
+        {
+            get { return (int)GetValue(SpeedReportingBaselineTimeoutProperty); }
+            set { SetValue(SpeedReportingBaselineTimeoutProperty, value); }
+        }
+
+        public int SpeedReportingMinimum
+        {
+            get { return (int)GetValue(SpeedReportingMinimumProperty); }
+            set { SetValue(SpeedReportingMinimumProperty, value); }
+        }
+
+        public bool BatteryPercentReporting
+        {
+            get { return (bool)GetValue(BatteryPercentReportingProperty); }
+            set { SetValue(BatteryPercentReportingProperty, value); }
+        }
+
+        public bool BatteryPercentInferredBasedOnVoltage
+        {
+            get { return (bool)GetValue(BatteryPercentInferredBasedOnVoltageProperty); }
+            set { SetValue(BatteryPercentInferredBasedOnVoltageProperty, value); }
         }
 
         public string LogsDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "beta_ride_logs");
@@ -54,8 +114,12 @@ namespace OWCE
         {
             Xamarin.Forms.Device.SetFlags(new string[] { "Shapes_Experimental", "Expander_Experimental" });
 
-
             MetricDisplay = Preferences.Get("metric_display", System.Globalization.RegionInfo.CurrentRegion.IsMetric);
+            SpeedReporting = Preferences.Get("speed_reporting", false);
+            SpeedReportingBaselineTimeout = Preferences.Get("speedreporting_baseline_timeout", 15);
+            SpeedReportingMinimum = Preferences.Get("speedreporting_minimum", System.Globalization.RegionInfo.CurrentRegion.IsMetric ? 15 : 10);
+            BatteryPercentReporting = Preferences.Get("batterypercent_reporting", false);
+            BatteryPercentInferredBasedOnVoltage = Preferences.Get("batterypercent_inferred_voltage", false);
             
             if (Directory.Exists(LogsDirectory) == false)
             {

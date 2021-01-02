@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView" xmlns:views="clr-namespace:OWCE.Views" xmlns:converters="clr-namespace:OWCE.Converters" x:Class="OWCE.Views.SpeedRangeDistanceView">
     <ContentView.Resources>
-        <converters:RpmToSpeedConverter x:Key="rpmToSpeedConverter" />
         <converters:DistanceConverter x:Key="distanceConverter" />
     </ContentView.Resources>
     <yummy:PancakeView BackgroundColor="#FFFF00"  Style="{StaticResource BoardDetailBlockBaseStyle}">
@@ -41,7 +40,7 @@
                     </Label>
 
                     <Label Text="SPEED" FontFamily="SairaExtraCondensed-Bold" TextColor="Black"   CharacterSpacing="0.26" FontSize="16" Margin="20,6,0,0" />
-                    <Label Text="{Binding RPM, Converter={StaticResource rpmToSpeedConverter}, ConverterParameter={Binding WheelCircumference}, StringFormat='{0:F0}'}"  TextColor="Black"  FontFamily="SairaExtraCondensed-Black" FontSize="125" HorizontalOptions="Center" VerticalOptions="Start"  />
+                    <Label Text="{Binding Speed, StringFormat='{0:F0}'}"  TextColor="Black"  FontFamily="SairaExtraCondensed-Black" FontSize="125" HorizontalOptions="Center" VerticalOptions="Start"  />
 
                     <Label TextColor="Black" FontFamily="SairaExtraCondensed-Black" FontSize="30" CharacterSpacing="0.97" HorizontalOptions="Center" VerticalOptions="End" VerticalTextAlignment="End">
                         <Label.Triggers>
