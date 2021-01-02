@@ -159,8 +159,8 @@ namespace OWCE
 
 
 
-        private int _tripOdometer;
-        public int TripOdometer
+        private float _tripOdometer;
+        public float TripOdometer
         {
             get { return _tripOdometer; }
             set { if (_tripOdometer != value) { _tripOdometer = value; OnPropertyChanged(); } }
@@ -1159,7 +1159,7 @@ namespace OWCE
                     Yaw = 0.1f * (1800 - value);
                     break;
                 case TripOdometerUUID:
-                    TripOdometer = value;
+                    TripOdometer = (float)value * 0.001f;
                     break;
                 case RpmUUID:
                     RPM = value;
