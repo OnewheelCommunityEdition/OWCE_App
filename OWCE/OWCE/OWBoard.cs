@@ -231,8 +231,8 @@ namespace OWCE
 
 
 
-        private int _tripOdometer;
-        public int TripOdometer
+        private float _tripOdometer;
+        public float TripOdometer
         {
             get { return _tripOdometer; }
             set { if (_tripOdometer != value) { _tripOdometer = value; OnPropertyChanged(); } }
@@ -1308,7 +1308,7 @@ namespace OWCE
                     Yaw = 0.1f * (1800 - value);
                     break;
                 case TripOdometerUUID:
-                    TripOdometer = value;
+                    TripOdometer = (float)value * 0.001f;
                     break;
                 case RpmUUID:
                     RPM = value;
@@ -1333,19 +1333,21 @@ namespace OWCE
                     FirmwareRevision = value;
                     break;
                 case CurrentAmpsUUID:
-                    // Appears the first 4 bits are 0000 if power loss, 1111 if regen.
-                    IsRegen = (value >> 12) == 15;
 
                     var scaleFactor = _boardType switch {
-                        OWBoardType.V1 => 0.9f,
-                        OWBoardType.Plus => 1.8f,
-                        OWBoardType.XR => 2.0f,
-                        OWBoardType.Pint => 2.0f,
+                        OWBoardType.V1 => 0.0009f,
+                        OWBoardType.Plus => 0.0018f,
+                        OWBoardType.XR => 0.002f,
+                        OWBoardType.Pint => 0.002f,
                         _ => throw new Exception("Unknown board type"),
                     };
 
-                    // That bitwise operaion is to remove the possiblity of 1111 at the start of the data indicating regen.
-                    CurrentAmps = (float)(value & 0b0000111111111111) * 0.001f * scaleFactor;
+                    /// https://en.wikipedia.org/wiki/Two's_complement
+                    int ampsValue = (value > 32767) ? (int)value - 65536 : value;
+
+                    CurrentAmps = (float)ampsValue * scaleFactor;
+                    IsRegen = (CurrentAmps < 0);
+
                     break;
                 case TripAmpHoursUUID:
                     if (BoardType == OWBoardType.V1)

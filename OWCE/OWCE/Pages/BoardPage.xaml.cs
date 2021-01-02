@@ -150,8 +150,9 @@ namespace OWCE.Pages
 
         protected override bool OnBackButtonPressed()
         {
+            Disconnect_Tapped(null, EventArgs.Empty);
             //DisconnectAndPop();
-            return false;
+            return true;
         }
 
         async void Disconnect_Tapped(object sender, EventArgs e)
