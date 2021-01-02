@@ -137,8 +137,9 @@ namespace OWCE.Pages
 
         protected override bool OnBackButtonPressed()
         {
+            Disconnect_Tapped(null, EventArgs.Empty);
             //DisconnectAndPop();
-            return false;
+            return true;
         }
 
         async void Disconnect_Tapped(System.Object sender, System.EventArgs e)
