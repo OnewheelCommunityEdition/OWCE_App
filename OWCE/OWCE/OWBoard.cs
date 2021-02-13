@@ -18,6 +18,7 @@ using System.Collections.ObjectModel;
 using OWCE.Models;
 using OWCE.Network;
 using OWCE.DependencyInterfaces;
+using Rg.Plugins.Popup.Services;
 
 namespace OWCE
 {
@@ -725,22 +726,47 @@ namespace OWCE
             var firmwareRevision = await _owble.ReadValue(FirmwareRevisionUUID);
             SetValue(FirmwareRevisionUUID, firmwareRevision, true);
 
-            if (HardwareRevision > 3000 && FirmwareRevision > 4000)
+            if (HardwareRevision > 3000 && FirmwareRevision > 4000) // Requires Gemini handshake
             {
-                try
+                var rideMode = await _owble.ReadValue(RideModeUUID);
+                var rideModeInt = BitConverter.ToUInt16(rideMode, 0);
+
+                if (rideModeInt > 0)
                 {
-                    await Handshake();
+                    // NOOP: Board is active 😜
                 }
-                catch (Exceptions.HandshakeException handshakeException)
+                else if (FirmwareRevision >= 4142) // Pint or XR with 4210 hardware 
                 {
-                    await App.Current.MainPage.DisplayAlert("Error", handshakeException.Message, "Ok");
-                    if (handshakeException.ShouldDisconnect)
+                    // No longer using the handshake with web connection.
+                    var jumpstartAlert = new Pages.Popup.JumpstartAlert(new Command(async () =>
                     {
-                        if (App.Current.MainPage.Navigation.ModalStack.Count == 1 && App.Current.MainPage.Navigation.ModalStack.FirstOrDefault() is Pages.CustomNavigationPage modalNavigationPage && modalNavigationPage.CurrentPage is Pages.BoardPage boardPage)
+                        await PopupNavigation.Instance.PopAllAsync();
+                        if (App.Current.MainPage.Navigation.ModalStack.Count == 1 && App.Current.MainPage.Navigation.ModalStack.FirstOrDefault() is NavigationPage modalNavigationPage && modalNavigationPage.CurrentPage is Pages.BoardPage boardPage)
                         {
                             await boardPage.DisconnectAndPop();
+                            return;
                         }
-                        return;
+                    }));
+                    await PopupNavigation.Instance.PushAsync(jumpstartAlert, true);
+                    return;
+                }
+                else // XR 4209 and below
+                {
+                    try
+                    {
+                        await Handshake();
+                    }
+                    catch (Exceptions.HandshakeException handshakeException)
+                    {
+                        await App.Current.MainPage.DisplayAlert("Error", handshakeException.Message, "Ok");
+                        if (handshakeException.ShouldDisconnect)
+                        {
+                            if (App.Current.MainPage.Navigation.ModalStack.Count == 1 && App.Current.MainPage.Navigation.ModalStack.FirstOrDefault() is Pages.CustomNavigationPage modalNavigationPage && modalNavigationPage.CurrentPage is Pages.BoardPage boardPage)
+                            {
+                                await boardPage.DisconnectAndPop();
+                            }
+                            return;
+                        }
                     }
                 }
 
