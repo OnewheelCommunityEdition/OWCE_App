@@ -1,11 +1,5 @@
 #!/usr/bin/env bash
 
-if [ -z "$OWCE_SYNCFUSION_LICENSE" ]
-then
-    echo "You need define the OWCE_SYNCFUSION_LICENSE variable in App Center"
-    exit
-fi
-
 if [ -z "$OWCE_APPCENTER_IOS" ]
 then
     echo "You need define the OWCE_APPCENTER_IOS variable in App Center"
@@ -28,9 +22,6 @@ APP_CONSTANT_FILE=$APPCENTER_SOURCE_DIRECTORY/OWCE/OWCE/AppConstants.cs
 
 if [ -e "$APP_CONSTANT_FILE" ]
 then
-    echo "Updating SyncfusionLicense to $OWCE_SYNCFUSION_LICENSE in AppConstant.cs"
-    sed -i '' 's#SyncfusionLicense = "[a-z:./]*"#SyncfusionLicense = "'$OWCE_SYNCFUSION_LICENSE'"#' $APP_CONSTANT_FILE
-
     echo "Updating SyncfusionLicense to $OWCE_APPCENTER_IOS in AppConstant.cs"
     sed -i '' 's#AppCenteriOS = "[a-z:./]*"#AppCenteriOS = "'$OWCE_APPCENTER_IOS'"#' $APP_CONSTANT_FILE
 
