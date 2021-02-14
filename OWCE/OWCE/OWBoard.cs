@@ -160,8 +160,8 @@ namespace OWCE
 
 
 
-        private float _tripOdometer;
-        public float TripOdometer
+        private ushort _tripOdometer;
+        public ushort TripOdometer
         {
             get { return _tripOdometer; }
             set { if (_tripOdometer != value) { _tripOdometer = value; OnPropertyChanged(); } }
@@ -586,7 +586,7 @@ namespace OWCE
 
         private void OWBLE_BoardValueChanged(string characteristicGuid, byte[] data)
         {
-            Debug.WriteLine($"{characteristicGuid} {BitConverter.ToString(data)}");
+            //Debug.WriteLine($"{characteristicGuid} {BitConverter.ToString(data)}");
 
             if (_isLogging)
             {
@@ -1185,7 +1185,8 @@ namespace OWCE
                     Yaw = 0.1f * (1800 - value);
                     break;
                 case TripOdometerUUID:
-                    TripOdometer = (float)value * 0.001f;
+                    System.Diagnostics.Debug.WriteLine($"TripOdometer: {value}");
+                    TripOdometer = value;
                     break;
                 case RpmUUID:
                     RPM = value;
