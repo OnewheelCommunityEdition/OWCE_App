@@ -34,7 +34,7 @@ connect to your board</Label.Text>
 
                     
                     <Label Grid.Row="0" Grid.Column="1" VerticalOptions="Start" Text="Quit OWCE, and open the official Onewheel app" LineHeight="0.75" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="24" CharacterSpacing="0.26" />
-                    <Label Grid.Row="1" Grid.Column="1" VerticalOptions="Start" Text="Connect to your board, wiat for the ride mode to show up" LineHeight="0.75" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="24" CharacterSpacing="0.26" />
+                    <Label Grid.Row="1" Grid.Column="1" VerticalOptions="Start" Text="Connect to your board, wait for the ride mode to show up" LineHeight="0.75" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="24" CharacterSpacing="0.26" />
                     <Label Grid.Row="2" Grid.Column="1" VerticalOptions="Start" Text="Force quit the app, and come back to OWCE" LineHeight="0.75" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="24" CharacterSpacing="0.26" />
 
                 </Grid>
