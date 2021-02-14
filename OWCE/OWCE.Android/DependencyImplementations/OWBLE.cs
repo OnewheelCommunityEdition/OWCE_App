@@ -588,7 +588,8 @@ namespace OWCE.Droid.DependencyImplementations
         {
             if (_connectTaskCompletionSource != null && _connectTaskCompletionSource.Task.IsCanceled == false)
             {
-                _connectTaskCompletionSource.TrySetCanceled();
+                // TODO: this causes app to crash. While not ideal, this works for the current flow.
+                _connectTaskCompletionSource.SetCanceled();
             }
 
             // TODO: Handle is connecting.
