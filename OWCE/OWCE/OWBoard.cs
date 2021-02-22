@@ -19,6 +19,7 @@ using OWCE.Models;
 using OWCE.Network;
 using OWCE.DependencyInterfaces;
 using Rg.Plugins.Popup.Services;
+using MvvmHelpers;
 
 namespace OWCE
 {
@@ -770,22 +771,12 @@ namespace OWCE
                     }
                 }
 
+                KeepBoardAlive().SafeFireAndForget();
+
                 _keepHandshakeBackgroundRunning = true;
                 Device.StartTimer(TimeSpan.FromSeconds(15), () =>
                 {
-                    Task.Run(async () =>
-                    {
-                        try
-                        {
-                            byte[] firmwareRevision = GetBytesForBoardFromUInt16((UInt16)FirmwareRevision, FirmwareRevisionUUID);
-                            await _owble.WriteValue(OWBoard.FirmwareRevisionUUID, firmwareRevision);
-                        }
-                        catch (Exception err)
-                        {
-                            // TODO: Couldnt update firmware revision.
-                            Debug.WriteLine("ERROR: " + err.Message);
-                        }
-                    });
+                    KeepBoardAlive().SafeFireAndForget();
                     return _keepHandshakeBackgroundRunning;
                 });
             }
@@ -803,7 +794,20 @@ namespace OWCE
 
         }
 
-
+        // This should be called to keep the board in its unlocked state.
+        async Task KeepBoardAlive()
+        {
+            try
+            {
+                byte[] firmwareRevision = GetBytesForBoardFromUInt16((UInt16)FirmwareRevision, FirmwareRevisionUUID);
+                await _owble.WriteValue(OWBoard.FirmwareRevisionUUID, firmwareRevision);
+            }
+            catch (Exception err)
+            {
+                // TODO: Couldnt update firmware revision.
+                Debug.WriteLine("ERROR: " + err.Message);
+            }
+        }
 
         private async Task<bool> Handshake()
         {
