@@ -771,6 +771,8 @@ namespace OWCE
                     }
                 }
 
+                // Turns out the below timer does not fire immedaitly, it fires after the first 15sec have passed.
+                // Calling this before we start the timer should make it work more reliably.
                 KeepBoardAlive().SafeFireAndForget();
 
                 _keepHandshakeBackgroundRunning = true;
