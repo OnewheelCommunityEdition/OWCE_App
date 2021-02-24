@@ -1,7 +1,7 @@
 Onewheel Community Edition (OWCE) App
 ===========
 
-A cross-platform app for use with the [Onewheel](https://onewheel.com/) V1, Plus and XR boards from Future Motion. It currently does not support XR with hardware 4210 and higher, or the Onewheel Pint.
+A cross-platform app for use with the [Onewheel](https://onewheel.com/) V1, Plus and XR boards from Future Motion.
 
 NOTE: Onewheel Community Edition app is not endorsed by or affiliated with Future Motion in any way.
 
