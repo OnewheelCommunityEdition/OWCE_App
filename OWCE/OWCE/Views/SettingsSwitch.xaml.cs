@@ -85,6 +85,13 @@ namespace OWCE.Views
             UpdateTogglePosition(false).SafeFireAndForget();
         }
 
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+
+            UpdateTogglePosition(false).SafeFireAndForget();
+        }
+
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
