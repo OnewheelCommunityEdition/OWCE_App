@@ -30,18 +30,24 @@
                 <Grid Grid.Row="2" RowDefinitions="30,30,30,30" ColumnDefinitions="53,*" Margin="16,20,16,8">
                     <views:SettingsSwitch x:Name="ImperialSwitch" Grid.Row="0" Grid.Column="0" IsToggledChanged="ImperialSwitch_IsToggledChanged" />
                     <Label Grid.Row="0" Grid.Column="1" Text="Imperial units (mph, F)" FontFamily="SairaExtraCondensed-Bold" TextColor="{Binding Source={x:Reference ImperialSwitch}, Path=CurrentColor}" FontSize="18" />
-
-                    <views:SettingsSwitch Grid.Row="1" Grid.Column="0" />
-                    <Label Grid.Row="1" Grid.Column="1" Text="Light theme" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18" />
-
-                    <views:SettingsSwitch Grid.Row="2" Grid.Column="0" />
-                    <Label Grid.Row="2" Grid.Column="1" Text="Board lights on" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18" />
                     
-                    <views:SettingsSwitch Grid.Row="3" Grid.Column="0" />
-                    <Label Grid.Row="3" Grid.Column="1" Text="Show battery % calculation from voltage" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18" />
+                    <views:SettingsSwitch x:Name="SpeedReportingSwitch" Grid.Row="1" Grid.Column="0" IsToggledChanged="SpeedReportingSwitch_IsToggledChanged" />
+                    <Label Grid.Row="1" Grid.Column="1" Text="Speed Alerts" FontFamily="SairaExtraCondensed-Bold" TextColor="{Binding Source={x:Reference SpeedReportingSwitch}, Path=CurrentColor}" FontSize="18" />
 
-                    <BoxView Color="White" Opacity="0.8" Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="2" />
-                    <Label TextColor="Black" Grid.Row="1" Text="Coming Soon" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="2" FontFamily="SairaExtraCondensed-Bold" />
+                    <views:SettingsSwitch x:Name="BatteryPercentReportingSwitch" Grid.Row="2" Grid.Column="0" IsToggledChanged="BatteryPercentReportingSwitch_IsToggledChanged" />
+                    <Label Grid.Row="2" Grid.Column="1" Text="Battery Updates" FontFamily="SairaExtraCondensed-Bold" TextColor="{Binding Source={x:Reference BatteryPercentReportingSwitch}, Path=CurrentColor}" FontSize="18" />
+
+                    <views:SettingsSwitch x:Name="BatteryPercentInferredBasedOnVoltageSwitch" Grid.Row="3" Grid.Column="0" IsToggledChanged="BatteryPercentInferredBasedOnVoltageSwitch_IsToggledChanged" />
+                    <Label Grid.Row="3" Grid.Column="1" Text="Show battery % based on voltage" FontFamily="SairaExtraCondensed-Bold" TextColor="{Binding Source={x:Reference BatteryPercentInferredBasedOnVoltageSwitch}, Path=CurrentColor}" FontSize="18" />
+                    
+                    <views:SettingsSwitch Grid.Row="4" Grid.Column="0" />
+                    <Label Grid.Row="4" Grid.Column="1" Text="Light theme" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18" />
+
+                    <views:SettingsSwitch Grid.Row="5" Grid.Column="0" />
+                    <Label Grid.Row="5" Grid.Column="1" Text="Board lights on" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18" />
+
+                    <BoxView Color="White" Opacity="0.8" Grid.Row="4" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2" />
+                    <Label TextColor="Black" Grid.Row="4" Text="Coming Soon" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2" FontFamily="SairaExtraCondensed-Bold" />
                 </Grid>
                 <BoxView Grid.Row="3" Background="#E4E4E4" HeightRequest="1" />
 
@@ -75,8 +81,8 @@
         </yummy:PancakeView>
         <ScrollView>
             <StackLayout Spacing="16" Margin="0,16,0,0">
-                <views:SpeedRangeDistanceView x:Name="SpeedRangeDistanceView" HeightRequest="180" RPM="{Binding RPM}" WheelCircumference="{Binding WheelCircumference}" LifetimeOdometer="{Binding LifetimeOdometer}" TripOdometer="{Binding TripOdometer}" />
-                <views:BatteryView BindingContext="{Binding .}" BatteryPercent="{Binding BatteryPercent}" BatteryVoltage="{Binding BatteryVoltage}" BatteryCells="{Binding BatteryCells}"  />
+                <views:SpeedRangeDistanceView x:Name="SpeedRangeDistanceView" HeightRequest="180" RPM="{Binding RPM}" Speed="{Binding Speed}" LifetimeOdometer="{Binding LifetimeOdometer}" TripOdometer="{Binding TripOdometer}" />
+                <views:BatteryView BindingContext="{Binding .}" BatteryPercent="{Binding SelectedBatteryPercent}" BatteryVoltage="{Binding BatteryVoltage}" BatteryCells="{Binding BatteryCells}"  />
                 <views:PowerView BindingContext="{Binding .}" CurrentAmps="{Binding CurrentAmps}" IsRegen="{Binding IsRegen}" TripAmpHours="{Binding TripAmpHours}" TripRegenAmpHours="{Binding TripRegenAmpHours}" />
                 <views:TemperatureView x:Name="TemperatureView" BindingContext="{Binding .}" ControllerTemp="{Binding ControllerTemperature}" MotorTemp="{Binding MotorTemperature}" BatteryTemp="{Binding BatteryTemperature}" />
                 <views:RideModeView BindingContext="{Binding .}" BoardType="{Binding BoardType}" SimpleStopEnabled="{Binding SimpleStopEnabled}" />

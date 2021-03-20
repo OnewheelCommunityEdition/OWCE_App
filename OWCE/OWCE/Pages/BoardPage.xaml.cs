@@ -1,24 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using Xamarin.Essentials;
-using Xamarin.Forms;
-using RestSharp;
-using System.Net;
-using System.IO;
-using System.Threading.Tasks;
-using OWCE.Pages.Popup;
-using Rg.Plugins.Popup.Services;
-using System.Linq;
-using OWCE.Views;
-
 namespace OWCE.Pages
 {
+    using System;
+    using System.Collections.Generic;
+    using Xamarin.Essentials;
+    using Xamarin.Forms;
+    using RestSharp;
+    using System.Net;
+    using System.IO;
+    using System.Threading.Tasks;
+    using OWCE.Pages.Popup;
+    using Rg.Plugins.Popup.Services;
+    using System.Linq;
+    using OWCE.Models;
+    using OWCE.Views;
+
     public partial class BoardPage : BaseContentPage
     {
         ConnectingAlert _reconnectingAlert;
 
-
         public OWBoard Board { get; private set; }
+
         /*
         public string SpeedHeader
         {
@@ -31,11 +32,17 @@ namespace OWCE.Pages
 
         private bool _initialSubscirbe = false;
 
-
+        private TextToSpeechProvider _ttsProvider = null;
+        private SpeedReporting _speedReporting = null;
+        private BatteryPercentReporting _batteryPercentReporting = null;
 
         public BoardPage(OWBoard board) : base()
         {
             Board = board;
+
+            board.Init();
+
+            BindingContext = this;
 
             //board.StartLogging();
             InitializeComponent();
@@ -44,6 +51,9 @@ namespace OWCE.Pages
             AppVersionLabel.Text = $"{AppInfo.VersionString} (build {AppInfo.BuildString})";
 
             ImperialSwitch.IsToggled = !App.Current.MetricDisplay;
+            SpeedReportingSwitch.IsToggled = App.Current.SpeedReporting;
+            BatteryPercentReportingSwitch.IsToggled = App.Current.BatteryPercentReporting;
+            BatteryPercentInferredBasedOnVoltageSwitch.IsToggled = App.Current.BatteryPercentInferredBasedOnVoltage;
 
 
             Board.Init();
@@ -70,6 +80,11 @@ namespace OWCE.Pages
                 }),
             };
             CustomToolbarItems.Add(settingsToolbarItem);
+
+            _ttsProvider = new TextToSpeechProvider();
+
+            UpdateSpeedReporting(App.Current.SpeedReporting);
+            UpdateBatteryPercentReporting(App.Current.BatteryPercentReporting);
         }
 
         private void OWBLE_BoardDisconnected()
@@ -87,13 +102,11 @@ namespace OWCE.Pages
                 PopupNavigation.Instance.RemovePageAsync(_reconnectingAlert);
                 _reconnectingAlert = null;
             }), "Reconnecting...");
-            
 
             if (PopupNavigation.Instance.PopupStack.Contains(_reconnectingAlert) == false)
             {
                 PopupNavigation.Instance.PushAsync(_reconnectingAlert, true);
             }
-
         }
 
 
@@ -142,7 +155,7 @@ namespace OWCE.Pages
             return true;
         }
 
-        async void Disconnect_Tapped(System.Object sender, System.EventArgs e)
+        async void Disconnect_Tapped(object sender, EventArgs e)
         {
             var result = await DisplayActionSheet("Are you sure you want to disconnect?", "Cancel", "Disconnect");
             if (result == "Disconnect")
@@ -154,8 +167,44 @@ namespace OWCE.Pages
 
         public async Task DisconnectAndPop()
         {
+            UpdateSpeedReporting(enabled: false);
+            UpdateBatteryPercentReporting(enabled: false);
+
+            if (_ttsProvider != null)
+            {
+                _ttsProvider.SpeakMessage("OWCE Status: Disconnecting", 3);
+            }
+
             await App.Current.OWBLE.Disconnect();
             await Navigation.PopModalAsync();
+        }
+
+        private void UpdateSpeedReporting(bool enabled)
+        {
+            if (enabled)
+            {
+                _speedReporting = new SpeedReporting(this.Board, _ttsProvider);
+                _speedReporting.Start();
+            }
+            else if (_speedReporting != null)
+            {
+                _speedReporting.Stop();
+                _speedReporting = null;
+            }
+        }
+
+        private void UpdateBatteryPercentReporting(bool enabled)
+        {
+            if (enabled)
+            {
+                _batteryPercentReporting = new BatteryPercentReporting(this.Board, _ttsProvider);
+                _batteryPercentReporting.Start();
+            }
+            else if (_batteryPercentReporting != null)
+            {
+                _batteryPercentReporting.Stop();
+                _batteryPercentReporting = null;
+            }
         }
 
         private bool _isLogging = false;
@@ -176,6 +225,29 @@ namespace OWCE.Pages
 
             //this.ForceLayout();
         }
+
+        private void SpeedReportingSwitch_IsToggledChanged(object sender, bool isToggled)
+        {
+            App.Current.SpeedReporting = isToggled;
+            Preferences.Set("speed_reporting", isToggled);
+
+            UpdateSpeedReporting(App.Current.SpeedReporting);
+        }
+
+        private void BatteryPercentReportingSwitch_IsToggledChanged(object sender, bool isToggled)
+        {
+            App.Current.BatteryPercentReporting = isToggled;
+            Preferences.Set("batterypercent_reporting", isToggled);
+
+            UpdateBatteryPercentReporting(App.Current.BatteryPercentReporting);
+        }
+
+        private void BatteryPercentInferredBasedOnVoltageSwitch_IsToggledChanged(object sender, bool isToggled)
+        {
+            App.Current.BatteryPercentInferredBasedOnVoltage = isToggled;
+            Preferences.Set("batterypercent_inferred_voltage", isToggled);
+        }
+
 
         /*
         private async void LogData_Clicked(object sender, System.EventArgs e)
@@ -249,6 +321,5 @@ namespace OWCE.Pages
 
         }
         */
-
     }
 }

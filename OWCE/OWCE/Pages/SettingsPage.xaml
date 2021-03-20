@@ -8,8 +8,51 @@
                 <Switch x:Name="MetricDisplay" Toggled="MetricDisplay_Toggled" VerticalOptions="Center" HorizontalOptions="End" />
             </StackLayout>
             <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" HeightRequest="50">
+                <Label Text="Speed reporting" VerticalOptions="Center" HorizontalOptions="FillAndExpand"/>
+                <Switch x:Name="SpeedReporting" Toggled="SpeedReporting_Toggled" VerticalOptions="Center" HorizontalOptions="End" />
+            </StackLayout>
+            <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" HeightRequest="50">
+                <Label Text="Speed reporting minimum" VerticalOptions="Center" HorizontalOptions="Fill"/>
+                <Entry x:Name="SpeedReportingMinimum"
+                       Text="3"
+                       VerticalOptions="Center"
+                       HorizontalOptions="EndAndExpand"
+                       TextChanged="SpeedReportingMinimum_TextChanged"
+                       Unfocused="SpeedReportingMinimum_Unfocused"
+                       TextColor="White"
+                       MinimumWidthRequest="50"/>
+            </StackLayout>
+            <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
             
-         
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" HeightRequest="50">
+                <Label Text="Speed reporting baseline timeout" VerticalOptions="Center" HorizontalOptions="Fill"/>
+                <Entry x:Name="SpeedReportingBaselineTimeout"
+                       Text="10"
+                       VerticalOptions="Center"
+                       HorizontalOptions="EndAndExpand"
+                       TextChanged="SpeedReportingBaselineTimeout_TextChanged"
+                       Unfocused="SpeedReportingBaselineTimeout_Unfocused"
+                       TextColor="White"
+                       MinimumWidthRequest="50"/>
+            </StackLayout>
+            <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" HeightRequest="50">
+                <Label Text="Battery percent reporting" VerticalOptions="Center" HorizontalOptions="FillAndExpand"/>
+                <Switch x:Name="BatteryPercentReporting" Toggled="BatteryPercentReporting_Toggled" VerticalOptions="Center" HorizontalOptions="End" />
+            </StackLayout>
+            <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
+
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" HeightRequest="50">
+                <Label Text="Battery percent from voltage" VerticalOptions="Center" HorizontalOptions="FillAndExpand"/>
+                <Switch x:Name="BatteryPercentInferredBasedOnVoltage" Toggled="BatteryPercentInferredBasedOnVoltage_Toggled" VerticalOptions="Center" HorizontalOptions="End" />
+            </StackLayout>
+            <BoxView HorizontalOptions="FillAndExpand" Color="{StaticResource darkBackgroundColor}" HeightRequest="1" Margin="0" />
+
         </StackLayout>
     </ScrollView>
 </ContentPage>

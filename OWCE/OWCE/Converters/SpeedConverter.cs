@@ -11,14 +11,7 @@ namespace OWCE.Converters
             var outputValue = 0f;
             if (value is float metersPerSecond)
             {
-                if (App.Current.MetricDisplay)
-                {
-                    outputValue = metersPerSecond * 3.6f; // kmph
-                }
-                else
-                {
-                    outputValue = metersPerSecond * 2.23694f; // mph
-                }
+                outputValue = ConvertSpeedValue(metersPerSecond, App.Current.MetricDisplay);
             }
 
             if (parameter == null)
@@ -38,6 +31,18 @@ namespace OWCE.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+
+        public static float ConvertSpeedValue(float metersPerSecond, bool isMetric)
+        {
+            if (isMetric)
+            {
+                return metersPerSecond * 3.6f; // kmph
+            }
+            else
+            {
+                return metersPerSecond * 2.23694f; // mph
+            }
         }
     }
 }

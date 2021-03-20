@@ -30,6 +30,7 @@
 
 
   <ItemGroup>
+    <Folder Include="Spline\" />
     <Folder Include="Pages\" />
     <Folder Include="Extensions\" />
     <Folder Include="Views\" />

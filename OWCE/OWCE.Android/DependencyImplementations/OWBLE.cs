@@ -129,7 +129,7 @@ namespace OWCE.Droid.DependencyImplementations
 
             public override void OnConnectionStateChange(BluetoothGatt gatt, GattStatus status, ProfileState newState)
             {
-                Debug.WriteLine("OnConnectionStateChange: " + status);
+                Debug.WriteLine($"OnConnectionStateChange: status {status} newState {newState}.");
                 _owble.OnConnectionStateChange(gatt, status, newState);
             }
 
@@ -586,7 +586,10 @@ namespace OWCE.Droid.DependencyImplementations
 
         public Task Disconnect()
         {
-            if (_connectTaskCompletionSource != null && _connectTaskCompletionSource.Task.IsCanceled == false)
+            if (_connectTaskCompletionSource != null
+                && !_connectTaskCompletionSource.Task.IsCompleted
+                && !_connectTaskCompletionSource.Task.IsCanceled
+                && !_connectTaskCompletionSource.Task.IsFaulted)
             {
                 _connectTaskCompletionSource.SetCanceled();
             }
