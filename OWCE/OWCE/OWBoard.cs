@@ -1167,6 +1167,8 @@ namespace OWCE
                 {
                     BatteryPercent = data[1];
                 }
+
+                return;
             }
 
 
@@ -1197,7 +1199,6 @@ namespace OWCE
                     Yaw = 0.1f * (1800 - value);
                     break;
                 case TripOdometerUUID:
-                    System.Diagnostics.Debug.WriteLine($"TripOdometer: {value}");
                     TripOdometer = value;
                     break;
                 case RpmUUID:
