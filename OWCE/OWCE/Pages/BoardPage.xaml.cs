@@ -165,16 +165,7 @@ namespace OWCE.Pages
             App.Current.MetricDisplay = !isToggled;
             Preferences.Set("metric_display", !isToggled);
 
-            var speedBinding = SpeedRangeDistanceView.BindingContext;
-            SpeedRangeDistanceView.BindingContext = null;
-            SpeedRangeDistanceView.BindingContext = speedBinding;
-
-
-            var tempBinding = TemperatureView.BindingContext;
-            TemperatureView.BindingContext = null;
-            TemperatureView.BindingContext = tempBinding;
-
-            //this.ForceLayout();
+            MessagingCenter.Send<App>(App.Current, App.UnitDisplayUpdatedKey);
         }
 
         /*

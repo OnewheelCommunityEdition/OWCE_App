@@ -26,6 +26,8 @@ namespace OWCE
 {
     public partial class App : Application
     {
+        public const string UnitDisplayUpdatedKey = "UnitDisplayUpdated";
+
         public static new App Current => Application.Current as App;
         public IOWBLE OWBLE { get; private set; }
 

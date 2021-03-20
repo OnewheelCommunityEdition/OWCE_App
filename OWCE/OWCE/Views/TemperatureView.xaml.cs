@@ -39,6 +39,13 @@ namespace OWCE.Views
         {
             InitializeComponent();
             MainView.BindingContext = this;
+
+            MessagingCenter.Subscribe<App>(this, App.UnitDisplayUpdatedKey, (app) =>
+            {
+                OnPropertyChanged(nameof(BatteryTemp));
+                OnPropertyChanged(nameof(MotorTemp));
+                OnPropertyChanged(nameof(ControllerTemp));
+            });
         }
 
         

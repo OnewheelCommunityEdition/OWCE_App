@@ -521,6 +521,12 @@ namespace OWCE
 
         public OWBoard(IOWBLE owble, OWBaseBoard baseBoard) : base(baseBoard)
         {
+            MessagingCenter.Subscribe<App>(this, App.UnitDisplayUpdatedKey, (app) =>
+            {
+                OnPropertyChanged(nameof(RPM));
+                OnPropertyChanged(nameof(LifetimeOdometer));
+                OnPropertyChanged(nameof(TripOdometer));
+            });
 
             _owble = owble;
             _id = baseBoard.ID;
