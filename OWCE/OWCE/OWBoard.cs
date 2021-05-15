@@ -744,6 +744,11 @@ namespace OWCE
                 }
                 else if (FirmwareRevision >= 4142) // Pint or XR with 4210 hardware 
                 {
+                    if (FirmwareRevision >= 4155 && HardwareRevision < 5000) // XR with 4155 FW.
+                    {
+                        await App.Current.MainPage.DisplayAlert("Oh no!", "Some features of this app currently will not work with board firmware 4155 and higher.\n\nFuture Motion has locked some features down and as a result prevents apps like OWCE reporting valuable data to you.\n\nSorry about that.", "Ok");
+                    }
+
                     // No longer using the handshake with web connection.
                     var jumpstartAlert = new Pages.Popup.JumpstartAlert(new Command(async () =>
                     {
