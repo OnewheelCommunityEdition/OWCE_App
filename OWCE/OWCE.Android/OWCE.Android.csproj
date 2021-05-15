@@ -83,7 +83,13 @@
     <PackageReference Include="Xamarin.Forms.PancakeView">
       <Version>2.3.0.759</Version>
     </PackageReference>
-  <PackageReference Include="Xamarin.AndroidX.Migration" Version="1.0.8" />  </ItemGroup>
+  <PackageReference Include="Xamarin.AndroidX.Migration" Version="1.0.8" />    <PackageReference Include="SkiaSharp">
+    <Version>2.80.2</Version>
+  </PackageReference>
+  <PackageReference Include="SkiaSharp.Views.Forms">
+    <Version>2.80.2</Version>
+  </PackageReference>
+</ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

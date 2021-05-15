@@ -20,7 +20,7 @@
                     <!--
             726.4854811913 is 40km/h converted to rpm with a 917.66mm circumference wheel.
             -->
-                    <views:ArcView x:Name="MainArcView" Current="{Binding RPM}" Maximum="726.4854811913" SizeChanged="MainArcView_SizeChanged" Margin="30,0" Minimum="0" />
+                    <views:SpeedArcView HorizontalOptions="FillAndExpand" VerticalOptions="Fill" CurrentRPM="{Binding RPM}" MaxRPM="1000" MinRPM="0" />
 
 
                     <Label VerticalOptions="End" Margin="20,0">

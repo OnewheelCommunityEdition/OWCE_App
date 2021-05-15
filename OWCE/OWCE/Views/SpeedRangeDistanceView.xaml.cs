@@ -69,14 +69,6 @@ namespace OWCE.Views
             InitializeComponent();
         }
 
-        void MainArcView_SizeChanged(System.Object sender, System.EventArgs e)
-        {
-            if (MainArcView.Width > 0)
-            {
-                //GridThing.RowDefinitions[0].Height = MainArcView.Width * 0.523465704f;
-            }
-        }
-
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
