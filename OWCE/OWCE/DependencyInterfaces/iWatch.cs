@@ -7,5 +7,6 @@ namespace OWCE.DependencyInterfaces
         void UpdateBatteryPercent(int percent);
         void UpdateSpeed(int speed);
         void UpdateVoltage(float voltage);
+        void UpdateDistance(string distanceString);
     }
 }

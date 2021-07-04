@@ -67,6 +67,11 @@ namespace OWCE.WatchOS.WatchOSExtension
                 {
                     this.voltageLabel.SetText(String.Format("{0:F2}V battery", applicationContext["Voltage"]));
                 }
+                if (applicationContext.ContainsKey("Distance"))
+                {
+                    this.tripDistanceLabel.SetText((string)applicationContext["Distance"]);
+                }
+
             }
             catch (Exception ex)
             {

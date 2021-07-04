@@ -23,6 +23,12 @@ namespace OWCE.iOS.DependencyImplementations
                 { "BatteryPercent", percent } });
         }
 
+        void IWatch.UpdateDistance(string distanceString)
+        {
+            WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() {
+                { "Distance", distanceString } });
+        }
+
         void IWatch.UpdateSpeed(int speed)
         {
             WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() {
