@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="18122" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
+    <device id="watch38"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="18022"/>
+    </dependencies>
+    <scenes>
+        <!--Interface Controller-->
+        <scene sceneID="aou-V4-d1y">
+            <objects>
+                <controller id="AgC-eL-Hgc" customClass="InterfaceController">
+                    <items>
+                        <textField width="1" alignment="left" text="Hello OWCE! 7" id="YbM-4p-DCB"/>
+                        <group width="136" height="100" alignment="left" layout="vertical" id="Uz7-H4-yJd">
+                            <items>
+                                <label width="136" height="63" alignment="left" text="0" textAlignment="center" id="jhG-AM-wAb">
+                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <fontDescription key="font" type="system" pointSize="60"/>
+                                </label>
+                                <label width="135" height="21" alignment="left" text="mph" textAlignment="center" id="Hmi-dN-68Z">
+                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </label>
+                            </items>
+                            <color key="backgroundColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </group>
+                        <group width="1" alignment="left" layout="vertical" id="xHP-lz-dts">
+                            <items>
+                                <label width="136" alignment="left" text="100%" textAlignment="center" id="kEP-RA-nQQ">
+                                    <fontDescription key="font" type="system" pointSize="55"/>
+                                </label>
+                                <label width="136" alignment="left" text="0.0V battery" textAlignment="center" id="Y75-iU-HdX"/>
+                            </items>
+                            <color key="backgroundColor" red="0.99984914059999996" green="0.037384711209999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </group>
+                        <label alignment="left" text="Label" id="rol-Vw-zN9"/>
+                        <label alignment="left" text="Errors:" numberOfLines="10" id="1IU-Bg-Gto"/>
+                    </items>
+                    <connections>
+                        <outlet property="batteryPercentageLabel" destination="kEP-RA-nQQ" id="jHA-RH-Qko"/>
+                        <outlet property="errorMessages" destination="1IU-Bg-Gto" id="CMQ-DF-eT5"/>
+                        <outlet property="myLabel" destination="rol-Vw-zN9" id="nd0-Bt-JFx"/>
+                        <outlet property="speedLabel" destination="jhG-AM-wAb" id="PJ6-Lz-A6L"/>
+                        <outlet property="voltageLabel" destination="Y75-iU-HdX" id="LDC-Mb-J8a"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="0.0" y="-1"/>
+        </scene>
+        <!--Static Notification Interface Controller-->
+        <scene sceneID="AEw-b0-oYE">
+            <objects>
+                <notificationController id="YCC-NB-fut" customClass="NotificationController">
+                    <items>
+                        <label alignment="left" text="Alert Label" id="XkS-y5-khE"/>
+                    </items>
+                    <notificationCategory key="notificationCategory" id="JfB-70-Muf"/>
+                    <connections>
+                        <outlet property="notificationAlertLabel" destination="XkS-y5-khE" id="49B-RR-99y"/>
+                        <segue destination="gdX-wl-uQE" kind="relationship" relationship="dynamicNotificationInterface" id="fKh-qV-3T2"/>
+                    </connections>
+                </notificationController>
+            </objects>
+            <point key="canvasLocation" x="231" y="0.0"/>
+        </scene>
+        <!--Notification Controller-->
+        <scene sceneID="KIl-fV-djm">
+            <objects>
+                <controller id="gdX-wl-uQE" customClass="NotificationController"/>
+            </objects>
+            <point key="canvasLocation" x="462" y="0.0"/>
+        </scene>
+    </scenes>
+</document>

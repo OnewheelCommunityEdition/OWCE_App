@@ -20,6 +20,7 @@ using OWCE.Network;
 using OWCE.DependencyInterfaces;
 using Rg.Plugins.Popup.Services;
 using MvvmHelpers;
+using OWCE.PropertyChangeHandlers;
 
 namespace OWCE
 {
@@ -536,6 +537,9 @@ namespace OWCE
             _owble.BoardValueChanged += OWBLE_BoardValueChanged;
             _owble.RSSIUpdated += OWBLE_RSSIUpdated;
 
+            // Subscribe to property changes to keep watch app in sync
+            // (eg speed, battery percent changes)
+            this.PropertyChanged += WatchSyncEventHandler.HandlePropertyChanged;
 
             MessagingCenter.Subscribe<object>(this, "start_recording", (source) =>
             {

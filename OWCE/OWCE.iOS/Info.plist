@@ -21,15 +21,15 @@
 	<key>MinimumOSVersion</key>
 	<string>10.0</string>
 	<key>CFBundleDisplayName</key>
-	<string>OWCE</string>
+	<string>OWCE-nik</string>
 	<key>CFBundleSpokenName</key>
 	<string>Onewheel Community Edition</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.owcommunity.owce</string>
+	<string>nik.com.owcommunity.owce</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>CFBundleName</key>
-	<string>OWCE</string>
+	<string>OWCE-nik</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>CFBundleShortVersionString</key>
