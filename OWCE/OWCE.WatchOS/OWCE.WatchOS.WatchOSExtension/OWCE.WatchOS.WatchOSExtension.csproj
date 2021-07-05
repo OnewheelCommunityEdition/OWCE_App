@@ -102,6 +102,7 @@
       <DependentUpon>NotificationController.cs</DependentUpon>
     </Compile>
     <Compile Include="SessionManager\WCSessionManager.cs" />
+    <Compile Include="ComplicationController.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="PushNotificationPayload.json" />
@@ -110,6 +111,21 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>9.0.1</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Media.xcassets\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Circular.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Extra Large.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Bezel.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Corner.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Large Rectangular.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Modular.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Utilitarian.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Modular.imageset\Icon-Watch-29x29%402x.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Modular.imageset\Icon-Watch-29x29%402x-1.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Modular.imageset\Icon-Watch-29x29%402x-2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\WatchOS\Xamarin.WatchOS.AppExtension.CSharp.targets" />
 </Project>
