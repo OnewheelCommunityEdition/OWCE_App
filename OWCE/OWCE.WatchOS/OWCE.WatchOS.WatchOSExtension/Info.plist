@@ -5,7 +5,7 @@
 	<key>CFBundleName</key>
 	<string>OWCE.WatchOS.WatchOSExtension</string>
 	<key>CFBundleDisplayName</key>
-	<string>OWCE.WatchOS.WatchOSExtension</string>
+	<string>OWCE</string>
 	<key>CFBundleIdentifier</key>
 	<string>nik.com.owcommunity.owce.watchkitapp.watchkitextension</string>
 	<key>CFBundleDevelopmentRegion</key>

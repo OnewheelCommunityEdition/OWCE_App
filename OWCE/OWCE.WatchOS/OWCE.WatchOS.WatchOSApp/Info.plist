@@ -5,7 +5,7 @@
 	<key>CFBundleName</key>
 	<string>OWCE.WatchOS.WatchOSApp</string>
 	<key>CFBundleDisplayName</key>
-	<string>OWCE.WatchOS.WatchOSApp</string>
+	<string>OWCE</string>
 	<key>CFBundleIdentifier</key>
 	<string>nik.com.owcommunity.owce.watchkitapp</string>
 	<key>CFBundleDevelopmentRegion</key>
@@ -26,6 +26,6 @@
 	<key>WKWatchKitApp</key>
 	<true/>
 	<key>XSAppIconAssets</key>
-	<string>Resources/Images.xcassets/AppIcons.appiconset</string>
+	<string>Assets.xcassets/AppIcon.appiconset</string>
 </dict>
 </plist>
