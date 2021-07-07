@@ -123,5 +123,8 @@
       <IsAppExtension>True</IsAppExtension>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\SairaExtraCondensed-Black.ttf" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\WatchOS\Xamarin.WatchOS.App.CSharp.targets" />
 </Project>

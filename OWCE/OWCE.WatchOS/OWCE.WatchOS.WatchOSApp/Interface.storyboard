@@ -5,6 +5,11 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="18022"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="SairaExtraCondensed-Black.ttf">
+            <string>SairaExtraCondensed-Black</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Interface Controller-->
         <scene sceneID="aou-V4-d1y">
@@ -18,7 +23,7 @@
                             <items>
                                 <label alignment="center" text="0" textAlignment="center" id="jhG-AM-wAb">
                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <fontDescription key="font" type="system" pointSize="60"/>
+                                    <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="60"/>
                                 </label>
                                 <label alignment="center" verticalAlignment="center" text="mph" textAlignment="center" id="Hmi-dN-68Z">
                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -29,7 +34,7 @@
                         <group width="1" alignment="left" layout="vertical" id="xHP-lz-dts">
                             <items>
                                 <label alignment="center" text="100%" textAlignment="center" id="kEP-RA-nQQ">
-                                    <fontDescription key="font" type="system" pointSize="55"/>
+                                    <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="55"/>
                                 </label>
                                 <label alignment="center" text="0.0V battery" textAlignment="center" id="Y75-iU-HdX"/>
                             </items>
@@ -39,7 +44,7 @@
                             <items>
                                 <label width="133" alignment="center" text="0 mi" textAlignment="center" id="aCv-RU-pjH" userLabel="Trip Distance Label">
                                     <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <fontDescription key="font" type="system" pointSize="45"/>
+                                    <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="45"/>
                                 </label>
                                 <label width="1" alignment="left" verticalAlignment="center" text="ride" textAlignment="center" id="zhb-Sf-Nba">
                                     <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

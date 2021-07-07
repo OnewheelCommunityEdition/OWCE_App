@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="PushNotificationPayload.json" />
+    <BundleResource Include="Resources\SairaExtraCondensed-Black.ttf" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json">

@@ -37,5 +37,9 @@
 		<string>CLKComplicationFamilyModularSmall</string>
 		<string>CLKComplicationFamilyGraphicCircular</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>SairaExtraCondensed-Black.ttf</string>
+	</array>
 </dict>
 </plist>
