@@ -27,6 +27,7 @@
                                 </label>
                                 <label alignment="center" verticalAlignment="center" text="mph" textAlignment="center" id="Hmi-dN-68Z">
                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
                                 </label>
                             </items>
                             <color key="backgroundColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -36,7 +37,9 @@
                                 <label alignment="center" text="100%" textAlignment="center" id="kEP-RA-nQQ">
                                     <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="55"/>
                                 </label>
-                                <label alignment="center" text="0.0V battery" textAlignment="center" id="Y75-iU-HdX"/>
+                                <label alignment="center" text="0.0V battery" textAlignment="center" id="Y75-iU-HdX">
+                                    <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
+                                </label>
                             </items>
                             <color key="backgroundColor" red="0.99984914059999996" green="0.037384711209999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </group>
@@ -48,7 +51,7 @@
                                 </label>
                                 <label width="1" alignment="left" verticalAlignment="center" text="ride" textAlignment="center" id="zhb-Sf-Nba">
                                     <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <fontDescription key="font" type="system" pointSize="16"/>
+                                    <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
                                 </label>
                             </items>
                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
