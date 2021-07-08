@@ -9,6 +9,8 @@ using Xamarin.Forms;
 
 namespace OWCE.iOS.DependencyImplementations
 {
+    // Implementation of IWatch on iOS.
+    // Messages are received on InterfaceController.cs on the watch side.
     public class Watch : IWatch
     {
         private OWBoard _board;
@@ -58,6 +60,8 @@ namespace OWCE.iOS.DependencyImplementations
                     Console.WriteLine("Board not initialized yet. Returning");
                     return;
                 }
+                // Watch just woke up -- send all current data to bring
+                // the watch up to speed
                 SendAllBoardData(_board);
             }
         }

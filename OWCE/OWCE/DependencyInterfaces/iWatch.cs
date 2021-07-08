@@ -1,6 +1,9 @@
 ﻿using System;
 namespace OWCE.DependencyInterfaces
 {
+    // Handles communication with the watch.
+    // Platform-specific implementations are expected to implement
+    // this interface via DependencyService
     public interface IWatch
     {
         void UpdateBatteryPercent(int percent);

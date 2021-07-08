@@ -20,7 +20,8 @@ namespace OWCE.WatchOS.WatchOSExtension
             // Configure interface objects here.
             Console.WriteLine("{0} awake with context", this);
 
-            // Register for notifications
+            // Register for notifications, eg when the phone updates new
+            // values for speed, distance etc
             WCSessionManager.SharedManager.MessageReceived += DidReceiveMessage;
         }
 
@@ -38,6 +39,8 @@ namespace OWCE.WatchOS.WatchOSExtension
             // This method is called when the watch view controller is no longer visible to the user.
         }
 
+        // Called when the phone has new values to update on the watch display.
+        // Messages are mostly sent from Watch.cs on phone side
         public void DidReceiveMessage(WCSession session, Dictionary<string, object> applicationContext)
         {   try
             {
@@ -68,6 +71,7 @@ namespace OWCE.WatchOS.WatchOSExtension
                 }
                 if (applicationContext.ContainsKey("SpeedUnitsLabel"))
                 {
+                    // Update the speed units to mph or km/h
                     this.speedUnitsLabel.SetText((string)applicationContext["SpeedUnitsLabel"]);
                 }
             }

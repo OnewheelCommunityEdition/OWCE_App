@@ -6,10 +6,10 @@ using System;
 
 namespace WatchConnectivity
 {
+	// Handles WatchConnectivity sessions.
+	// Based on sample Xamarin code in https://github.com/xamarin/ios-samples/tree/main/watchOS/WatchConnectivity
 	public sealed class WCSessionManager : WCSessionDelegate
 	{
-		// Setup is converted from https://www.natashatherobot.com/watchconnectivity-say-hello-to-wcsession/ 
-		// with some extra bits foo
 		private static readonly WCSessionManager sharedManager = new WCSessionManager();
 		private static WCSession session = WCSession.IsSupported ? WCSession.DefaultSession : null;
 
