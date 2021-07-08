@@ -7,7 +7,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>OWCE</string>
 	<key>CFBundleIdentifier</key>
-	<string>nik.com.owcommunity.owce.watchkitapp.watchkitextension</string>
+	<string>com.owcommunity.owce.watchkitapp.watchkitextension</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleShortVersionString</key>
@@ -21,7 +21,7 @@
 		<key>NSExtensionAttributes</key>
 		<dict>
 			<key>WKAppBundleIdentifier</key>
-			<string>nik.com.owcommunity.owce.watchkitapp</string>
+			<string>com.owcommunity.owce.watchkitapp</string>
 		</dict>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.watchkit</string>

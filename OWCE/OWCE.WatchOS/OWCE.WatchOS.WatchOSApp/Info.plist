@@ -7,7 +7,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>OWCE</string>
 	<key>CFBundleIdentifier</key>
-	<string>nik.com.owcommunity.owce.watchkitapp</string>
+	<string>com.owcommunity.owce.watchkitapp</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleShortVersionString</key>
@@ -22,7 +22,7 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>WKCompanionAppBundleIdentifier</key>
-	<string>nik.com.owcommunity.owce</string>
+	<string>com.owcommunity.owce</string>
 	<key>WKWatchKitApp</key>
 	<true/>
 	<key>XSAppIconAssets</key>
