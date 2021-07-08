@@ -133,7 +133,7 @@ namespace WatchConnectivity
 
 		public override void DidReceiveApplicationContext(WCSession session, NSDictionary<NSString, NSObject> applicationContext)
 		{
-			Console.WriteLine($"Receiving Message on {Device}");
+			Console.WriteLine($"Receiving App Context on {Device}");
 			if (ApplicationContextUpdated != null)
 			{
 				var keys = applicationContext.Keys.Select(k => k.ToString()).ToArray();
@@ -148,14 +148,14 @@ namespace WatchConnectivity
         public override void DidReceiveMessage(WCSession session, NSDictionary<NSString, NSObject> message)
         {
 			Console.WriteLine($"Receiving Message on {Device}");
-			if (ApplicationContextUpdated != null)
+			if (MessageReceived != null)
 			{
 				var keys = message.Keys.Select(k => k.ToString()).ToArray();
 				var values = message.Values.Select(v => JsonConvert.DeserializeObject(v.ToString())).ToArray();
 				var dictionary = keys.Zip(values, (k, v) => new { Key = k, Value = v })
 									 .ToDictionary(x => x.Key, x => x.Value);
 
-				ApplicationContextUpdated(session, dictionary);
+				MessageReceived(session, dictionary);
 			}
 		}
 

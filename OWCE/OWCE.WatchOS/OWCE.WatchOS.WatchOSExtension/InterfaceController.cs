@@ -21,29 +21,24 @@ namespace OWCE.WatchOS.WatchOSExtension
             Console.WriteLine("{0} awake with context", this);
 
             // Register for notifications
-            //NSNotificationCenter.DefaultCenter.AddObserver(new NSString("BoardConnected"), this.ShowConnected);
-            WCSessionManager.SharedManager.ApplicationContextUpdated += DidReceiveApplicationContext;
-            WCSessionManager.SharedManager.MessageReceived += DidReceiveApplicationContext;
+            WCSessionManager.SharedManager.MessageReceived += DidReceiveMessage;
         }
 
         public override void WillActivate()
         {
             // This method is called when the watch view controller is about to be visible to the user.
-            Console.WriteLine("{0} will activate", this);
+
+            // Send message to Phone to tell it to update with latest values
+            WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() {
+                { "WatchAppAwake", null } });
         }
 
         public override void DidDeactivate()
         {
             // This method is called when the watch view controller is no longer visible to the user.
-            Console.WriteLine("{0} did deactivate", this);
         }
 
-        private void ShowConnected(NSNotification notification)
-        {
-            this.myLabel.SetText("Connected");
-        }
-
-        public void DidReceiveApplicationContext(WCSession session, Dictionary<string, object> applicationContext)
+        public void DidReceiveMessage(WCSession session, Dictionary<string, object> applicationContext)
         {   try
             {
                 if (applicationContext.ContainsKey("MessagePhone"))
@@ -71,7 +66,18 @@ namespace OWCE.WatchOS.WatchOSExtension
                 {
                     this.tripDistanceLabel.SetText((string)applicationContext["Distance"]);
                 }
-
+                if (applicationContext.ContainsKey("Metric"))
+                {
+                    bool isMetric = (bool)applicationContext["Metric"];
+                    if (isMetric)
+                    {
+                        this.speedUnitsLabel.SetText("kmh");
+                    }
+                    else
+                    {
+                        this.speedUnitsLabel.SetText("mph");
+                    }
+                }
             }
             catch (Exception ex)
             {

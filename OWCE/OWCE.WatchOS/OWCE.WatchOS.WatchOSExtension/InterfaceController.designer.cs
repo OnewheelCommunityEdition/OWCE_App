@@ -25,6 +25,9 @@ namespace OWCE.WatchOS.WatchOSExtension
 		WatchKit.WKInterfaceLabel speedLabel { get; set; }
 
 		[Outlet]
+		WatchKit.WKInterfaceLabel speedUnitsLabel { get; set; }
+
+		[Outlet]
 		WatchKit.WKInterfaceLabel tripDistanceLabel { get; set; }
 
 		[Outlet]
@@ -52,14 +55,19 @@ namespace OWCE.WatchOS.WatchOSExtension
 				speedLabel = null;
 			}
 
+			if (tripDistanceLabel != null) {
+				tripDistanceLabel.Dispose ();
+				tripDistanceLabel = null;
+			}
+
 			if (voltageLabel != null) {
 				voltageLabel.Dispose ();
 				voltageLabel = null;
 			}
 
-			if (tripDistanceLabel != null) {
-				tripDistanceLabel.Dispose ();
-				tripDistanceLabel = null;
+			if (speedUnitsLabel != null) {
+				speedUnitsLabel.Dispose ();
+				speedUnitsLabel = null;
 			}
 		}
 	}

@@ -17,7 +17,7 @@ namespace OWCE.PropertyChangeHandlers
             {
                 if (!PropertiesToWatch.Contains(e.PropertyName)) { return; }
 
-                IWatch watchService = DependencyService.Get<IWatch>(DependencyFetchTarget.NewInstance);
+                IWatch watchService = DependencyService.Get<IWatch>();
                 if (e.PropertyName.Equals("BatteryVoltage"))
                 {
                     float voltage = (sender as OWBoard).BatteryVoltage;

@@ -21,11 +21,11 @@
                         </label>
                         <group width="1" alignment="left" layout="vertical" id="Uz7-H4-yJd">
                             <items>
-                                <label alignment="center" text="0" textAlignment="center" id="jhG-AM-wAb">
+                                <label height="54" alignment="center" text="0" textAlignment="center" id="jhG-AM-wAb">
                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="60"/>
                                 </label>
-                                <label alignment="center" verticalAlignment="center" text="mph" textAlignment="center" id="Hmi-dN-68Z">
+                                <label height="24" alignment="center" verticalAlignment="center" text="mph" textAlignment="center" id="Hmi-dN-68Z">
                                     <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
                                 </label>
@@ -34,7 +34,7 @@
                         </group>
                         <group width="1" alignment="left" layout="vertical" id="xHP-lz-dts">
                             <items>
-                                <label alignment="center" text="100%" textAlignment="center" id="kEP-RA-nQQ">
+                                <label height="54" alignment="center" text="100%" textAlignment="center" id="kEP-RA-nQQ">
                                     <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="55"/>
                                 </label>
                                 <label alignment="center" text="0.0V battery" textAlignment="center" id="Y75-iU-HdX">
@@ -45,11 +45,11 @@
                         </group>
                         <group width="1" alignment="left" layout="vertical" id="0s8-zO-gKM">
                             <items>
-                                <label width="133" alignment="center" text="0 mi" textAlignment="center" id="aCv-RU-pjH" userLabel="Trip Distance Label">
+                                <label width="133" height="46" alignment="center" text="0 mi" textAlignment="center" id="aCv-RU-pjH" userLabel="Trip Distance Label">
                                     <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="45"/>
                                 </label>
-                                <label width="1" alignment="left" verticalAlignment="center" text="ride" textAlignment="center" id="zhb-Sf-Nba">
+                                <label width="1" height="25" alignment="left" verticalAlignment="center" text="ride" textAlignment="center" id="zhb-Sf-Nba">
                                     <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
                                 </label>
@@ -64,12 +64,13 @@
                         <outlet property="errorMessages" destination="1IU-Bg-Gto" id="CMQ-DF-eT5"/>
                         <outlet property="myLabel" destination="rol-Vw-zN9" id="nd0-Bt-JFx"/>
                         <outlet property="speedLabel" destination="jhG-AM-wAb" id="PJ6-Lz-A6L"/>
+                        <outlet property="speedUnitsLabel" destination="Hmi-dN-68Z" id="I8O-sq-d0Y"/>
                         <outlet property="tripDistanceLabel" destination="aCv-RU-pjH" id="wXT-oQ-UWB"/>
                         <outlet property="voltageLabel" destination="Y75-iU-HdX" id="LDC-Mb-J8a"/>
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="0.0" y="-1"/>
+            <point key="canvasLocation" x="0.0" y="-50.482233502538065"/>
         </scene>
         <!--Static Notification Interface Controller-->
         <scene sceneID="AEw-b0-oYE">

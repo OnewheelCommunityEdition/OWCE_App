@@ -7,11 +7,6 @@ namespace OWCE.Droid.DependencyImplementations
 {
     public class Watch : IWatch
     {
-        public void BoardConnected()
-        {
-            // Implement when we have Android Watch support
-        }
-
         public void UpdateBatteryPercent(int percent)
         {
             // Implement when we have Android Watch support
@@ -28,6 +23,11 @@ namespace OWCE.Droid.DependencyImplementations
         }
 
         public void UpdateVoltage(float voltage)
+        {
+            // Implement when we have Android Watch support
+        }
+
+        void IWatch.ListenForWatchMessages(OWBoard board)
         {
             // Implement when we have Android Watch support
         }
