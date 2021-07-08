@@ -66,17 +66,9 @@ namespace OWCE.WatchOS.WatchOSExtension
                 {
                     this.tripDistanceLabel.SetText((string)applicationContext["Distance"]);
                 }
-                if (applicationContext.ContainsKey("Metric"))
+                if (applicationContext.ContainsKey("SpeedUnitsLabel"))
                 {
-                    bool isMetric = (bool)applicationContext["Metric"];
-                    if (isMetric)
-                    {
-                        this.speedUnitsLabel.SetText("kmh");
-                    }
-                    else
-                    {
-                        this.speedUnitsLabel.SetText("mph");
-                    }
+                    this.speedUnitsLabel.SetText((string)applicationContext["SpeedUnitsLabel"]);
                 }
             }
             catch (Exception ex)

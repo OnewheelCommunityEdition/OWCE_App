@@ -75,7 +75,7 @@ namespace OWCE.iOS.DependencyImplementations
                         { "BatteryPercent", board.BatteryPercent },
                         { "Speed", speedMph},
                         { "Voltage", board.BatteryVoltage},
-                        { "Metric", App.Current.MetricDisplay},
+                        { "SpeedUnitsLabel", App.Current.MetricDisplay ? "km/h" : "mph"},
                         { "Distance", distanceString}
                     });
 
