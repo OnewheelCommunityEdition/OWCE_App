@@ -5,20 +5,20 @@ using Xamarin.Forms;
 
 namespace OWCE.Pages
 {
-    public class MainMasterDetailPage : MasterDetailPage
+    public class MainFlyoutPage : FlyoutPage
     {
         private NavigationPage _mainBoardNavigationPage = null;
 
-        public MainMasterDetailPage()
+        public MainFlyoutPage()
         {
-            Master = new MainMasterPage();
+            Flyout = new MainFlyoutMenuPage();
 
             _mainBoardNavigationPage = new CustomNavigationPage(new BoardListPage());
             Detail = _mainBoardNavigationPage;
 
             //Detail = new NavigationPage(new ListLogsPage());
 
-            this.MasterBehavior = MasterBehavior.Popover;
+            FlyoutLayoutBehavior = FlyoutLayoutBehavior.Popover;
         }
 
         public void GoToBoardPage()

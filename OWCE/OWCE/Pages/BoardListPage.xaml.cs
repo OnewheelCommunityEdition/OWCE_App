@@ -323,9 +323,9 @@ namespace OWCE.Pages
 
         void BurgerMenu_Tapped(System.Object sender, System.EventArgs e)
         {
-            if (Parent?.Parent is MainMasterDetailPage mainMasterDetailPage)
+            if (Parent?.Parent is MainFlyoutPage mainFlyout)
             {
-                mainMasterDetailPage.IsPresented = true;
+                mainFlyout.IsPresented = true;
             }
         }
 
