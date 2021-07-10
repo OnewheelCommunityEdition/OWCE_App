@@ -1402,7 +1402,8 @@ namespace OWCE
         {
             _isLogging = false;
             _currentRide.EndTime = DateTime.Now;
-            Hud.Show("Saving");
+            // TODO: Replace hud.
+            //Hud.Show("Saving");
 
             /*
             await CrossGeolocator.Current.StopListeningAsync(); 
@@ -1412,7 +1413,7 @@ namespace OWCE
 
             SaveEvents();
 
-            Hud.Dismiss();
+            //Hud.Dismiss();
 
 
 

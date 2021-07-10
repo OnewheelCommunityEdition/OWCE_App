@@ -82,7 +82,6 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DependencyImplementations\Hud.cs" />
     <Compile Include="DependencyImplementations\PermissionPrompt.cs" />
     <Compile Include="DependencyImplementations\OWBLE.cs" />
     <Compile Include="Extensions\GuidExtension.cs" />
@@ -182,7 +181,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
-    <PackageReference Include="BTProgressHUD-updated" Version="1.8.1" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
     <PackageReference Include="Resizetizer.NT">
       <Version>0.2.0</Version>

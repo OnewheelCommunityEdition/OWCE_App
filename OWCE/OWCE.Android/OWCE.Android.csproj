@@ -63,7 +63,6 @@
   </ItemGroup>
     <ItemGroup>
     <PackageReference Include="Xamarin.AndroidX.Legacy.Support.Core.Utils" Version="1.0.0.7" />
-    <PackageReference Include="AndHUD" Version="1.4.3" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
     <PackageReference Include="Resizetizer.NT">
@@ -95,7 +94,6 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SplashActivity.cs" />
-    <Compile Include="DependencyImplementations\Hud.cs" />
     <Compile Include="DependencyImplementations\PermissionPrompt.cs" />
     <Compile Include="DependencyImplementations\OWBLE.cs" />
     <Compile Include="Extensions\GuidExtension.cs" />

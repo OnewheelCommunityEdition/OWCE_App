@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AndroidHUD;
 using OWCE.DependencyInterfaces;
 using Xamarin.Forms;
 
