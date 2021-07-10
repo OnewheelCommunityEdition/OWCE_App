@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
-using BigTed;
 using CoreGraphics;
 using Foundation;
 using OWCE.DependencyInterfaces;
