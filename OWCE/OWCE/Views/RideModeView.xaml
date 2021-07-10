@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
              x:Class="OWCE.Views.RideModeView"
              xmlns:views="clr-namespace:OWCE.Views"
@@ -16,8 +17,8 @@
     </ContentView.Resources>
 
     <yummy:PancakeView BackgroundColor="#000000" Style="{StaticResource BoardDetailBlockBaseStyle}">
-        <Expander x:Name="ExpanderView" Margin="0" Padding="0" HorizontalOptions="Fill" PropertyChanged="ExpanderView_PropertyChanged">
-            <Expander.Header>
+        <xct:Expander x:Name="ExpanderView" Margin="0" Padding="0" HorizontalOptions="Fill" PropertyChanged="ExpanderView_PropertyChanged">
+            <xct:Expander.Header>
                 <Grid BackgroundColor="#000000"  AbsoluteLayout.LayoutFlags="WidthProportional" AbsoluteLayout.LayoutBounds="0,0,1,121">
                     <Label Text="RIDE MODE" FontFamily="SairaExtraCondensed-Bold" TextColor="White" CharacterSpacing="0.26" FontSize="16" Margin="20,6,0,0" />
 
@@ -32,7 +33,7 @@
                     <views:ExpanderArrowView x:Name="ExpanderArrow" HorizontalOptions="End" Margin="17,13" />
 
                 </Grid>
-            </Expander.Header>
+            </xct:Expander.Header>
             <Grid ColumnSpacing="0" RowSpacing="0" RowDefinitions="Auto,76,Auto" Margin="0" Padding="0">
                 <!--
                 <views:SwitchView Grid.Row="0" HorizontalOptions="Center">
@@ -89,6 +90,6 @@
                     </Button.IsVisible>
                 </Button>
             </Grid>
-        </Expander>
+        </xct:Expander>
     </yummy:PancakeView>
 </ContentView>

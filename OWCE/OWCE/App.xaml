@@ -6,7 +6,7 @@
              xmlns:views="clr-namespace:OWCE.Views"
              x:Class="OWCE.App"
              xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
->
+             xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit">
     <Application.Resources>
         <ResourceDictionary>
 
@@ -108,7 +108,7 @@
                 </Setter>
             </Style>
 
-            <Style TargetType="Expander">
+            <Style TargetType="xct:Expander">
                 <Setter Property="ExpandAnimationEasing" Value="{x:Static Easing.CubicIn}" />
                 <Setter Property="ExpandAnimationLength" Value="200" />
                 <Setter Property="CollapseAnimationEasing" Value="{x:Static Easing.CubicOut}" />

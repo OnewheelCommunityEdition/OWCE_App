@@ -54,8 +54,6 @@ namespace OWCE
 
         public App()
         {
-            Xamarin.Forms.Device.SetFlags(new string[] { "Shapes_Experimental", "Expander_Experimental" });
-
 
             MetricDisplay = Preferences.Get("metric_display", System.Globalization.RegionInfo.CurrentRegion.IsMetric);
             
@@ -79,7 +77,7 @@ namespace OWCE
 #else
             OWBLE = DependencyService.Get<IOWBLE>();
 #endif
-            //MainPage = new MainMasterDetailPage();
+            //MainPage = new MainFlyoutPage();
             MainPage = new NavigationPage(new BoardListPage());
 
 

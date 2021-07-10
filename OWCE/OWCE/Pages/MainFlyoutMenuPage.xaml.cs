@@ -5,27 +5,27 @@ using Xamarin.Forms;
 
 namespace OWCE.Pages
 {
-    public partial class MainMasterPage : ContentPage
+    public partial class MainFlyoutMenuPage : ContentPage
     {
 
-        public MainMasterPage()
+        public MainFlyoutMenuPage()
         {
             InitializeComponent();
         }
 
         private void Onewheels_Tapped(object sender, System.EventArgs e)
         {
-            if (Parent is MainMasterDetailPage masterDetailPage)
+            if (Parent is MainFlyoutPage mainFlyoutPage)
             {
-                masterDetailPage.GoToBoardPage();
+                mainFlyoutPage.GoToBoardPage();
             }
         }
 
         private void MyRides_Tapped(object sender, System.EventArgs e)
         {
-            if (Parent is MainMasterDetailPage masterDetailPage)
+            if (Parent is MainFlyoutPage mainFlyoutPage)
             {
-                masterDetailPage.GoToMyRidesPage();
+                mainFlyoutPage.GoToMyRidesPage();
             }
         }
 
@@ -38,9 +38,9 @@ namespace OWCE.Pages
         {
             Navigation.PushModalAsync(new NavigationPage(new SettingsPage()));
             /*
-            if (Parent is MainMasterDetailPage masterDetailPage)
+            if (Parent is MainFlyoutPage mainFlyoutPage)
             {
-                masterDetailPage.GoToSettingsPage();
+                mainFlyoutPage.GoToSettingsPage();
             }
             */
         }
@@ -59,9 +59,9 @@ namespace OWCE.Pages
 
         public void Logs_Tapped(object sender, EventArgs e)
         {
-            if (Parent is MainMasterDetailPage masterDetailPage)
+            if (Parent is MainFlyoutPage mainFlyoutPage)
             {
-                masterDetailPage.GoToLogsPage();
+                mainFlyoutPage.GoToLogsPage();
             }
         }
     }
