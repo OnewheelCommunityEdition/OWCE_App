@@ -28,9 +28,9 @@ namespace OWCE.Views
             var parent = Parent;
             while (parent != null)
             {
-                if (parent is MainMasterDetailPage mainMasterDetailPage)
+                if (parent is MainFlyoutPage mainFlyoutPage)
                 {
-                    mainMasterDetailPage.IsPresented = true;
+                    mainFlyoutPage.IsPresented = true;
                     break;
                 }
 

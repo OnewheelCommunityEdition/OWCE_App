@@ -84,8 +84,6 @@
     <Compile Include="Extensions\GuidExtension.cs" />
     <Compile Include="DependencyImplementations\UserAgent.cs" />
     <Compile Include="Renderers\CustomNavigationPageRenderer.cs" />
-    <Compile Include="Renderers\MainMasterDetailPageRenderer.cs" />
-    <Compile Include="Renderers\MainMasterPageRenderer.cs" />
     <Compile Include="Renderers\ArcViewRenderer.cs" />
     <Compile Include="CharacteristicValueRequest.cs" />
   </ItemGroup>

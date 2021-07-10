@@ -53,8 +53,8 @@
     <Compile Update="Pages\BoardPage.xaml.cs">
       <DependentUpon>BoardPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\MainMasterPage.xaml.cs">
-      <DependentUpon>MainMasterPage.xaml</DependentUpon>
+    <Compile Update="Pages\MainFlyoutMenuPage.xaml.cs">
+      <DependentUpon>MainFlyoutMenuPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\MyRidesPage.xaml.cs">
       <DependentUpon>MyRidesPage.xaml</DependentUpon>
