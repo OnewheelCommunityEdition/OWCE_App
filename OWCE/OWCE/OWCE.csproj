@@ -65,13 +65,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="**/.DS_Store" />
-    <None Remove="Fonts\SairaExtraCondensed-SemiBold.ttf" />
     <None Remove="Resources\Fonts\SairaExtraCondensed-SemiBold.ttf" />
     <None Remove="Resources\Fonts\SairaExtraCondensed-Bold.ttf" />
     <None Remove="Resources\Fonts\SairaExtraCondensed-Black.ttf" />
     <None Remove="Resources\Fonts\SairaExtraCondensed-Light.ttf" />
     <None Remove="Resources\Fonts\SairaExtraCondensed-Medium.ttf" />
-    <None Remove="Xamarin.CommunityToolkit" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-SemiBold.ttf" />
