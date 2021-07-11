@@ -80,7 +80,6 @@
     <IOSDebugOverWiFi>true</IOSDebugOverWiFi>
     <IOSDebuggerPort>10001</IOSDebuggerPort>
     <LangVersion>8.0</LangVersion>
-    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
