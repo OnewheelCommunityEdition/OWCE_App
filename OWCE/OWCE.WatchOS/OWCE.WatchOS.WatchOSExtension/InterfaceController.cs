@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Foundation;
 using WatchConnectivity;
 using WatchKit;
@@ -8,6 +10,8 @@ namespace OWCE.WatchOS.WatchOSExtension
 {
     public partial class InterfaceController : WKInterfaceController
     {
+        private CancellationTokenSource source = new CancellationTokenSource();
+
         protected InterfaceController(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
@@ -29,14 +33,34 @@ namespace OWCE.WatchOS.WatchOSExtension
         {
             // This method is called when the watch view controller is about to be visible to the user.
 
+            // Check whether session is active
+            if (!WCSessionManager.SharedManager.IsReachable())
+            {
+                // If session is not reachable, we should display a message
+                // reminding the user to connect the phone to the board.
+                ShowConnectToBoardViaPhoneMessage();
+            }
+
             // Send message to Phone to tell it to update with latest values
             WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() {
                 { "WatchAppAwake", null } });
+
+            // If we don't hear back from the phone within 3 secs, then assume
+            // the phone is disconnected from the board.
+            var oldSource = source;
+            source = new CancellationTokenSource();
+            oldSource.Dispose();
+            var t = Task.Run(async delegate
+                {
+                    await Task.Delay(3000, source.Token);
+                    ShowConnectToBoardViaPhoneMessage();
+                });
         }
 
         public override void DidDeactivate()
         {
             // This method is called when the watch view controller is no longer visible to the user.
+            source.Cancel();
         }
 
         // Called when the phone has new values to update on the watch display.
@@ -44,6 +68,15 @@ namespace OWCE.WatchOS.WatchOSExtension
         public void DidReceiveMessage(WCSession session, Dictionary<string, object> applicationContext)
         {   try
             {
+                // Since we got a response from the phone, cancel the timer
+                // task that would have prompted the user to connect to the board on the phone
+                source.Cancel();
+
+                // Make sure we hide the "Connect to board" message and show the
+                // ride details.
+                HideConnectToBoardViaPhoneMessage();
+
+                // Now process the message itself
                 if (applicationContext.ContainsKey("MessagePhone"))
                 {
                     var message = (string)applicationContext["MessagePhone"];
@@ -80,6 +113,22 @@ namespace OWCE.WatchOS.WatchOSExtension
                 Console.WriteLine($"Exception Processing Message: {ex.Message}");
                 this.errorMessages.SetText($"Exception: {ex.Message}");
             }
+        }
+
+        // Displays the "Please connect the phone to the board" message
+        // and hides the ride details (eg speed, battery, distance)
+        private void ShowConnectToBoardViaPhoneMessage()
+        {
+            this.connectToBoardGroup.SetHidden(false);
+            this.rideDetailsGroup.SetHidden(true);
+        }
+
+        // Does the opposite of ShowConnectToBoardViaPhoneMessage()
+        private void HideConnectToBoardViaPhoneMessage()
+        {
+            this.connectToBoardGroup.SetHidden(true);
+            this.rideDetailsGroup.SetHidden(false);
+
         }
     }
 }

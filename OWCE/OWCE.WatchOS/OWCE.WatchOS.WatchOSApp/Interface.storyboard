@@ -19,50 +19,61 @@
                         <label width="1" alignment="left" text="OWCE" textAlignment="center" id="ShG-eU-ZCd">
                             <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </label>
-                        <group width="1" alignment="left" layout="vertical" id="Uz7-H4-yJd">
+                        <group width="1" alignment="left" id="udh-QH-9Jq">
                             <items>
-                                <label height="54" alignment="center" text="0" textAlignment="center" id="jhG-AM-wAb">
-                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="60"/>
-                                </label>
-                                <label height="24" alignment="center" verticalAlignment="center" text="mph" textAlignment="center" id="Hmi-dN-68Z">
-                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
-                                </label>
+                                <label alignment="center" verticalAlignment="center" text="Please connect your phone to your board to continue." textAlignment="center" numberOfLines="5" id="Gn3-DD-0mS"/>
                             </items>
-                            <color key="backgroundColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </group>
-                        <group width="1" alignment="left" layout="vertical" id="xHP-lz-dts">
+                        <group width="1" alignment="left" layout="vertical" id="ZR4-J3-7uD">
                             <items>
-                                <label height="54" alignment="center" text="100%" textAlignment="center" id="kEP-RA-nQQ">
-                                    <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="55"/>
-                                </label>
-                                <label alignment="center" text="0.0V battery" textAlignment="center" id="Y75-iU-HdX">
-                                    <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
-                                </label>
+                                <group width="1" alignment="left" layout="vertical" id="Uz7-H4-yJd">
+                                    <items>
+                                        <label height="54" alignment="center" text="0" textAlignment="center" id="jhG-AM-wAb">
+                                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="60"/>
+                                        </label>
+                                        <label height="24" alignment="center" verticalAlignment="center" text="mph" textAlignment="center" id="Hmi-dN-68Z">
+                                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
+                                        </label>
+                                    </items>
+                                    <color key="backgroundColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </group>
+                                <group width="1" alignment="left" layout="vertical" id="xHP-lz-dts">
+                                    <items>
+                                        <label height="54" alignment="center" text="100%" textAlignment="center" id="kEP-RA-nQQ">
+                                            <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="55"/>
+                                        </label>
+                                        <label alignment="center" text="0.0V battery" textAlignment="center" id="Y75-iU-HdX">
+                                            <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
+                                        </label>
+                                    </items>
+                                    <color key="backgroundColor" red="0.99984914059999996" green="0.037384711209999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </group>
+                                <group width="1" alignment="left" layout="vertical" id="0s8-zO-gKM">
+                                    <items>
+                                        <label width="133" height="46" alignment="center" text="0 mi" textAlignment="center" id="aCv-RU-pjH" userLabel="Trip Distance Label">
+                                            <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="45"/>
+                                        </label>
+                                        <label width="1" height="25" alignment="left" verticalAlignment="center" text="ride" textAlignment="center" id="zhb-Sf-Nba">
+                                            <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
+                                        </label>
+                                    </items>
+                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </group>
+                                <label alignment="left" text="Label" id="rol-Vw-zN9"/>
+                                <label alignment="left" text="Errors:" numberOfLines="10" id="1IU-Bg-Gto"/>
                             </items>
-                            <color key="backgroundColor" red="0.99984914059999996" green="0.037384711209999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </group>
-                        <group width="1" alignment="left" layout="vertical" id="0s8-zO-gKM">
-                            <items>
-                                <label width="133" height="46" alignment="center" text="0 mi" textAlignment="center" id="aCv-RU-pjH" userLabel="Trip Distance Label">
-                                    <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="45"/>
-                                </label>
-                                <label width="1" height="25" alignment="left" verticalAlignment="center" text="ride" textAlignment="center" id="zhb-Sf-Nba">
-                                    <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
-                                </label>
-                            </items>
-                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </group>
-                        <label alignment="left" text="Label" id="rol-Vw-zN9"/>
-                        <label alignment="left" text="Errors:" numberOfLines="10" id="1IU-Bg-Gto"/>
                     </items>
                     <connections>
                         <outlet property="batteryPercentageLabel" destination="kEP-RA-nQQ" id="jHA-RH-Qko"/>
+                        <outlet property="connectToBoardGroup" destination="udh-QH-9Jq" id="ysQ-7e-zFN"/>
                         <outlet property="errorMessages" destination="1IU-Bg-Gto" id="CMQ-DF-eT5"/>
                         <outlet property="myLabel" destination="rol-Vw-zN9" id="nd0-Bt-JFx"/>
+                        <outlet property="rideDetailsGroup" destination="ZR4-J3-7uD" id="LNV-Z8-gdA"/>
                         <outlet property="speedLabel" destination="jhG-AM-wAb" id="PJ6-Lz-A6L"/>
                         <outlet property="speedUnitsLabel" destination="Hmi-dN-68Z" id="I8O-sq-d0Y"/>
                         <outlet property="tripDistanceLabel" destination="aCv-RU-pjH" id="wXT-oQ-UWB"/>

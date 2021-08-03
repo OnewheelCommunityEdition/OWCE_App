@@ -16,10 +16,16 @@ namespace OWCE.WatchOS.WatchOSExtension
 		WatchKit.WKInterfaceLabel batteryPercentageLabel { get; set; }
 
 		[Outlet]
+		WatchKit.WKInterfaceGroup connectToBoardGroup { get; set; }
+
+		[Outlet]
 		WatchKit.WKInterfaceLabel errorMessages { get; set; }
 
 		[Outlet]
 		WatchKit.WKInterfaceLabel myLabel { get; set; }
+
+		[Outlet]
+		WatchKit.WKInterfaceGroup rideDetailsGroup { get; set; }
 
 		[Outlet]
 		WatchKit.WKInterfaceLabel speedLabel { get; set; }
@@ -55,6 +61,11 @@ namespace OWCE.WatchOS.WatchOSExtension
 				speedLabel = null;
 			}
 
+			if (speedUnitsLabel != null) {
+				speedUnitsLabel.Dispose ();
+				speedUnitsLabel = null;
+			}
+
 			if (tripDistanceLabel != null) {
 				tripDistanceLabel.Dispose ();
 				tripDistanceLabel = null;
@@ -65,9 +76,14 @@ namespace OWCE.WatchOS.WatchOSExtension
 				voltageLabel = null;
 			}
 
-			if (speedUnitsLabel != null) {
-				speedUnitsLabel.Dispose ();
-				speedUnitsLabel = null;
+			if (connectToBoardGroup != null) {
+				connectToBoardGroup.Dispose ();
+				connectToBoardGroup = null;
+			}
+
+			if (rideDetailsGroup != null) {
+				rideDetailsGroup.Dispose ();
+				rideDetailsGroup = null;
 			}
 		}
 	}

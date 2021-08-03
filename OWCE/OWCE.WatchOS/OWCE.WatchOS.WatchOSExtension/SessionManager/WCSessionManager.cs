@@ -159,6 +159,11 @@ namespace WatchConnectivity
 			}
 		}
 
+		public bool IsReachable()
+        {
+			return validReachableSession != null;
+        }
+
 		#endregion
 	}
 }

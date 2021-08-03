@@ -31,5 +31,10 @@ namespace OWCE.Droid.DependencyImplementations
         {
             // Implement when we have Android Watch support
         }
+
+        void IWatch.StopListeningForWatchMessages()
+        {
+            // Implement when we have Android Watch support
+        }
     }
 }

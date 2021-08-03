@@ -51,6 +51,11 @@ namespace OWCE.iOS.DependencyImplementations
             WCSessionManager.SharedManager.MessageReceived += DidReceiveMessage;
         }
 
+        void IWatch.StopListeningForWatchMessages()
+        {
+            WCSessionManager.SharedManager.MessageReceived -= DidReceiveMessage;
+        }
+
         public void DidReceiveMessage(WCSession session, Dictionary<string, object> message)
         {
             if (message.ContainsKey("WatchAppAwake"))

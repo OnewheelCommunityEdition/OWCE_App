@@ -11,5 +11,6 @@ namespace OWCE.DependencyInterfaces
         void UpdateVoltage(float voltage);
         void UpdateDistance(string distanceString);
         void ListenForWatchMessages(OWBoard board);
+        void StopListeningForWatchMessages();
     }
 }
