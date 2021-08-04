@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="18122" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="AgC-eL-Hgc">
-    <device id="watch40"/>
+    <device id="watch38"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="18022"/>
@@ -19,9 +19,10 @@
                         <label width="1" alignment="left" text="OWCE" textAlignment="center" id="ShG-eU-ZCd">
                             <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </label>
-                        <group width="1" alignment="left" id="udh-QH-9Jq">
+                        <group width="1" alignment="left" layout="vertical" id="udh-QH-9Jq">
                             <items>
-                                <label alignment="center" verticalAlignment="center" text="Please connect your phone to your board to continue." textAlignment="center" numberOfLines="5" id="Gn3-DD-0mS"/>
+                                <label height="129" alignment="center" text="Please connect your phone to your board to continue." textAlignment="center" numberOfLines="10" id="Gn3-DD-0mS"/>
+                                <label height="78" alignment="left" textAlignment="center" id="dIc-PU-d81"/>
                             </items>
                         </group>
                         <group width="1" alignment="left" layout="vertical" id="ZR4-J3-7uD">
@@ -63,8 +64,8 @@
                                     </items>
                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </group>
-                                <label alignment="left" text="Label" id="rol-Vw-zN9"/>
-                                <label alignment="left" text="Errors:" numberOfLines="10" id="1IU-Bg-Gto"/>
+                                <label alignment="left" hidden="YES" text="Label" id="rol-Vw-zN9"/>
+                                <label alignment="left" hidden="YES" text="Errors:" numberOfLines="10" id="1IU-Bg-Gto"/>
                             </items>
                         </group>
                     </items>
@@ -81,7 +82,7 @@
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="0.0" y="-50.482233502538065"/>
+            <point key="canvasLocation" x="0.0" y="-153.5"/>
         </scene>
         <!--Static Notification Interface Controller-->
         <scene sceneID="AEw-b0-oYE">
