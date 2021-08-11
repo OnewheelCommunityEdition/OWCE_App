@@ -4,6 +4,7 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using WatchConnectivity;
 
 namespace OWCE.iOS
 {
@@ -26,6 +27,10 @@ namespace OWCE.iOS
 
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
+
+            // Apple Watch session manager
+            WCSessionManager.SharedManager.StartSession();
+
             return base.FinishedLaunching(uiApplication, launchOptions);
         }
     }

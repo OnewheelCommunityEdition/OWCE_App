@@ -28,6 +28,7 @@
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
     <PackageReference Include="SkiaSharp" Version="2.80.2" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="1.2.0" />
   </ItemGroup>
 
@@ -42,6 +43,7 @@
     <Folder Include="Pages\Popup\" />
     <Folder Include="Network\" />
     <Folder Include="Exceptions\" />
+    <Folder Include="PropertyChangeHandlers\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="App.xaml.cs">
@@ -70,6 +72,8 @@
     <None Remove="Resources\Fonts\SairaExtraCondensed-Black.ttf" />
     <None Remove="Resources\Fonts\SairaExtraCondensed-Light.ttf" />
     <None Remove="Resources\Fonts\SairaExtraCondensed-Medium.ttf" />
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="PropertyChangeHandlers\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-SemiBold.ttf" />

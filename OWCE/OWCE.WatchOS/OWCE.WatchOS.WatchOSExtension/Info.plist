@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleName</key>
+	<string>OWCE.WatchOS.WatchOSExtension</string>
+	<key>CFBundleDisplayName</key>
+	<string>OWCE</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.owcommunity.owce.watchkitapp.watchkitextension</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>MinimumOSVersion</key>
+	<string>7.4</string>
+	<key>NSExtension</key>
+	<dict>
+		<key>NSExtensionAttributes</key>
+		<dict>
+			<key>WKAppBundleIdentifier</key>
+			<string>com.owcommunity.owce.watchkitapp</string>
+		</dict>
+		<key>NSExtensionPointIdentifier</key>
+		<string>com.apple.watchkit</string>
+	</dict>
+	<key>RemoteInterfacePrincipleClass</key>
+	<string>InterfaceController</string>
+	<key>WKExtensionDelegateClassName</key>
+	<string>ExtensionDelegate</string>
+	<key>CLKComplicationPrincipalClass</key>
+	<string>ComplicationController</string>
+	<key>CLKComplicationSupportedFamilies</key>
+	<array>
+		<string>CLKComplicationFamilyModularSmall</string>
+		<string>CLKComplicationFamilyGraphicCircular</string>
+	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>SairaExtraCondensed-Black.ttf</string>
+	</array>
+</dict>
+</plist>

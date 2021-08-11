@@ -14,20 +14,26 @@ namespace OWCE.Converters
         {
             if (value is ushort rotations)
             {
-                // TODO: Not use static wheel circumfrence.
-                var kilometers = 917.66f * rotations * 0.001f * 0.001f;
-
-                if (App.Current.MetricDisplay)
-                {
-                    return $"{kilometers.ToString("N1")} km"; // kmph
-                }
-                else
-                {
-                    return $"{UnitConverters.KilometersToMiles(kilometers).ToString("N1")} mi";
-                }
+                return ConvertRotationsToDistance(rotations); 
             }
 
             return 0.0f;
+        }
+
+        public static string ConvertRotationsToDistance(ushort rotations)
+        {
+            // TODO: Not use static wheel circumfrence.
+            var kilometers = 917.66f * rotations * 0.001f * 0.001f;
+
+            if (App.Current.MetricDisplay)
+            {
+                return $"{kilometers.ToString("N1")} km"; // kmph
+            }
+            else
+            {
+                return $"{UnitConverters.KilometersToMiles(kilometers).ToString("N1")} mi";
+            }
+
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

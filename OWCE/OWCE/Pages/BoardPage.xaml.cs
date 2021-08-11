@@ -10,6 +10,7 @@ using OWCE.Pages.Popup;
 using Rg.Plugins.Popup.Services;
 using System.Linq;
 using OWCE.Views;
+using OWCE.DependencyInterfaces;
 
 namespace OWCE.Pages
 {
@@ -156,6 +157,8 @@ namespace OWCE.Pages
         {
             await App.Current.OWBLE.Disconnect();
             await Navigation.PopModalAsync();
+            IWatch watchService = DependencyService.Get<IWatch>();
+            watchService.StopListeningForWatchMessages();
         }
 
         private bool _isLogging = false;

@@ -369,6 +369,9 @@ namespace OWCE.Pages
                     if (board != null)
                     {
                         await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(new BoardPage(board)));
+                        // Publish notification that board was connected
+                        IWatch watchService = DependencyService.Get<IWatch>();
+                        watchService.ListenForWatchMessages(board);
                     }
                     /*
                     try

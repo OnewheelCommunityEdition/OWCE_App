@@ -88,6 +88,10 @@
     <Compile Include="Renderers\CustomNavigationPageRenderer.cs" />
     <Compile Include="Renderers\ArcViewRenderer.cs" />
     <Compile Include="CharacteristicValueRequest.cs" />
+    <Compile Include="DependencyImplementations\Watch.cs" />
+    <Compile Include="..\OWCE.WatchOs\OWCE.WatchOS.WatchOSExtension\SessionManager\WCSessionManager.cs">
+      <Link>SessionManager\WCSessionManager.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -208,6 +212,11 @@
     <ProjectReference Include="..\OWCE\OWCE.csproj">
       <Project>{4B3D0411-B028-494E-AB04-113D1F130DA1}</Project>
       <Name>OWCE</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OWCE.WatchOS\OWCE.WatchOS.WatchOSApp\OWCE.WatchOS.WatchOSApp.csproj">
+      <IsWatchApp>true</IsWatchApp>
+      <Project>{1DB46ADC-CEEE-4BC0-B63A-EBF5C3AA2692}</Project>
+      <Name>OWCE.WatchOS.WatchOSApp</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

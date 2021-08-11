@@ -103,6 +103,7 @@
     <Compile Include="DependencyImplementations\UserAgent.cs" />
     <Compile Include="Renderers\ArcViewRenderer.cs" />
     <Compile Include="CharacteristicValueRequest.cs" />
+    <Compile Include="DependencyImplementations\Watch.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

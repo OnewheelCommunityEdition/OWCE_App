@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
+    <ProjectTypeGuids>{1E2E965C-F6D2-49ED-B86E-418A60C69EEF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{733697FC-0154-4E0E-84C7-DF6484A32C23}</ProjectGuid>
+    <TemplateGuid>{22c3201b-89f4-43a0-a2fc-a31418d6fe44}</TemplateGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>OWCE.WatchOS.WatchOSExtension</RootNamespace>
+    <AssemblyName>OWCEWatchOSWatchOSExtension</AssemblyName>
+    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
+    <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchDebug>true</MtouchDebug>
+    <MtouchFastDev>true</MtouchFastDev>
+    <MtouchLink>None</MtouchLink>
+    <MtouchArch>i386</MtouchArch>
+    <DeviceSpecificBuild>false</DeviceSpecificBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhone\Release</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchUseLlvm>true</MtouchUseLlvm>
+    <MtouchFloat32>true</MtouchFloat32>
+    <MtouchEnableBitcode>true</MtouchEnableBitcode>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchArch>ARMv7k, ARM64_32</MtouchArch>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchLink>None</MtouchLink>
+    <MtouchArch>i386</MtouchArch>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhone\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <DeviceSpecificBuild>true</DeviceSpecificBuild>
+    <MtouchDebug>true</MtouchDebug>
+    <MtouchFloat32>true</MtouchFloat32>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchArch>ARM64_32</MtouchArch>
+    <IOSDebugOverWiFi>true</IOSDebugOverWiFi>
+    <IOSDebuggerPort>10001</IOSDebuggerPort>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="Xamarin.WatchOS" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+    <Folder Include="SessionManager\" />
+    <Folder Include="Media.xcassets\OWCELogo.imageset\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Info.plist" />
+    <None Include="Entitlements.plist" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ExtensionDelegate.cs" />
+    <Compile Include="InterfaceController.cs" />
+    <Compile Include="InterfaceController.designer.cs">
+      <DependentUpon>InterfaceController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NotificationController.cs" />
+    <Compile Include="NotificationController.designer.cs">
+      <DependentUpon>NotificationController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SessionManager\WCSessionManager.cs" />
+    <Compile Include="ComplicationController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="PushNotificationPayload.json" />
+    <BundleResource Include="Resources\SairaExtraCondensed-Black.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>9.0.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ImageAsset Include="Media.xcassets\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Circular.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Extra Large.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Bezel.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Corner.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Large Rectangular.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Modular.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Utilitarian.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Modular.imageset\Icon-Watch-29x29%402x.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Modular.imageset\Icon-Watch-29x29%402x-1.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Modular.imageset\Icon-Watch-29x29%402x-2.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Circular.imageset\Icon-Watch-29x29%402x.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Circular.imageset\Icon-Watch-29x29%402x-1.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Circular.imageset\Icon-Watch-29x29%402x-2.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Icon-Watch-98x98%402x.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Icon-Watch-98x98%402x-1.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Icon-Watch-98x98%402x-2.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Icon-Watch-98x98%402x-3.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Icon-Watch-98x98%402x-4.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Icon-Watch-98x98%402x-5.png" />
+    <ImageAsset Include="Media.xcassets\OWCELogo.imageset\Contents.json" />
+    <ImageAsset Include="Media.xcassets\OWCELogo.imageset\Icon-Watch-44x44%402x.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\WatchOS\Xamarin.WatchOS.AppExtension.CSharp.targets" />
+</Project>
