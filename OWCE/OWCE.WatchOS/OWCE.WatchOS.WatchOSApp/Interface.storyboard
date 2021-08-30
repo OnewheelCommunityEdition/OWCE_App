@@ -16,7 +16,7 @@
             <objects>
                 <controller id="AgC-eL-Hgc" customClass="InterfaceController">
                     <items>
-                        <label width="1" alignment="left" text="OWCE" textAlignment="center" id="ShG-eU-ZCd">
+                        <label width="1" alignment="left" hidden="YES" text="OWCE" textAlignment="center" id="ShG-eU-ZCd">
                             <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </label>
                         <group width="1" alignment="left" layout="vertical" id="udh-QH-9Jq">
@@ -25,39 +25,45 @@
                                 <label height="78" alignment="left" textAlignment="center" id="dIc-PU-d81"/>
                             </items>
                         </group>
-                        <group width="1" alignment="left" layout="vertical" id="ZR4-J3-7uD">
+                        <group width="1" alignment="left" layout="vertical" spacing="0.0" id="ZR4-J3-7uD">
                             <items>
-                                <group width="1" alignment="left" layout="vertical" id="Uz7-H4-yJd">
+                                <group width="1" alignment="left" id="LmL-Ci-hqA">
                                     <items>
                                         <label height="54" alignment="center" text="0" textAlignment="center" id="jhG-AM-wAb">
-                                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="60"/>
+                                            <variation key="device=watch42mm">
+                                                <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="72"/>
+                                            </variation>
                                         </label>
                                         <label height="24" alignment="center" verticalAlignment="center" text="mph" textAlignment="center" id="Hmi-dN-68Z">
-                                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
                                         </label>
                                     </items>
-                                    <color key="backgroundColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </group>
-                                <group width="1" alignment="left" layout="vertical" id="xHP-lz-dts">
+                                <group width="1" alignment="left" id="jAC-3K-vDG">
                                     <items>
-                                        <label height="54" alignment="center" text="100%" textAlignment="center" id="kEP-RA-nQQ">
-                                            <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="55"/>
+                                        <label alignment="left" text="100%" textAlignment="left" numberOfLines="0" id="kEP-RA-nQQ">
+                                            <color key="textColor" red="0.99984914059999996" green="0.037384711209999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="48"/>
+                                            <variation key="device=watch38mm">
+                                                <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="36"/>
+                                            </variation>
                                         </label>
-                                        <label alignment="center" text="0.0V battery" textAlignment="center" id="Y75-iU-HdX">
-                                            <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
+                                        <label alignment="right" verticalAlignment="center" text="0.0V" textAlignment="center" id="Y75-iU-HdX">
+                                            <color key="textColor" red="0.99984914059999996" green="0.037384711209999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="30"/>
                                         </label>
                                     </items>
-                                    <color key="backgroundColor" red="0.99984914059999996" green="0.037384711209999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </group>
                                 <group width="1" alignment="left" layout="vertical" id="0s8-zO-gKM">
                                     <items>
                                         <label width="133" height="46" alignment="center" text="0 mi" textAlignment="center" id="aCv-RU-pjH" userLabel="Trip Distance Label">
                                             <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="45"/>
+                                            <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="36"/>
                                         </label>
-                                        <label width="1" height="25" alignment="left" verticalAlignment="center" text="ride" textAlignment="center" id="zhb-Sf-Nba">
+                                        <label width="1" height="25" alignment="left" verticalAlignment="center" hidden="YES" text="ride" textAlignment="center" id="zhb-Sf-Nba">
                                             <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
                                         </label>
@@ -67,6 +73,7 @@
                                 <label alignment="left" hidden="YES" text="Label" id="rol-Vw-zN9"/>
                                 <label alignment="left" hidden="YES" text="Errors:" numberOfLines="10" id="1IU-Bg-Gto"/>
                             </items>
+                            <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
                         </group>
                     </items>
                     <connections>
@@ -82,7 +89,7 @@
                     </connections>
                 </controller>
             </objects>
-            <point key="canvasLocation" x="0.0" y="-153.5"/>
+            <point key="canvasLocation" x="0.0" y="-153.87179487179489"/>
         </scene>
         <!--Static Notification Interface Controller-->
         <scene sceneID="AEw-b0-oYE">
