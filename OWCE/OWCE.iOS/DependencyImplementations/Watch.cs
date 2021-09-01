@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using OWCE.Converters;
+﻿using System.Collections.Generic;
 using OWCE.DependencyInterfaces;
 using OWCE.PropertyChangeHandlers;
 using WatchConnectivity;
