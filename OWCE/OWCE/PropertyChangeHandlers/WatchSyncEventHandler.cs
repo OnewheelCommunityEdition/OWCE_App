@@ -9,7 +9,8 @@ namespace OWCE.PropertyChangeHandlers
 {
     public class WatchSyncEventHandler
     {
-        private static readonly HashSet<String> PropertiesToWatch = new HashSet<string> { "BatteryPercent", "BatteryVoltage", "RPM", "TripOdometer" };
+        private static readonly HashSet<String> PropertiesToWatch =
+            new HashSet<string> { "BatteryPercent", "BatteryVoltage", "RPM", "TripOdometer" };
 
         public static readonly WatchSyncEventHandler Instance = new WatchSyncEventHandler();
 
@@ -26,31 +27,38 @@ namespace OWCE.PropertyChangeHandlers
 
                 // For Quart, should add battery percent here
             }
+
             if (propertyName == null || propertyName.Equals("RPM"))
             {
                 int rpm = board.RPM;
                 int speed = (int)RpmToSpeedConverter.ConvertFromRpm(rpm);
                 watchUpdates.Add("Speed", speed);
             }
+
             if (propertyName == null || propertyName.Equals("BatteryPercent"))
             {
                 int batteryPercent = board.BatteryPercent;
                 watchUpdates.Add("BatteryPercent", batteryPercent);
             }
+
             if (propertyName == null || propertyName.Equals("TripOdometer"))
             {
                 ushort tripOdometer = board.TripOdometer;
                 string tripDescription = RotationsToDistanceConverter.ConvertRotationsToDistance(tripOdometer);
                 watchUpdates.Add("Distance", tripDescription);
             }
+
             if (propertyName == null)
             {
                 watchUpdates.Add("SpeedUnitsLabel", App.Current.MetricDisplay ? "km/h" : "mph");
             }
-            // TODO: Here we can implement delayed send
+
+            // TODO: In future, consider calling FlushMessages() after a delay
+            // to accumulate more messages and reduce the traffic to the watch.
             FlushMessages();
         }
 
+        // Sends all outstanding updates to the watch, and reset the update Dictionary
         private void FlushMessages()
         {
             var updates = watchUpdates;
