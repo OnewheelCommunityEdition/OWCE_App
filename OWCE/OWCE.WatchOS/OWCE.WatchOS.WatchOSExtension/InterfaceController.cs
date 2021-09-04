@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Foundation;
+using UIKit;
 using WatchConnectivity;
 using WatchKit;
 
@@ -16,6 +17,8 @@ namespace OWCE.WatchOS.WatchOSExtension
         {
             // Note: this .ctor should not contain any initialization logic.
         }
+
+        private bool darkMode = true;
 
         public override void Awake(NSObject context)
         {
@@ -130,6 +133,46 @@ namespace OWCE.WatchOS.WatchOSExtension
             this.rideDetailsGroup.SetHidden(false);
 
         }
+
+        private void toggleBatteryPressed()
+        {
+            if (darkMode)
+            {
+                // Set Battery Labels to Light Mode
+                this.batteryLabelGroup.SetBackgroundColor(UIColor.Magenta);
+                this.batteryPercentageLabel.SetTextColor(UIColor.White);
+                this.voltageLabel.SetTextColor(UIColor.White);
+
+                // Set Speed Labels to Light mode
+                this.speedLabelGroup.SetBackgroundColor(UIColor.Yellow);
+                this.speedLabel.SetTextColor(UIColor.Black);
+                this.speedUnitsLabel.SetTextColor(UIColor.Black);
+
+                darkMode = false;
+            }
+            else
+            {
+                // Set Battery Labels to Dark Mode
+                this.batteryLabelGroup.SetBackgroundColor(UIColor.Black);
+                // Note: the battery labels are a whiter version of
+                // Magenta to make it more readable
+                this.batteryPercentageLabel.SetTextColor(UIColor.FromRGB(255, 100, 255));
+                this.voltageLabel.SetTextColor(UIColor.FromRGB(255, 100, 255));
+
+                // Set Speed Labels to Dark Mode
+                this.speedLabelGroup.SetBackgroundColor(UIColor.Black);
+                this.speedLabel.SetTextColor(UIColor.Yellow);
+                this.speedUnitsLabel.SetTextColor(UIColor.Yellow);
+
+                darkMode = true;
+            }
+        }
+
+        partial void darkModeTogglePressed()
+        {
+            toggleBatteryPressed();
+        }
+
     }
 }
 

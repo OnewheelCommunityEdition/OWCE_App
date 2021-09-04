@@ -30,14 +30,14 @@
                                 <group width="1" alignment="left" id="LmL-Ci-hqA">
                                     <items>
                                         <label height="54" alignment="center" text="0" textAlignment="center" id="jhG-AM-wAb">
-                                            <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="textColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="60"/>
                                             <variation key="device=watch42mm">
                                                 <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="72"/>
                                             </variation>
                                         </label>
                                         <label height="24" alignment="center" verticalAlignment="center" text="mph" textAlignment="center" id="Hmi-dN-68Z">
-                                            <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="textColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
                                         </label>
                                     </items>
@@ -45,29 +45,37 @@
                                 <group width="1" alignment="left" id="jAC-3K-vDG">
                                     <items>
                                         <label alignment="left" text="100%" textAlignment="left" numberOfLines="0" id="kEP-RA-nQQ">
-                                            <color key="textColor" red="0.99984914059999996" green="0.037384711209999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="textColor" red="1" green="0.39253377374205406" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="48"/>
                                             <variation key="device=watch38mm">
                                                 <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="36"/>
                                             </variation>
                                         </label>
                                         <label alignment="right" verticalAlignment="center" text="0.0V" textAlignment="center" id="Y75-iU-HdX">
-                                            <color key="textColor" red="0.99984914059999996" green="0.037384711209999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="textColor" red="1" green="0.39215686274509803" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="30"/>
                                         </label>
                                     </items>
                                 </group>
-                                <group width="1" alignment="left" layout="vertical" id="0s8-zO-gKM">
-                                    <items>
-                                        <label width="133" height="46" alignment="center" text="0 mi" textAlignment="center" id="aCv-RU-pjH" userLabel="Trip Distance Label">
-                                            <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="36"/>
-                                        </label>
-                                        <label width="1" height="25" alignment="left" verticalAlignment="center" hidden="YES" text="ride" textAlignment="center" id="zhb-Sf-Nba">
-                                            <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
-                                        </label>
-                                    </items>
+                                <button alignment="left" id="Svw-GX-pd7">
+                                    <group key="contentGroup" width="1" alignment="left" layout="vertical" id="XvD-Ok-iy6">
+                                        <items>
+                                            <label width="133" height="46" alignment="center" text="0 mi" textAlignment="center" id="aCv-RU-pjH" userLabel="Trip Distance Label">
+                                                <color key="textColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="36"/>
+                                            </label>
+                                            <label width="1" height="25" alignment="left" verticalAlignment="center" hidden="YES" text="ride" textAlignment="center" id="zhb-Sf-Nba">
+                                                <color key="textColor" red="1" green="0.98420685529999996" blue="0.0028507602399999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="font" name="SairaExtraCondensed-Black" family="Saira ExtraCondensed" pointSize="20"/>
+                                            </label>
+                                        </items>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </group>
+                                    <connections>
+                                        <action selector="darkModeTogglePressed" destination="AgC-eL-Hgc" id="zZM-9e-8Wk"/>
+                                    </connections>
+                                </button>
+                                <group width="1" alignment="left" hidden="YES" layout="vertical" id="0s8-zO-gKM">
                                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </group>
                                 <label alignment="left" hidden="YES" text="Label" id="rol-Vw-zN9"/>
@@ -77,12 +85,14 @@
                         </group>
                     </items>
                     <connections>
+                        <outlet property="batteryLabelGroup" destination="jAC-3K-vDG" id="rEO-fu-JNm"/>
                         <outlet property="batteryPercentageLabel" destination="kEP-RA-nQQ" id="jHA-RH-Qko"/>
                         <outlet property="connectToBoardGroup" destination="udh-QH-9Jq" id="ysQ-7e-zFN"/>
                         <outlet property="errorMessages" destination="1IU-Bg-Gto" id="CMQ-DF-eT5"/>
                         <outlet property="myLabel" destination="rol-Vw-zN9" id="nd0-Bt-JFx"/>
                         <outlet property="rideDetailsGroup" destination="ZR4-J3-7uD" id="LNV-Z8-gdA"/>
                         <outlet property="speedLabel" destination="jhG-AM-wAb" id="PJ6-Lz-A6L"/>
+                        <outlet property="speedLabelGroup" destination="LmL-Ci-hqA" id="LD1-Gy-w63"/>
                         <outlet property="speedUnitsLabel" destination="Hmi-dN-68Z" id="I8O-sq-d0Y"/>
                         <outlet property="tripDistanceLabel" destination="aCv-RU-pjH" id="wXT-oQ-UWB"/>
                         <outlet property="voltageLabel" destination="Y75-iU-HdX" id="LDC-Mb-J8a"/>
