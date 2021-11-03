@@ -23,7 +23,7 @@ namespace OWCE.PropertyChangeHandlers
             if (propertyName == null || propertyName.Equals("BatteryVoltage"))
             {
                 float voltage = board.BatteryVoltage;
-                watchUpdates.Add("Voltage", voltage);
+                watchUpdates["Voltage"] = voltage;
 
                 // For Quart, should add battery percent here
             }
@@ -32,25 +32,25 @@ namespace OWCE.PropertyChangeHandlers
             {
                 int rpm = board.RPM;
                 int speed = (int)RpmToSpeedConverter.ConvertFromRpm(rpm);
-                watchUpdates.Add("Speed", speed);
+                watchUpdates["Speed"] = speed;
             }
 
             if (propertyName == null || propertyName.Equals("BatteryPercent"))
             {
                 int batteryPercent = board.BatteryPercent;
-                watchUpdates.Add("BatteryPercent", batteryPercent);
+                watchUpdates["BatteryPercent"] = batteryPercent;
             }
 
             if (propertyName == null || propertyName.Equals("TripOdometer"))
             {
                 ushort tripOdometer = board.TripOdometer;
                 string tripDescription = RotationsToDistanceConverter.ConvertRotationsToDistance(tripOdometer);
-                watchUpdates.Add("Distance", tripDescription);
+                watchUpdates["Distance"] = tripDescription;
             }
 
             if (propertyName == null)
             {
-                watchUpdates.Add("SpeedUnitsLabel", App.Current.MetricDisplay ? "km/h" : "mph");
+                watchUpdates["SpeedUnitsLabel"] = App.Current.MetricDisplay ? "km/h" : "mph";
             }
 
             // TODO: In future, consider calling FlushMessages() after a delay
