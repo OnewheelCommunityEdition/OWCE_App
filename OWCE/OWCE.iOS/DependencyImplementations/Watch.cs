@@ -14,7 +14,7 @@ namespace OWCE.iOS.DependencyImplementations
     {
         private OWBoard _board;
 
-        public void SendWatchMessages(Dictionary<string, object> messages)
+        public void SendWatchMessages(Dictionary<WatchMessage, object> messages)
         {
             WCSessionManager.SharedManager.SendMessage(messages);
         }
@@ -30,7 +30,7 @@ namespace OWCE.iOS.DependencyImplementations
             WCSessionManager.SharedManager.MessageReceived -= DidReceiveMessage;
         }
 
-        public void DidReceiveMessage(WCSession session, Dictionary<string, object> message)
+        public void DidReceiveMessage(WCSession session, Dictionary<WatchMessage, object> message)
         {
             WatchSyncEventHandler.HandleWatchMessage(message, _board);
         }

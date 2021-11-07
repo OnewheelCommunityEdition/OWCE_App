@@ -4,6 +4,9 @@ using Foundation;
 using Newtonsoft.Json;
 using System;
 
+// In the watch app this is just the SharedEnums
+using OWCE;
+
 namespace WatchConnectivity
 {
 	// Handles WatchConnectivity sessions.
@@ -19,11 +22,8 @@ namespace WatchConnectivity
 		public static string Device = "Watch";
 #endif
 
-		public event ApplicationContextUpdatedHandler ApplicationContextUpdated;
-		public delegate void ApplicationContextUpdatedHandler(WCSession session, Dictionary<string, object> applicationContext);
-
-		public event MessageReceivedHandler MessageReceived;
-		public delegate void MessageReceivedHandler(WCSession session, Dictionary<string, object> applicationContext);
+		public Action<WCSession, Dictionary<WatchMessage, object>> ApplicationContextUpdated;
+		public Action<WCSession, Dictionary<WatchMessage, object>> MessageReceived;
 
 
 		private WCSession validSession
@@ -48,7 +48,20 @@ namespace WatchConnectivity
 			}
 		}
 
-		private WCSessionManager() : base() { }
+		Dictionary<WatchMessage, NSString> _watchMessageToNativeString = new Dictionary<WatchMessage, NSString>();
+		Dictionary<NSString, WatchMessage> _nativeStringToWatchMessage = new Dictionary<NSString, WatchMessage>();
+
+		private WCSessionManager() : base()
+		{
+			// Prefil the _watchMessageToNativeString dictionary with enums and their NSString so we don't have to make them every time.
+			var values = Enum.GetValues(typeof(WatchMessage));
+			foreach (WatchMessage value in values)
+            {
+				var name = new NSString(Enum.GetName(typeof(WatchMessage), value));
+				_watchMessageToNativeString[value] = name;
+				_nativeStringToWatchMessage[name] = value;
+			}
+		}
 
 		public static WCSessionManager SharedManager
 		{
@@ -84,6 +97,7 @@ namespace WatchConnectivity
 
 		#region Application Context Methods
 
+		/*
 		public void UpdateApplicationContext(Dictionary<string, object> applicationContext)
 		{
 			// Application context doesnt need the watch to be reachable, it will be received when opened
@@ -111,17 +125,16 @@ namespace WatchConnectivity
 				}
 			}
 		}
+		*/
 
-		public void SendMessage(Dictionary<string, object> message)
+		public void SendMessage(Dictionary<WatchMessage, object> message)
 		{
 			// Application context doesnt need the watch to be reachable, it will be received when opened
 			if (validSession != null)
 			{
 				try
 				{
-					var NSValues = message.Values.Select(x => new NSString(JsonConvert.SerializeObject(x))).ToArray();
-					var NSKeys = message.Keys.Select(x => new NSString(x)).ToArray();
-					var MessageToSend = NSDictionary<NSString, NSObject>.FromObjectsAndKeys(NSValues, NSKeys);
+					var MessageToSend = NSDictionary<NSString, NSObject>.FromObjectsAndKeys(message.Values.ToArray(), message.Keys.Select(x => _watchMessageToNativeString[x]).ToArray());
 					validSession.SendMessage(MessageToSend, null, null);
 				}
 				catch (Exception ex)
@@ -131,6 +144,7 @@ namespace WatchConnectivity
 			}
 		}
 
+		/*
 		public override void DidReceiveApplicationContext(WCSession session, NSDictionary<NSString, NSObject> applicationContext)
 		{
 			System.Diagnostics.Debug.WriteLine($"Receiving App Context on {Device}");
@@ -140,22 +154,35 @@ namespace WatchConnectivity
 				var values = applicationContext.Values.Select(v => JsonConvert.DeserializeObject(v.ToString())).ToArray();
 				var dictionary = keys.Zip(values, (k, v) => new { Key = k, Value = v })
 									 .ToDictionary(x => x.Key, x => x.Value);
-
-				ApplicationContextUpdated(session, dictionary);
+				ApplicationContextUpdated?.Invoke(session, null);
 			}
 		}
+		*/
 
         public override void DidReceiveMessage(WCSession session, NSDictionary<NSString, NSObject> message)
         {
 			System.Diagnostics.Debug.WriteLine($"Receiving Message on {Device}");
 			if (MessageReceived != null)
 			{
-				var keys = message.Keys.Select(k => k.ToString()).ToArray();
-				var values = message.Values.Select(v => JsonConvert.DeserializeObject(v.ToString())).ToArray();
-				var dictionary = keys.Zip(values, (k, v) => new { Key = k, Value = v })
-									 .ToDictionary(x => x.Key, x => x.Value);
+				var dictionary = new Dictionary<WatchMessage, object>();
+				foreach (var nativeKey in message.Keys)
+				{
+					var key = _nativeStringToWatchMessage[nativeKey];
 
-				MessageReceived(session, dictionary);
+					if (key == WatchMessage.Awake || key == WatchMessage.Speed || key == WatchMessage.BatteryPercent)
+					{
+						dictionary[key] = (message[nativeKey] as NSNumber)?.Int32Value ?? 0;
+					}
+					else if (key == WatchMessage.Voltage)
+					{
+						dictionary[key] = (message[nativeKey] as NSNumber)?.FloatValue ?? 0f;
+					}
+					else if (key == WatchMessage.Distance || key == WatchMessage.SpeedUnitsLabel)
+					{
+						dictionary[key] = (message[nativeKey] as NSString)?.ToString() ?? String.Empty;
+					}
+				}
+				MessageReceived?.Invoke(session, dictionary);			
 			}
 		}
 

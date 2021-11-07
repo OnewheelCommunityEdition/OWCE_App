@@ -9,7 +9,7 @@ namespace OWCE.DependencyInterfaces
     public interface IWatch
     {
         //test
-        void SendWatchMessages(Dictionary<string, object> messages);
+        void SendWatchMessages(Dictionary<WatchMessage, object> messages);
         void ListenForWatchMessages(OWBoard board);
         void StopListeningForWatchMessages();
     }

@@ -104,6 +104,9 @@
     <Compile Include="..\..\OWCE.iOS\SessionManager\WCSessionManager.cs">
       <Link>SessionManager\WCSessionManager.cs</Link>
     </Compile>
+    <Compile Include="..\..\OWCE\SharedEnums.cs">
+      <Link>SharedEnums.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="PushNotificationPayload.json" />

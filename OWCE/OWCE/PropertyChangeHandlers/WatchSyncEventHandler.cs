@@ -14,7 +14,7 @@ namespace OWCE.PropertyChangeHandlers
 
         public static readonly WatchSyncEventHandler Instance = new WatchSyncEventHandler();
 
-        private Dictionary<string, object> watchUpdates = new Dictionary<string, object>();
+        private Dictionary<WatchMessage, object> watchUpdates = new Dictionary<WatchMessage, object>();
 
         // Updates the watch with the given property
         // - propertyName: null if updating all properties
@@ -23,7 +23,7 @@ namespace OWCE.PropertyChangeHandlers
             if (propertyName == null || propertyName.Equals("BatteryVoltage"))
             {
                 float voltage = board.BatteryVoltage;
-                watchUpdates["Voltage"] = voltage;
+                watchUpdates[WatchMessage.Voltage] = voltage;
 
                 // For Quart, should add battery percent here
             }
@@ -32,25 +32,25 @@ namespace OWCE.PropertyChangeHandlers
             {
                 int rpm = board.RPM;
                 int speed = (int)RpmToSpeedConverter.ConvertFromRpm(rpm);
-                watchUpdates["Speed"] = speed;
+                watchUpdates[WatchMessage.Speed] = speed;
             }
 
             if (propertyName == null || propertyName.Equals("BatteryPercent"))
             {
                 int batteryPercent = board.BatteryPercent;
-                watchUpdates["BatteryPercent"] = batteryPercent;
+                watchUpdates[WatchMessage.BatteryPercent] = batteryPercent;
             }
 
             if (propertyName == null || propertyName.Equals("TripOdometer"))
             {
                 ushort tripOdometer = board.TripOdometer;
                 string tripDescription = RotationsToDistanceConverter.ConvertRotationsToDistance(tripOdometer);
-                watchUpdates["Distance"] = tripDescription;
+                watchUpdates[WatchMessage.Distance] = tripDescription;
             }
 
             if (propertyName == null)
             {
-                watchUpdates["SpeedUnitsLabel"] = App.Current.MetricDisplay ? "km/h" : "mph";
+                watchUpdates[WatchMessage.SpeedUnitsLabel] = App.Current.MetricDisplay ? "km/h" : "mph";
             }
 
             // TODO: In future, consider calling FlushMessages() after a delay
@@ -62,7 +62,7 @@ namespace OWCE.PropertyChangeHandlers
         private void FlushMessages()
         {
             var updates = watchUpdates;
-            watchUpdates = new Dictionary<string, object>();
+            watchUpdates = new Dictionary<WatchMessage, object>();
 
             IWatch watchService = DependencyService.Get<IWatch>();
             watchService.SendWatchMessages(updates);
@@ -87,11 +87,11 @@ namespace OWCE.PropertyChangeHandlers
         }
 
         // Invoked when the watch sends messages to the phone (eg when the watch wakes up)
-        public static void HandleWatchMessage(Dictionary<string, object> message, OWBoard board)
+        public static void HandleWatchMessage(Dictionary<WatchMessage, object> message, OWBoard board)
         {
             try
             {
-                if (message.ContainsKey("WatchAppAwake"))
+                if (message.ContainsKey(WatchMessage.Awake))
                 {
                     if (board == null)
                     {
