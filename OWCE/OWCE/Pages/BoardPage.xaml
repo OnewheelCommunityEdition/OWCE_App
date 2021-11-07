@@ -5,7 +5,8 @@
     xmlns:pages="clr-namespace:OWCE.Pages"
     xmlns:views="clr-namespace:OWCE.Views"
     xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
-    xmlns:rgpopup="http://rotorgames.com"
+    xmlns:rgpopup="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"   
+    xmlns:rgpopupanimation="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
     x:Class="OWCE.Pages.BoardPage"             
     BackgroundColor="White"
     Title="{Binding Name}">
@@ -13,7 +14,7 @@
     <pages:BaseContentPage.Resources>
         <rgpopup:PopupPage x:Key="SettingsPopupPage" x:Name="SettingsPopupPage">
             <rgpopup:PopupPage.Animation>
-                <rgpopup:ScaleAnimation 
+                <rgpopupanimation:ScaleAnimation 
                     PositionIn="Bottom"
                     PositionOut="Bottom"
                     DurationIn="200"
