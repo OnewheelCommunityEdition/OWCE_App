@@ -8,6 +8,7 @@ namespace OWCE.DependencyInterfaces
     // this interface via DependencyService
     public interface IWatch
     {
+        //test
         void SendWatchMessages(Dictionary<string, object> messages);
         void ListenForWatchMessages(OWBoard board);
         void StopListeningForWatchMessages();
