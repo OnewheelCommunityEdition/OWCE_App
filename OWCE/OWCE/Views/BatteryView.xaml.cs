@@ -130,7 +130,7 @@ namespace OWCE.Views
         /*
         private void BatteryCells_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            Console.WriteLine($"BatteryCells_PropertyChanged: {e.PropertyName}");
+            System.Diagnostics.Debug.WriteLine($"BatteryCells_PropertyChanged: {e.PropertyName}");
         }
         */
 
