@@ -26,7 +26,7 @@
     <MtouchDebug>true</MtouchDebug>
     <MtouchFastDev>true</MtouchFastDev>
     <MtouchLink>None</MtouchLink>
-    <MtouchArch>i386</MtouchArch>
+    <MtouchArch>x86_64</MtouchArch>
     <DeviceSpecificBuild>false</DeviceSpecificBuild>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
