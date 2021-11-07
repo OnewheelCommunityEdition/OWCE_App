@@ -217,6 +217,7 @@
       <IsWatchApp>true</IsWatchApp>
       <Project>{1DB46ADC-CEEE-4BC0-B63A-EBF5C3AA2692}</Project>
       <Name>OWCE.WatchOS.WatchOSApp</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
