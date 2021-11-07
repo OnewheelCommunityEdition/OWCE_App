@@ -18,7 +18,7 @@ namespace OWCE.WatchOS.WatchOSExtension
             // Note: this .ctor should not contain any initialization logic.
         }
 
-        private boolfdf darkMode = true;
+        private bool darkMode = true;
 
         //public override void Awake(NSObject context)
         //{
