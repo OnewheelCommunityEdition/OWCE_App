@@ -13,6 +13,9 @@ namespace OWCE.WatchOS.WatchOSExtension
 	partial class InterfaceController
 	{
 		[Outlet]
+		WatchKit.WKInterfaceGroup batteryLabelGroup { get; set; }
+
+		[Outlet]
 		WatchKit.WKInterfaceLabel batteryPercentageLabel { get; set; }
 
 		[Outlet]
@@ -31,6 +34,9 @@ namespace OWCE.WatchOS.WatchOSExtension
 		WatchKit.WKInterfaceLabel speedLabel { get; set; }
 
 		[Outlet]
+		WatchKit.WKInterfaceGroup speedLabelGroup { get; set; }
+
+		[Outlet]
 		WatchKit.WKInterfaceLabel speedUnitsLabel { get; set; }
 
 		[Outlet]
@@ -38,12 +44,25 @@ namespace OWCE.WatchOS.WatchOSExtension
 
 		[Outlet]
 		WatchKit.WKInterfaceLabel voltageLabel { get; set; }
+
+		[Action ("darkModeTogglePressed")]
+		partial void darkModeTogglePressed ();
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (batteryLabelGroup != null) {
+				batteryLabelGroup.Dispose ();
+				batteryLabelGroup = null;
+			}
+
 			if (batteryPercentageLabel != null) {
 				batteryPercentageLabel.Dispose ();
 				batteryPercentageLabel = null;
+			}
+
+			if (connectToBoardGroup != null) {
+				connectToBoardGroup.Dispose ();
+				connectToBoardGroup = null;
 			}
 
 			if (errorMessages != null) {
@@ -56,9 +75,19 @@ namespace OWCE.WatchOS.WatchOSExtension
 				myLabel = null;
 			}
 
+			if (rideDetailsGroup != null) {
+				rideDetailsGroup.Dispose ();
+				rideDetailsGroup = null;
+			}
+
 			if (speedLabel != null) {
 				speedLabel.Dispose ();
 				speedLabel = null;
+			}
+
+			if (speedLabelGroup != null) {
+				speedLabelGroup.Dispose ();
+				speedLabelGroup = null;
 			}
 
 			if (speedUnitsLabel != null) {
@@ -74,16 +103,6 @@ namespace OWCE.WatchOS.WatchOSExtension
 			if (voltageLabel != null) {
 				voltageLabel.Dispose ();
 				voltageLabel = null;
-			}
-
-			if (connectToBoardGroup != null) {
-				connectToBoardGroup.Dispose ();
-				connectToBoardGroup = null;
-			}
-
-			if (rideDetailsGroup != null) {
-				rideDetailsGroup.Dispose ();
-				rideDetailsGroup = null;
 			}
 		}
 	}
