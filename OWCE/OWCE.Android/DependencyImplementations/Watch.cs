@@ -8,7 +8,7 @@ namespace OWCE.Droid.DependencyImplementations
 {
     public class Watch : IWatch
     {
-        public void SendWatchMessages(Dictionary<string, object> messages)
+        public void SendWatchMessages(Dictionary<WatchMessage, object> messages)
         {
             // Implement when we have Android Watch support
         }
