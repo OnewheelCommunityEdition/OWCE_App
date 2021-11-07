@@ -43,8 +43,7 @@ namespace OWCE.WatchOS.WatchOSExtension
                 else if (complication.Family == CLKComplicationFamily.GraphicCircular)
                 {
                     var graphicTemplate = new CLKComplicationTemplateGraphicCircularImage();
-                    graphicTemplate.ImageProvider = new CLKFullColorImageProvider(
-                        UIImage.FromBundle("OWCELogo"));
+                    graphicTemplate.ImageProvider = new CLKFullColorImageProvider(UIImage.FromBundle("OWCELogo"));
 
                     entry = CLKComplicationTimelineEntry.Create(NSDate.Now, graphicTemplate);
                 }

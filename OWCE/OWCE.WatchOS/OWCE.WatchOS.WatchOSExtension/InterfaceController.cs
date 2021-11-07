@@ -20,14 +20,6 @@ namespace OWCE.WatchOS.WatchOSExtension
 
         private bool darkMode = true;
 
-        //public override void Awake(NSObject context)
-        //{
-        //    base.Awake(context);
-
-        //    // Configure interface objects here.
-        //    // Console.WriteLine("{0} awake with context", this);
-        //}
-
         public override void WillActivate()
         {
             // This method is called when the watch view controller is about to be visible to the user.
