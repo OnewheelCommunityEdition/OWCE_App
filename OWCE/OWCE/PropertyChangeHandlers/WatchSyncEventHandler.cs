@@ -9,41 +9,74 @@ namespace OWCE.PropertyChangeHandlers
 {
     public class WatchSyncEventHandler
     {
-        private static HashSet<String> PropertiesToWatch = new HashSet<string> { "BatteryVoltage", "RPM", "TripOdometer" };
+        private static readonly HashSet<String> PropertiesToWatch =
+            new HashSet<string> { "BatteryPercent", "BatteryVoltage", "RPM", "TripOdometer" };
 
+        public static readonly WatchSyncEventHandler Instance = new WatchSyncEventHandler();
+
+        private Dictionary<string, object> watchUpdates = new Dictionary<string, object>();
+
+        // Updates the watch with the given property
+        // - propertyName: null if updating all properties
+        private void UpdateProperty(string propertyName, OWBoard board)
+        {
+            if (propertyName == null || propertyName.Equals("BatteryVoltage"))
+            {
+                float voltage = board.BatteryVoltage;
+                watchUpdates["Voltage"] = voltage;
+
+                // For Quart, should add battery percent here
+            }
+
+            if (propertyName == null || propertyName.Equals("RPM"))
+            {
+                int rpm = board.RPM;
+                int speed = (int)RpmToSpeedConverter.ConvertFromRpm(rpm);
+                watchUpdates["Speed"] = speed;
+            }
+
+            if (propertyName == null || propertyName.Equals("BatteryPercent"))
+            {
+                int batteryPercent = board.BatteryPercent;
+                watchUpdates["BatteryPercent"] = batteryPercent;
+            }
+
+            if (propertyName == null || propertyName.Equals("TripOdometer"))
+            {
+                ushort tripOdometer = board.TripOdometer;
+                string tripDescription = RotationsToDistanceConverter.ConvertRotationsToDistance(tripOdometer);
+                watchUpdates["Distance"] = tripDescription;
+            }
+
+            if (propertyName == null)
+            {
+                watchUpdates["SpeedUnitsLabel"] = App.Current.MetricDisplay ? "km/h" : "mph";
+            }
+
+            // TODO: In future, consider calling FlushMessages() after a delay
+            // to accumulate more messages and reduce the traffic to the watch.
+            FlushMessages();
+        }
+
+        // Sends all outstanding updates to the watch, and reset the update Dictionary
+        private void FlushMessages()
+        {
+            var updates = watchUpdates;
+            watchUpdates = new Dictionary<string, object>();
+
+            IWatch watchService = DependencyService.Get<IWatch>();
+            watchService.SendWatchMessages(updates);
+        }
+
+        // Invoked when the OWBoard has properties changed (eg Speed, Voltage) that we need
+        // to update the watch on
         public static void HandlePropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             try
             {
                 if (!PropertiesToWatch.Contains(e.PropertyName)) { return; }
 
-                IWatch watchService = DependencyService.Get<IWatch>();
-                if (e.PropertyName.Equals("BatteryVoltage"))
-                {
-                    float voltage = (sender as OWBoard).BatteryVoltage;
-                    watchService.UpdateVoltage(voltage);
-
-                    // For Quart
-                    //double pct = 99.9 / (0.8 + Math.Pow(1.28, 54 - voltage)) - 9;
-                    //watchService.UpdateBatteryPercent((int)pct);
-                }
-                if (e.PropertyName.Equals("RPM"))
-                {
-                    int rpm = (sender as OWBoard).RPM;
-                    int speedMph = (int)RpmToSpeedConverter.ConvertFromRpm(rpm);
-                    watchService.UpdateSpeed(speedMph);
-                }
-                if (e.PropertyName.Equals("BatteryPercent"))
-                {
-                    int batteryPercent = (sender as OWBoard).BatteryPercent;
-                    watchService.UpdateBatteryPercent(batteryPercent);
-                }
-                if (e.PropertyName.Equals("TripOdometer"))
-                {
-                    ushort tripOdometer = (sender as OWBoard).TripOdometer;
-                    string tripDescription = RotationsToDistanceConverter.ConvertRotationsToDistance(tripOdometer);
-                    watchService.UpdateDistance(tripDescription);
-                }
+                Instance.UpdateProperty(e.PropertyName, (sender as OWBoard));
             }
             catch (Exception ex)
             {
@@ -51,6 +84,29 @@ namespace OWCE.PropertyChangeHandlers
                 //(sender as OWBoard).ErrorMessage = $"Exception Handling Watch Property Change: {ex.Message}";
             }
 
+        }
+
+        // Invoked when the watch sends messages to the phone (eg when the watch wakes up)
+        public static void HandleWatchMessage(Dictionary<string, object> message, OWBoard board)
+        {
+            try
+            {
+                if (message.ContainsKey("WatchAppAwake"))
+                {
+                    if (board == null)
+                    {
+                        Console.WriteLine("Board not initialized yet. Returning");
+                        return;
+                    }
+                    // Watch just woke up -- send all current data to bring
+                    // the watch up to speed
+                    Instance.UpdateProperty(null, board);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception Handling Watch Message: {ex.Message}");
+            }
         }
     }
 }

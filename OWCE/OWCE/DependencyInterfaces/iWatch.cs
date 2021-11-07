@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace OWCE.DependencyInterfaces
 {
     // Handles communication with the watch.
@@ -6,10 +8,7 @@ namespace OWCE.DependencyInterfaces
     // this interface via DependencyService
     public interface IWatch
     {
-        void UpdateBatteryPercent(int percent);
-        void UpdateSpeed(int speed);
-        void UpdateVoltage(float voltage);
-        void UpdateDistance(string distanceString);
+        void SendWatchMessages(Dictionary<string, object> messages);
         void ListenForWatchMessages(OWBoard board);
         void StopListeningForWatchMessages();
     }

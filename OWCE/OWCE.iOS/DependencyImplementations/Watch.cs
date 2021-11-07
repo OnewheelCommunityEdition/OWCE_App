@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using OWCE.Converters;
+﻿using System.Collections.Generic;
 using OWCE.DependencyInterfaces;
+using OWCE.PropertyChangeHandlers;
 using WatchConnectivity;
 using Xamarin.Forms;
 
@@ -15,34 +14,9 @@ namespace OWCE.iOS.DependencyImplementations
     {
         private OWBoard _board;
 
-        public void BoardConnected()
+        public void SendWatchMessages(Dictionary<string, object> messages)
         {
-            WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() {
-                { "MessagePhone", "Connected" } });
-        }
-
-        void IWatch.UpdateBatteryPercent(int percent)
-        {
-            WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() {
-                { "BatteryPercent", percent } });
-        }
-
-        void IWatch.UpdateDistance(string distanceString)
-        {
-            WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() {
-                { "Distance", distanceString } });
-        }
-
-        void IWatch.UpdateSpeed(int speed)
-        {
-            WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() {
-                { "Speed", speed} });
-        }
-
-        void IWatch.UpdateVoltage(float voltage)
-        {
-            WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() {
-                { "Voltage", voltage} });
+            WCSessionManager.SharedManager.SendMessage(messages);
         }
 
         void IWatch.ListenForWatchMessages(OWBoard board)
@@ -58,41 +32,7 @@ namespace OWCE.iOS.DependencyImplementations
 
         public void DidReceiveMessage(WCSession session, Dictionary<string, object> message)
         {
-            if (message.ContainsKey("WatchAppAwake"))
-            {
-                if (_board == null)
-                {
-                    Console.WriteLine("Board not initialized yet. Returning");
-                    return;
-                }
-                // Watch just woke up -- send all current data to bring
-                // the watch up to speed
-                SendAllBoardData(_board);
-            }
-        }
-
-        private void SendAllBoardData(OWBoard board)
-        {
-            try
-            {
-                int rpm = board.RPM;
-                int speedMph = (int)RpmToSpeedConverter.ConvertFromRpm(rpm);
-                ushort tripOdometer = board.TripOdometer;
-                string distanceString = RotationsToDistanceConverter.ConvertRotationsToDistance(tripOdometer);
-
-                WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() {
-                        { "BatteryPercent", board.BatteryPercent },
-                        { "Speed", speedMph},
-                        { "Voltage", board.BatteryVoltage},
-                        { "SpeedUnitsLabel", App.Current.MetricDisplay ? "km/h" : "mph"},
-                        { "Distance", distanceString}
-                    });
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Exception Processing Message: {ex.Message}");
-            }
+            WatchSyncEventHandler.HandleWatchMessage(message, _board);
         }
     }
 }
