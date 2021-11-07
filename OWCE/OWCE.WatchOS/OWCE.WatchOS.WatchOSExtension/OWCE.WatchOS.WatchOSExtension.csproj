@@ -117,11 +117,6 @@
     <BundleResource Include="Resources\SairaExtraCondensed-Black.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>9.0.1</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
     <ImageAsset Include="Media.xcassets\Contents.json" />
     <ImageAsset Include="Media.xcassets\Complication.complicationset\Contents.json" />
     <ImageAsset Include="Media.xcassets\Complication.complicationset\Circular.imageset\Contents.json" />
