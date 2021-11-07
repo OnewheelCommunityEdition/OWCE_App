@@ -28,6 +28,7 @@
     <MtouchLink>None</MtouchLink>
     <MtouchArch>i386</MtouchArch>
     <DeviceSpecificBuild>false</DeviceSpecificBuild>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>pdbonly</DebugType>
@@ -44,6 +45,7 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>ARMv7k, ARM64_32</MtouchArch>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>pdbonly</DebugType>
@@ -56,6 +58,7 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchLink>None</MtouchLink>
     <MtouchArch>i386</MtouchArch>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -74,6 +77,7 @@
     <MtouchArch>ARM64_32</MtouchArch>
     <IOSDebugOverWiFi>true</IOSDebugOverWiFi>
     <IOSDebuggerPort>10001</IOSDebuggerPort>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
