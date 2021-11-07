@@ -100,8 +100,10 @@
     <Compile Include="NotificationController.designer.cs">
       <DependentUpon>NotificationController.cs</DependentUpon>
     </Compile>
-    <Compile Include="SessionManager\WCSessionManager.cs" />
     <Compile Include="ComplicationController.cs" />
+    <Compile Include="..\..\OWCE.iOS\SessionManager\WCSessionManager.cs">
+      <Link>SessionManager\WCSessionManager.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="PushNotificationPayload.json" />
