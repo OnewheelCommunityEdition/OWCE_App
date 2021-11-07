@@ -193,7 +193,7 @@ namespace OWCE.Views
             var voltagePercent = 1f - (voltageOffset / voltageRange);
             var colorPercent = (voltagePercent * 0.788235294118);
 
-            //Console.WriteLine($"{voltage:F2} - {colorPercent:F2}");
+            //System.Diagnostics.Debug.WriteLine($"{voltage:F2} - {colorPercent:F2}");
             return new Color(1f, colorPercent, 1f);
 
 

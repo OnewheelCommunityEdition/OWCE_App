@@ -27,7 +27,7 @@ namespace OWCE.WatchOS.WatchOSExtension
         public override void GetCurrentTimelineEntry(CLKComplication complication, Action<CLKComplicationTimelineEntry> handler)
         {
             // Call the handler with the current timeline entry
-            Console.WriteLine("GetCurrentTimelineEntry");
+            System.Diagnostics.Debug.WriteLine("GetCurrentTimelineEntry");
 
             CLKComplicationTimelineEntry entry = null;
             try
@@ -52,7 +52,7 @@ namespace OWCE.WatchOS.WatchOSExtension
             }
             catch (Exception x)
             {
-                Console.WriteLine("Exception " + x);
+                System.Diagnostics.Debug.WriteLine("Exception " + x);
             }
             handler(entry);
         }
@@ -60,7 +60,7 @@ namespace OWCE.WatchOS.WatchOSExtension
         public override void GetPlaceholderTemplate(CLKComplication complication, Action<CLKComplicationTemplate> handler)
         {
             // This method will be called once per supported complication, and the results will be cached
-            Console.WriteLine("GetPlaceholderTemplate for " + complication);
+            System.Diagnostics.Debug.WriteLine("GetPlaceholderTemplate for " + complication);
 
             CLKComplicationTemplate template = null;
 
@@ -82,8 +82,8 @@ namespace OWCE.WatchOS.WatchOSExtension
 
         public override void GetSupportedTimeTravelDirections(CLKComplication complication, Action<CLKComplicationTimeTravelDirections> handler)
 		{
-			// Retrieves the time travel directions supported by your complication
-			Console.WriteLine("GetSupportedTimeTravelDirections");
+            // Retrieves the time travel directions supported by your complication
+            System.Diagnostics.Debug.WriteLine("GetSupportedTimeTravelDirections");
 			handler(CLKComplicationTimeTravelDirections.None);
 		}
 	}

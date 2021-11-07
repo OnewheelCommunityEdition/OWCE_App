@@ -108,7 +108,7 @@ namespace OWCE.Views
 
            
 
-            Console.WriteLine($"OnPropertyChanging: {propertyName}");
+            System.Diagnostics.Debug.WriteLine($"OnPropertyChanging: {propertyName}");
         }
         */
 
@@ -116,7 +116,7 @@ namespace OWCE.Views
         {
             base.OnPropertyChanged(propertyName);
 
-            //Console.WriteLine($"OnPropertyChanged: {propertyName}");
+            //System.Diagnostics.Debug.WriteLine($"OnPropertyChanged: {propertyName}");
             if (BatteryPercentProperty.PropertyName.Equals(propertyName))
             {
                 BatteryBar.AnimateWidthPercent((float)BatteryPercent * 0.01);

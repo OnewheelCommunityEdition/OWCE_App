@@ -75,12 +75,12 @@ namespace OWCE.Pages
 
         private void OWBLE_BoardDisconnected()
         {
-            Console.WriteLine("OWBLE_BoardDisconnected");
+            System.Diagnostics.Debug.WriteLine("OWBLE_BoardDisconnected");
         }
 
         private void OWBLE_BoardReconnecting()
         {
-            Console.WriteLine("OWBLE_BoardReconnecting");
+            System.Diagnostics.Debug.WriteLine("OWBLE_BoardReconnecting");
             
             _reconnectingAlert = new ConnectingAlert(Board.Name, new Command(() =>
             {
@@ -100,7 +100,7 @@ namespace OWCE.Pages
 
         private void OWBLE_BoardReconnected()
         {
-            Console.WriteLine("OWBLE_BoardReconnected");
+            System.Diagnostics.Debug.WriteLine("OWBLE_BoardReconnected");
 
             if (PopupNavigation.Instance.PopupStack.Contains(_reconnectingAlert))
             {

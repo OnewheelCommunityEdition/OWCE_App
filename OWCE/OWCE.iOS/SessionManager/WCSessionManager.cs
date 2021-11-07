@@ -31,8 +31,8 @@ namespace WatchConnectivity
 			get
 			{
 #if __IOS__
-				Console.WriteLine($"Paired status:{(session.Paired ? '✓' : '✗')}\n");
-				Console.WriteLine($"Watch App Installed status:{(session.WatchAppInstalled ? '✓' : '✗')}\n");
+				System.Diagnostics.Debug.WriteLine($"Paired status:{(session.Paired ? '✓' : '✗')}");
+				System.Diagnostics.Debug.WriteLine($"Watch App Installed status:{(session.WatchAppInstalled ? '✓' : '✗')}\n");
 				return (session.Paired && session.WatchAppInstalled) ? session : null;
 #else
 				return session;
@@ -64,13 +64,13 @@ namespace WatchConnectivity
 			{
 				session.Delegate = this;
 				session.ActivateSession();
-				Console.WriteLine($"Started Watch Connectivity Session on {Device}");
+				System.Diagnostics.Debug.WriteLine($"Started Watch Connectivity Session on {Device}");
 			}
 		}
 
 		public override void SessionReachabilityDidChange(WCSession session)
 		{
-			Console.WriteLine($"Watch connectivity Reachable:{(session.Reachable ? '✓' : '✗')} from {Device}");
+			System.Diagnostics.Debug.WriteLine($"Watch connectivity Reachable:{(session.Reachable ? '✓' : '✗')} from {Device}");
 			// handle session reachability change
 			if (session.Reachable)
 			{
@@ -98,16 +98,16 @@ namespace WatchConnectivity
 					var sendSuccessfully = validSession.UpdateApplicationContext(NSApplicationContext, out error);
 					if (sendSuccessfully)
 					{
-						Console.WriteLine($"Sent App Context from {Device} \nPayLoad: {NSApplicationContext.ToString()} \n");
+						System.Diagnostics.Debug.WriteLine($"Sent App Context from {Device} \nPayLoad: {NSApplicationContext.ToString()} \n");
 					}
 					else
 					{
-						Console.WriteLine($"Error Updating Application Context: {error.LocalizedDescription}");
+						System.Diagnostics.Debug.WriteLine($"Error Updating Application Context: {error.LocalizedDescription}");
 					}
 				}
 				catch (Exception ex)
 				{
-					Console.WriteLine($"Exception Updating Application Context: {ex.Message}");
+					System.Diagnostics.Debug.WriteLine($"Exception Updating Application Context: {ex.Message}");
 				}
 			}
 		}
@@ -126,14 +126,14 @@ namespace WatchConnectivity
 				}
 				catch (Exception ex)
 				{
-					Console.WriteLine($"Exception Updating Application Context: {ex.Message}");
+					System.Diagnostics.Debug.WriteLine($"Exception Updating Application Context: {ex.Message}");
 				}
 			}
 		}
 
 		public override void DidReceiveApplicationContext(WCSession session, NSDictionary<NSString, NSObject> applicationContext)
 		{
-			Console.WriteLine($"Receiving App Context on {Device}");
+			System.Diagnostics.Debug.WriteLine($"Receiving App Context on {Device}");
 			if (ApplicationContextUpdated != null)
 			{
 				var keys = applicationContext.Keys.Select(k => k.ToString()).ToArray();
@@ -147,7 +147,7 @@ namespace WatchConnectivity
 
         public override void DidReceiveMessage(WCSession session, NSDictionary<NSString, NSObject> message)
         {
-			Console.WriteLine($"Receiving Message on {Device}");
+			System.Diagnostics.Debug.WriteLine($"Receiving Message on {Device}");
 			if (MessageReceived != null)
 			{
 				var keys = message.Keys.Select(k => k.ToString()).ToArray();

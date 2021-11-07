@@ -117,7 +117,7 @@ namespace OWCE.WatchOS.WatchOSExtension
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Processing Message: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Exception Processing Message: {ex.Message}");
                 this.errorMessages.SetText($"Exception: {ex.Message}");
             }
         }

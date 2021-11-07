@@ -34,12 +34,12 @@ namespace OWCE.iOS.Renderers
 
         private void PropertyChanging(object sender, PropertyChangingEventArgs e)
         {
-            //Console.WriteLine($"PropertyChanging: {e.PropertyName}");
+            //System.Diagnostics.Debug.WriteLine($"PropertyChanging: {e.PropertyName}");
         }
 
         private void PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            //Console.WriteLine($"PropertyChanged: {e.PropertyName}");
+            //System.Diagnostics.Debug.WriteLine($"PropertyChanged: {e.PropertyName}");
             if (NavigationPage.BarBackgroundColorProperty.PropertyName.Equals(e.PropertyName))
             {
                 if (Element is Xamarin.Forms.NavigationPage navigationPage)
@@ -49,7 +49,7 @@ namespace OWCE.iOS.Renderers
             }
             else if (NavigationPage.IconImageSourceProperty.PropertyName.Equals(e.PropertyName))
             {
-                Console.WriteLine("X");
+                System.Diagnostics.Debug.WriteLine("X");
             }
         }
             

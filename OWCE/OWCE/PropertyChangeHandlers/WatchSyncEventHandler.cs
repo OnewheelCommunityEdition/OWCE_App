@@ -80,7 +80,7 @@ namespace OWCE.PropertyChangeHandlers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Handling Watch Property Change: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Exception Handling Watch Property Change: {ex.Message}");
                 //(sender as OWBoard).ErrorMessage = $"Exception Handling Watch Property Change: {ex.Message}";
             }
 
@@ -95,7 +95,7 @@ namespace OWCE.PropertyChangeHandlers
                 {
                     if (board == null)
                     {
-                        Console.WriteLine("Board not initialized yet. Returning");
+                        System.Diagnostics.Debug.WriteLine("Board not initialized yet. Returning");
                         return;
                     }
                     // Watch just woke up -- send all current data to bring
@@ -105,7 +105,7 @@ namespace OWCE.PropertyChangeHandlers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception Handling Watch Message: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Exception Handling Watch Message: {ex.Message}");
             }
         }
     }

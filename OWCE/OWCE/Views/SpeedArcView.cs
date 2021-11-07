@@ -193,7 +193,7 @@ namespace OWCE.Views
 
             animation.Commit(this, "SimpleAnimation", 16, 250, Easing.Linear, (a, b) =>
             {
-                //Console.WriteLine($"Finished: {animationNumber}");
+                //System.Diagnostics.Debug.WriteLine($"Finished: {animationNumber}");
             });
 
         }
