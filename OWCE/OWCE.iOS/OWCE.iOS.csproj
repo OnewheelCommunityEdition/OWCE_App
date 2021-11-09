@@ -26,6 +26,9 @@
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
+    <LangVersion>8.0</LangVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <CodesignKey>iPhone Developer</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -35,7 +38,9 @@
     <WarningLevel>4</WarningLevel>
     <MtouchLink>None</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Distribution</CodesignKey>
+    <LangVersion>8.0</LangVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,10 +50,14 @@
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <MtouchArch>ARMv7s, ARM64</MtouchArch>
+    <MtouchArch>ARM64</MtouchArch>
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchNoSymbolStrip>true</MtouchNoSymbolStrip>
+    <MtouchLink>None</MtouchLink>
+    <LangVersion>8.0</LangVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -56,10 +65,15 @@
     <OutputPath>bin\iPhone\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <MtouchArch>ARMv7s, ARM64</MtouchArch>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
+    <CodesignKey>iPhone Distribution</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <NoWarn></NoWarn>
+    <LangVersion>8.0</LangVersion>
+    <MtouchUseLlvm>true</MtouchUseLlvm>
+    <MtouchUseThumb>true</MtouchUseThumb>
+    <MtouchLink>SdkOnly</MtouchLink>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -67,8 +81,15 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DependencyImplementations\Hud.cs" />
     <Compile Include="DependencyImplementations\PermissionPrompt.cs" />
+    <Compile Include="DependencyImplementations\OWBLE.cs" />
+    <Compile Include="Extensions\GuidExtension.cs" />
+    <Compile Include="DependencyImplementations\UserAgent.cs" />
+    <Compile Include="Renderers\CustomNavigationPageRenderer.cs" />
+    <Compile Include="Renderers\ArcViewRenderer.cs" />
+    <Compile Include="CharacteristicValueRequest.cs" />
+    <Compile Include="DependencyImplementations\Watch.cs" />
+    <Compile Include="SessionManager\WCSessionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -120,18 +141,69 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-29x29.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\hamburger.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\hamburger.imageset\hamburger.png" />
+    <ImageAsset Include="Assets.xcassets\hamburger.imageset\hamburger%402x.png" />
+    <ImageAsset Include="Assets.xcassets\hamburger.imageset\hamburger%403x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\menu_leaderboards.png" />
+    <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\menu_leaderboards%402x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\menu_leaderboards%403x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_myrides.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\menu_myrides.imageset\menu_myrides.png" />
+    <ImageAsset Include="Assets.xcassets\menu_myrides.imageset\menu_myrides%402x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_myrides.imageset\menu_myrides%403x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_onewheels.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\menu_onewheels.imageset\menu_onewheels.png" />
+    <ImageAsset Include="Assets.xcassets\menu_onewheels.imageset\menu_onewheels%402x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_onewheels.imageset\menu_onewheels%403x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_settings.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\menu_settings.imageset\menu_settings.png" />
+    <ImageAsset Include="Assets.xcassets\menu_settings.imageset\menu_settings%402x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_settings.imageset\menu_settings%403x.png" />
+    <ImageAsset Include="Assets.xcassets\burger_menu.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\burger_menu.imageset\burger_menu.png" />
+    <ImageAsset Include="Assets.xcassets\burger_menu.imageset\burger_menu%402x.png" />
+    <ImageAsset Include="Assets.xcassets\burger_menu.imageset\burger_menu%403x.png" />
+    <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\settings_info.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\settings_info.imageset\settings_info.png" />
+    <ImageAsset Include="Assets.xcassets\settings_info.imageset\settings_info%402x.png" />
+    <ImageAsset Include="Assets.xcassets\settings_info.imageset\settings_info%403x.png" />
+    <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect.png" />
+    <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect%402x.png" />
+    <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="3.5.0.129452" />
-    <PackageReference Include="BTProgressHUD" Version="1.2.0.6" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+    <PackageReference Include="Rg.Plugins.Popup">
+      <Version>2.0.0.14</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AppCenter.Crashes">
+      <Version>4.4.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AppCenter.Analytics">
+      <Version>4.4.0</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Forms.PancakeView">
+      <Version>2.3.0.759</Version>
+    </PackageReference>
+    <PackageReference Include="SkiaSharp">
+      <Version>2.80.3</Version>
+    </PackageReference>
+    <PackageReference Include="SkiaSharp.Views.Forms">
+      <Version>2.80.3</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.CommunityToolkit">
+      <Version>1.3.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
@@ -139,44 +211,46 @@
       <Project>{4B3D0411-B028-494E-AB04-113D1F130DA1}</Project>
       <Name>OWCE</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\hamburger.png" />
-    <BundleResource Include="Resources\hamburger%402x.png" />
-    <BundleResource Include="Resources\hamburger%403x.png" />
-    <BundleResource Include="Resources\menu_leaderboards.png" />
-    <BundleResource Include="Resources\menu_leaderboards%402x.png" />
-    <BundleResource Include="Resources\menu_leaderboards%403x.png" />
-    <BundleResource Include="Resources\menu_myrides.png" />
-    <BundleResource Include="Resources\menu_myrides%402x.png" />
-    <BundleResource Include="Resources\menu_myrides%403x.png" />
-    <BundleResource Include="Resources\menu_onewheels.png" />
-    <BundleResource Include="Resources\menu_onewheels%402x.png" />
-    <BundleResource Include="Resources\menu_onewheels%403x.png" />
-    <BundleResource Include="Resources\menu_settings.png" />
-    <BundleResource Include="Resources\menu_settings%402x.png" />
-    <BundleResource Include="Resources\menu_settings%403x.png" />
-    <BundleResource Include="Resources\ow_icon_plus.png" />
-    <BundleResource Include="Resources\ow_icon_plus%402x.png" />
-    <BundleResource Include="Resources\ow_icon_plus%403x.png" />
-    <BundleResource Include="Resources\ow_icon_v1.png" />
-    <BundleResource Include="Resources\ow_icon_v1%402x.png" />
-    <BundleResource Include="Resources\ow_icon_v1%403x.png" />
-    <BundleResource Include="Resources\ow_icon_xr.png" />
-    <BundleResource Include="Resources\ow_icon_xr%402x.png" />
-    <BundleResource Include="Resources\ow_icon_xr%403x.png" />
-    <BundleResource Include="Resources\ow_icon.png" />
-    <BundleResource Include="Resources\ow_icon%402x.png" />
-    <BundleResource Include="Resources\ow_icon%403x.png" />
-    <BundleResource Include="Resources\splash_icon.png" />
-    <BundleResource Include="Resources\splash_icon%402x.png" />
-    <BundleResource Include="Resources\splash_icon%403x.png" />
+    <ProjectReference Include="..\OWCE.WatchOS\OWCE.WatchOS.WatchOSApp\OWCE.WatchOS.WatchOSApp.csproj">
+      <IsWatchApp>true</IsWatchApp>
+      <Project>{1DB46ADC-CEEE-4BC0-B63A-EBF5C3AA2692}</Project>
+      <Name>OWCE.WatchOS.WatchOSApp</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DependencyImplementations\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Assets.xcassets\hamburger.imageset\" />
+    <Folder Include="Assets.xcassets\menu_leaderboards.imageset\" />
+    <Folder Include="Assets.xcassets\menu_myrides.imageset\" />
+    <Folder Include="Assets.xcassets\menu_onewheels.imageset\" />
+    <Folder Include="Assets.xcassets\menu_settings.imageset\" />
+    <Folder Include="Assets.xcassets\ow_icon_plus.imageset\" />
+    <Folder Include="Assets.xcassets\ow_icon_v1.imageset\" />
+    <Folder Include="Assets.xcassets\ow_icon_xr.imageset\" />
+    <Folder Include="Assets.xcassets\ow_icon.imageset\" />
+    <Folder Include="Assets.xcassets\splash_icon.imageset\" />
+    <Folder Include="Renderers\" />
+    <Folder Include="Assets.xcassets\yellow_gradient.imageset\" />
+    <Folder Include="Assets.xcassets\splash_gradient.imageset\" />
+    <Folder Include="Assets.xcassets\splash-image.imageset\" />
+    <Folder Include="Assets.xcassets\splash_background.imageset\" />
+    <Folder Include="Assets.xcassets\burger_menu.imageset\" />
+    <Folder Include="Assets.xcassets\settings_disconnect.imageset\" />
+    <Folder Include="Assets.xcassets\settings_info.imageset\" />
+    <Folder Include="SessionManager\" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />
     <ITunesArtwork Include="iTunesArtwork%402x" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\splash_image.png" />
+    <BundleResource Include="Resources\splash_image%403x.png" />
+    <BundleResource Include="Resources\splash_image%402x.png" />
+    <BundleResource Include="Resources\splash_background.png" />
+    <BundleResource Include="Resources\splash_background%402x.png" />
+    <BundleResource Include="Resources\splash_background%403x.png" />
   </ItemGroup>
 </Project>

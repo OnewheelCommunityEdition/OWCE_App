@@ -54,7 +54,7 @@ namespace OWCE
 
         public string GetLogFilePath()
         {
-            return Path.Combine(FileSystem.CacheDirectory, _file);
+            return Path.Combine(App.Current.LogsDirectory, _file);
         }
     }
 }

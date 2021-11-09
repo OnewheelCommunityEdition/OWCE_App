@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
+    xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:views="clr-namespace:OWCE.Views"
+    xmlns:converters="clr-namespace:OWCE.Converters"
+    x:Class="OWCE.Views.SpeedRangeDistanceView">
+
+    <ContentView.Resources>
+        <converters:RpmToSpeedConverter x:Key="rpmToSpeedConverter" />
+        <converters:DistanceConverter x:Key="distanceConverter" />
+        <converters:RotationsToDistanceConverter x:Key="rotationsToDistanceConverter" />
+
+        
+    </ContentView.Resources>
+    <yummy:PancakeView BackgroundColor="#FFFF00"  Style="{StaticResource BoardDetailBlockBaseStyle}">
+
+        <xct:Expander x:Name="ExpanderView" HorizontalOptions="Fill" PropertyChanged="ExpanderView_PropertyChanged">
+
+
+
+            <xct:Expander.Header>
+
+                <Grid x:Name="GridThing" ColumnSpacing="0" RowSpacing="0" >
+
+                    <!--
+            726.4854811913 is 40km/h converted to rpm with a 917.66mm circumference wheel.
+            -->
+                    <views:SpeedArcView HorizontalOptions="FillAndExpand" VerticalOptions="Fill" CurrentRPM="{Binding RPM}" MaxRPM="1000" MinRPM="0" />
+
+
+                    <Label VerticalOptions="End" Margin="20,0">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding TripOdometer, Converter={StaticResource rotationsToDistanceConverter}}" FontSize="16" TextColor="Black"  FontFamily="SairaExtraCondensed-Medium" />
+                                <Span Text=" ride" FontSize="16" TextColor="Black"  FontFamily="SairaExtraCondensed-Light" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+
+                    <Label HorizontalTextAlignment="End" HorizontalOptions="Fill" VerticalOptions="End" Margin="20,0">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="lifetime " TextColor="Black"  FontSize="16" FontFamily="SairaExtraCondensed-Light" />
+
+                                <Span Text="{Binding LifetimeOdometer, Converter={StaticResource distanceConverter}, ConverterParameter='N0'}" TextColor="Black"  FontSize="16" FontFamily="SairaExtraCondensed-Medium" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <Label Text="SPEED" FontFamily="SairaExtraCondensed-Bold" TextColor="Black"   CharacterSpacing="0.26" FontSize="16" Margin="20,6,0,0" />
+                    <Label Text="{Binding RPM, Converter={StaticResource rpmToSpeedConverter}, ConverterParameter={Binding WheelCircumference}, StringFormat='{0:F0}'}"  TextColor="Black"  FontFamily="SairaExtraCondensed-Black" FontSize="125" HorizontalOptions="Center" VerticalOptions="Start"  />
+
+                    <Label TextColor="Black" FontFamily="SairaExtraCondensed-Black" FontSize="30" CharacterSpacing="0.97" HorizontalOptions="Center" VerticalOptions="End" VerticalTextAlignment="End">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:Static Application.Current}, Path=MetricDisplay}" Value="true">
+                              <Setter Property="Text" Value="km/h" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:Static Application.Current}, Path=MetricDisplay}" Value="false">
+                              <Setter Property="Text" Value="mph" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+
+                    <views:ExpanderArrowView x:Name="ExpanderArrow" HorizontalOptions="End" Margin="17,13" ArrowColor="#000000" IsVisible="false" />
+                </Grid>
+
+            </xct:Expander.Header>
+            <!--
+            <Grid Grid.Row="1" HeightRequest="76" BackgroundColor="White" ColumnSpacing="0" ColumnDefinitions="Auto,Auto" Padding="10,0,0,0">
+                <Button Grid.Column="0" BackgroundColor="White" HorizontalOptions="Start" VerticalOptions="Center" CornerRadius="20" Margin="10,0,0,0" Padding="15,0" TextColor="Black" FontSize="18" FontFamily="SairaExtraCondensed-Bold" Text="Set alarm speed" BorderWidth="1" BorderColor="#DBDBDF" HeightRequest="40" />
+            </Grid>
+            -->
+        </xct:Expander>
+    </yummy:PancakeView>
+
+
+</ContentView>

@@ -4,6 +4,7 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using WatchConnectivity;
 
 namespace OWCE.iOS
 {
@@ -11,7 +12,7 @@ namespace OWCE.iOS
     // User Interface of the application, as well as listening (and optionally responding) to 
     // application events from iOS.
     [Register("AppDelegate")]
-    public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
+    public class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
         //
         // This method is invoked when the application has loaded and is ready to run. In this 
@@ -20,14 +21,17 @@ namespace OWCE.iOS
         //
         // You have 17 seconds to return from this method, or iOS will terminate your application.
         //
-        public override bool FinishedLaunching(UIApplication app, NSDictionary options)
+        public override bool FinishedLaunching(UIApplication uiApplication, NSDictionary launchOptions)
         {
-            new Syncfusion.SfGauge.XForms.iOS.SfGaugeRenderer();
+            Rg.Plugins.Popup.Popup.Init();
 
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
 
-            return base.FinishedLaunching(app, options);
+            // Apple Watch session manager
+            WCSessionManager.SharedManager.StartSession();
+
+            return base.FinishedLaunching(uiApplication, launchOptions);
         }
     }
 }

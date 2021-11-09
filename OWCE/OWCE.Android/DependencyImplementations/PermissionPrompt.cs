@@ -15,33 +15,24 @@ namespace OWCE.Droid.DependencyImplementations
         {
             if ((int)Android.OS.Build.VERSION.SdkInt >= 23)
             {
-                var locationPermission = Plugin.Permissions.Abstractions.Permission.Location;
-                var permissionStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(locationPermission);
+                var permissionStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
 
-
-                if (true || permissionStatus != Plugin.Permissions.Abstractions.PermissionStatus.Granted)
+                if (permissionStatus != PermissionStatus.Granted)
                 {
-                    bool shouldRequest = await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(locationPermission);
-                    if (shouldRequest)
-                    {
-                        await Application.Current.MainPage.DisplayAlert("Oops", "In order to access board details in a bluetooth scan your phones location permission needs to be enabled.\n(Yeah, that is as confusing as it sounds)", "Ok");
-                    }
+                    await Application.Current.MainPage.DisplayAlert("Oops", "In order to for bluetooth to scan for your board you need to enable location permission.\n(Yeah, that is as confusing as it sounds)", "Ok");
 
-                    var result = await CrossPermissions.Current.RequestPermissionsAsync(locationPermission);
-
-                    permissionStatus = await CrossPermissions.Current.CheckPermissionStatusAsync(locationPermission);
+                    permissionStatus = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();                    
                 }
 
-                if (permissionStatus == Plugin.Permissions.Abstractions.PermissionStatus.Denied)
+                if (permissionStatus == PermissionStatus.Denied)
                 {
-                    var shouldOpenSettings = await Application.Current.MainPage.DisplayAlert("Error", "In order to access board details in a bluetooth scan your phones location permission needs to be enabled.\n(Yeah, that is as confusing as it sounds)", "Open Settings", "Cancel");
+                    var shouldOpenSettings = await Application.Current.MainPage.DisplayAlert("Error", "In order to for bluetooth to scan for your board you need to enable location permission.\n(Yeah, that is as confusing as it sounds)", "Open Settings", "Cancel");
                     if (shouldOpenSettings)
                     {
                         AppInfo.ShowSettingsUI();
                     }
                     return false;
                 }
-
             }
 
             return true;

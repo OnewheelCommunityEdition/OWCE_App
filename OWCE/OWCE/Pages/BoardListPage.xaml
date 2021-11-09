@@ -1,17 +1,98 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<pages:BaseContentPage  xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="OWCE.BoardListPage" 
+             x:Class="OWCE.Pages.BoardListPage"
+             xmlns:pages="clr-namespace:OWCE.Pages"
              xmlns:converters="clr-namespace:OWCE.Converters"
-            Title="ONEWHEELS" >
+             xmlns:owce="clr-namespace:OWCE"
+             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+             xmlns:views="clr-namespace:OWCE.Views"
+             xmlns:popup="clr-namespace:OWCE.Pages.Popup">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:BoardIsAvailableOpacityConverter x:Key="boardIsAvailableOpacityConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    <StackLayout>
+
+    <Grid>
+
+
+        <yummy:PancakeView BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
+            <yummy:PancakeView.BackgroundGradientStops>
+                <yummy:GradientStopCollection>
+                    <yummy:GradientStop Color="{StaticResource BackgroundGradientStart}" Offset="0" />
+                    <yummy:GradientStop Color="{StaticResource BackgroundGradientEnd}" Offset="1" />
+                </yummy:GradientStopCollection>
+            </yummy:PancakeView.BackgroundGradientStops>
+        </yummy:PancakeView>
+        
+      
+        
+        <Image x:Name="BackgroundLogoImage" HorizontalOptions="Center" VerticalOptions="Center" Source="splash_image.png" Opacity="0.1" />
+        <!--
+        <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="0" Opacity="0.1">
+            <Image Source="logo_a.png" />
+            <Label FontFamily="SairaExtraCondensed-Bold" HorizontalTextAlignment="Center" FontSize="80" CharacterSpacing="0.29" Text="Onewheel" TextColor="Black" />
+            <Label FontFamily="SairaExtraCondensed-Bold" HorizontalTextAlignment="Center" FontSize="36" CharacterSpacing="-0.58" Text="Community Edition" TextColor="Black" Margin="0,-20,0,0" />
+        </StackLayout>
+            -->
+
+        <RefreshView x:Name="MainRefreshView" Command="{Binding RefreshCommand}" >
+            <CollectionView ItemsSource="{Binding Boards}" Margin="0,0,0,0" SelectionMode="Single" SelectionChanged="BoardsCollectionView_SelectionChanged"> 
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="1" VerticalItemSpacing="0" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="owce:OWBaseBoard">
+                        <ContentView Padding="16,10,16,15">
+                            <VisualStateManager.VisualStateGroups>
+					            <VisualStateGroup Name="CommonStates">
+						            <VisualState Name="Normal" />
+						            <VisualState Name="Selected">
+							            <VisualState.Setters>
+								            <Setter Property="BackgroundColor" Value="Transparent" />
+							            </VisualState.Setters>
+						            </VisualState>
+					            </VisualStateGroup>
+				            </VisualStateManager.VisualStateGroups>
+
+                            <yummy:PancakeView HeightRequest="121" CornerRadius="11" BackgroundColor="{StaticResource BrightYellow}">
+                            
+                                <yummy:PancakeView.Shadow>
+                                    <yummy:DropShadow Color="Black" Opacity="0.14" Offset="0,1" BlurRadius="5" />
+                                </yummy:PancakeView.Shadow>
+
+                                <Grid>
+                                    <Label FontFamily="SairaExtraCondensed-Bold" FontSize="16" Text="{Binding BoardModelStringLong}" TextColor="Black" Margin="20,5,0,0" CharacterSpacing="-0.26" />
+                                    <Label FontFamily="SairaExtraCondensed-Black" FontSize="40" Text="{Binding Name}" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" CharacterSpacing="0.48" />
+                                </Grid>
+                            </yummy:PancakeView>
+                        </ContentView>
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+        </RefreshView>
+
+
+        <!--
+        <views:FakeNavigationBar>
+            <views:FakeNavigationBar.InnerContent>
+                <Grid ColumnDefinitions="*,26" ColumnSpacing="18">
+                    <Label Text="Scanning..." TextColor="Black" FontFamily="SairaExtraCondensed-SemiBold" FontSize="24" HorizontalOptions="End" VerticalOptions="Center" />
+                    <ActivityIndicator Grid.Column="1" WidthRequest="26" HeightRequest="26" IsRunning="true" HorizontalOptions="End" />
+                </Grid>
+            </views:FakeNavigationBar.InnerContent>
+        </views:FakeNavigationBar>
+        -->
+        
+    </Grid>
+    <!--
         <ListView x:Name="DeviceListView" CachingStrategy="RecycleElement" ItemsSource="{Binding Boards}" ItemSelected="DeviceListView_ItemSelected" IsPullToRefreshEnabled="true" RefreshCommand="{Binding RefreshCommand}">
-            <ListView.Header>
+          
+       <ListView.Header> 
                 <StackLayout>
                     <StackLayout x:Name="NotScanningHeader" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Orientation="Horizontal" Padding="20">
                         <StackLayout.GestureRecognizers>
@@ -27,7 +108,13 @@
                         </StackLayout.GestureRecognizers>
                         <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Orientation="Horizontal" >
                             <Label Text="Scanning..." InputTransparent="true" HorizontalOptions="Center" VerticalOptions="Center"  />
-                            <ActivityIndicator InputTransparent="true" HorizontalOptions="Center" VerticalOptions="Center" IsRunning="true" Color="White" />
+                            <ActivityIndicator InputTransparent="true" HorizontalOptions="Center" VerticalOptions="Center" IsRunning="true">
+                                <ActivityIndicator.Color>
+                                    <OnPlatform x:TypeArguments="Color">
+                                        <On Platform="iOS, Android">White</On>
+                                    </OnPlatform>
+                                </ActivityIndicator.Color>
+                            </ActivityIndicator>
                         </StackLayout>
                     </StackLayout>
                 </StackLayout>
@@ -35,11 +122,9 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout VerticalOptions="FillAndExpand" Orientation="Horizontal" Padding="20,8,0,8" Opacity="{Binding IsAvailable, Converter={StaticResource boardIsAvailableOpacityConverter}}">
-                            <StackLayout WidthRequest="76" VerticalOptions="Center">
-                                <Image Source="{Binding BoardIcon}" VerticalOptions="Center" HorizontalOptions="Start"/>
-                            </StackLayout>
-                            <Label Text="{Binding Name}" VerticalOptions="FillAndExpand" VerticalTextAlignment="Center" />
+                        <StackLayout VerticalOptions="FillAndExpand" Orientation="Horizontal" Padding="20,8" Opacity="{Binding IsAvailable, Converter={StaticResource boardIsAvailableOpacityConverter}}">
+                            <Label Text="{Binding Name}" HorizontalOptions="FillAndExpand" VerticalOptions="Center" />
+                            <Label Text="{Binding BoardModelString}" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="End"/>
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
@@ -53,6 +138,7 @@
                     </ViewCell>
                 </DataTemplate>
             </ListView.GroupHeaderTemplate>
+ 
         </ListView>
-    </StackLayout>
-</ContentPage>
+        -->
+</pages:BaseContentPage>

@@ -22,6 +22,8 @@
 	<string>10.0</string>
 	<key>CFBundleDisplayName</key>
 	<string>OWCE</string>
+	<key>CFBundleSpokenName</key>
+	<string>Onewheel Community Edition</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.owcommunity.owce</string>
 	<key>UILaunchStoryboardName</key>
@@ -30,17 +32,10 @@
 	<string>OWCE</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>location</string>
-		<string>bluetooth-central</string>
-	</array>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-	<key>UIStatusBarStyle</key>
-	<string>UIStatusBarStyleLightContent</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -49,7 +44,15 @@
 	<string>When recording your own rides.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open.</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>Needs Calendar Permission</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Access bluetooth to connect to your Onewheel</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Access bluetooth to connect to your Onewheel</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-central</string>
+	</array>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 </dict>
 </plist>
