@@ -5,7 +5,7 @@ This repo bulds Onewheel Community Edition app (OWCE), a community built compani
 
 Xamarin.Forms apps consist of the main shared codebase inside the Forms project (in this case OWCE.csproj), a Xamarin.Android project (OWCE.Android.csproj), and a Xamarin.iOS project (OWCE.iOS.csproj).
 
-To start the benchmark with `./run_benchmark.sh`
+To start the benchmark with `./run_benchmark.sh` (I recommend running this twice and using the second result)
 
 The script will first delete bin/obj directories for projects about to be built, as well as restore nuget packages for those projects. 
 
@@ -53,4 +53,5 @@ Total build time: 81 seconds
 ### Results
 | Device | Android build | Android rebuild | Android Forms rebuild | iOS build | iOS rebuild | iOS Forms rebuild | Total |
 |-------------|-------------|-------------|-------------|-------------|-------------|-------------|-------------|
-| Mid 2014 MacBook Pro (i7, 2.8 GHz) | 34 | 9 | 11 | 17 | 4 |  6 | 81 |
+| Mid 2014 MacBook Pro (i7, 4-core, 2.8 GHz) | 34 | 9 | 11 | 17 | 4 |  6 | 81 |
+| 2018 MacMini (i7, 6-core, 3.2 Ghz) | 26 | 8 | 8 | 14 | 4 | 5 | 65 | 
