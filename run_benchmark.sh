@@ -8,6 +8,7 @@ IOS_BUILD_ARGS="/p:Configuration=$BUILD_CONFIG /p:Platform=iPhoneSimulator"
 
 pushd OWCE/ > /dev/null
 
+    # Clean Forms
     pushd OWCE/ > /dev/null
         echo "Removing bin/obj folders and restoring nugets for OWCE.csproj"
         echo "Removing bin/obj folders and restoring nugets for OWCE.csproj" >> "$LOG_FILE"
@@ -21,6 +22,7 @@ pushd OWCE/ > /dev/null
         echo "" >> "$LOG_FILE"
     popd > /dev/null
 
+    # Clean Android
     pushd OWCE.Android/ > /dev/null
         echo "Removing bin/obj folders and restoring nugets for OWCE.Android.csproj"
         echo "Removing bin/obj folders and restoring nugets for OWCE.Android.csproj" >> "$LOG_FILE"
@@ -34,46 +36,7 @@ pushd OWCE/ > /dev/null
         echo "" >> "$LOG_FILE"
     popd > /dev/null
 
-    pushd OWCE.iOS/ > /dev/null
-        echo "Removing bin/obj folders and restoring nugets for OWCE.iOS.csproj"
-        echo "Removing bin/obj folders and restoring nugets for OWCE.iOS.csproj" >> "$LOG_FILE"
-        rm -rf bin/
-        rm -rf obj/
-        msbuild OWCE.iOS.csproj /p:Configuration=$BUILD_CONFIG /t:restore >> "$LOG_FILE"
-        if [ $? -ne 0 ]; then
-            echo "Unable to complete action. Please check your log file ($LOG_FILENAME) for more information."
-            exit
-        fi
-        echo "" >> "$LOG_FILE"
-    popd > /dev/null
-
-    pushd OWCE.WatchOS/OWCE.WatchOS.WatchOSApp/ > /dev/null
-        echo "Removing bin/obj folders and restoring nugets for OWCE.WatchOS.WatchOSApp.csproj"
-        echo "Removing bin/obj folders and restoring nugets for OWCE.WatchOS.WatchOSApp.csproj" >> "$LOG_FILE"
-        rm -rf bin/
-        rm -rf obj/
-        msbuild OWCE.WatchOS.WatchOSApp.csproj /p:Configuration=$BUILD_CONFIG /t:restore >> "$LOG_FILE"
-        if [ $? -ne 0 ]; then
-            echo "Unable to complete action. Please check your log file ($LOG_FILENAME) for more information."
-            exit
-        fi
-        echo "" >> "$LOG_FILE"
-    popd > /dev/null
-
-    pushd OWCE.WatchOS/OWCE.WatchOS.WatchOSExtension/ > /dev/null
-        echo "Removing bin/obj folders and restoring nugets for OWCE.WatchOS.WatchOSExtension.csproj"
-        echo "Removing bin/obj folders and restoring nugets for OWCE.WatchOS.WatchOSExtension.csproj" >> "$LOG_FILE"
-        rm -rf bin/
-        rm -rf obj/
-        msbuild OWCE.WatchOS.WatchOSExtension.csproj /p:Configuration=$BUILD_CONFIG /t:restore >> "$LOG_FILE"
-        if [ $? -ne 0 ]; then
-            echo "Unable to complete action. Please check your log file ($LOG_FILENAME) for more information."
-            exit
-        fi
-        echo "" >> "$LOG_FILE"
-    popd > /dev/null
-
-
+    # Build Android
     pushd OWCE.Android/ > /dev/null
         echo "Building OWCE.Android";
 
@@ -109,6 +72,63 @@ pushd OWCE/ > /dev/null
         ANDROID_FORMS_REBUILD_TIME=$(($BUILD_END_TIME - $BUILD_START_TIME))
     popd > /dev/null
 
+    # Clean Forms
+    pushd OWCE/ > /dev/null
+        echo "Removing bin/obj folders and restoring nugets for OWCE.csproj"
+        echo "Removing bin/obj folders and restoring nugets for OWCE.csproj" >> "$LOG_FILE"
+        rm -rf bin/
+        rm -rf obj/
+        msbuild OWCE.csproj /p:Configuration=$BUILD_CONFIG /t:restore >> "$LOG_FILE"
+        if [ $? -ne 0 ]; then
+            echo "Unable to complete action. Please check your log file ($LOG_FILENAME) for more information."
+            exit
+        fi
+        echo "" >> "$LOG_FILE"
+    popd > /dev/null
+
+    # Clean iOS
+    pushd OWCE.iOS/ > /dev/null
+        echo "Removing bin/obj folders and restoring nugets for OWCE.iOS.csproj"
+        echo "Removing bin/obj folders and restoring nugets for OWCE.iOS.csproj" >> "$LOG_FILE"
+        rm -rf bin/
+        rm -rf obj/
+        msbuild OWCE.iOS.csproj /p:Configuration=$BUILD_CONFIG /t:restore >> "$LOG_FILE"
+        if [ $? -ne 0 ]; then
+            echo "Unable to complete action. Please check your log file ($LOG_FILENAME) for more information."
+            exit
+        fi
+        echo "" >> "$LOG_FILE"
+    popd > /dev/null
+
+    # Clean WatchOSApp
+    pushd OWCE.WatchOS/OWCE.WatchOS.WatchOSApp/ > /dev/null
+        echo "Removing bin/obj folders and restoring nugets for OWCE.WatchOS.WatchOSApp.csproj"
+        echo "Removing bin/obj folders and restoring nugets for OWCE.WatchOS.WatchOSApp.csproj" >> "$LOG_FILE"
+        rm -rf bin/
+        rm -rf obj/
+        msbuild OWCE.WatchOS.WatchOSApp.csproj /p:Configuration=$BUILD_CONFIG /t:restore >> "$LOG_FILE"
+        if [ $? -ne 0 ]; then
+            echo "Unable to complete action. Please check your log file ($LOG_FILENAME) for more information."
+            exit
+        fi
+        echo "" >> "$LOG_FILE"
+    popd > /dev/null
+
+    # Clean WatchOSExtension
+    pushd OWCE.WatchOS/OWCE.WatchOS.WatchOSExtension/ > /dev/null
+        echo "Removing bin/obj folders and restoring nugets for OWCE.WatchOS.WatchOSExtension.csproj"
+        echo "Removing bin/obj folders and restoring nugets for OWCE.WatchOS.WatchOSExtension.csproj" >> "$LOG_FILE"
+        rm -rf bin/
+        rm -rf obj/
+        msbuild OWCE.WatchOS.WatchOSExtension.csproj /p:Configuration=$BUILD_CONFIG /t:restore >> "$LOG_FILE"
+        if [ $? -ne 0 ]; then
+            echo "Unable to complete action. Please check your log file ($LOG_FILENAME) for more information."
+            exit
+        fi
+        echo "" >> "$LOG_FILE"
+    popd > /dev/null
+
+    # Build iOS
     pushd OWCE.iOS/ > /dev/null
         echo "Building OWCE.iOS";
 
