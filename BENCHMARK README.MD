@@ -52,4 +52,5 @@ Total build time: 81 seconds
 
 ### Results
 | Device | Android build | Android rebuild | Android Forms rebuild | iOS build | iOS rebuild | iOS Forms rebuild | Total |
+|-------------|-------------|-------------|-------------|-------------|-------------|-------------|-------------|
 | Mid 2014 MacBook Pro (i7, 2.8 GHz) | 34 | 9 | 11 | 17 | 4 |  6 | 81 |
