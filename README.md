@@ -1,7 +1,11 @@
 Onewheel Community Edition (OWCE) App
 ===========
 
-A cross-platform app for use with the [Onewheel](https://onewheel.com/) V1, Plus and XR boards from Future Motion.
+A cross-platform app for use with the [Onewheel](https://onewheel.com/) V1, Plus, XR and Pint boards from Future Motion.
+
+Newer board firmware no longer send through voltage as this was removed by Future Motion. Those versions are:
+- XR with firmware 4155 and higher
+- Pint with firmware 5059 and higher
 
 NOTE: Onewheel Community Edition app is not endorsed by or affiliated with Future Motion in any way.
 
@@ -21,22 +25,6 @@ Using your flavour of Visual Studio open OWCE.sln. From the platform dropdown ch
 
 NOTE: Because the app is very dependent on the Onewheels low energy bluetooth it will not function correctly in a simulator/emulator. For best results deploy to a physical device. 
 
-### Obtaining and enabling a free Syncfusion license
-
-If you deploy with the above instructions you may notice a Syncfusion license popup on launch, this is expected. We use [Syncfusion](https://www.syncfusion.com/products/xamarin) for various graphs and dials throughout the app. Syncfusion requires a license in order to function correctly. This should be free for you if you sign up for a communiity edition license from Syncfusion [here](https://www.syncfusion.com/products/communitylicense).
-
-Once you have your license key you just need to add it to the SyncfusionLicense property in the AppConstants.cs file
-
-```csharp
-using System;
-namespace OWCE
-{
-    public class AppConstants
-    {
-        public const string SyncfusionLicense = "<your license goes here>";
-    }
-}
-```
 
 
 ## Frequently (or not so frequently) asked Questions
@@ -55,7 +43,7 @@ No. This app uses the same bluetooth low energy (BLE) interface that the officia
 
 ### What Onewheels are supported?
 
-Currently v1, Plus and XR models (all known released boards) are supported.
+Currently v1, Plus, XR and Pint. Pint X has not been tested yet.
 
 ### Will using this app void my warranty?
 
