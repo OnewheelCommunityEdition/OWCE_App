@@ -3,7 +3,12 @@ using System.Threading.Tasks;
 using CoreBluetooth;
 using Foundation;
 
+
+#if __IOS__
 namespace OWCE.iOS
+#elif __MACOS__
+namespace OWCE.MacOS
+#endif
 {
     public class CharacteristicValueRequest : IEquatable<CharacteristicValueRequest>
     {

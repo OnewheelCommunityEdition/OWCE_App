@@ -9,10 +9,10 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.ComponentModel;
-using UIKit;
 using System.Threading;
 
 #if __IOS__
+using UIKit;
 using OWCE.iOS.Extensions;
 [assembly: Dependency(typeof(OWCE.iOS.DependencyImplementations.OWBLE))]
 namespace OWCE.iOS.DependencyImplementations
@@ -198,6 +198,7 @@ namespace OWCE.MacOS.DependencyImplementations
 
         public Task<bool> ReadyToScan()
         {
+#if __IOS__
             if (UIDevice.CurrentDevice.CheckSystemVersion(13, 1))
             {
                 // NotDetermined before prompt.
@@ -207,13 +208,19 @@ namespace OWCE.MacOS.DependencyImplementations
                     return Task.FromResult<bool>(true);
                 }
             }
+#elif __MACOS__
+            if (CBCentralManager.Authorization == CBManagerAuthorization.AllowedAlways)
+            {
+                return Task.FromResult<bool>(true);
+            }
+#endif
 
             return Task.FromResult<bool>(false);
         }
 
         Dictionary<CBUUID, CBCharacteristic> _characteristics = new Dictionary<CBUUID, CBCharacteristic>();
 
-        #region ICBPeripheralDelegate
+#region ICBPeripheralDelegate
         [Export("peripheral:didDiscoverServices:")]
         public void DiscoveredService(CBPeripheral peripheral, NSError error)
         {
@@ -357,9 +364,9 @@ namespace OWCE.MacOS.DependencyImplementations
             _writeQueue.Remove(writeCharacteristicValueRequest);
             writeCharacteristicValueRequest.CompletionSource.SetResult(dataBytes);
         }
-        #endregion
+#endregion
 
-        #region ICBCentralManagerDelegate
+#region ICBCentralManagerDelegate
         [Export("centralManager:didDiscoverPeripheral:advertisementData:RSSI:")]
         public void DiscoveredPeripheral(CBCentralManager central, CBPeripheral peripheral, NSDictionary advertisementData, NSNumber RSSI)
         {
@@ -480,10 +487,10 @@ namespace OWCE.MacOS.DependencyImplementations
             Debug.WriteLine("CentralManager_WillRestoreState");
 
         }
-        #endregion
+#endregion
 
       
-        #region IOWBLE
+#region IOWBLE
    
         public Task<bool> Connect(OWBaseBoard board, CancellationToken cancellationToken)
         {
@@ -664,6 +671,6 @@ namespace OWCE.MacOS.DependencyImplementations
             return Task.CompletedTask;
             //throw new NotImplementedException();
         }
-        #endregion
+#endregion
     }
 }
