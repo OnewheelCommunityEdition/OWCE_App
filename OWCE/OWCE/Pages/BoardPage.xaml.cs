@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Xamarin.Essentials;
 using Xamarin.Forms;
-using RestSharp;
 using System.Net;
 using System.IO;
 using System.Threading.Tasks;
