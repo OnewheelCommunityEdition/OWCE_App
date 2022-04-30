@@ -42,6 +42,7 @@
     <Folder Include="Network\" />
     <Folder Include="Exceptions\" />
     <Folder Include="PropertyChangeHandlers\" />
+    <Folder Include="Resources\SampleRideData\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="App.xaml.cs">
@@ -72,6 +73,8 @@
     <None Remove="Resources\Fonts\SairaExtraCondensed-Medium.ttf" />
     <None Remove="Newtonsoft.Json" />
     <None Remove="PropertyChangeHandlers\" />
+    <None Remove="Resources\SampleRideData\" />
+    <None Remove="Resources\SampleRideData\*.bin" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-SemiBold.ttf" />
@@ -79,5 +82,6 @@
     <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-Black.ttf" />
     <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-Light.ttf" />
     <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-Medium.ttf" />
+    <EmbeddedResource Include="Resources\SampleRideData\*.bin" />
   </ItemGroup>
 </Project>
