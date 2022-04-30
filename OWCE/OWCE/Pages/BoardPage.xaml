@@ -66,14 +66,13 @@
     </pages:BaseContentPage.Resources>
 
     <Grid>
-        <yummy:PancakeView BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
-            <yummy:PancakeView.BackgroundGradientStops>
-                <yummy:GradientStopCollection>
-                    <yummy:GradientStop Color="{StaticResource BackgroundGradientStart}" Offset="0" />
-                    <yummy:GradientStop Color="{StaticResource BackgroundGradientEnd}" Offset="1" />
-                </yummy:GradientStopCollection>
-            </yummy:PancakeView.BackgroundGradientStops>
-        </yummy:PancakeView>
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="{StaticResource BackgroundGradientStart}" Offset="0"/>
+                <GradientStop Color="{StaticResource BackgroundGradientEnd}" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
         <ScrollView>
             <StackLayout Spacing="16" Margin="0,16,0,0">
                 <views:SpeedRangeDistanceView x:Name="SpeedRangeDistanceView" HeightRequest="180" RPM="{Binding RPM}" WheelCircumference="{Binding WheelCircumference}" LifetimeOdometer="{Binding LifetimeOdometer}" TripOdometer="{Binding TripOdometer}" />

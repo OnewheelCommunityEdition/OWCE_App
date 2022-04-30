@@ -6,15 +6,12 @@
       BackgroundColor="Transparent"
       VerticalOptions="Start">
 
-
-    <yummy:PancakeView>
-        <yummy:PancakeView.BackgroundGradientStops>
-            <yummy:GradientStopCollection>
-                <yummy:GradientStop Color="{StaticResource BackgroundGradientStart}" Offset="0" />
-                <yummy:GradientStop Color="Transparent" Offset="1" />
-            </yummy:GradientStopCollection>
-        </yummy:PancakeView.BackgroundGradientStops>
-    </yummy:PancakeView>
+    <Grid.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="{StaticResource BackgroundGradientStart}" Offset="0"/>
+            <GradientStop Color="Transparent" Offset="1"/>
+        </LinearGradientBrush>
+    </Grid.Background>
 
     <Image Source="burger_menu.png" HorizontalOptions="Start" WidthRequest="30" HeightRequest="30" Margin="16,5,0,0" VerticalOptions="End">
         <Image.GestureRecognizers>
