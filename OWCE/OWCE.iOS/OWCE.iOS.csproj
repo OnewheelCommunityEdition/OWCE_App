@@ -173,6 +173,10 @@
     <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect.png" />
     <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect%402x.png" />
     <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect%403x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\menu_cancel.png" />
+    <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\menu_cancel%402x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\menu_cancel%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -240,6 +244,7 @@
     <Folder Include="Assets.xcassets\settings_disconnect.imageset\" />
     <Folder Include="Assets.xcassets\settings_info.imageset\" />
     <Folder Include="SessionManager\" />
+    <Folder Include="Assets.xcassets\menu_cancel.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />
