@@ -68,6 +68,25 @@ namespace OWCE
             // If simulator or emulator use MockOWBLE.
             if (DeviceInfo.DeviceType == DeviceType.Virtual)
             {
+                var filenameRegex = new System.Text.RegularExpressions.Regex(@"^OWCE\.Resources\.SampleRideData\.(.*)\.bin$");
+                var assembly = System.Reflection.IntrospectionExtensions.GetTypeInfo(typeof(App)).Assembly;
+                foreach (var resourceName in assembly.GetManifestResourceNames())
+                {
+                    var match = filenameRegex.Match(resourceName);
+                    if (match.Success) //resourceName.StartsWith("OWCE.Resources.SampleRideData.")
+                    {
+                        var targetFilename = Path.Combine(LogsDirectory, match.Groups[1].Value + ".bin");
+                        // TODO: Check filename? Check exists? Check checksum?
+                        using (var fileStream = assembly.GetManifestResourceStream(resourceName))
+                        {
+                            using (var streamWriter = File.Create(targetFilename))
+                            {
+                                fileStream.CopyTo(streamWriter);
+                            }
+                        }
+                    }
+                }
+
                 OWBLE = new MockOWBLE();
             }
             else
