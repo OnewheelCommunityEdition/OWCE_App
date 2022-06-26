@@ -12,6 +12,7 @@ using OWCE.DependencyInterfaces;
 using OWCE.Views;
 using Rg.Plugins.Popup.Extensions;
 using Rg.Plugins.Popup.Services;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -59,7 +60,9 @@ namespace OWCE.Pages
             }
         }));
 
-
+        private AsyncCommand<OWBaseBoard> _boardSelectedCommand;
+        public AsyncCommand<OWBaseBoard> BoardSelectedCommand => _boardSelectedCommand ??= new AsyncCommand<OWBaseBoard>(BoardSelectedAsync, allowsMultipleExecutions: false);
+                
 
         /*
 
@@ -329,21 +332,14 @@ namespace OWCE.Pages
             }
         }
 
-        async void BoardsCollectionView_SelectionChanged(System.Object sender, Xamarin.Forms.SelectionChangedEventArgs e)
+
+        async Task BoardSelectedAsync(OWBaseBoard baseBoard)
         {
-            Debug.WriteLine("BoardsCollectionView_SelectionChanged");
-            if (e.CurrentSelection == null || e.CurrentSelection.Count == 0)
+            if (baseBoard == null)
             {
                 return;
             }
 
-            if (sender is CollectionView collectionView)
-            {
-                collectionView.SelectedItem = null;
-            }
-
-            if (e.CurrentSelection[0] is OWBaseBoard baseBoard)
-            {
                 if (baseBoard.IsAvailable)
                 {
                     StopScanning();
