@@ -586,10 +586,16 @@ namespace OWCE.Droid.DependencyImplementations
 
         public Task Disconnect()
         {
-            if (_connectTaskCompletionSource != null && _connectTaskCompletionSource.Task.IsCanceled == false)
+            if (_connectTaskCompletionSource != null && _connectTaskCompletionSource.Task.IsCanceled == false && _connectTaskCompletionSource.Task.IsCompleted == false && _connectTaskCompletionSource.Task.IsFaulted == false)
             {
-                // TODO: this causes app to crash. While not ideal, this works for the current flow.
-                _connectTaskCompletionSource.SetCanceled();
+                try
+                {
+                    _connectTaskCompletionSource.SetCanceled();
+                }
+                catch (Exception err)
+                {
+                    Debugger.Break();
+                }
             }
 
             // TODO: Handle is connecting.
