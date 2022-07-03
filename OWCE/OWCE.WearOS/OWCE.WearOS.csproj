@@ -132,6 +132,14 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\values\wear.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\font\sairaextracondensed_black.ttf">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\activity_main.xml" />
@@ -146,12 +154,16 @@
     <Folder Include="Resources\drawable\" />
     <Folder Include="Resources\mipmap-xxxhdpi\" />
     <Folder Include="Resources\mipmap-anydpi-v26\" />
+    <Folder Include="Resources\font\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.AndroidX.PercentLayout" Version="1.0.0.15" />
     <PackageReference Include="Xamarin.AndroidX.Legacy.Support.Core.UI" Version="1.0.0.15" />
     <PackageReference Include="Xamarin.AndroidX.Wear" Version="1.2.0.6" />
     <PackageReference Include="Xamarin.Android.Wear" Version="2.2.0" />
+    <PackageReference Include="Xamarin.GooglePlayServices.Wearable">
+      <Version>117.1.0.6</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

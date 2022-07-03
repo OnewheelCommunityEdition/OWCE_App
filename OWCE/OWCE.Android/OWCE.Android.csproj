@@ -91,6 +91,9 @@
   <PackageReference Include="Xamarin.AndroidX.RecyclerView">
     <Version>1.2.1.6</Version>
   </PackageReference>
+  <PackageReference Include="Xamarin.GooglePlayServices.Wearable">
+    <Version>117.1.0.6</Version>
+  </PackageReference>
 </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
@@ -365,6 +368,10 @@
       <Generator></Generator>
     </AndroidResource>
     <AndroidResource Include="Resources\drawable-xxxhdpi\menu_cancel.png">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\values\wear.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>

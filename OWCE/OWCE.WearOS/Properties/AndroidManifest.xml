@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.owcommunity.owce.wearos">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.owcommunity.owce">
 	<uses-sdk android:minSdkVersion="23" android:targetSdkVersion="31" />
 	<uses-feature android:name="android.hardware.type.watch" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -9,6 +9,6 @@
       Set to true if your app is Standalone, that is, it does not require the handheld
       app to run.
     -->
-		<meta-data android:name="com.google.android.wearable.standalone" android:value="true" />
+		<meta-data android:name="com.google.android.wearable.standalone" android:value="false" />
 	</application>
 </manifest>
