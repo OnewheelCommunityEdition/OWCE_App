@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OWCE.WatchOS.WatchOSApp", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OWCE.WatchOS.WatchOSExtension", "OWCE.WatchOS\OWCE.WatchOS.WatchOSExtension\OWCE.WatchOS.WatchOSExtension.csproj", "{733697FC-0154-4E0E-84C7-DF6484A32C23}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OWCE.WearOS", "OWCE.WearOS\OWCE.WearOS.csproj", "{E5052310-F9AF-4CBA-B13E-3D1849ED6315}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,5 +83,17 @@ Global
 		{733697FC-0154-4E0E-84C7-DF6484A32C23}.Debug|iPhone.Build.0 = Debug|iPhone
 		{733697FC-0154-4E0E-84C7-DF6484A32C23}.Release|iPhone.ActiveCfg = Release|iPhone
 		{733697FC-0154-4E0E-84C7-DF6484A32C23}.Release|iPhone.Build.0 = Release|iPhone
+		{E5052310-F9AF-4CBA-B13E-3D1849ED6315}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5052310-F9AF-4CBA-B13E-3D1849ED6315}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5052310-F9AF-4CBA-B13E-3D1849ED6315}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5052310-F9AF-4CBA-B13E-3D1849ED6315}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5052310-F9AF-4CBA-B13E-3D1849ED6315}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{E5052310-F9AF-4CBA-B13E-3D1849ED6315}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{E5052310-F9AF-4CBA-B13E-3D1849ED6315}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{E5052310-F9AF-4CBA-B13E-3D1849ED6315}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{E5052310-F9AF-4CBA-B13E-3D1849ED6315}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{E5052310-F9AF-4CBA-B13E-3D1849ED6315}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{E5052310-F9AF-4CBA-B13E-3D1849ED6315}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{E5052310-F9AF-4CBA-B13E-3D1849ED6315}.Release|iPhone.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
