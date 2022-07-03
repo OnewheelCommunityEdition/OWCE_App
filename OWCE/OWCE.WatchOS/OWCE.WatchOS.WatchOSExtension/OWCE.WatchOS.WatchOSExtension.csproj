@@ -127,20 +127,13 @@
     <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Large Rectangular.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\Complication.complicationset\Modular.imageset\Contents.json" />
     <ImageAsset Include="Media.xcassets\Complication.complicationset\Utilitarian.imageset\Contents.json" />
-    <ImageAsset Include="Media.xcassets\Complication.complicationset\Modular.imageset\Icon-Watch-29x29%402x.png" />
-    <ImageAsset Include="Media.xcassets\Complication.complicationset\Modular.imageset\Icon-Watch-29x29%402x-1.png" />
-    <ImageAsset Include="Media.xcassets\Complication.complicationset\Modular.imageset\Icon-Watch-29x29%402x-2.png" />
-    <ImageAsset Include="Media.xcassets\Complication.complicationset\Circular.imageset\Icon-Watch-29x29%402x.png" />
-    <ImageAsset Include="Media.xcassets\Complication.complicationset\Circular.imageset\Icon-Watch-29x29%402x-1.png" />
-    <ImageAsset Include="Media.xcassets\Complication.complicationset\Circular.imageset\Icon-Watch-29x29%402x-2.png" />
-    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Icon-Watch-98x98%402x.png" />
-    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Icon-Watch-98x98%402x-1.png" />
-    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Icon-Watch-98x98%402x-2.png" />
-    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Icon-Watch-98x98%402x-3.png" />
-    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Icon-Watch-98x98%402x-4.png" />
-    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Icon-Watch-98x98%402x-5.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Modular.imageset\Icon-ModularSmall-38mm@2x.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Modular.imageset\Icon-ModularSmall-42mm@2x.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Modular.imageset\Icon-ModularSmall-44mm@2x.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Icon-GraphicCircular-38mm@2x.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Icon-GraphicCircular-42mm@2x.png" />
+    <ImageAsset Include="Media.xcassets\Complication.complicationset\Graphic Circular.imageset\Icon-GraphicCircular-44mm@2x.png" />
     <ImageAsset Include="Media.xcassets\OWCELogo.imageset\Contents.json" />
-    <ImageAsset Include="Media.xcassets\OWCELogo.imageset\Icon-Watch-44x44%402x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\WatchOS\Xamarin.WatchOS.AppExtension.CSharp.targets" />
 </Project>
