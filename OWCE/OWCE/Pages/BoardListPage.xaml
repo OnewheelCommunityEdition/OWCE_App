@@ -8,6 +8,7 @@
              xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
              xmlns:views="clr-namespace:OWCE.Views"
              xmlns:popup="clr-namespace:OWCE.Pages.Popup"
+             x:DataType="pages:BoardListPage"
              xmlns:xcte="clr-namespace:Xamarin.CommunityToolkit.Effects;assembly=Xamarin.CommunityToolkit">
     <ContentPage.Resources>
         <ResourceDictionary>

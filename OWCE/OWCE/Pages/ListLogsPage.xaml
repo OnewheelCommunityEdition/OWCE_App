@@ -1,5 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="OWCE.Pages.ListLogsPage">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:OWCE.Pages"
+             x:Class="OWCE.Pages.ListLogsPage"
+             x:DataType="pages:ListLogsPage">
     <!--<ContentPage.Resources>
         <Style TargetType="Grid">
             <Setter Property="VisualStateManager.VisualStateGroups">
@@ -19,7 +23,7 @@
     <RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
         <CollectionView ItemsSource="{Binding LogsList}" SelectionMode="Single" SelectionChanged="CollectionView_SelectionChanged" >
             <CollectionView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="pages:LogSummary">
                     <Grid Padding="10">
                         <Label Text="{Binding Name}" FontSize="Large" TextColor="Black" />
                     </Grid>

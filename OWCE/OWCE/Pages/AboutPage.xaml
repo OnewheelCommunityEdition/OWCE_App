@@ -5,7 +5,9 @@
     xmlns:pages="clr-namespace:OWCE.Pages"    
     xmlns:xcte="clr-namespace:Xamarin.CommunityToolkit.Effects;assembly=Xamarin.CommunityToolkit"
     x:Class="OWCE.Pages.AboutPage"
-    Title="About" BackgroundColor="White">
+    x:DataType="pages:AboutPage"
+    Title="About"
+    BackgroundColor="White">
     <pages:BaseContentPage.Resources>
         <Style TargetType="Label">
             <Setter Property="TextColor" Value="Black" />
