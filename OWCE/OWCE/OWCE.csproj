@@ -45,20 +45,6 @@
     <Folder Include="Resources\SampleRideData\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\BoardListPage.xaml.cs">
-      <DependentUpon>BoardListPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\BoardPage.xaml.cs">
-      <DependentUpon>BoardPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\MyRidesPage.xaml.cs">
-      <DependentUpon>MyRidesPage.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="**/.DS_Store" />
     <None Remove="Resources\Fonts\SairaExtraCondensed-SemiBold.ttf" />
     <None Remove="Resources\Fonts\SairaExtraCondensed-Bold.ttf" />
