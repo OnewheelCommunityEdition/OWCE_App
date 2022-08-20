@@ -13,11 +13,13 @@
         </LinearGradientBrush>
     </Grid.Background>
 
+    <!--
     <Image Source="burger_menu.png" HorizontalOptions="Start" WidthRequest="30" HeightRequest="30" Margin="16,5,0,0" VerticalOptions="End">
         <Image.GestureRecognizers>
             <TapGestureRecognizer Tapped="BurgerMenu_Tapped" />
         </Image.GestureRecognizers>
     </Image>
+    -->
 
     <ContentView x:Name="InnerContentHolder" HeightRequest="44" VerticalOptions="End" BackgroundColor="Transparent" Content="{Binding InnerContent}" HorizontalOptions="Fill" />
 

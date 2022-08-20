@@ -50,7 +50,7 @@ namespace OWCE
             set { SetValue(MetricDisplayProperty, value); }
         }
 
-        public string LogsDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "beta_ride_logs");
+        public string LogsDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "past_rides");
 
         public App()
         {
@@ -61,6 +61,8 @@ namespace OWCE
             {
                 Directory.CreateDirectory(LogsDirectory);
             }
+
+            Database.Init();
 
             InitializeComponent();
 
@@ -97,7 +99,7 @@ namespace OWCE
             OWBLE = DependencyService.Get<IOWBLE>();
 #endif
             //MainPage = new MainFlyoutPage();
-            MainPage = new NavigationPage(new BoardListPage());
+            MainPage = new CustomNavigationPage(new BoardListPage());
 
 
 

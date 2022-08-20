@@ -35,12 +35,12 @@ namespace OWCE
             try
             {
               
-                using (FileStream fs = new FileStream(_logFilename, FileMode.Open, FileAccess.Read))
+                using (var fileStream = new FileStream(_logFilename, FileMode.Open, FileAccess.Read))
                 {
                     do
                     {
                         previousEvent = currentEvent;
-                        currentEvent = OWBoardEvent.Parser.ParseDelimitedFrom(fs);
+                        currentEvent = OWBoardEvent.Parser.ParseDelimitedFrom(fileStream);
 
                         if (previousEvent != null)
                         {
@@ -58,7 +58,7 @@ namespace OWCE
                         }
 
                     }
-                    while (fs.Position < fs.Length);
+                    while (fileStream.Position < fileStream.Length);
                 }
             }
             catch (Exception err)

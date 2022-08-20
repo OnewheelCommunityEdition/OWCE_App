@@ -28,6 +28,8 @@
     <PackageReference Include="SkiaSharp" Version="2.88.0" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="2.88.0" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.4" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
   </ItemGroup>
 
 
@@ -55,6 +57,8 @@
     <None Remove="PropertyChangeHandlers\" />
     <None Remove="Resources\SampleRideData\" />
     <None Remove="Resources\SampleRideData\*.bin" />
+    <None Remove="sqlite-net-pcl" />
+    <None Remove="CommunityToolkit.Mvvm" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-SemiBold.ttf" />

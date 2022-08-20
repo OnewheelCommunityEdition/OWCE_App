@@ -22,7 +22,7 @@ namespace OWCE.Views
         }
 
 
-
+        /*
         public void BurgerMenu_Tapped(object sender, EventArgs e)
         {
             var parent = Parent;
@@ -37,5 +37,6 @@ namespace OWCE.Views
                 parent = parent.Parent;
             }
         }
+        */
     }
 }

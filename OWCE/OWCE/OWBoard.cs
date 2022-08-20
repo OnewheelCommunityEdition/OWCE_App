@@ -540,31 +540,18 @@ namespace OWCE
             // Subscribe to property changes to keep watch app in sync
             // (eg speed, battery percent changes)
             this.PropertyChanged += WatchSyncEventHandler.HandlePropertyChanged;
-
-            MessagingCenter.Subscribe<object>(this, "start_recording", (source) =>
-            {
-                if (_isLogging)
-                    return;
-
-                StartLogging();
-            });
-            MessagingCenter.Subscribe<object>(this, "stop_recording", (source) =>
-            {
-                if (_isLogging)
-                {
-                    StopLogging();
-                }
-            });
         }
 
         public virtual void Init()
         {
+            /*
 #if DEBUG
             if (DeviceInfo.DeviceType == DeviceType.Physical)
             {
                 StartLogging();
             }
 #endif
+            */
         }
 
         void LogData(string characteristicGuid, byte[] data)
@@ -1365,18 +1352,11 @@ namespace OWCE
             //await CrossBluetoothLE.Current.Adapter.DisconnectDeviceAsync(_device);
         }
         */
-        //private long _currentRunStart = 0;
-        //public long CurrentRunStart { get{ return _currentRunStart; } }
 
 
         public void StartLogging()
         {
-            var filename = DateTime.Now.ToString("dd MMMM yyyy hh:mm:ss tt") + ".bin";
-
-            // _currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            //_logDirectory = Path.Combine(FileSystem.CacheDirectory, _currentRunStart.ToString());
-            var currentRunStart = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            _currentRide = new Ride(filename);
+            _currentRide = Ride.CreateNewRide();
 
             //_currentLogFile = Path.Combine(App.Current.LogsDirectory, filename);
 
@@ -1405,7 +1385,10 @@ namespace OWCE
         public string StopLogging()
         {
             _isLogging = false;
+            _currentRide.EndTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             _currentRide.EndTime = DateTime.Now;
+
+
             // TODO: Replace hud.
             //Hud.Show("Saving");
 
@@ -1416,6 +1399,7 @@ namespace OWCE
             */
 
             SaveEvents();
+            _currentRide.Save();
 
             //Hud.Dismiss();
 
@@ -1504,12 +1488,11 @@ namespace OWCE
             {
                 var oldEvents = _events;
                 _events = new OWBoardEventList();
-                var logPath = _currentRide.GetLogFilePath();
-                using (FileStream fs = new FileStream(logPath, FileMode.Append, FileAccess.Write))
+                using (var fileStream = new FileStream(_currentRide.DataFilePath, FileMode.Append, FileAccess.Write))
                 {
                     foreach (var owBoardEvent in oldEvents.BoardEvents)
                     {
-                        owBoardEvent.WriteDelimitedTo(fs);
+                        owBoardEvent.WriteDelimitedTo(fileStream);
                     }
                 }
                 //long currentRunEnd = DateTimeOffset.UtcNow.ToUnixTimeSeconds();

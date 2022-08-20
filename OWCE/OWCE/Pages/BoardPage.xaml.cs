@@ -10,6 +10,7 @@ using Rg.Plugins.Popup.Services;
 using System.Linq;
 using OWCE.Views;
 using OWCE.DependencyInterfaces;
+using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace OWCE.Pages
 {
@@ -30,6 +31,7 @@ namespace OWCE.Pages
         }*/
 
         private bool _initialSubscirbe = false;
+        Grid _sideMenuItem = null;
 
 
 
@@ -37,13 +39,12 @@ namespace OWCE.Pages
         {
             Board = board;
 
-            //board.StartLogging();
             InitializeComponent();
             BindingContext = board;
 
             AppVersionLabel.Text = $"{AppInfo.VersionString} (build {AppInfo.BuildString})";
 
-            ImperialSwitch.IsToggled = !App.Current.MetricDisplay;
+            // TODO: Fix ImperialSwitch.IsToggled = !App.Current.MetricDisplay;
 
 
             Board.Init();
@@ -59,17 +60,17 @@ namespace OWCE.Pages
             titleLabel.HorizontalOptions = LayoutOptions.End;
             titleLabel.Padding = new Thickness(0, 0, 16, 0);
 
-      
-            var settingsToolbarItem = new CustomToolbarItem()
+
+            var sideMenuItem = new CustomToolbarItem()
             {
                 Position = CustomToolbarItemPosition.Left,
                 IconImageSource = "burger_menu",
-                Command = new Command(() =>
+                Command = new AsyncCommand(async () =>
                 {
-                    PopupNavigation.Instance.PushAsync(SettingsPopupPage);
-                }),
+                    await PopupNavigation.Instance.PushAsync(Popup.SideMenuPopup.Instance);
+                }, allowsMultipleExecutions: false),
             };
-            CustomToolbarItems.Add(settingsToolbarItem);
+            CustomToolbarItems.Add(sideMenuItem);
         }
 
         private void OWBLE_BoardDisconnected()
@@ -108,11 +109,18 @@ namespace OWCE.Pages
             }
         }
 
-
-
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
+            Popup.SideMenuPopup.Instance.Title = "Settings";
+
+            if (_sideMenuItem == null)
+            {
+                var dataTemplate = (DataTemplate)Resources["SideMenu"];
+                _sideMenuItem = dataTemplate.CreateContent() as Grid;
+            }
+            Popup.SideMenuPopup.Instance.PageSpecificSideMenu = _sideMenuItem;
         }
 
         protected override void OnDisappearing()
@@ -145,9 +153,13 @@ namespace OWCE.Pages
         async void Disconnect_Tapped(System.Object sender, System.EventArgs e)
         {
             var result = await DisplayActionSheet("Are you sure you want to disconnect?", "Cancel", "Disconnect");
+
             if (result == "Disconnect")
             {
-                await PopupNavigation.Instance.PopAllAsync();
+                if (PopupNavigation.Instance.PopupStack.Any())
+                {
+                    await PopupNavigation.Instance.PopAllAsync();
+                }
                 await DisconnectAndPop();
             }
         }
@@ -155,8 +167,11 @@ namespace OWCE.Pages
         public async Task DisconnectAndPop()
         {
             await App.Current.OWBLE.Disconnect();
+
             await Navigation.PopModalAsync();
+
             IWatch watchService = DependencyService.Get<IWatch>();
+
             watchService.StopListeningForWatchMessages();
         }
 
