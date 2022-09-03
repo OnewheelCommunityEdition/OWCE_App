@@ -24,8 +24,9 @@ namespace OWCE.Pages
                 }, allowsMultipleExecutions: false),
             });
 
-            var rides = Database.Connection.Table<Ride>().OrderByDescending((r) => r.StartTime);
-            Rides.AddRange(rides);
+            // TODO: ??
+            //var rides = Database.Connection.Table<Ride>().OrderByDescending((r) => r.StartTime);
+            //Rides.AddRange(rides);
 
             BindingContext = this;
         }

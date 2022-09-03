@@ -62,7 +62,7 @@ namespace OWCE.Pages
 
         private AsyncCommand<OWBaseBoard> _boardSelectedCommand;
         public AsyncCommand<OWBaseBoard> BoardSelectedCommand => _boardSelectedCommand ??= new AsyncCommand<OWBaseBoard>(BoardSelectedAsync, allowsMultipleExecutions: false);
-                
+
 
         /*
 
@@ -135,7 +135,7 @@ namespace OWCE.Pages
             CustomToolbarItems.Add(scanningToolbarItem);
 
 #if DEBUG
-            var popupPage = new Rg.Plugins.Popup.Pages.PopupPage(); 
+            var popupPage = new Rg.Plugins.Popup.Pages.PopupPage();
 
             // Secret debug menu.
             var debugToolbarItem = new CustomToolbarItem()
@@ -144,9 +144,10 @@ namespace OWCE.Pages
                 IconImageSource = "burger_menu",
                 Command = new Command(() =>
                 {
-                    var debugMenu = new Popup.DebugBoardListPageSettingPopup();
+                    // TODO: ??
+                    //var debugMenu = new Popup.DebugBoardListPageSettingPopup();
 
-                    PopupNavigation.Instance.PushAsync(debugMenu);
+                    //PopupNavigation.Instance.PushAsync(debugMenu);
                 }),
             };
             CustomToolbarItems.Add(debugToolbarItem);
@@ -224,7 +225,7 @@ namespace OWCE.Pages
                     }
                     else
                     {
-                        await StartScanning(); 
+                        await StartScanning();
                     }
                 }
             }
@@ -257,7 +258,7 @@ namespace OWCE.Pages
             {
                 App.Current.OWBLE.StartScanning();
             }
-            catch (Exception )
+            catch (Exception)
             {
                 var alert = new Pages.Popup.Alert("Error", "Could not scan for boards. Please ensure bluetooth is enabled and has correct permission to scan.");
                 await PopupNavigation.Instance.PushAsync(alert, true);
@@ -326,10 +327,13 @@ namespace OWCE.Pages
 
         void BurgerMenu_Tapped(System.Object sender, System.EventArgs e)
         {
+            // TODO: ??
+            /*
             if (Parent?.Parent is MainFlyoutPage mainFlyout)
             {
                 mainFlyout.IsPresented = true;
             }
+            */
         }
 
 
@@ -340,58 +344,57 @@ namespace OWCE.Pages
                 return;
             }
 
-                if (baseBoard.IsAvailable)
+            if (baseBoard.IsAvailable)
+            {
+                StopScanning();
+
+                //_selectedBoard = board;
+
+                var cancellationTokenSource = new CancellationTokenSource();
+
+                var connectingAlert = new Popup.ConnectingAlert(baseBoard.Name, new Command(() =>
                 {
-                    StopScanning();
-
-                    //_selectedBoard = board;
-
-                    var cancellationTokenSource = new CancellationTokenSource();
-
-                    var connectingAlert = new Popup.ConnectingAlert(baseBoard.Name, new Command(() =>
+                    Debug.WriteLine("Connecting alert: cancel clicked");
+                    if (cancellationTokenSource.IsCancellationRequested == false)
                     {
-                        Debug.WriteLine("Connecting alert: cancel clicked");
-                        if (cancellationTokenSource.IsCancellationRequested == false)
-                        {
-                            cancellationTokenSource.Cancel();
-                            //_selectedBoard = null;
-                            //App.Current.OWBLE.Disconnect();
-                        }
-                    }));
-                    await PopupNavigation.Instance.PushAsync(connectingAlert, true);
-
-                    var board = await App.Current.ConnectToBoard(baseBoard, cancellationTokenSource.Token);
-                    await PopupNavigation.Instance.PopAllAsync();
-                    if (board != null)
-                    {
-                        await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(new BoardPage(board)));
-                        // Publish notification that board was connected
-                        IWatch watchService = DependencyService.Get<IWatch>();
-                        watchService.ListenForWatchMessages(board);
+                        cancellationTokenSource.Cancel();
+                        //_selectedBoard = null;
+                        //App.Current.OWBLE.Disconnect();
                     }
-                    /*
-                    try
-                    {
-                        var connectTask = App.Current.OWBLE.Connect(_selectedBoard);
+                }));
+                await PopupNavigation.Instance.PushAsync(connectingAlert, true);
 
-                        var connected = await connectTask;
-                    }
-                    catch (TaskCanceledException)
-                    {
-                        _selectedBoard = null;
-                        Hud.Dismiss();
-                    }
-                    catch (Exception)
-                    {
-                        await DisplayAlert("Error", $"Unable to connect to {board.Name}.", "Cancel");
-                    }
-                    */
-                }
-                else
+                var board = await App.Current.ConnectToBoard(baseBoard, cancellationTokenSource.Token);
+                await PopupNavigation.Instance.PopAllAsync();
+                if (board != null)
                 {
-                    var alert = new Pages.Popup.Alert("Error", $"{baseBoard.Name} is not available.");
-                    await PopupNavigation.Instance.PushAsync(alert, true);
+                    await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(new BoardPage(board)));
+                    // Publish notification that board was connected
+                    IWatch watchService = DependencyService.Get<IWatch>();
+                    watchService.ListenForWatchMessages(board);
                 }
+                /*
+                try
+                {
+                    var connectTask = App.Current.OWBLE.Connect(_selectedBoard);
+
+                    var connected = await connectTask;
+                }
+                catch (TaskCanceledException)
+                {
+                    _selectedBoard = null;
+                    Hud.Dismiss();
+                }
+                catch (Exception)
+                {
+                    await DisplayAlert("Error", $"Unable to connect to {board.Name}.", "Cancel");
+                }
+                */
+            }
+            else
+            {
+                var alert = new Pages.Popup.Alert("Error", $"{baseBoard.Name} is not available.");
+                await PopupNavigation.Instance.PushAsync(alert, true);
             }
         }
     }

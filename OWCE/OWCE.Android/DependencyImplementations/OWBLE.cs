@@ -867,10 +867,21 @@ namespace OWCE.Droid.DependencyImplementations
 
         public async Task<bool> ReadyToScan()
         {
-            var permissionStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
-            if (permissionStatus == PermissionStatus.Granted || permissionStatus == PermissionStatus.Restricted)
+            if ((int)Android.OS.Build.VERSION.SdkInt >= 31)
             {
-                return true;
+                var permissionStatus = await Permissions.CheckStatusAsync<BluetoothPermission>();
+                if (permissionStatus == PermissionStatus.Granted)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                var permissionStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+                if (permissionStatus == PermissionStatus.Granted || permissionStatus == PermissionStatus.Restricted)
+                {
+                    return true;
+                }
             }
 
             return false;
