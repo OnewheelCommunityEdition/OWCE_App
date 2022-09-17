@@ -26,6 +26,7 @@ namespace OWCE.MacOS
 
         public override void DidFinishLaunching(NSNotification notification)
         {
+            Rg.Plugins.Popup.Popup.Init();
             Forms.Init();
             LoadApplication(new App());
             base.DidFinishLaunching(notification);

@@ -9,14 +9,15 @@ using Xamarin.Forms;
 
 namespace OWCE.Pages
 {
+    public class LogSummary
+    {
+        public string Filename { get; set; }
+        public string Name => Path.GetFileNameWithoutExtension(Filename);
+        public DateTime Created { get; set; }
+    }
+
     public partial class ListLogsPage : ContentPage
     {
-        public class LogSummary
-        {
-            public string Filename { get; set; }
-            public string Name => Path.GetFileNameWithoutExtension(Filename);
-            public DateTime Created { get; set; }
-        }
 
         ObservableRangeCollection<LogSummary> _logsList = new ObservableRangeCollection<LogSummary>();
         public ObservableRangeCollection<LogSummary> LogsList { get { return _logsList; } }

@@ -13,7 +13,7 @@ using Android.Widget;
 
 namespace OWCE.Droid
 {
-    [Activity(Theme = "@style/MainTheme.Splash", Icon = "@mipmap/ic_launcher", MainLauncher = true, NoHistory = true, ScreenOrientation = ScreenOrientation.Portrait)]
+    [Activity(Theme = "@style/MainTheme.Splash", Exported = true, Icon = "@mipmap/ic_launcher", MainLauncher = true, NoHistory = true, ScreenOrientation = ScreenOrientation.Portrait)]
     public class SplashActivity : Activity
     {
         protected override void OnCreate(Bundle savedInstanceState)

@@ -14,21 +14,20 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.4.0" />
-    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.4.0" />
-    <PackageReference Include="Google.Protobuf" Version="3.17.3" />
-    <PackageReference Include="RestSharp" Version="106.13.0" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.5.3" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="4.5.3" />
+    <PackageReference Include="Google.Protobuf" Version="3.21.5" />
     <PackageReference Include="SharpZipLib" Version="1.3.3" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2515" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
     <PackageReference Include="Xam.Plugin.Geolocator" Version="4.5.0.6" />
-    <PackageReference Include="System.Text.Json" Version="5.0.2" />
+    <PackageReference Include="System.Text.Json" Version="6.0.5" />
     <PackageReference Include="Xamarin.Forms.PancakeView" Version="2.3.0.759" />
-    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.14" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.1.0" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
-    <PackageReference Include="SkiaSharp" Version="2.80.3" />
-    <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.3" />
-    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.3.0" />
+    <PackageReference Include="SkiaSharp" Version="2.88.1" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="2.88.1" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.4" />
   </ItemGroup>
 
 
@@ -43,26 +42,7 @@
     <Folder Include="Network\" />
     <Folder Include="Exceptions\" />
     <Folder Include="PropertyChangeHandlers\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\BoardListPage.xaml.cs">
-      <DependentUpon>BoardListPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\BoardPage.xaml.cs">
-      <DependentUpon>BoardPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\MainFlyoutMenuPage.xaml.cs">
-      <DependentUpon>MainFlyoutMenuPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\MyRidesPage.xaml.cs">
-      <DependentUpon>MyRidesPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\SettingsPage.xaml.cs">
-      <DependentUpon>SettingsPage.xaml</DependentUpon>
-    </Compile>
+    <Folder Include="Resources\SampleRideData\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="**/.DS_Store" />
@@ -73,6 +53,8 @@
     <None Remove="Resources\Fonts\SairaExtraCondensed-Medium.ttf" />
     <None Remove="Newtonsoft.Json" />
     <None Remove="PropertyChangeHandlers\" />
+    <None Remove="Resources\SampleRideData\" />
+    <None Remove="Resources\SampleRideData\*.bin" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-SemiBold.ttf" />
@@ -80,5 +62,6 @@
     <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-Black.ttf" />
     <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-Light.ttf" />
     <EmbeddedResource Include="Resources\Fonts\SairaExtraCondensed-Medium.ttf" />
+    <EmbeddedResource Include="Resources\SampleRideData\*.bin" />
   </ItemGroup>
 </Project>

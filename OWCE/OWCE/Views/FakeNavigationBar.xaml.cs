@@ -28,11 +28,14 @@ namespace OWCE.Views
             var parent = Parent;
             while (parent != null)
             {
+                // TODO: ??
+                /*
                 if (parent is MainFlyoutPage mainFlyoutPage)
                 {
                     mainFlyoutPage.IsPresented = true;
                     break;
                 }
+                */
 
                 parent = parent.Parent;
             }

@@ -173,6 +173,10 @@
     <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect.png" />
     <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect%402x.png" />
     <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect%403x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\menu_cancel.png" />
+    <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\menu_cancel%402x.png" />
+    <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\menu_cancel%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -181,28 +185,28 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2515" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
     <PackageReference Include="Rg.Plugins.Popup">
-      <Version>2.0.0.14</Version>
+      <Version>2.1.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Crashes">
-      <Version>4.4.0</Version>
+      <Version>4.5.3</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Analytics">
-      <Version>4.4.0</Version>
+      <Version>4.5.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms.PancakeView">
       <Version>2.3.0.759</Version>
     </PackageReference>
     <PackageReference Include="SkiaSharp">
-      <Version>2.80.3</Version>
+      <Version>2.88.1</Version>
     </PackageReference>
     <PackageReference Include="SkiaSharp.Views.Forms">
-      <Version>2.80.3</Version>
+      <Version>2.88.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.CommunityToolkit">
-      <Version>1.3.0</Version>
+      <Version>2.0.4</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
@@ -240,6 +244,7 @@
     <Folder Include="Assets.xcassets\settings_disconnect.imageset\" />
     <Folder Include="Assets.xcassets\settings_info.imageset\" />
     <Folder Include="SessionManager\" />
+    <Folder Include="Assets.xcassets\menu_cancel.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />

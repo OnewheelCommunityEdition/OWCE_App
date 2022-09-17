@@ -586,10 +586,16 @@ namespace OWCE.Droid.DependencyImplementations
 
         public Task Disconnect()
         {
-            if (_connectTaskCompletionSource != null && _connectTaskCompletionSource.Task.IsCanceled == false)
+            if (_connectTaskCompletionSource != null && _connectTaskCompletionSource.Task.IsCanceled == false && _connectTaskCompletionSource.Task.IsCompleted == false && _connectTaskCompletionSource.Task.IsFaulted == false)
             {
-                // TODO: this causes app to crash. While not ideal, this works for the current flow.
-                _connectTaskCompletionSource.SetCanceled();
+                try
+                {
+                    _connectTaskCompletionSource.SetCanceled();
+                }
+                catch (Exception err)
+                {
+                    Debugger.Break();
+                }
             }
 
             // TODO: Handle is connecting.
@@ -861,10 +867,21 @@ namespace OWCE.Droid.DependencyImplementations
 
         public async Task<bool> ReadyToScan()
         {
-            var permissionStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
-            if (permissionStatus == PermissionStatus.Granted || permissionStatus == PermissionStatus.Restricted)
+            if ((int)Android.OS.Build.VERSION.SdkInt >= 31)
             {
-                return true;
+                var permissionStatus = await Permissions.CheckStatusAsync<BluetoothPermission>();
+                if (permissionStatus == PermissionStatus.Granted)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                var permissionStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+                if (permissionStatus == PermissionStatus.Granted || permissionStatus == PermissionStatus.Restricted)
+                {
+                    return true;
+                }
             }
 
             return false;

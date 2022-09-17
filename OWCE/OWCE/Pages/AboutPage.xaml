@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:BaseContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:OWCE.Pages"    
+    xmlns:xcte="clr-namespace:Xamarin.CommunityToolkit.Effects;assembly=Xamarin.CommunityToolkit"
+    x:Class="OWCE.Pages.AboutPage"
+    x:DataType="pages:AboutPage"
+    Title="About"
+    BackgroundColor="White">
+    <pages:BaseContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="Black" />
+        </Style>
+    </pages:BaseContentPage.Resources>
+
+    <Grid Margin="16" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+        <Label Grid.Row="0" Text="This is a third party app made by the community, for the community to give extra safety features &amp; better data." />
+        <Label Grid.Row="1" Text="This is not the official app. It is not supported, endorsed or affiliated with Future Motion in any way." />
+        <Label Grid.Row="2">
+             <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="Version: " FontAttributes="Bold" />
+                    <Span Text="{Binding VersionString}" />
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
+
+        <Label Grid.Row="3" Text="Links:" FontAttributes="Bold" />
+        <Grid Grid.Row="4" RowSpacing="5" Margin="16,0,0,0">
+            <Label Grid.Row="0" Text="OWCE FAQ" TextDecorations="Underline"  xcte:TouchEffect.Command="{Binding FAQCommand}" />
+            <Label Grid.Row="1" Text="GitHub (Source code)" TextDecorations="Underline"  xcte:TouchEffect.Command="{Binding SourceCodeCommand}" />
+            <Label Grid.Row="2" Text="Report a problem" TextDecorations="Underline" xcte:TouchEffect.Command="{Binding ReportProblemCommand}" />
+            <Label Grid.Row="3" Text="Request a feature" TextDecorations="Underline" xcte:TouchEffect.Command="{Binding RequestFeatureCommand}" />
+            <Label Grid.Row="4" Text="Reddit" TextDecorations="Underline" xcte:TouchEffect.Command="{Binding RedditCommand}" />
+            <Label Grid.Row="5" Text="Twitter" TextDecorations="Underline" xcte:TouchEffect.Command="{Binding TwitterCommand}" />
+            <Label Grid.Row="6" Text="Facebook page (for news)" TextDecorations="Underline" xcte:TouchEffect.Command="{Binding FacebookPageCommand}" />
+            <Label Grid.Row="7" Text="Facebook group (for discussions)" TextDecorations="Underline" xcte:TouchEffect.Command="{Binding FacebookGroupCommand}" />
+        </Grid>
+    </Grid>
+</pages:BaseContentPage>

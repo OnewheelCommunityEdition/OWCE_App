@@ -7,7 +7,9 @@
              xmlns:owce="clr-namespace:OWCE"
              xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
              xmlns:views="clr-namespace:OWCE.Views"
-             xmlns:popup="clr-namespace:OWCE.Pages.Popup">
+             xmlns:popup="clr-namespace:OWCE.Pages.Popup"
+             x:DataType="pages:BoardListPage"
+             xmlns:xcte="clr-namespace:Xamarin.CommunityToolkit.Effects;assembly=Xamarin.CommunityToolkit">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:BoardIsAvailableOpacityConverter x:Key="boardIsAvailableOpacityConverter" />
@@ -15,18 +17,13 @@
     </ContentPage.Resources>
 
     <Grid>
-
-
-        <yummy:PancakeView BackgroundGradientStartPoint="0,0" BackgroundGradientEndPoint="0,1">
-            <yummy:PancakeView.BackgroundGradientStops>
-                <yummy:GradientStopCollection>
-                    <yummy:GradientStop Color="{StaticResource BackgroundGradientStart}" Offset="0" />
-                    <yummy:GradientStop Color="{StaticResource BackgroundGradientEnd}" Offset="1" />
-                </yummy:GradientStopCollection>
-            </yummy:PancakeView.BackgroundGradientStops>
-        </yummy:PancakeView>
-        
-      
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="{StaticResource BackgroundGradientStart}" Offset="0"/>
+                <GradientStop Color="{StaticResource BackgroundGradientEnd}" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+              
         
         <Image x:Name="BackgroundLogoImage" HorizontalOptions="Center" VerticalOptions="Center" Source="splash_image.png" Opacity="0.1" />
         <!--
@@ -38,7 +35,7 @@
             -->
 
         <RefreshView x:Name="MainRefreshView" Command="{Binding RefreshCommand}" >
-            <CollectionView ItemsSource="{Binding Boards}" Margin="0,0,0,0" SelectionMode="Single" SelectionChanged="BoardsCollectionView_SelectionChanged"> 
+            <CollectionView x:Name="MainCollectionView" ItemsSource="{Binding Boards}" Margin="0,0,0,0" SelectionMode="None"> 
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="1" VerticalItemSpacing="0" />
                 </CollectionView.ItemsLayout>
@@ -46,18 +43,9 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="owce:OWBaseBoard">
                         <ContentView Padding="16,10,16,15">
-                            <VisualStateManager.VisualStateGroups>
-					            <VisualStateGroup Name="CommonStates">
-						            <VisualState Name="Normal" />
-						            <VisualState Name="Selected">
-							            <VisualState.Setters>
-								            <Setter Property="BackgroundColor" Value="Transparent" />
-							            </VisualState.Setters>
-						            </VisualState>
-					            </VisualStateGroup>
-				            </VisualStateManager.VisualStateGroups>
+                           
+                            <yummy:PancakeView HeightRequest="121" CornerRadius="11" BackgroundColor="{StaticResource BrightYellow}" xcte:TouchEffect.NativeAnimation="true" xcte:TouchEffect.Command="{Binding Source={x:Reference MainCollectionView}, Path=BindingContext.BoardSelectedCommand}" xcte:TouchEffect.CommandParameter="{Binding .}" >
 
-                            <yummy:PancakeView HeightRequest="121" CornerRadius="11" BackgroundColor="{StaticResource BrightYellow}">
                             
                                 <yummy:PancakeView.Shadow>
                                     <yummy:DropShadow Color="Black" Opacity="0.14" Offset="0,1" BlurRadius="5" />
@@ -67,6 +55,7 @@
                                     <Label FontFamily="SairaExtraCondensed-Bold" FontSize="16" Text="{Binding BoardModelStringLong}" TextColor="Black" Margin="20,5,0,0" CharacterSpacing="-0.26" />
                                     <Label FontFamily="SairaExtraCondensed-Black" FontSize="40" Text="{Binding Name}" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center" CharacterSpacing="0.48" />
                                 </Grid>
+                                
                             </yummy:PancakeView>
                         </ContentView>
 

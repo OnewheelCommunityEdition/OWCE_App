@@ -148,9 +148,46 @@ namespace OWCE
             var rand = new Random();
             foreach (var file in files)
             {
+                // Can't use real board serial for this as multiple test data of the same board would all appear as the same board,
+                // which means it would not show. Instead we generate a 6 digit number based on the MD5 hash of the file. It isn't
+                // perfect (potential collisions, etc) but it should work fine for what we are doing.
+                //
+                // The reason we want unique rather than random is because when you come back to the board list page you will see
+                // duplicate results as they will have different device IDs. If it's based on something that doesn't change such as
+                // the hash of a file this will prevent duplicates re-appearing.
+                //
+                // While we don't use the hash itself, we use this to seed our random number generator which should give the same
+                // number every time.
+                var fakeDeviceID = String.Empty;
+                using (var md5 = System.Security.Cryptography.MD5.Create())
+                {
+                    using (var stream = File.OpenRead(file))
+                    {
+                        // Hash will be 16 bytes. Seed is an int which is 4 bytes. So we will instead take the average of every 4
+                        // bytes of the hash.
+                        var hash = md5.ComputeHash(stream);
+                        var shrunkHash = new byte[4];
+                        for (int startIndex = 0, outIndex = 0; startIndex < 16; startIndex += 4, outIndex += 1)
+                        {
+                            var sum = hash[startIndex + 0] + hash[startIndex + 1] + hash[startIndex + 2] + hash[startIndex + 3];
+                            shrunkHash[outIndex] = (byte)(sum / 4);
+                        }
+                        var shrunkHashNumber = BitConverter.ToInt32(shrunkHash);
+
+                        var random = new Random(shrunkHashNumber);
+                        fakeDeviceID = random.Next(0, 999999).ToString("D6");
+                    }
+                }
+
+                // Fallback incase something bad happened.
+                if (String.IsNullOrEmpty(fakeDeviceID))
+                {
+                    fakeDeviceID = rand.Next(0, 999999).ToString("D6");
+                }
+
                 BoardDiscovered?.Invoke(new OWBaseBoard()
                 {
-                    ID = "ow" + rand.Next(0, 999999).ToString("D6"),
+                    ID = "ow" + fakeDeviceID,
                     Name = Path.GetFileNameWithoutExtension(file),
                     IsAvailable = true,
                     NativePeripheral = file,

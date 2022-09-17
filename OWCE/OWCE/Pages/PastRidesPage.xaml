@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:BaseContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:OWCE.Pages"
+    xmlns:owce="clr-namespace:OWCE"
+    x:Class="OWCE.Pages.PastRidesPage"
+    x:DataType="pages:PastRidesPage"
+    Title="Past Rides">
+
+    <CollectionView ItemsSource="{Binding Rides}" SelectionMode="Single">
+        <CollectionView.ItemTemplate>
+            <DataTemplate x:DataType="owce:Ride">
+                <Grid HeightRequest="50">
+
+                </Grid>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+        <CollectionView.EmptyViewTemplate>
+            <DataTemplate>
+                <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                    <Label Text="No past rides found" HorizontalOptions="Center" VerticalOptions="Center" TextColor="Black" />
+                </Grid>
+            </DataTemplate>
+        </CollectionView.EmptyViewTemplate>
+    </CollectionView>
+
+</pages:BaseContentPage>
