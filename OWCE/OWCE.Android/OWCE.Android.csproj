@@ -86,10 +86,13 @@
     <Version>2.0.5</Version>
   </PackageReference>
   <PackageReference Include="Xamarin.AndroidX.Activity">
-    <Version>1.4.0.3</Version>
+    <Version>1.5.1</Version>
   </PackageReference>
   <PackageReference Include="Xamarin.AndroidX.RecyclerView">
-    <Version>1.2.1.6</Version>
+    <Version>1.2.1.7</Version>
+  </PackageReference>
+  <PackageReference Include="Xamarin.AndroidX.Core">
+    <Version>1.8.0.1</Version>
   </PackageReference>
   <PackageReference Include="sqlite-net-pcl">
     <Version>1.8.116</Version>
@@ -106,6 +109,7 @@
     <Compile Include="Renderers\ArcViewRenderer.cs" />
     <Compile Include="CharacteristicValueRequest.cs" />
     <Compile Include="DependencyImplementations\Watch.cs" />
+    <Compile Include="BluetoothPermission.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />

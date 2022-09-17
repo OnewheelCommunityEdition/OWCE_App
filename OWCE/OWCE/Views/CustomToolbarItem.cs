@@ -52,7 +52,7 @@ namespace OWCE.Views
 
         
         public static readonly BindableProperty TextProperty = BindableProperty.Create(
-            propertyName: nameof(TextProperty),
+            propertyName: nameof(Text),
             returnType: typeof(string),
             declaringType: typeof(CustomToolbarItem));
 

@@ -13,29 +13,54 @@ namespace OWCE.Droid.DependencyImplementations
     {
         public async Task<bool> PromptBLEPermission()
         {
-            if ((int)Android.OS.Build.VERSION.SdkInt >= 23)
+            // Android 12 and higher gets new permissions
+            if ((int)Android.OS.Build.VERSION.SdkInt >= 31)
+            {
+                var permissionStatus = await Permissions.CheckStatusAsync<BluetoothPermission>();
+
+                if (permissionStatus == PermissionStatus.Granted)
+                {
+                    return true;
+                }
+
+
+                permissionStatus = await Permissions.RequestAsync<BluetoothPermission>();
+                if (permissionStatus == PermissionStatus.Granted)
+                {
+                    return true;
+                }
+
+                // Something didn't go right. Direct user to settings to hopefully enable permission.
+                var shouldOpenSettings = await Application.Current.MainPage.DisplayAlert("Error", "In order to connect to your Onewheel you need to enable bluetooth permissions.", "Open Settings", "Cancel");
+                if (shouldOpenSettings)
+                {
+                    AppInfo.ShowSettingsUI();
+                }
+                return false;
+            }
+            else // Android 11 and lower gets the old permissions.
             {
                 var permissionStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
-
-                if (permissionStatus != PermissionStatus.Granted)
+                if (permissionStatus == PermissionStatus.Granted)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Oops", "In order to for bluetooth to scan for your board you need to enable location permission.\n(Yeah, that is as confusing as it sounds)", "Ok");
-
-                    permissionStatus = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();                    
+                    return true;
                 }
 
-                if (permissionStatus == PermissionStatus.Denied)
+                await Application.Current.MainPage.DisplayAlert("Oops", "In order to for bluetooth to scan for your board you need to enable location permission.\n(Yeah, that is as confusing as it sounds)", "Ok");
+
+                permissionStatus = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+                if (permissionStatus == PermissionStatus.Granted)
                 {
-                    var shouldOpenSettings = await Application.Current.MainPage.DisplayAlert("Error", "In order to for bluetooth to scan for your board you need to enable location permission.\n(Yeah, that is as confusing as it sounds)", "Open Settings", "Cancel");
-                    if (shouldOpenSettings)
-                    {
-                        AppInfo.ShowSettingsUI();
-                    }
-                    return false;
+                    return true;
                 }
+
+                var shouldOpenSettings = await Application.Current.MainPage.DisplayAlert("Error", "In order to for bluetooth to scan for your board you need to enable location permission.\n(Yeah, that is as confusing as it sounds)", "Open Settings", "Cancel");
+                if (shouldOpenSettings)
+                {
+                    AppInfo.ShowSettingsUI();
+                }
+                return false;
             }
-
-            return true;
         }
     }
 }

@@ -238,7 +238,7 @@ namespace OWCE.Pages
                     }
                     else
                     {
-                        await StartScanning(); 
+                        await StartScanning();
                     }
                 }
             }
@@ -271,7 +271,7 @@ namespace OWCE.Pages
             {
                 App.Current.OWBLE.StartScanning();
             }
-            catch (Exception )
+            catch (Exception)
             {
                 var alert = new Pages.Popup.Alert("Error", "Could not scan for boards. Please ensure bluetooth is enabled and has correct permission to scan.");
                 await PopupNavigation.Instance.PushAsync(alert, true);
