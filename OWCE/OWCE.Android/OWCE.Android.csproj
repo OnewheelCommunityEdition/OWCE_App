@@ -86,13 +86,13 @@
     <Version>2.0.5</Version>
   </PackageReference>
   <PackageReference Include="Xamarin.AndroidX.Activity">
-    <Version>1.6.0</Version>
+    <Version>1.6.0.1</Version>
   </PackageReference>
   <PackageReference Include="Xamarin.AndroidX.RecyclerView">
-    <Version>1.2.1.7</Version>
+    <Version>1.2.1.8</Version>
   </PackageReference>
   <PackageReference Include="Xamarin.AndroidX.Core">
-    <Version>1.9.0</Version>
+    <Version>1.9.0.1</Version>
   </PackageReference>
   <PackageReference Include="sqlite-net-pcl">
     <Version>1.8.116</Version>
