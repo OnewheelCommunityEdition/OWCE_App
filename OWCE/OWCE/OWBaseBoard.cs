@@ -264,6 +264,7 @@ namespace OWCE
                     ("Pacific", RideModes.Pint_Pacific),
                     ("Elevated", RideModes.Pint_Elevated),
                     ("Skyline", RideModes.Pint_Skyline),
+                    ("Custom", RideModes.Pint_Custom),
                 };
             }
 

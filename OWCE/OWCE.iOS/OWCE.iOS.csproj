@@ -68,7 +68,8 @@
     <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
     <CodesignKey>iPhone Distribution</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <NoWarn></NoWarn>
+    <NoWarn>
+    </NoWarn>
     <LangVersion>8.0</LangVersion>
     <MtouchUseLlvm>true</MtouchUseLlvm>
     <MtouchUseThumb>true</MtouchUseThumb>
@@ -141,42 +142,114 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Icon-App-29x29.png">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Assets.xcassets\hamburger.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\hamburger.imageset\hamburger.png" />
-    <ImageAsset Include="Assets.xcassets\hamburger.imageset\hamburger%402x.png" />
-    <ImageAsset Include="Assets.xcassets\hamburger.imageset\hamburger%403x.png" />
-    <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\menu_leaderboards.png" />
-    <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\menu_leaderboards%402x.png" />
-    <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\menu_leaderboards%403x.png" />
-    <ImageAsset Include="Assets.xcassets\menu_myrides.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\menu_myrides.imageset\menu_myrides.png" />
-    <ImageAsset Include="Assets.xcassets\menu_myrides.imageset\menu_myrides%402x.png" />
-    <ImageAsset Include="Assets.xcassets\menu_myrides.imageset\menu_myrides%403x.png" />
-    <ImageAsset Include="Assets.xcassets\menu_onewheels.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\menu_onewheels.imageset\menu_onewheels.png" />
-    <ImageAsset Include="Assets.xcassets\menu_onewheels.imageset\menu_onewheels%402x.png" />
-    <ImageAsset Include="Assets.xcassets\menu_onewheels.imageset\menu_onewheels%403x.png" />
-    <ImageAsset Include="Assets.xcassets\menu_settings.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\menu_settings.imageset\menu_settings.png" />
-    <ImageAsset Include="Assets.xcassets\menu_settings.imageset\menu_settings%402x.png" />
-    <ImageAsset Include="Assets.xcassets\menu_settings.imageset\menu_settings%403x.png" />
-    <ImageAsset Include="Assets.xcassets\burger_menu.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\burger_menu.imageset\burger_menu.png" />
-    <ImageAsset Include="Assets.xcassets\burger_menu.imageset\burger_menu%402x.png" />
-    <ImageAsset Include="Assets.xcassets\burger_menu.imageset\burger_menu%403x.png" />
-    <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\settings_info.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\settings_info.imageset\settings_info.png" />
-    <ImageAsset Include="Assets.xcassets\settings_info.imageset\settings_info%402x.png" />
-    <ImageAsset Include="Assets.xcassets\settings_info.imageset\settings_info%403x.png" />
-    <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect.png" />
-    <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect%402x.png" />
-    <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect%403x.png" />
-    <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\menu_cancel.png" />
-    <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\menu_cancel%402x.png" />
-    <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\menu_cancel%403x.png" />
+    <ImageAsset Include="Assets.xcassets\hamburger.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\hamburger.imageset\hamburger.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\hamburger.imageset\hamburger%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\hamburger.imageset\hamburger%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\menu_leaderboards.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\menu_leaderboards%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\menu_leaderboards%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_myrides.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_myrides.imageset\menu_myrides.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_myrides.imageset\menu_myrides%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_myrides.imageset\menu_myrides%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_onewheels.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_onewheels.imageset\menu_onewheels.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_onewheels.imageset\menu_onewheels%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_onewheels.imageset\menu_onewheels%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_settings.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_settings.imageset\menu_settings.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_settings.imageset\menu_settings%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_settings.imageset\menu_settings%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\burger_menu.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\burger_menu.imageset\burger_menu.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\burger_menu.imageset\burger_menu%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\burger_menu.imageset\burger_menu%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\settings_info.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\settings_info.imageset\settings_info.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\settings_info.imageset\settings_info%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\settings_info.imageset\settings_info%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\settings_disconnect.imageset\settings_disconnect%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\menu_cancel.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\menu_cancel%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\menu_cancel%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -220,31 +293,19 @@
       <Project>{1DB46ADC-CEEE-4BC0-B63A-EBF5C3AA2692}</Project>
       <Name>OWCE.WatchOS.WatchOSApp</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IsAppExtension>false</IsAppExtension>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DependencyImplementations\" />
-    <Folder Include="Extensions\" />
-    <Folder Include="Assets.xcassets\hamburger.imageset\" />
-    <Folder Include="Assets.xcassets\menu_leaderboards.imageset\" />
-    <Folder Include="Assets.xcassets\menu_myrides.imageset\" />
-    <Folder Include="Assets.xcassets\menu_onewheels.imageset\" />
-    <Folder Include="Assets.xcassets\menu_settings.imageset\" />
+    <Folder Include="Assets.xcassets\ow_icon.imageset\" />
     <Folder Include="Assets.xcassets\ow_icon_plus.imageset\" />
     <Folder Include="Assets.xcassets\ow_icon_v1.imageset\" />
     <Folder Include="Assets.xcassets\ow_icon_xr.imageset\" />
-    <Folder Include="Assets.xcassets\ow_icon.imageset\" />
-    <Folder Include="Assets.xcassets\splash_icon.imageset\" />
-    <Folder Include="Renderers\" />
-    <Folder Include="Assets.xcassets\yellow_gradient.imageset\" />
-    <Folder Include="Assets.xcassets\splash_gradient.imageset\" />
     <Folder Include="Assets.xcassets\splash-image.imageset\" />
     <Folder Include="Assets.xcassets\splash_background.imageset\" />
-    <Folder Include="Assets.xcassets\burger_menu.imageset\" />
-    <Folder Include="Assets.xcassets\settings_disconnect.imageset\" />
-    <Folder Include="Assets.xcassets\settings_info.imageset\" />
-    <Folder Include="SessionManager\" />
-    <Folder Include="Assets.xcassets\menu_cancel.imageset\" />
+    <Folder Include="Assets.xcassets\splash_gradient.imageset\" />
+    <Folder Include="Assets.xcassets\splash_icon.imageset\" />
+    <Folder Include="Assets.xcassets\yellow_gradient.imageset\" />
   </ItemGroup>
   <ItemGroup>
     <ITunesArtwork Include="iTunesArtwork" />

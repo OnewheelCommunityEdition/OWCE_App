@@ -25,26 +25,32 @@
                     <Label Text="{Binding RideModeString}" FontFamily="SairaExtraCondensed-Black" HorizontalOptions="Center" TextColor="White" CharacterSpacing="2.2" FontSize="60" Padding="0,16,0,16" />
 
 
-                    <!--
                     <Label Text="Simplestop is ON" IsVisible="{Binding SimpleStopEnabled, Converter={StaticResource IsTrueConverter}}" FontFamily="SairaExtraCondensed-SemiBold" TextColor="Magenta" HorizontalOptions="Center" VerticalOptions="End" FontSize="16" Margin="0,0,0,6" />
                     <Label Text="Simplestop is OFF" IsVisible="{Binding SimpleStopEnabled, Converter={StaticResource IsFalseConverter}}" FontFamily="SairaExtraCondensed-SemiBold" TextColor="White" HorizontalOptions="Center" VerticalOptions="End" FontSize="16" Margin="0,0,0,6" />
-                    -->
 
                     <views:ExpanderArrowView x:Name="ExpanderArrow" HorizontalOptions="End" Margin="17,13" />
 
                 </Grid>
             </xct:Expander.Header>
             <Grid ColumnSpacing="0" RowSpacing="0" RowDefinitions="Auto,76,Auto" Margin="0" Padding="0">
-                <!--
-                <views:SwitchView Grid.Row="0" HorizontalOptions="Center">
-                    <views:SwitchView.IsVisible>
-                        <MultiBinding Converter="{StaticResource AnyTrueConverter}">
-                            <Binding Path="SimpleStopEnabled" Converter="{StaticResource IsTrueConverter}" />
-                            <Binding Path="SimpleStopEnabled" Converter="{StaticResource IsFalseConverter}" />
-                        </MultiBinding>
-                    </views:SwitchView.IsVisible>
-                </views:SwitchView>
-                -->
+
+                <Switch OnColor="Magenta" Toggled="OnSimpleStopToggled" Grid.Row="0" HorizontalOptions="Center" IsVisible="{Binding CanSimpleStop, Converter={StaticResource IsTrueConverter}}">
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="On">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="DarkMagenta" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Off">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="White" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+                </Switch>
+
                 <CollectionView x:Name="RideModesCollectionView" HorizontalScrollBarVisibility="Never" ItemsLayout="HorizontalList" Grid.Row="1" HeightRequest="76" BackgroundColor="White">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="views:RideModeButton">
@@ -81,14 +87,16 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                <Button Grid.Row="2" HorizontalOptions="Center" FontSize="16" Padding="16,10,16,16" VerticalOptions="Center" Text="SET CUSTOM SHAPING" Font="SairaExtraCondensed-SemiBold" Clicked="SetCustomShaping_Clicked">
-                    <Button.IsVisible>
+                <CollectionView Grid.Row="2" ItemsLayout="HorizontalList">
+                    <CollectionView.IsVisible>
                         <MultiBinding Converter="{StaticResource AnyTrueConverter}">
                             <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Plus" />
                             <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="XR" />
+                            <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Pint" />
+                            <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="GT" />
                         </MultiBinding>
-                    </Button.IsVisible>
-                </Button>
+                    </CollectionView.IsVisible>
+                </CollectionView>
             </Grid>
         </xct:Expander>
     </yummy:PancakeView>

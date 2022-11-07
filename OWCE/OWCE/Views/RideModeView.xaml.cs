@@ -173,5 +173,16 @@ namespace OWCE.Views
                //VisualStateManager.GoToState(button, selectedRideMode.IsSelected ? "SelectedState" : "NormalState");
             }
         }
+
+        private void OnSimpleStopToggled(object sender, ToggledEventArgs e)
+        {
+            if (sender is Switch simpleStopSwitch)
+            {
+                if (BindingContext is OWBoard board)
+                {
+                    board.ToggleSimpleStop(simpleStopSwitch.IsToggled);
+                }
+            }
+        }
     }
 }
