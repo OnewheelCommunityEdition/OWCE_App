@@ -21,6 +21,8 @@ using OWCE.DependencyInterfaces;
 using Rg.Plugins.Popup.Services;
 using MvvmHelpers;
 using OWCE.PropertyChangeHandlers;
+using OWCE.Pages;
+using OWCE.Utils;
 
 namespace OWCE
 {
@@ -886,7 +888,6 @@ namespace OWCE
                 var data = await _owble.ReadValue(characteristic);
                 SetValue(characteristic, data, true);
             }
-
         }
 
         // This should be called to keep the board in its unlocked state.
@@ -1191,7 +1192,7 @@ namespace OWCE
             return bytes;
         }
 
-        private void SetValue(string uuid, byte[] data, bool initialData = false)
+        private async void SetValue(string uuid, byte[] data, bool initialData = false)
         {
             if (data == null)
                 return;
@@ -1441,13 +1442,13 @@ namespace OWCE
                     switch (trait)
                     {
                         case RideTrait.AngleOffset:
-                            AngleOffset = rideTraitsData[1];
+                            AngleOffset = Rescaler.TwosComplement(rideTraitsData[1]);
                             break;
                         case RideTrait.TurnCompensation:
-                            TurnCompensation = rideTraitsData[1];
+                            TurnCompensation = Rescaler.TwosComplement(rideTraitsData[1]);
                             break;
                         case RideTrait.Aggressiveness:
-                            Aggressiveness = rideTraitsData[1];
+                            Aggressiveness = Rescaler.TwosComplement(rideTraitsData[1]);
                             break;
                         case RideTrait.SimpleStop:
                             SimpleStopEnabled = rideTraitsData[1] == 1;
@@ -1455,6 +1456,11 @@ namespace OWCE
                         default:
                             Console.WriteLine(string.Format("Unknown ride trait found. Type: {0}", rideTraitsData[0]));
                             break;
+                    }
+
+                    if (HasValidRideTraits())
+                    {
+                        await _owble.UnsubscribeValue(OWBoard.RideTraitsUUID, true);
                     }
                     //UNKNOWN2 = value;
                     break;
@@ -1720,22 +1726,25 @@ namespace OWCE
             var result = await App.Current.OWBLE.WriteValue(OWBoard.RideModeUUID, rideModeBytes, true);
         }
 
-        public async void ChangeAngleOffset(int angleOffset)
+        public async Task ChangeAngleOffset(int angleOffset)
         {
-            await ChangeRideTrait(RideTrait.AngleOffset, (short)angleOffset);
+            byte converted = Rescaler.TwosComplement(angleOffset);
+            await ChangeRideTrait(RideTrait.AngleOffset, converted);
         }
 
-        public async void ChangeTurnCompensation(int turnCompensation)
+        public async Task ChangeTurnCompensation(int turnCompensation)
         {
-            await ChangeRideTrait(RideTrait.TurnCompensation, (short)turnCompensation);
+            byte converted = Rescaler.TwosComplement(turnCompensation);
+            await ChangeRideTrait(RideTrait.TurnCompensation, converted);
         }
 
-        public async void ChangeAggressiveness(int aggressiveness)
+        public async Task ChangeAggressiveness(int aggressiveness)
         {
-            await ChangeRideTrait(RideTrait.Aggressiveness, (short)aggressiveness);
+            byte converted = Rescaler.TwosComplement(aggressiveness);
+            await ChangeRideTrait(RideTrait.Aggressiveness, converted);
         }
 
-        public async void ToggleSimpleStop(bool enabled)
+        public async Task ToggleSimpleStop(bool enabled)
         {
             await ChangeRideTrait(RideTrait.SimpleStop, enabled);
         }
@@ -1743,14 +1752,13 @@ namespace OWCE
         public async Task ChangeRideTrait(RideTrait trait, bool value)
         {
             byte[] frame = new byte[] { ((byte)trait), value ? (byte)1 : (byte)0 };
-            var result = await App.Current.OWBLE.WriteValue(OWBoard.RideTraitsUUID, frame.Reverse().ToArray(), true);
+            var result = await App.Current.OWBLE.WriteValue(RideTraitsUUID, frame.Reverse().ToArray(), true);
         }
 
-        public async Task ChangeRideTrait(RideTrait trait, short value)
+        public async Task ChangeRideTrait(RideTrait trait, byte value)
         {
-            byte[] traitType = new byte[] { ((byte)trait) };
-            byte[] frame = traitType.Concat(BitConverter.GetBytes(value)).ToArray();
-            var result = await App.Current.OWBLE.WriteValue(OWBoard.RideTraitsUUID, frame.Reverse().ToArray(), true);
+            byte[] frame = new byte[] { ((byte)trait), value };
+            var result = await App.Current.OWBLE.WriteValue(RideTraitsUUID, frame.Reverse().ToArray(), true);
         }
     }
 }

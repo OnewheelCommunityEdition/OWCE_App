@@ -10,5 +10,25 @@ namespace OWCE.Utils
         {
             return toMin + (((toMax - toMin) / (fromMax - fromMin)) * (value - fromMin));
         }
+
+        public static int TwosComplement(byte value)
+        {
+            // If a positive value, return it
+            if ((value & 0x80) == 0)
+                return value;
+
+            // Otherwise perform the 2's complement math on the value
+            return (byte)(~(value - 0x01)) * -1;
+        }
+
+        public static byte TwosComplement(int value)
+        {
+            // If a positive value, return it
+            if ((value & 0x80) == 0)
+                return (byte)value;
+
+            // Otherwise perform the 2's complement math on the value
+            return (byte)(256 + value);
+        }
     }
 }

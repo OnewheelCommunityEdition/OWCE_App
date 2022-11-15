@@ -5,15 +5,20 @@
              xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
              x:Class="OWCE.Views.RideModeView"
              xmlns:views="clr-namespace:OWCE.Views"
-             xmlns:converters="clr-namespace:OWCE.Converters">
+             xmlns:converters="clr-namespace:OWCE.Converters"
+             xmlns:forms="clr-namespace:Xamarin.RangeSlider.Forms;assembly=Xamarin.RangeSlider.Forms">
 
     <ContentView.Resources>
         <converters:AllTrueMultiConverter x:Key="AllTrueConverter" />
         <converters:AnyTrueMultiConverter x:Key="AnyTrueConverter" />
         <converters:IsBoardTypeConverter x:Key="IsBoardTypeConverter" />
+        <converters:IsCustomShapingConverter x:Key="IsCustomShapingConverter" />
         <converters:IsTrueConverter x:Key="IsTrueConverter" />
         <converters:IsFalseConverter x:Key="IsFalseConverter" />
         <converters:SelectedButtonConverter x:Key="SelectedButtonConverter" />
+        <converters:TurnCompensationConverter x:Key="TurnCompensationConverter" />
+        <converters:AggressivenessConverter x:Key="AggressivenessConverter" />
+        <converters:AngleOffsetConverter x:Key="AngleOffsetConverter" />
     </ContentView.Resources>
 
     <yummy:PancakeView BackgroundColor="#000000" Style="{StaticResource BoardDetailBlockBaseStyle}">
@@ -87,16 +92,20 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                <CollectionView Grid.Row="2" ItemsLayout="HorizontalList">
-                    <CollectionView.IsVisible>
-                        <MultiBinding Converter="{StaticResource AnyTrueConverter}">
-                            <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Plus" />
-                            <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="XR" />
-                            <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Pint" />
-                            <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="GT" />
-                        </MultiBinding>
-                    </CollectionView.IsVisible>
-                </CollectionView>
+                <StackLayout Grid.Row="2" Padding="20" BackgroundColor="White">
+                    <StackLayout>
+                        <forms:RangeSlider MinimumValue="0" MaximumValue="10" UpperValue="{Binding TurnCompensation, Converter={StaticResource TurnCompensationConverter}}" LowerValue="0" MinThumbHidden="True" StepValue="0.1" StepValueContinuously="false" ShowTextAboveThumbs="True" DragCompleted="OnTurnCompensationChanged" />
+                        <Label x:Name="TurnCompensationLabel" TextColor="Black" />
+                    </StackLayout>
+                    <StackLayout>
+                        <forms:RangeSlider MinimumValue="-1.5" MaximumValue="3" UpperValue="{Binding AngleOffset, Converter={StaticResource AngleOffsetConverter}}" LowerValue="-1.5" MinThumbHidden="True" StepValue="0.1" StepValueContinuously="false" ShowTextAboveThumbs="True" DragCompleted="OnAngleOffsetChanged" />
+                        <Label x:Name="AngleOffsetLabel" TextColor="Black" />
+                    </StackLayout>
+                    <StackLayout>
+                        <forms:RangeSlider MinimumValue="0" MaximumValue="10" UpperValue="{Binding Aggressiveness, Converter={StaticResource AggressivenessConverter}}" LowerValue="0" MinThumbHidden="True" StepValue="0.1" StepValueContinuously="false" ShowTextAboveThumbs="True" DragCompleted="OnAggressivenessChanged" />
+                        <Label x:Name="AggressivenessLabel" TextColor="Black" />
+                    </StackLayout>
+                </StackLayout>
             </Grid>
         </xct:Expander>
     </yummy:PancakeView>
