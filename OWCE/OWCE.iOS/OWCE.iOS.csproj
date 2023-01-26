@@ -29,6 +29,7 @@
     <LangVersion>8.0</LangVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignProvision>Automatic</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -41,6 +42,7 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
     <LangVersion>8.0</LangVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <CodesignProvision>Automatic</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -58,6 +60,7 @@
     <MtouchLink>None</MtouchLink>
     <LangVersion>8.0</LangVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <CodesignProvision>Automatic</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -65,15 +68,14 @@
     <OutputPath>bin\iPhone\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
+    <MtouchArch>ARM64</MtouchArch>
     <CodesignKey>iPhone Distribution</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <NoWarn></NoWarn>
     <LangVersion>8.0</LangVersion>
-    <MtouchUseLlvm>true</MtouchUseLlvm>
-    <MtouchUseThumb>true</MtouchUseThumb>
     <MtouchLink>SdkOnly</MtouchLink>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <CodesignProvision>Automatic</CodesignProvision>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -177,6 +179,23 @@
     <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\menu_cancel.png" />
     <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\menu_cancel%402x.png" />
     <ImageAsset Include="Assets.xcassets\menu_cancel.imageset\menu_cancel%403x.png" />
+    <ImageAsset Include="Assets.xcassets\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\settings_stop_recording.imageset\settings_stop_recording.png" />
+    <ImageAsset Include="Assets.xcassets\settings_stop_recording.imageset\settings_stop_recording%403x.png" />
+    <ImageAsset Include="Assets.xcassets\settings_stop_recording.imageset\settings_stop_recording%402x.png" />
+    <ImageAsset Include="Assets.xcassets\settings_stop_recording.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\settings_start_recording.imageset\settings_start_recording%403x.png" />
+    <ImageAsset Include="Assets.xcassets\settings_start_recording.imageset\settings_start_recording%402x.png" />
+    <ImageAsset Include="Assets.xcassets\settings_start_recording.imageset\settings_start_recording.png" />
+    <ImageAsset Include="Assets.xcassets\settings_start_recording.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\swipe_rename.imageset\swipe_rename%402x.png" />
+    <ImageAsset Include="Assets.xcassets\swipe_rename.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\swipe_rename.imageset\swipe_rename%403x.png" />
+    <ImageAsset Include="Assets.xcassets\swipe_rename.imageset\swipe_rename.png" />
+    <ImageAsset Include="Assets.xcassets\swipe_delete.imageset\swipe_delete%403x.png" />
+    <ImageAsset Include="Assets.xcassets\swipe_delete.imageset\swipe_delete%402x.png" />
+    <ImageAsset Include="Assets.xcassets\swipe_delete.imageset\swipe_delete.png" />
+    <ImageAsset Include="Assets.xcassets\swipe_delete.imageset\Contents.json" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -185,28 +204,31 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2515" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2545" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.4" />
     <PackageReference Include="Rg.Plugins.Popup">
       <Version>2.1.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Crashes">
-      <Version>4.5.3</Version>
+      <Version>5.0.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Analytics">
-      <Version>4.5.3</Version>
+      <Version>5.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms.PancakeView">
       <Version>2.3.0.759</Version>
     </PackageReference>
     <PackageReference Include="SkiaSharp">
-      <Version>2.88.1</Version>
+      <Version>2.88.3</Version>
     </PackageReference>
     <PackageReference Include="SkiaSharp.Views.Forms">
-      <Version>2.88.1</Version>
+      <Version>2.88.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.CommunityToolkit">
-      <Version>2.0.4</Version>
+      <Version>2.0.5</Version>
+    </PackageReference>
+    <PackageReference Include="sqlite-net-pcl">
+      <Version>1.8.116</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
@@ -214,6 +236,12 @@
     <ProjectReference Include="..\OWCE\OWCE.csproj">
       <Project>{4B3D0411-B028-494E-AB04-113D1F130DA1}</Project>
       <Name>OWCE</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OWCE.WatchOS\OWCE.WatchOS.WatchOSApp\OWCE.WatchOS.WatchOSApp.csproj">
+      <IsWatchApp>true</IsWatchApp>
+      <Project>{1DB46ADC-CEEE-4BC0-B63A-EBF5C3AA2692}</Project>
+      <Name>OWCE.WatchOS.WatchOSApp</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

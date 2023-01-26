@@ -30,27 +30,33 @@
           HorizontalOptions="Start"
           WidthRequest="500"
           ColumnSpacing="0"
-          RowSpacing="0"
+          RowSpacing="12"
           Padding="0,16,0,16"
           Margin="0,0,40,0"
-          RowDefinitions="Auto,1,*,1,Auto">
+          RowDefinitions="Auto,1,*,1,Auto,Auto">
 
-        <Label Grid.Row="0" Text="{Binding Title}" TextColor="Black" FontFamily="SairaExtraCondensed-SemiBold" FontSize="24" Padding="16,0,16,0" />
+        <Label Grid.Row="0" Text="{Binding Title}" TextColor="Black" FontAttributes="Bold" FontSize="24" Padding="16,0,16,0" />
 
-       
+
 
         <Image Grid.Row="0" Source="menu_cancel" xcte:IconTintColorEffect.TintColor="Black" WidthRequest="16" HeightRequest="16" xcte:TouchEffect.NativeAnimation="True" xcte:TouchEffect.Command="{Binding CloseCommand}" HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,16,0" />
 
         <BoxView Grid.Row="1" Background="#E4E4E4" HeightRequest="1" />
-        
+
         <!-- Grid.Row 2 is for page specific menu -->
-                
+
         <BoxView Grid.Row="3" Background="#E4E4E4" HeightRequest="1" />
-        <Grid Grid.Row="4" RowDefinitions="1,Auto" ColumnDefinitions="60,*" ColumnSpacing="8" xcte:TouchEffect.Command="{Binding AboutCommand}" xcte:TouchEffect.CommandParameter="{Binding Source={RelativeSource Self}}">
-            <Image Grid.Row="1" Grid.Column="0" Source="settings_info" WidthRequest="24" HeightRequest="24" HorizontalOptions="Center"/>
-            <Label Grid.Row="1" Grid.Column="1" Text="About this app" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18" />
+
+        <Grid Grid.Row="4" RowDefinitions="Auto" ColumnDefinitions="60,*" ColumnSpacing="0" xcte:TouchEffect.Command="{Binding SettingsCommand}" xcte:TouchEffect.CommandParameter="{Binding Source={RelativeSource Self}}">
+            <Image Grid.Row="0" Grid.Column="0" xcte:IconTintColorEffect.TintColor="Black" Source="menu_settings" WidthRequest="24" HeightRequest="24" HorizontalOptions="Center"/>
+            <Label Grid.Row="0" Grid.Column="1" Text="Settings" TextColor="Black" FontSize="18" />
         </Grid>
-         
+
+        <Grid Grid.Row="5" RowDefinitions="Auto" ColumnDefinitions="60,*" ColumnSpacing="0" xcte:TouchEffect.Command="{Binding AboutCommand}" xcte:TouchEffect.CommandParameter="{Binding Source={RelativeSource Self}}">
+            <Image Grid.Row="0" Grid.Column="0" Source="settings_info" WidthRequest="24" HeightRequest="24" HorizontalOptions="Center"/>
+            <Label Grid.Row="0" Grid.Column="1" Text="About this app" TextColor="Black" FontSize="18" />
+        </Grid>
+
 
     </Grid>
 

@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using OWCE.DependencyInterfaces;
+using OWCE.Pages.Popup;
 using OWCE.Views;
 using Rg.Plugins.Popup.Extensions;
 using Rg.Plugins.Popup.Services;
@@ -60,9 +61,11 @@ namespace OWCE.Pages
             }
         }));
 
-        private AsyncCommand<OWBaseBoard> _boardSelectedCommand;
+        AsyncCommand<OWBaseBoard> _boardSelectedCommand;
         public AsyncCommand<OWBaseBoard> BoardSelectedCommand => _boardSelectedCommand ??= new AsyncCommand<OWBaseBoard>(BoardSelectedAsync, allowsMultipleExecutions: false);
 
+       
+        
 
         /*
 
@@ -81,6 +84,10 @@ namespace OWCE.Pages
 
         //IOWScanner _owScanner;
         //public IOWScanner OWScanner => _owScanner;
+
+        //PastRidesCommand
+        AsyncCommand _pastRidesCommand;
+        public AsyncCommand PastRidesCommand => _pastRidesCommand ??= new AsyncCommand(PastRidesCommand_Clicked, allowsMultipleExecutions: false);
 
         Grid _scanningView;
 
@@ -134,24 +141,16 @@ namespace OWCE.Pages
             scanningToolbarItem.Content = _scanningView;
             CustomToolbarItems.Add(scanningToolbarItem);
 
-#if DEBUG
-            var popupPage = new Rg.Plugins.Popup.Pages.PopupPage();
-
-            // Secret debug menu.
-            var debugToolbarItem = new CustomToolbarItem()
+            var sideMenuItem = new CustomToolbarItem()
             {
                 Position = CustomToolbarItemPosition.Left,
                 IconImageSource = "burger_menu",
-                Command = new Command(() =>
+                Command = new AsyncCommand(async () =>
                 {
-                    // TODO: ??
-                    //var debugMenu = new Popup.DebugBoardListPageSettingPopup();
-
-                    //PopupNavigation.Instance.PushAsync(debugMenu);
-                }),
+                    await PopupNavigation.Instance.PushAsync(Popup.SideMenuPopup.Instance);
+                }, allowsMultipleExecutions: false),
             };
-            CustomToolbarItems.Add(debugToolbarItem);
-#endif
+            CustomToolbarItems.Add(sideMenuItem);
 
             /*
 #if DEBUG
@@ -168,15 +167,24 @@ namespace OWCE.Pages
         Thickness _safeInsets;
 
         bool _hasAppeared = false;
+        Grid _sideMenuItem;
+
         protected override async void OnAppearing()
         {
             base.OnAppearing();
 
-            //_selectedBoard = null;
+            Popup.SideMenuPopup.Instance.Title = "OWCE";
 
 
-            App.Current.OWBLE.ErrorOccurred += OWBLE_ErrorOccurred;
-            App.Current.OWBLE.BoardDiscovered += OWBLE_BoardDiscovered;
+            if (_sideMenuItem == null)
+            {
+                var dataTemplate = (DataTemplate)Resources["SideMenu"];
+                _sideMenuItem = dataTemplate.CreateContent() as Grid;
+                _sideMenuItem.BindingContext = BindingContext;
+            }
+            Popup.SideMenuPopup.Instance.PageSpecificSideMenu = _sideMenuItem;
+
+
             //App.Current.OWBLE.BLEStateChanged += OWBLE_BLEStateChanged;
             //App.Current.OWBLE.BoardDiscovered += OWBLE_BoardDiscovered;
             //App.Current.OWBLE.BoardConnected += OWBLE_BoardConnected;
@@ -194,6 +202,11 @@ namespace OWCE.Pages
             if (_hasAppeared == false)
             {
                 _hasAppeared = true;
+
+
+                App.Current.OWBLE.ErrorOccurred += OWBLE_ErrorOccurred;
+                App.Current.OWBLE.BoardDiscovered += OWBLE_BoardDiscovered;
+
                 // If this is the first launch of the current app we want to re-alert the user that this is a community driven app.
                 if (VersionTracking.IsFirstLaunchForCurrentVersion)
                 {
@@ -274,8 +287,8 @@ namespace OWCE.Pages
         {
             base.OnDisappearing();
 
-            App.Current.OWBLE.ErrorOccurred -= OWBLE_ErrorOccurred;
-            App.Current.OWBLE.BoardDiscovered -= OWBLE_BoardDiscovered;
+            //App.Current.OWBLE.ErrorOccurred -= OWBLE_ErrorOccurred;
+            //App.Current.OWBLE.BoardDiscovered -= OWBLE_BoardDiscovered;
 
             //App.Current.OWBLE.BLEStateChanged -= OWBLE_BLEStateChanged;
             //App.Current.OWBLE.BoardDiscovered -= OWBLE_BoardDiscovered;
@@ -325,16 +338,6 @@ namespace OWCE.Pages
 
 
 
-        void BurgerMenu_Tapped(System.Object sender, System.EventArgs e)
-        {
-            // TODO: ??
-            /*
-            if (Parent?.Parent is MainFlyoutPage mainFlyout)
-            {
-                mainFlyout.IsPresented = true;
-            }
-            */
-        }
 
 
         async Task BoardSelectedAsync(OWBaseBoard baseBoard)
@@ -368,7 +371,7 @@ namespace OWCE.Pages
                 await PopupNavigation.Instance.PopAllAsync();
                 if (board != null)
                 {
-                    await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(new BoardPage(board)));
+                    await Navigation.PushModalAsync(new CustomNavigationPage(new BoardPage(board)));
                     // Publish notification that board was connected
                     IWatch watchService = DependencyService.Get<IWatch>();
                     watchService.ListenForWatchMessages(board);
@@ -397,5 +400,14 @@ namespace OWCE.Pages
                 await PopupNavigation.Instance.PushAsync(alert, true);
             }
         }
+
+        async Task PastRidesCommand_Clicked()
+        {
+            await Task.WhenAll(
+               Navigation.PushAsync(new PastRidesPage()),
+               PopupNavigation.Instance.RemovePageAsync(SideMenuPopup.Instance)
+           );
+        }
+
     }
 }

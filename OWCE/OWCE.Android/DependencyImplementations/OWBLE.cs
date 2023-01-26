@@ -190,12 +190,13 @@ namespace OWCE.Droid.DependencyImplementations
             
             foreach (var characteristic in service.Characteristics)
             {
-                _characteristics.Add(characteristic.Uuid.ToString().ToLower(), characteristic);
+                _characteristics[characteristic.Uuid.ToString().ToLower()] = characteristic;
             }
 
-            if (_connectTaskCompletionSource.Task.IsCanceled == false)
+            if (_connectTaskCompletionSource?.Task.IsCanceled == false && _connectTaskCompletionSource?.Task.IsCompleted == false)
             {
                 _connectTaskCompletionSource.SetResult(true);
+
                 // TODO: Fix this.
                 //BoardConnected?.Invoke(new OWBoard(_board));
             }
@@ -591,9 +592,23 @@ namespace OWCE.Droid.DependencyImplementations
                 try
                 {
                     _connectTaskCompletionSource.SetCanceled();
+                    _connectTaskCompletionSource = null;
+
+                    _bluetoothGatt.Disconnect();
+                    _bluetoothGatt = null;
+                    _gattCallback = null;
+
+
+                    _readQueue.Clear();
+                    _writeQueue.Clear();
+                    _subscribeQueue.Clear();
+                    _unsubscribeQueue.Clear();
+                    _gattOperationQueue.Clear();
+
                 }
                 catch (Exception err)
                 {
+
                     Debugger.Break();
                 }
             }

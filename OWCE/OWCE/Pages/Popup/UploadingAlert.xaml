@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<pages:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+    xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+    xmlns:popup="clr-namespace:OWCE.Pages.Popup"
+    x:Class="OWCE.Pages.Popup.UploadingAlert"
+    x:DataType="popup:UploadingAlert"
+    CloseWhenBackgroundIsClicked="false"
+    BackgroundColor="#BF000000">
+
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation 
+            PositionIn="Center"
+            PositionOut="Center"
+            ScaleIn="1.2"
+            ScaleOut="0.8"
+            DurationIn="400"
+            DurationOut="300"
+            EasingIn="SinOut"
+            EasingOut="SinIn"
+            HasBackgroundAnimation="True"/>
+    </pages:PopupPage.Animation>
+    
+        <yummy:PancakeView Margin="16,0" VerticalOptions="Center" CornerRadius="11" BackgroundColor="{StaticResource BrightYellow}">
+            <Grid RowDefinitions="Auto,Auto,Auto,76" ColumnSpacing="0" RowSpacing="0">
+                <Label Grid.Row="0" Text="{Binding SuperTitleText}" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="16" CharacterSpacing="-0.26" Margin="22,5,22,0" VerticalOptions="Start" />
+                <Label Grid.Row="1" Text="{Binding TitleText}" FontFamily="SairaExtraCondensed-Black" TextColor="Black" FontSize="36" HorizontalTextAlignment="Center" />
+                <Grid Grid.Row="2" RowDefinitions="Auto" ColumnDefinitions="Auto,Auto" HorizontalOptions="Center"  Margin="0,9,0,18" >
+                    <Label Grid.Column="0" Text="{Binding ConnectingText}" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="24" VerticalOptions="Center" CharacterSpacing="0.26" />
+
+                    <ProgressBar Grid.Column="1"  />
+                    <ActivityIndicator Grid.Column="1" IsRunning="True" Color="Black" WidthRequest="26" HeightRequest="26" VerticalOptions="Center" />
+                </Grid>
+                <Grid Grid.Row="3" BackgroundColor="White" HeightRequest="76">
+                    <Button Text="{Binding ButtonText}" FontFamily="SairaExtraCondensed-Bold" CharacterSpacing="0.29" TextColor="Black" FontSize="18" VerticalOptions="Center" HorizontalOptions="CenterAndExpand" CornerRadius="20" HeightRequest="40" WidthRequest="112" BorderWidth="1" BorderColor="{StaticResource ButtonBoarder}" Command="{Binding ActionButtonCommand}" />
+                </Grid>
+            </Grid>
+        </yummy:PancakeView>
+</pages:PopupPage>

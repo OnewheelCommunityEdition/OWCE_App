@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:BaseContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:OWCE.Pages"
+    xmlns:xctc="clr-namespace:Xamarin.CommunityToolkit.Converters;assembly=Xamarin.CommunityToolkit"
+    x:Class="OWCE.Pages.AppSettingsPage"
+    x:DataType="pages:AppSettingsPage"
+    Title="Settings">
+
+    <pages:BaseContentPage.Resources>
+         <ResourceDictionary>
+            <xctc:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </pages:BaseContentPage.Resources>
+
+
+    <ScrollView>
+        <Grid Padding="16" RowDefinitions="Auto,Auto,Auto,*" ColumnDefinitions="*,Auto" RowSpacing="16">
+
+            <Label Grid.Row="0" Grid.Column="0" VerticalOptions="Center" TextColor="Black" Text="Imperial units (mph, °F)" />
+            <Switch Grid.Row="0" Grid.Column="1" HorizontalOptions="End" IsToggled="{Binding MetricDisplay, Converter={StaticResource InvertedBoolConverter}}" />
+             
+            <Label Grid.Row="1" Grid.Column="0" VerticalOptions="Center" TextColor="Black" Text="Auto ride recording" />
+            <Switch Grid.Row="1" Grid.Column="1" HorizontalOptions="End" IsToggled="{Binding AutoRideRecording}" />
+                        
+            <Label Grid.Row="2" Grid.Column="0" VerticalOptions="Center" TextColor="Black" Text="Theme" />
+            <Label Grid.Row="2" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="End" TextColor="DarkGray" Text="Coming Soon" />
+
+        </Grid>
+
+    </ScrollView>
+
+
+
+</pages:BaseContentPage>
+

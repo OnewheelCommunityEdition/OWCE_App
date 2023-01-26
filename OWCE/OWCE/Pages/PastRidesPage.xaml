@@ -6,14 +6,30 @@
     xmlns:owce="clr-namespace:OWCE"
     x:Class="OWCE.Pages.PastRidesPage"
     x:DataType="pages:PastRidesPage"
-    Title="Past Rides">
+    Title="Past Rides"
+    xmlns:xcte="clr-namespace:Xamarin.CommunityToolkit.Effects;assembly=Xamarin.CommunityToolkit">
 
-    <CollectionView ItemsSource="{Binding Rides}" SelectionMode="Single">
+    <!-- SelectionChangedCommand="{Binding RideSelectedCommand}" SelectionChangedCommandParameter="{Binding Source={RelativeSource Self}}"-->
+    <CollectionView ItemsSource="{Binding Rides}" SelectionMode="None">
         <CollectionView.ItemTemplate>
             <DataTemplate x:DataType="owce:Ride">
-                <Grid HeightRequest="50">
+                <SwipeView>
+                    <SwipeView.RightItems>
+                        <SwipeItems>
+                            <SwipeItem Text="Delete" IconImageSource="swipe_delete" BackgroundColor="Red" Command="{Binding Source={RelativeSource AncestorType={x:Type pages:BaseContentPage}}, Path=DeleteRideCommand}" CommandParameter="{Binding .}" />
+                            <SwipeItem Text="Rename" IconImageSource="swipe_rename" BackgroundColor="Orange" Command="{Binding Source={RelativeSource AncestorType={x:Type pages:BaseContentPage}}, Path=RenameRideCommand}" CommandParameter="{Binding .}" />
+                        </SwipeItems>
+                    </SwipeView.RightItems>
 
-                </Grid>
+                    
+                    <Grid BackgroundColor="White" RowDefinitions="Auto,Auto,1" xcte:TouchEffect.NativeAnimation="true" xcte:TouchEffect.Command="{Binding Source={RelativeSource AncestorType={x:Type pages:BaseContentPage}}, Path=RideSelectedCommand}" xcte:TouchEffect.CommandParameter="{Binding .}">
+                        <Label Grid.Row="0" Text="{Binding Name}" Padding="8,8,8,0" FontSize="22" FontAttributes="Bold" TextColor="Black" />
+                        <Label Grid.Row="1" Text="{Binding StartTime}" Padding="8,0,0,8" FontSize="16" TextColor="DarkGray" />
+                        <BoxView Grid.Row="2" BackgroundColor="LightGray" />
+                    </Grid>
+
+                </SwipeView>
+
             </DataTemplate>
         </CollectionView.ItemTemplate>
         <CollectionView.EmptyViewTemplate>

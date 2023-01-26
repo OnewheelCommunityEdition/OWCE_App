@@ -22,23 +22,24 @@ namespace OWCE.Views
         }
 
 
-
+        /*
         public void BurgerMenu_Tapped(object sender, EventArgs e)
         {
             var parent = Parent;
             while (parent != null)
             {
                 // TODO: ??
-                /*
-                if (parent is MainFlyoutPage mainFlyoutPage)
-                {
-                    mainFlyoutPage.IsPresented = true;
-                    break;
-                }
-                */
+                
+                //if (parent is MainFlyoutPage mainFlyoutPage)
+                //{
+                //    mainFlyoutPage.IsPresented = true;
+                //    break;
+                //}
+                
 
                 parent = parent.Parent;
             }
         }
+        */
     }
 }
