@@ -239,6 +239,12 @@
       <Project>{4B3D0411-B028-494E-AB04-113D1F130DA1}</Project>
       <Name>OWCE</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OWCE.WatchOS\OWCE.WatchOS.WatchOSApp\OWCE.WatchOS.WatchOSApp.csproj">
+      <IsWatchApp>true</IsWatchApp>
+      <Project>{1DB46ADC-CEEE-4BC0-B63A-EBF5C3AA2692}</Project>
+      <Name>OWCE.WatchOS.WatchOSApp</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DependencyImplementations\" />
