@@ -13,6 +13,18 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converters:BoardIsAvailableOpacityConverter x:Key="boardIsAvailableOpacityConverter" />
+
+            <DataTemplate x:Key="SideMenu">
+                <Grid BackgroundColor="White" ColumnSpacing="0" RowSpacing="0" VerticalOptions="FillAndExpand" RowDefinitions="Auto,*">
+                                
+                    <Grid Grid.Row="0" VerticalOptions="End" RowDefinitions="Auto" ColumnDefinitions="60,*" ColumnSpacing="0"  xcte:TouchEffect.NativeAnimation="true" xcte:TouchEffect.Command="{Binding PastRidesCommand}" xcte:TouchEffect.CommandParameter="{Binding Source={RelativeSource Self}}">
+                        <Image Grid.Row="0" Grid.Column="0" Source="menu_myrides" xcte:IconTintColorEffect.TintColor="Black" WidthRequest="24" HeightRequest="24" HorizontalOptions="Center" />
+                        <Label Grid.Row="0" Grid.Column="1" Text="Past Rides" TextColor="Black" FontSize="18" />
+                    </Grid>
+
+                </Grid>
+            </DataTemplate>
+
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -46,7 +58,7 @@
                            
                             <yummy:PancakeView HeightRequest="121" CornerRadius="11" BackgroundColor="{StaticResource BrightYellow}" xcte:TouchEffect.NativeAnimation="true" xcte:TouchEffect.Command="{Binding Source={x:Reference MainCollectionView}, Path=BindingContext.BoardSelectedCommand}" xcte:TouchEffect.CommandParameter="{Binding .}" >
 
-                            
+                                
                                 <yummy:PancakeView.Shadow>
                                     <yummy:DropShadow Color="Black" Opacity="0.14" Offset="0,1" BlurRadius="5" />
                                 </yummy:PancakeView.Shadow>
