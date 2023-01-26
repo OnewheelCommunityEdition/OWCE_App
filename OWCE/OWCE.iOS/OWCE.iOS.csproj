@@ -68,13 +68,11 @@
     <OutputPath>bin\iPhone\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <MtouchArch>ARMv7, ARMv7s, ARM64</MtouchArch>
+    <MtouchArch>ARM64</MtouchArch>
     <CodesignKey>iPhone Distribution</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <NoWarn></NoWarn>
     <LangVersion>8.0</LangVersion>
-    <MtouchUseLlvm>true</MtouchUseLlvm>
-    <MtouchUseThumb>true</MtouchUseThumb>
     <MtouchLink>SdkOnly</MtouchLink>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <CodesignProvision>Automatic</CodesignProvision>
