@@ -92,7 +92,7 @@
     <Version>1.2.1.9</Version>
   </PackageReference>
   <PackageReference Include="Xamarin.AndroidX.Core">
-    <Version>1.9.0.1</Version>
+    <Version>1.9.0.2</Version>
   </PackageReference>
   <PackageReference Include="sqlite-net-pcl">
     <Version>1.8.116</Version>
