@@ -11,20 +11,15 @@ namespace OWCE.Pages
     {
         public ObservableRangeCollection<Ride> Rides { get; set; } = new ObservableRangeCollection<Ride>();
 
-        //AsyncCommand<Ride> rideSelectedCommand;
-        //public AsyncCommand<Ride> RideSelectedCommand => rideSelectedCommand ??= new AsyncCommand<Ride>(RideSelected, allowsMultipleExecutions: false);
+        AsyncCommand<Ride> rideSelectedCommand;
+        public AsyncCommand<Ride> RideSelectedCommand => rideSelectedCommand ??= new AsyncCommand<Ride>(RideSelected, allowsMultipleExecutions: false);
 
-        /*
         AsyncCommand<Ride> deleteRideCommand;
-        public AsyncCommand<Ride> DeleteRideCommand => deleteRideCommand ??= new AsyncCommand<Ride>(RideSelected, allowsMultipleExecutions: false);
+        public AsyncCommand<Ride> DeleteRideCommand => deleteRideCommand ??= new AsyncCommand<Ride>(DeleteRide, allowsMultipleExecutions: false);
 
         AsyncCommand<Ride> renameRideCommand;
-        public AsyncCommand<Ride> RenameRideCommand => renameRideCommand ??= new AsyncCommand<Ride>(RideSelected, allowsMultipleExecutions: false);
-        */
-
-        //DeleteRideCommand
-        //RenameRideCommand
-
+        public AsyncCommand<Ride> RenameRideCommand => renameRideCommand ??= new AsyncCommand<Ride>(RenameRide, allowsMultipleExecutions: false);
+        
         public PastRidesPage()
         {
             InitializeComponent();
@@ -61,8 +56,12 @@ namespace OWCE.Pages
         {
         }
 
+        // Disabled RelayCommand because of this
+        // CommunityToolkit.Mvvm.targets(41,5): warning : The MVVM Toolkit source generators have been disabled
+        // on the current configuration, as they need Roslyn 4.x in order to work. The MVVM Toolkit will work
+        // just fine, but features relying on the source generators will not be available.
 
-        [RelayCommand]
+        //[RelayCommand]
         async Task RideSelected(Ride ride)
         {
             var submit = await DisplayAlert("Coming Soon", "Viewing of recorded rides is not implemented yet. However if you would like to assist with OWCE development (specifically if you have aftermarket batteries) you can submit your ride for research purposes.", "Submit", "Cancel");
@@ -73,7 +72,7 @@ namespace OWCE.Pages
         }
 
 
-        [RelayCommand]
+        //[RelayCommand]
         async Task DeleteRide(Ride ride)
         {
             var delete = await DisplayAlert("Delete Ride", $"Are you sure you want to delete the ride \"{ride.Name}\"?", "Delete", "Cancel");
@@ -84,7 +83,7 @@ namespace OWCE.Pages
             }
         }
 
-        [RelayCommand]
+        //[RelayCommand]
         async Task RenameRide(Ride ride)
         {
             var name = await DisplayPromptAsync("Rename Ride", "What would like to rename this ride to?", "Save", initialValue: ride.Name);
