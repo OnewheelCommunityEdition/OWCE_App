@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:BaseContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="OWCE.Pages.SubmitRidePage"
+    xmlns:pages="clr-namespace:OWCE.Pages"
+    x:DataType="pages:SubmitRideModel"
+    Title="Additional Info">
+
+    <ScrollView>
+        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*" Padding="16">
+            <Label Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" Text="Ride Name" FontAttributes="Bold" TextColor="Black" />
+            <Entry Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,16" Text="{Binding RideName}" />
+
+            <Label Grid.Row="2" Grid.Column="0" VerticalTextAlignment="Center" Text="Aftermarket Battery" FontAttributes="Bold" TextColor="Black" />
+            <Switch Grid.Row="2" Grid.Column="1" IsToggled="{Binding IsAftermarketBattery}"  />
+            <Entry Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,16" Placeholder="Battery type" Text="{Binding BatteryType}" IsEnabled="{Binding IsAftermarketBattery}" />
+
+            <Label Grid.Row="4" Grid.Column="0" VerticalTextAlignment="Center" Text="Remove Identifiers" FontAttributes="Bold" TextColor="Black" />
+            <Switch Grid.Row="4" Grid.Column="1" IsToggled="{Binding RemoveIdentifiers}" />
+            <Label Grid.Row="5" Grid.ColumnSpan="2" Text="Remove personally identifiable information such as board serial number." FontSize="Small" TextColor="Black" Margin="0,0,0,16"  />
+
+            <Label Grid.Row="6" Grid.Column="0" VerticalTextAlignment="Center" Text="Allow Publicly"  FontAttributes="Bold" TextColor="Black" />
+            <Switch Grid.Row="6" Grid.Column="1" IsToggled="{Binding AllowPublicly}" />
+            <Label Grid.Row="7" Grid.ColumnSpan="2" Text="Your ride may be added to the OWCE source code so anyone developing can replay through the app." FontSize="Small" TextColor="Black" Margin="0,0,0,16"  />
+
+            <Label Grid.Row="8" Grid.Column="0" VerticalTextAlignment="Center" Text="Additional Notes" FontAttributes="Bold" TextColor="Black" />
+            <Entry Grid.Row="9" Grid.ColumnSpan="2" VerticalTextAlignment="Start" Text="{Binding AdditionalNotes}" TextColor="Black" />
+        </Grid>
+    </ScrollView>
+    
+
+</pages:BaseContentPage>

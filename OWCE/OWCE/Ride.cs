@@ -19,7 +19,6 @@ namespace OWCE
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string DataFileName { get; set; }
-        public string DataFilePath { get; set; }
 
         public int BoardSerial { get; set; }
 
@@ -56,8 +55,7 @@ namespace OWCE
                 StartTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
                 StartTime = DateTime.Now,
                 EndTime = DateTime.MaxValue,
-                DataFileName = newDataFileName,
-                DataFilePath = newDataFilePath
+                DataFileName = newDataFileName
             };
             newRide.Name = "Ride on " + newRide.TextDisplay;
 

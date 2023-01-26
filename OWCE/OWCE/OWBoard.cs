@@ -509,9 +509,16 @@ namespace OWCE
             set { if (_rssi != value) { _rssi = value; OnPropertyChanged(); } }
         }
 
+
+        bool _isRecordingRide = false;
+        public bool IsRecordingRide
+        {
+            get { return _isRecordingRide; }
+            set { if (_isRecordingRide != value) { _isRecordingRide = value; OnPropertyChanged(); } }
+        }
+
         IOWBLE _owble;
 
-        bool _isLogging = false;
         OWBoardEventList _events = new OWBoardEventList();
         List<OWBoardEvent> _initialEvents;
         Ride _currentRide = null;
@@ -544,6 +551,11 @@ namespace OWCE
 
         public virtual void Init()
         {
+            var autoRideRecording = Preferences.Get("auto_ride_recording", false);
+            if (autoRideRecording)
+            {
+                StartLogging();
+            }
             /*
 #if DEBUG
             if (DeviceInfo.DeviceType == DeviceType.Physical)
@@ -586,7 +598,7 @@ namespace OWCE
         {
             //Debug.WriteLine($"{characteristicGuid} {BitConverter.ToString(data)}");
 
-            if (_isLogging)
+            if (IsRecordingRide)
             {
                 LogData(characteristicGuid, data);
             }
@@ -1109,7 +1121,7 @@ namespace OWCE
 
             if (initialData)
             {
-                if (_isLogging)
+                if (IsRecordingRide)
                 {
                     LogData(uuid, data);
                 }
@@ -1356,12 +1368,17 @@ namespace OWCE
 
         public void StartLogging()
         {
+            if (IsRecordingRide)
+            {
+                return;
+            }
+
             _currentRide = Ride.CreateNewRide();
 
             //_currentLogFile = Path.Combine(App.Current.LogsDirectory, filename);
 
 
-            _isLogging = true;
+            IsRecordingRide = true;
             _events = new OWBoardEventList();
             if (_initialEvents != null)
             {
@@ -1382,15 +1399,14 @@ namespace OWCE
             */
         }
 
-        public string StopLogging()
+        public void StopLogging()
         {
-            _isLogging = false;
-            _currentRide.EndTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            _currentRide.EndTime = DateTime.Now;
+            if (IsRecordingRide == false)
+            {
+                return;
+            }
 
-
-            // TODO: Replace hud.
-            //Hud.Show("Saving");
+            IsRecordingRide = false;
 
             /*
             await CrossGeolocator.Current.StopListeningAsync(); 
@@ -1399,13 +1415,13 @@ namespace OWCE
             */
 
             SaveEvents();
-            _currentRide.Save();
 
-            //Hud.Dismiss();
-
-
-
-            return String.Empty;
+            if (_currentRide != null)
+            {
+                _currentRide.EndTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                _currentRide.EndTime = DateTime.Now;
+                _currentRide.Save();
+            }
         }
 
 
@@ -1488,12 +1504,19 @@ namespace OWCE
             {
                 var oldEvents = _events;
                 _events = new OWBoardEventList();
-                using (var fileStream = new FileStream(_currentRide.DataFilePath, FileMode.Append, FileAccess.Write))
+                using (var fileStream = new FileStream(Path.Combine(App.Current.LogsDirectory, _currentRide.DataFileName), FileMode.Append, FileAccess.Write))
                 {
                     foreach (var owBoardEvent in oldEvents.BoardEvents)
                     {
                         owBoardEvent.WriteDelimitedTo(fileStream);
                     }
+                }
+
+                if (_currentRide != null)
+                {
+                    _currentRide.EndTime = DateTime.Now;
+                    _currentRide.EndTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                    _currentRide.Save();
                 }
                 //long currentRunEnd = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 // var outputFile = Path.Combine(_logDirectory, $"{currentRunEnd}.dat");

@@ -29,13 +29,13 @@ namespace OWCE.Views
             while (parent != null)
             {
                 // TODO: ??
-                /*
-                if (parent is MainFlyoutPage mainFlyoutPage)
-                {
-                    mainFlyoutPage.IsPresented = true;
-                    break;
-                }
-                */
+                
+                //if (parent is MainFlyoutPage mainFlyoutPage)
+                //{
+                //    mainFlyoutPage.IsPresented = true;
+                //    break;
+                //}
+                
 
                 parent = parent.Parent;
             }

@@ -40,9 +40,8 @@ namespace OWCE.Pages
                 }, allowsMultipleExecutions: false),
             });
 
-            // TODO: ??
-            //var rides = Database.Connection.Table<Ride>().OrderByDescending((r) => r.StartTime);
-            //Rides.AddRange(rides);
+            var rides = Database.Connection.Table<Ride>().OrderByDescending((r) => r.StartTime);
+            Rides.AddRange(rides);
 
             BindingContext = this;
         }
@@ -55,7 +54,6 @@ namespace OWCE.Pages
             if (_hasFirstLoad == false)
             {
                 _hasFirstLoad = true;
-
             }
         }
 
@@ -67,8 +65,11 @@ namespace OWCE.Pages
         [RelayCommand]
         async Task RideSelected(Ride ride)
         {
-            await DisplayAlert("Sorry", "Viewing of recorded ride is not implemented yet. However if you would like to support OWCE you can submit your ride to be used to further develop the app.", "OKAY");
-
+            var submit = await DisplayAlert("Coming Soon", "Viewing of recorded rides is not implemented yet. However if you would like to assist with OWCE development (specifically if you have aftermarket batteries) you can submit your ride for research purposes.", "Submit", "Cancel");
+            if (submit)
+            {
+                await Navigation.PushModalAsync(new CustomNavigationPage(new SubmitRidePage(ride)));
+            }
         }
 
 

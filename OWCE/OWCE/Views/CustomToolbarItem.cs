@@ -158,9 +158,8 @@ namespace OWCE.Views
             {
                 _label = new Label()
                 {
-                    FontFamily = "SairaExtraCondensed-Medium",
+                    FontSize = 18,
                     TextColor = Color.Black,
-                    FontSize = 24,
                     VerticalOptions = LayoutOptions.Center,
                     HorizontalOptions = LayoutOptions.Center,
                 };

@@ -30,6 +30,7 @@
     <DeviceSpecificBuild>false</DeviceSpecificBuild>
     <LangVersion>8.0</LangVersion>
     <PlatformTarget>x64</PlatformTarget>
+    <CodesignProvision>Automatic</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>pdbonly</DebugType>
@@ -39,7 +40,7 @@
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Distribution</CodesignKey>
     <MtouchUseLlvm>true</MtouchUseLlvm>
     <MtouchFloat32>true</MtouchFloat32>
     <MtouchEnableBitcode>true</MtouchEnableBitcode>
@@ -47,6 +48,7 @@
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>ARMv7k</MtouchArch>
     <LangVersion>8.0</LangVersion>
+    <CodesignProvision>Automatic</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>pdbonly</DebugType>
@@ -56,10 +58,11 @@
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Distribution</CodesignKey>
     <MtouchLink>None</MtouchLink>
     <MtouchArch>i386</MtouchArch>
     <LangVersion>8.0</LangVersion>
+    <CodesignProvision>Automatic</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -80,6 +83,7 @@
     <IOSDebugOverWiFi>true</IOSDebugOverWiFi>
     <IOSDebuggerPort>10001</IOSDebuggerPort>
     <LangVersion>8.0</LangVersion>
+    <CodesignProvision>Automatic</CodesignProvision>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -4,8 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     x:Class="OWCE.Views.SettingsSwitch"
-    WidthRequest="26"
-    HeightRequest="26">
+    WidthRequest="24"
+    HeightRequest="24">
 
     <yummy:PancakeView x:Name="RoundedRectangle" HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="20" HeightRequest="10" CornerRadius="5" BackgroundColor="Black">
         <Grid>

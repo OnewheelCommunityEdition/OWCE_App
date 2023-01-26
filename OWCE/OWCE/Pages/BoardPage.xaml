@@ -5,44 +5,59 @@
     xmlns:pages="clr-namespace:OWCE.Pages"
     xmlns:views="clr-namespace:OWCE.Views"
     x:Class="OWCE.Pages.BoardPage"
+    xmlns:xctc="clr-namespace:Xamarin.CommunityToolkit.Converters;assembly=Xamarin.CommunityToolkit"
+    xmlns:xcte="clr-namespace:Xamarin.CommunityToolkit.Effects;assembly=Xamarin.CommunityToolkit"
     Title="{Binding Name}">
+
 
     <pages:BaseContentPage.Resources>
         <ResourceDictionary>
 
-            <DataTemplate x:Key="SideMenu">
+            <xctc:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+
+            <DataTemplate x:Key="SideMenu" x:DataType="pages:BoardPage">
                
 
-                <Grid BackgroundColor="White" ColumnSpacing="0" RowSpacing="0" VerticalOptions="FillAndExpand" RowDefinitions="Auto,1,Auto,1,*,Auto">
-
-                    <Grid Grid.Row="0" RowDefinitions="30,30,30,30" ColumnDefinitions="60,*">
-                        <Image Grid.Row="0" Grid.Column="0" Source="settings_disconnect" WidthRequest="24" HeightRequest="24" />
-                        <Label Grid.Row="0" Grid.Column="1" Text="Record ride data" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18"/>
+                <Grid BackgroundColor="White" ColumnSpacing="0" RowSpacing="8" VerticalOptions="FillAndExpand" RowDefinitions="Auto,1,Auto,1,*,Auto">
+                    
+                    <Grid Grid.Row="0" RowDefinitions="Auto" ColumnDefinitions="60,*" ColumnSpacing="0" IsVisible="{Binding Board.IsRecordingRide, Converter={StaticResource InvertedBoolConverter}}" xcte:TouchEffect.NativeAnimation="True" xcte:TouchEffect.Command="{Binding StartRecordRideCommand}">
+                        <Image Grid.Row="0" Grid.Column="0" Source="settings_start_recording" WidthRequest="24" HeightRequest="24" HorizontalOptions="Center" />
+                        <Label Grid.Row="0" Grid.Column="1" Text="Record ride" TextColor="Black" FontSize="18"/>
                     </Grid>
+                                        
+                    <Grid Grid.Row="0" RowDefinitions="Auto" ColumnDefinitions="60,*" ColumnSpacing="0" IsVisible="{Binding Board.IsRecordingRide}" xcte:TouchEffect.NativeAnimation="True" xcte:TouchEffect.Command="{Binding StopRecordRideCommand}">
+                        <Image Grid.Row="0" Grid.Column="0" Source="settings_stop_recording" WidthRequest="24" HeightRequest="24" HorizontalOptions="Center" />
+                        <Label Grid.Row="0" Grid.Column="1" Text="Stop recording ride" TextColor="Black" FontSize="18"/>
+                    </Grid>
+
+                    <!--
                     <BoxView Grid.Row="1" Background="#E4E4E4" HeightRequest="1" />
 
-                    <Grid Grid.Row="2" RowDefinitions="30,30,30,30" ColumnDefinitions="60,*">
-                        <views:SettingsSwitch x:Name="ImperialSwitch" Grid.Row="0" Grid.Column="0" IsToggledChanged="ImperialSwitch_IsToggledChanged" />
-                        <Label Grid.Row="0" Grid.Column="1" Text="Imperial units (mph, F)" FontFamily="SairaExtraCondensed-Bold" TextColor="{Binding Source={x:Reference ImperialSwitch}, Path=CurrentColor}" FontSize="18" />
 
-                        <views:SettingsSwitch Grid.Row="1" Grid.Column="0" />
-                        <Label Grid.Row="1" Grid.Column="1" Text="Light theme" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18" />
+                    <Grid Grid.Row="2" RowDefinitions="30,30,30,30" ColumnSpacing="0" ColumnDefinitions="60,*">
+                        <views:SettingsSwitch x:Name="ImperialSwitch" VerticalOptions="Center" Grid.Row="0" Grid.Column="0" IsToggledChanged="ImperialSwitch_IsToggledChanged" HorizontalOptions="Center" />
+                        <Label Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Text="Imperial units (mph, F)" TextColor="{Binding Source={x:Reference ImperialSwitch}, Path=CurrentColor}" FontSize="18" />
 
-                        <views:SettingsSwitch Grid.Row="2" Grid.Column="0" />
-                        <Label Grid.Row="2" Grid.Column="1" Text="Board lights on" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18" />
+                        <views:SettingsSwitch Grid.Row="1" Grid.Column="0" VerticalOptions="Center" />
+                        <Label Grid.Row="1" Grid.Column="1" Text="Light theme" TextColor="Black" FontSize="18" VerticalOptions="Center" />
+
+                        <views:SettingsSwitch Grid.Row="2" Grid.Column="0" VerticalOptions="Center" />
+                        <Label Grid.Row="2" Grid.Column="1" Text="Board lights on" TextColor="Black" FontSize="18" VerticalOptions="Center" />
                     
-                        <views:SettingsSwitch Grid.Row="3" Grid.Column="0" />
-                        <Label Grid.Row="3" Grid.Column="1" Text="Show battery % calculation from voltage" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18" />
+                        <views:SettingsSwitch Grid.Row="3" Grid.Column="0" VerticalOptions="Center" />
+                        <Label Grid.Row="3" Grid.Column="1" Text="Show battery % calculation from voltage" TextColor="Black" FontSize="18" />
 
                         <BoxView Color="White" Opacity="0.8" Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="2" />
-                        <Label TextColor="Black" Grid.Row="1" Text="Coming Soon" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="2" FontFamily="SairaExtraCondensed-Bold" />
+                        <Label TextColor="Black" Grid.Row="1" Text="Coming Soon" HorizontalOptions="Center" VerticalOptions="Center" Grid.Column="0" Grid.RowSpan="4" Grid.ColumnSpan="2" FontAttributes="Bold" />
                     </Grid>
+
                     <BoxView Grid.Row="3" Background="#E4E4E4" HeightRequest="1" />
+                    -->
 
-                    <Grid Grid.Row="4" VerticalOptions="End" RowDefinitions="30" ColumnDefinitions="60,*">
+                    <Grid Grid.Row="4" VerticalOptions="End" RowDefinitions="Auto" ColumnSpacing="0" ColumnDefinitions="60,*">
 
-                        <Image Grid.Row="0" Grid.Column="0" Source="settings_disconnect" WidthRequest="24" HeightRequest="24" />
-                        <Label Grid.Row="0" Grid.Column="1" Text="Connect another Onewheel" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="18">
+                        <Image Grid.Row="0" Grid.Column="0" Source="settings_disconnect" WidthRequest="24" HeightRequest="24" HorizontalOptions="Center" />
+                        <Label Grid.Row="0" Grid.Column="1" Text="Disconnect from board" TextColor="Black" FontSize="18">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="Disconnect_Tapped" />
                             </Label.GestureRecognizers>

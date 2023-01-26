@@ -59,7 +59,7 @@ namespace OWCE.Pages.Popup
             BindingContext = this;
         }
 
-        async Task CloseCommand_Clicked()
+        internal async Task CloseCommand_Clicked()
         {
             await PopupNavigation.Instance.PopAsync(true);
         }
