@@ -266,6 +266,19 @@ namespace OWCE
                     ("Skyline", RideModes.Pint_Skyline),
                 };
             }
+            else if (_boardType == OWBoardType.GT)
+            {
+                return new List<(string, ushort)>()
+                {
+                    ("Bay", RideModes.GT_Bay),
+                    ("Roam", RideModes.GT_Roam),
+                    ("Flow", RideModes.GT_Flow),
+                    ("Highline", RideModes.GT_HighLine),
+                    ("Elevated", RideModes.GT_Elevated),
+                    ("Apex", RideModes.GT_Apex),
+                    ("Custom", RideModes.GT_Custom),
+                };
+            }
 
             return new List<(string, ushort)>();
         }

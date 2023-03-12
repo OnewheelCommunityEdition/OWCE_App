@@ -31,6 +31,7 @@ namespace OWCE
         Plus,
         XR,
         Pint,
+        GT
     };
 
     public struct RideModes
@@ -48,6 +49,16 @@ namespace OWCE
         public const int Pint_Pacific = 6;
         public const int Pint_Elevated = 7;
         public const int Pint_Skyline = 8;
+
+        public const int GT_Bay = 3;
+        public const int GT_Roam = 4;
+        public const int GT_Flow = 5;
+        public const int GT_HighLine = 6;
+        public const int GT_Elevated = 7;
+        public const int GT_Apex = 8;
+        public const int GT_Custom = 9;
+
+
     }
 
     public class OWBoard : OWBaseBoard
@@ -346,6 +357,20 @@ namespace OWCE
                         6 => "Pacific",
                         7 => "Elevated",
                         8 => "Skyline",
+                        _ => "Unknown",
+                    };
+                }
+                else if (_boardType == OWBoardType.GT)
+                {
+                    return _rideMode switch
+                    {
+                        3 => "Bay",
+                        4 => "Roam",
+                        5 => "Flow",
+                        6 => "Highline",
+                        7 => "Elevated",
+                        8 => "Apex",
+                        9 => "Custom",
                         _ => "Unknown",
                     };
                 }
@@ -787,14 +812,18 @@ namespace OWCE
 
                 // Turns out the below timer does not fire immedaitly, it fires after the first 15sec have passed.
                 // Calling this before we start the timer should make it work more reliably.
-                KeepBoardAlive().SafeFireAndForget();
 
-                _keepHandshakeBackgroundRunning = true;
-                Device.StartTimer(TimeSpan.FromSeconds(15), () =>
+                if (!(HardwareRevision > 6000 && FirmwareRevision > 6000)) // GT only works with OWCE if Rewheel'd with BLE Handshake patched, no need to keep alive.
                 {
                     KeepBoardAlive().SafeFireAndForget();
-                    return _keepHandshakeBackgroundRunning;
-                });
+
+                    _keepHandshakeBackgroundRunning = true;
+                    Device.StartTimer(TimeSpan.FromSeconds(15), () =>
+                    {
+                        KeepBoardAlive().SafeFireAndForget();
+                        return _keepHandshakeBackgroundRunning;
+                    });
+                }
             }
 
             foreach (var characteristic in characteristicsToSubscribeTo)
@@ -815,6 +844,7 @@ namespace OWCE
         {
             try
             {
+                Debug.WriteLine("KeepBoardAlive");
                 byte[] firmwareRevision = GetBytesForBoardFromUInt16((UInt16)FirmwareRevision, FirmwareRevisionUUID);
                 await _owble.WriteValue(OWBoard.FirmwareRevisionUUID, firmwareRevision);
             }
@@ -1237,7 +1267,8 @@ namespace OWCE
                         OWBoardType.Plus => 0.0018f,
                         OWBoardType.XR => 0.002f,
                         OWBoardType.Pint => 0.002f,
-                        _ => throw new Exception("Unknown board type"),
+                        OWBoardType.GT => 0.002f,
+                        _ => throw new Exception("Unknown board type: " + _boardType),
                     };
 
                     /// https://en.wikipedia.org/wiki/Two's_complement
@@ -1299,8 +1330,20 @@ namespace OWCE
                             SimpleStopEnabled = false;
                         }
                     }
+                    else if (value >= 6000 && value <= 6999)
+                    {
+                        BoardType = OWBoardType.GT;
+                        if (SimpleStopEnabled == null)
+                        {
+                            SimpleStopEnabled = false;
+                        }
+                    }
 
-                    if (HardwareRevision >= 4000)
+                    if (HardwareRevision >= 6000)
+                    {
+                        BatteryCells.CellCount = 18;
+                        OnPropertyChanged("BatteryCells");
+                    } else if (HardwareRevision >= 4000)
                     {
                         BatteryCells.CellCount = 15;
                         BatteryCells.IgnoreCell(15);

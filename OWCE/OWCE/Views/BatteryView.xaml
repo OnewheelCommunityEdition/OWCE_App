@@ -5,12 +5,26 @@
     xmlns:xct="clr-namespace:Xamarin.CommunityToolkit.UI.Views;assembly=Xamarin.CommunityToolkit"
     xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     xmlns:views="clr-namespace:OWCE.Views"
+    xmlns:converters="clr-namespace:OWCE.Converters"
     x:Class="OWCE.Views.BatteryView">
+
+    <ContentView.Resources>
+        <converters:AnyTrueMultiConverter x:Key="AnyTrueConverter" />
+        <converters:IsBoardTypeConverter x:Key="IsBoardTypeConverter" />
+    </ContentView.Resources>
 
     <yummy:PancakeView x:Name="MainView" BackgroundColor="#FFFF00" Style="{StaticResource BoardDetailBlockBaseStyle}" >
 
 
         <xct:Expander x:Name="ExpanderView" HorizontalOptions="Fill" PropertyChanged="ExpanderView_PropertyChanged">
+            <xct:Expander.IsEnabled>
+                <MultiBinding Converter="{StaticResource AnyTrueConverter}">
+                    <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="V1" />
+                    <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Plus" />
+                    <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="XR" />
+                    <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Pint" />
+                </MultiBinding>
+            </xct:Expander.IsEnabled>
             <xct:Expander.Header>
                 <Grid BackgroundColor="#CC00CC" RowDefinitions="121" AbsoluteLayout.LayoutFlags="WidthProportional" AbsoluteLayout.LayoutBounds="0,0,1,121">
 
@@ -21,6 +35,14 @@
                     <Label Text="{Binding BatteryPercent, StringFormat='{0}%'}"  TextColor="White"  FontFamily="SairaExtraCondensed-Black" FontSize="80" HorizontalOptions="Center" VerticalOptions="Start"  />
 
                     <Label VerticalOptions="End" Margin="20,0">
+                        <Label.IsVisible>
+                            <MultiBinding Converter="{StaticResource AnyTrueConverter}">
+                                <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="V1" />
+                                <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Plus" />
+                                <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="XR" />
+                                <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Pint" />
+                            </MultiBinding>
+                        </Label.IsVisible>
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="{Binding BatteryCells.LowestCellVoltage, StringFormat='{0:F2}-'}" FontSize="16" TextColor="White" FontFamily="SairaExtraCondensed-Medium" />
@@ -30,10 +52,28 @@
                         </Label.FormattedText>
                     </Label>
 
-                    <Label Text="{Binding BatteryVoltage, StringFormat='{0:F2}V'}" TextColor="White" FontSize="16" FontFamily="SairaExtraCondensed-Medium" HorizontalTextAlignment="End" HorizontalOptions="Fill" VerticalOptions="End" Margin="20,0" />
+                    <Label Text="{Binding BatteryVoltage, StringFormat='{0:F2}V'}" TextColor="White" FontSize="16" FontFamily="SairaExtraCondensed-Medium" HorizontalTextAlignment="End" HorizontalOptions="Fill" VerticalOptions="End" Margin="20,0" >
+                        <Label.IsVisible>
+                            <MultiBinding Converter="{StaticResource AnyTrueConverter}">
+                                <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="V1" />
+                                <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Plus" />
+                                <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="XR" />
+                                <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Pint" />
+                            </MultiBinding>
+                        </Label.IsVisible>
+                    </Label>
 
 
-                    <views:ExpanderArrowView x:Name="ExpanderArrow" HorizontalOptions="End" Margin="17,13" />
+                    <views:ExpanderArrowView x:Name="ExpanderArrow" HorizontalOptions="End" Margin="17,13" >
+                        <views:ExpanderArrowView.IsVisible>
+                             <MultiBinding Converter="{StaticResource AnyTrueConverter}">
+                                <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="V1" />
+                                <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Plus" />
+                                <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="XR" />
+                                <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Pint" />
+                            </MultiBinding>
+                        </views:ExpanderArrowView.IsVisible>
+                     </views:ExpanderArrowView>
 
                 </Grid>
 
