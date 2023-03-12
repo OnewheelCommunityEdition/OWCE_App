@@ -86,6 +86,7 @@
                         <MultiBinding Converter="{StaticResource AnyTrueConverter}">
                             <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Plus" />
                             <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="XR" />
+                            <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="GT" />
                         </MultiBinding>
                     </Button.IsVisible>
                 </Button>
