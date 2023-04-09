@@ -16,7 +16,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.1" />
     <PackageReference Include="Microsoft.AppCenter.Analytics" Version="5.0.1" />
-    <PackageReference Include="Google.Protobuf" Version="3.22.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.22.1" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2578" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.5" />
