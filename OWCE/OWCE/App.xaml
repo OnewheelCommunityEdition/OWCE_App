@@ -22,10 +22,12 @@
             <Color x:Key="darkBackgroundColor">#1C2D41</Color>
             <Color x:Key="textColor">White</Color>
 
+            <!--
             <Style TargetType="Label">
                 <Setter Property="TextColor" Value="{DynamicResource textColor}" />
             </Style>
-            
+            -->
+
             <Style TargetType="NavigationPage">
                 <Setter Property="BarTextColor" Value="Black" />
                 <Setter Property="BackgroundColor" Value="{StaticResource BackgroundGradientStart}" />
@@ -55,12 +57,13 @@
             <Style TargetType="CollectionView">
                 <Setter Property="BackgroundColor" Value="Transparent" />
             </Style>
-            
+
+            <!--
             <Style TargetType="Button">
                 <Setter Property="TextColor" Value="{StaticResource textColor}" />
                 <Setter Property="BackgroundColor" Value="Transparent" />
             </Style>
-
+            -->
 
             <converters:DivideByTwo x:Key="divideByTwo" />
 
@@ -80,23 +83,36 @@
 
              <Style x:Key="RoundButtonStyle" TargetType="Button">
                 <Setter Property="BackgroundColor" Value="White" />
-                <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="HorizontalOptions" Value="Center" />
                 <Setter Property="VerticalOptions" Value="Center" />
                 <Setter Property="CornerRadius" Value="20" />
                 <Setter Property="Margin" Value="10,0,0,0" />
                 <Setter Property="Padding" Value="15,0" />
-                <Setter Property="TextColor" Value="Black" />
                 <Setter Property="FontSize" Value="18" />
                 <Setter Property="FontFamily" Value="SairaExtraCondensed-Bold" />
                 <Setter Property="BorderWidth" Value="1" />
-                <Setter Property="BorderColor" Value="#DBDBDF" />
+                <Setter Property="BorderColor" Value="{StaticResource ButtonBoarder}" />
                 <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="CharacterSpacing" Value="0.29" />
             </Style>
 
-            <Style x:Key="SelectedRoundButtonStyle" BasedOn="{StaticResource RoundButtonStyle}" TargetType="Button">
+            <!-- BasedOn style isn't working here, so we duplicated the entire style -->
+            <!-- BasedOn="{StaticResource RoundButtonStyle}" -->
+            <Style x:Key="SelectedRoundButtonStyle" TargetType="Button">
                 <Setter Property="BackgroundColor" Value="Black" />               
                 <Setter Property="TextColor" Value="White" />
-                <Setter Property="BorderColor" Value="#DBDBDF" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="CornerRadius" Value="20" />
+                <Setter Property="Margin" Value="10,0,0,0" />
+                <Setter Property="Padding" Value="15,0" />
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontFamily" Value="SairaExtraCondensed-Bold" />
+                <Setter Property="BorderWidth" Value="1" />
+                <Setter Property="BorderColor" Value="{StaticResource ButtonBoarder}" />
+                <Setter Property="HeightRequest" Value="40" />
+                <Setter Property="CharacterSpacing" Value="0.29" />
             </Style>
 
              <Style x:Key="BoardDetailBlockBaseStyle" TargetType="yummy:PancakeView">

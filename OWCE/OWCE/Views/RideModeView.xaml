@@ -45,43 +45,35 @@
                     </views:SwitchView.IsVisible>
                 </views:SwitchView>
                 -->
+
+                <!--
                 <CollectionView x:Name="RideModesCollectionView" HorizontalScrollBarVisibility="Never" ItemsLayout="HorizontalList" Grid.Row="1" HeightRequest="76" BackgroundColor="White">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="views:RideModeButton">
                             <Grid>
                                 <Button Text="{Binding Name}" Clicked="RideModeButton_Clicked" Style="{Binding IsSelected, Converter={StaticResource SelectedButtonConverter}}">
-                                    <!--
-                                    <VisualStateManager.VisualStateGroups>
-                                        <VisualStateGroup Name="SelectedStates">
-                                            <VisualState Name="SelectedState">
-                                                <VisualState.Setters>
-                                                    <Setter Property="Button.Style" Value="{StaticResource SelectedRoundButtonStyle}" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                            <VisualState Name="NormalState">
-                                                <VisualState.Setters>
-                                                    <Setter Property="Button.Style" Value="{StaticResource RoundButtonStyle}" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateManager.VisualStateGroups>
-                                    -->
-                                    <!--
-                                    <Button.Triggers>
-                                        <DataTrigger TargetType="Button" Binding="{Binding Source=BindingContext, Path=IsSelected}" Value="True">
-                                            <Setter Property="Style" Value="{StaticResource SelectedRoundButtonStyle}" />
-                                        </DataTrigger>
-                                        <DataTrigger TargetType="Button" Binding="{Binding Source=BindingContext, Path=IsSelected}" Value="False">
-                                            <Setter Property="Style" Value="{StaticResource RoundButtonStyle}" />
-                                        </DataTrigger>
-                                    </Button.Triggers>
-                                    -->
+                                    
                                 </Button>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                <Button Grid.Row="2" HorizontalOptions="Center" FontSize="16" Padding="16,10,16,16" VerticalOptions="Center" Text="SET CUSTOM SHAPING" Font="SairaExtraCondensed-SemiBold" Clicked="SetCustomShaping_Clicked">
+                -->
+
+                <ScrollView Grid.Row="1" HeightRequest="76" BackgroundColor="White" HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never" Orientation="Horizontal">
+                    <StackLayout  x:Name="RideModesStackLayout" BindableLayout.ItemsSource="{Binding User.TopFollowers}" Grid.Row="1" HeightRequest="76" BackgroundColor="White" Orientation="Horizontal">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="views:RideModeButton">
+                                <Button Text="{Binding Name}" Clicked="RideModeButton_Clicked" Style="{Binding IsSelected, Converter={StaticResource SelectedButtonConverter}}" HorizontalOptions="CenterAndExpand">
+                                    
+                                </Button>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                </ScrollView>
+               
+
+                <Button Grid.Row="2" Text="Set Custom Shaping" Style="{StaticResource RoundButtonStyle}" Margin="0,16" Clicked="SetCustomShaping_Clicked">
                     <Button.IsVisible>
                         <MultiBinding Converter="{StaticResource AnyTrueConverter}">
                             <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Plus" />
