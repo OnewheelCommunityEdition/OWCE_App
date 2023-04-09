@@ -79,6 +79,11 @@ namespace OWCE.Views
                     rows = 4;
                     columns = 4;
                 }
+                else if (batteryCells.CellCount == 18)
+                {
+                    rows = 6;
+                    columns = 3;
+                }
                 else
                 {
                     return;
