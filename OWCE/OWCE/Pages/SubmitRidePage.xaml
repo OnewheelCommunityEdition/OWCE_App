@@ -4,11 +4,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="OWCE.Pages.SubmitRidePage"
     xmlns:pages="clr-namespace:OWCE.Pages"
+    xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     x:DataType="pages:SubmitRideModel"
     Title="Additional Info">
 
     <ScrollView>
-        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*" Padding="16">
+        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto" Padding="16">
             <Label Grid.Row="0" Grid.Column="0" VerticalTextAlignment="Center" Text="Ride Name" FontAttributes="Bold" TextColor="Black" />
             <Entry Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,16" Text="{Binding RideName}" />
 
@@ -18,14 +19,21 @@
 
             <Label Grid.Row="4" Grid.Column="0" VerticalTextAlignment="Center" Text="Remove Identifiers" FontAttributes="Bold" TextColor="Black" />
             <Switch Grid.Row="4" Grid.Column="1" IsToggled="{Binding RemoveIdentifiers}" />
-            <Label Grid.Row="5" Grid.ColumnSpan="2" Text="Remove personally identifiable information such as board serial number." FontSize="Small" TextColor="Black" Margin="0,0,0,16"  />
+            <Label Grid.Row="5" Grid.ColumnSpan="2" Text="Replace all personally identifiable information such as board serial number with zeros." FontSize="Small" TextColor="Black" Margin="0,0,0,16"  />
 
             <Label Grid.Row="6" Grid.Column="0" VerticalTextAlignment="Center" Text="Allow Publicly"  FontAttributes="Bold" TextColor="Black" />
             <Switch Grid.Row="6" Grid.Column="1" IsToggled="{Binding AllowPublicly}" />
-            <Label Grid.Row="7" Grid.ColumnSpan="2" Text="Your ride may be added to the OWCE source code so anyone developing can replay through the app." FontSize="Small" TextColor="Black" Margin="0,0,0,16"  />
+            <Label Grid.Row="7" Grid.ColumnSpan="2" Text="Your ride may be added to the OWCE repository so anyone working from the source could replay your ride through the app." FontSize="Small" TextColor="Black" Margin="0,0,0,16"  />
 
             <Label Grid.Row="8" Grid.Column="0" VerticalTextAlignment="Center" Text="Additional Notes" FontAttributes="Bold" TextColor="Black" />
-            <Entry Grid.Row="9" Grid.ColumnSpan="2" VerticalTextAlignment="Start" Text="{Binding AdditionalNotes}" TextColor="Black" />
+            <yummy:PancakeView Grid.Row="9" Grid.ColumnSpan="2" CornerRadius="4">
+                <yummy:PancakeView.Border>
+                    <yummy:Border  Color="LightGray" Thickness="1" />
+                </yummy:PancakeView.Border>
+                <Editor Text="{Binding AdditionalNotes}" TextColor="Black" />
+            </yummy:PancakeView>
+
+            <Button Grid.Row="10" Grid.ColumnSpan="2" Text="View raw ride data being submitted" Command="{Binding ViewDataSubmittedCommand}" />
         </Grid>
     </ScrollView>
     

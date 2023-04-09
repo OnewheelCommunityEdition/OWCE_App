@@ -27,7 +27,7 @@
                 <Label Grid.Row="1" Text="{Binding TitleText}" FontFamily="SairaExtraCondensed-Black" TextColor="Black" FontSize="28" HorizontalTextAlignment="Center" />
                 <Label Grid.Row="2" Text="{Binding MessageText}" HorizontalTextAlignment="Center" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="16" CharacterSpacing="0.26" Margin="22,0,22,26" />
                 <Grid Grid.Row="3" BackgroundColor="White" HeightRequest="76">
-                    <Button Text="{Binding ButtonText}" FontFamily="SairaExtraCondensed-Bold" CharacterSpacing="0.29" TextColor="Black" FontSize="18" VerticalOptions="Center" HorizontalOptions="CenterAndExpand" CornerRadius="20" HeightRequest="40" WidthRequest="112" BorderWidth="1" BorderColor="{StaticResource ButtonBoarder}" Command="{Binding ActionButtonCommand}" CommandParameter="{Binding .}" />
+                    <Button Text="{Binding ButtonText}" FontFamily="SairaExtraCondensed-Bold" CharacterSpacing="0.29" TextColor="Black" FontSize="18" VerticalOptions="Center"  HorizontalOptions="CenterAndExpand" CornerRadius="20" HeightRequest="40" WidthRequest="112" BorderWidth="1" BackgroundColor="White" BorderColor="{StaticResource ButtonBoarder}" Command="{Binding ActionButtonCommand}" CommandParameter="{Binding .}" />
                 </Grid>
             </Grid>
         </yummy:PancakeView>
