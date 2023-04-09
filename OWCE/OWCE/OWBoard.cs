@@ -1231,6 +1231,10 @@ namespace OWCE
                     FirmwareRevision = value;
                     break;
                 case CurrentAmpsUUID:
+                    if (_boardType == OWBoardType.Unknown)
+                    {
+                        break;
+                    }
 
                     var scaleFactor = _boardType switch {
                         OWBoardType.V1 => 0.0009f,
