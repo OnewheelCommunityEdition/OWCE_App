@@ -133,6 +133,8 @@ namespace OWCE
                         OWBoardType.Plus => 917.66f,
                         OWBoardType.XR => 917.66f,
                         OWBoardType.Pint => 837.86f,
+                        OWBoardType.PintX => 837.86f,
+                        OWBoardType.GT => 917.66f,
                         _ => 0f,
                     };
 
@@ -154,6 +156,8 @@ namespace OWCE
                     OWBoardType.Plus => "Plus",
                     OWBoardType.XR => "XR",
                     OWBoardType.Pint => "Pint",
+                    OWBoardType.PintX => "Pint X",
+                    OWBoardType.GT => "GT",
                     _ => String.Empty,
                 };
             }
@@ -169,6 +173,8 @@ namespace OWCE
                     OWBoardType.Plus => "Onewheel+",
                     OWBoardType.XR => "Onewheel+ XR",
                     OWBoardType.Pint => "Onewheel Pint",
+                    OWBoardType.PintX => "Onewheel Pint X",
+                    OWBoardType.GT => "Onewheel GT",
                     _ => String.Empty,
                 };
             }
@@ -256,7 +262,7 @@ namespace OWCE
                     ("Custom", RideModes.PlusXR_Custom),
                 };
             }
-            else if (_boardType == OWBoardType.Pint)
+            else if (_boardType == OWBoardType.Pint || _boardType == OWBoardType.PintX)
             {
                 return new List<(string, ushort)>()
                 {

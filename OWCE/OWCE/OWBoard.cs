@@ -31,6 +31,7 @@ namespace OWCE
         Plus,
         XR,
         Pint,
+        PintX,
         GT
     };
 
@@ -39,12 +40,14 @@ namespace OWCE
         public const int V1_Classic = 1;
         public const int V1_Extreme = 2;
         public const int V1_Elevated = 3;
+
         public const int PlusXR_Sequoia = 4;
         public const int PlusXR_Cruz = 5;
         public const int PlusXR_Mission = 6;
         public const int PlusXR_Elevated = 7;
         public const int PlusXR_Delirium = 8;
         public const int PlusXR_Custom = 9;
+
         public const int Pint_Redwood = 5;
         public const int Pint_Pacific = 6;
         public const int Pint_Elevated = 7;
@@ -349,7 +352,7 @@ namespace OWCE
                         _ => "Unknown",
                     };
                 }
-                else if (_boardType == OWBoardType.Pint)
+                else if (_boardType == OWBoardType.Pint || _boardType == OWBoardType.PintX)
                 {
                     return _rideMode switch
                     {
@@ -813,7 +816,7 @@ namespace OWCE
                 // Turns out the below timer does not fire immedaitly, it fires after the first 15sec have passed.
                 // Calling this before we start the timer should make it work more reliably.
 
-                if (!(HardwareRevision > 6000 && FirmwareRevision > 6000)) // GT only works with OWCE if Rewheel'd with BLE Handshake patched, no need to keep alive.
+                if (!(HardwareRevision >= 6000 && HardwareRevision <= 6999)) // GT only works with OWCE if Rewheel'd with BLE Handshake patched, no need to keep alive.
                 {
                     KeepBoardAlive().SafeFireAndForget();
 
@@ -1193,6 +1196,7 @@ namespace OWCE
                         OWBoardType.Plus => 0.0018f,
                         OWBoardType.XR => 0.002f,
                         OWBoardType.Pint => 0.002f,
+                        OWBoardType.PintX => 0.002f,
                         OWBoardType.GT => 0.002f,
                         _ => throw new Exception("Unknown board type: " + _boardType),
                     };
@@ -1237,16 +1241,24 @@ namespace OWCE
                     {
                         BoardType = OWBoardType.V1;
                         SimpleStopEnabled = null;
+
+                        BatteryCells.CellCount = 16;
                     }
                     else if (value >= 3000 && value <= 3999)
                     {
                         BoardType = OWBoardType.Plus;
                         SimpleStopEnabled = null;
+
+                        BatteryCells.CellCount = 16;
                     }
                     else if (value >= 4000 && value <= 4999)
                     {
                         BoardType = OWBoardType.XR;
                         SimpleStopEnabled = null;
+
+                        BatteryCells.CellCount = 15;
+                        BatteryCells.IgnoreCell(15);
+                        OnPropertyChanged("BatteryCells");
                     }
                     else if (value >= 5000 && value <= 5999)
                     {
@@ -1255,6 +1267,22 @@ namespace OWCE
                         {
                             SimpleStopEnabled = false;
                         }
+
+                        BatteryCells.CellCount = 15;
+                        BatteryCells.IgnoreCell(15);
+                        OnPropertyChanged("BatteryCells");
+                    }
+                    else if (value >= 7000 && value <= 7999)
+                    {
+                        BoardType = OWBoardType.PintX;
+                        if (SimpleStopEnabled == null)
+                        {
+                            SimpleStopEnabled = false;
+                        }
+
+                        BatteryCells.CellCount = 15;
+                        BatteryCells.IgnoreCell(15);
+                        OnPropertyChanged("BatteryCells");
                     }
                     else if (value >= 6000 && value <= 6999)
                     {
@@ -1263,23 +1291,10 @@ namespace OWCE
                         {
                             SimpleStopEnabled = false;
                         }
-                    }
 
-                    if (HardwareRevision >= 6000)
-                    {
                         BatteryCells.CellCount = 18;
                         OnPropertyChanged("BatteryCells");
-                    } else if (HardwareRevision >= 4000)
-                    {
-                        BatteryCells.CellCount = 15;
-                        BatteryCells.IgnoreCell(15);
-                        OnPropertyChanged("BatteryCells");
                     }
-                    else
-                    {
-                        BatteryCells.CellCount = 16;
-                    }
-
                     break;
                 case LifetimeOdometerUUID:
                     LifetimeOdometer = value;

@@ -23,6 +23,7 @@
                     <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Plus" />
                     <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="XR" />
                     <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Pint" />
+                    <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="PintX" />
                 </MultiBinding>
             </xct:Expander.IsEnabled>
             <xct:Expander.Header>
@@ -41,6 +42,7 @@
                                 <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Plus" />
                                 <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="XR" />
                                 <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Pint" />
+                                <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="PintX" />
                             </MultiBinding>
                         </Label.IsVisible>
                         <Label.FormattedText>
@@ -59,6 +61,7 @@
                                 <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Plus" />
                                 <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="XR" />
                                 <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Pint" />
+                                <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="PintX" />
                             </MultiBinding>
                         </Label.IsVisible>
                     </Label>
@@ -71,6 +74,7 @@
                                 <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Plus" />
                                 <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="XR" />
                                 <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="Pint" />
+                                <Binding Path="BoardType" Converter="{StaticResource IsBoardTypeConverter}" ConverterParameter="PintX" />
                             </MultiBinding>
                         </views:ExpanderArrowView.IsVisible>
                      </views:ExpanderArrowView>
