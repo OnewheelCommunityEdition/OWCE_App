@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
+
 if [ -z "$OWCE_APPCENTER_IOS" ]
 then
     echo "You need define the OWCE_APPCENTER_IOS variable in App Center"
@@ -20,11 +22,17 @@ fi
 
 APP_CONSTANT_FILE=$APPCENTER_SOURCE_DIRECTORY/OWCE/OWCE/AppConstants.cs
 
-if [ -e "$APP_CONSTANT_FILE" ]
-then
-    echo "Updating SyncfusionLicense to $OWCE_APPCENTER_IOS in AppConstant.cs"
-    sed -i '' 's#AppCenteriOS = "[a-z:./]*"#AppCenteriOS = "'$OWCE_APPCENTER_IOS'"#' $APP_CONSTANT_FILE
 
-    echo "Updating SyncfusionLicense to $OWCE_APPCENTER_ANDROID in AppConstant.cs"
-    sed -i '' 's#AppCenterAndroid = "[a-z:./]*"#AppCenterAndroid = "'$OWCE_APPCENTER_ANDROID'"#' $APP_CONSTANT_FILE
+dotnet tool install --global boots
+boots --stable Mono
+
+if [[ "$APPCENTER_XAMARIN_PROJECT" == *"OWCE.iOS.csproj"* ]]; then
+  echo "iOS build detected"
+  boots --stable Xamarin.iOS
 fi
+
+if [[ "$APPCENTER_XAMARIN_PROJECT" == *"OWCE.Android.csproj"* ]]; then
+  echo "Android build detected"
+  boots --stable Xamarin.Android
+fi
+

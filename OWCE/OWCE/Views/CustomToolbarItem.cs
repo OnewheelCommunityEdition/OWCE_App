@@ -50,6 +50,7 @@ namespace OWCE.Views
 			set { SetValue(IconImageSourceProperty, value); }
 		}
 
+        
         public static readonly BindableProperty TextProperty = BindableProperty.Create(
             propertyName: nameof(Text),
             returnType: typeof(string),
@@ -148,7 +149,7 @@ namespace OWCE.Views
         void UpdateText()
         {
             // If image exists lets nuke it.
-            if (_image == null)
+            if (_image != null)
             {
                 _image = null;
             }
@@ -157,15 +158,14 @@ namespace OWCE.Views
             {
                 _label = new Label()
                 {
+                    FontSize = 18,
+                    TextColor = Color.Black,
                     VerticalOptions = LayoutOptions.Center,
                     HorizontalOptions = LayoutOptions.Center,
-                    TextColor = Color.Black,
                 };
-
                 Content = _label;
             }
             _label.Text = Text;
         }
-
     }
 }

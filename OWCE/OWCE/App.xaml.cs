@@ -20,7 +20,6 @@ using System.Linq;
 [assembly: ExportFont("SairaExtraCondensed-Medium.ttf")]
 
 
-//SairaExtraCondensed-SemiBold
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace OWCE
 {
@@ -50,7 +49,10 @@ namespace OWCE
             set { SetValue(MetricDisplayProperty, value); }
         }
 
-        public string LogsDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "beta_ride_logs");
+        public string LogsDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "past_rides");
+
+        public string UserAgent => $"OWCE/{Xamarin.Essentials.AppInfo.VersionString} Build/{Xamarin.Essentials.AppInfo.BuildString} ({Xamarin.Essentials.DeviceInfo.Platform}; {Xamarin.Essentials.DeviceInfo.VersionString})";
+
 
         public App()
         {
@@ -62,12 +64,15 @@ namespace OWCE
                 Directory.CreateDirectory(LogsDirectory);
             }
 
+            Database.Init();
+
             InitializeComponent();
 
 #if DEBUG
             // If simulator or emulator use MockOWBLE.
             if (DeviceInfo.DeviceType == DeviceType.Virtual)
             {
+                /*
                 var filenameRegex = new System.Text.RegularExpressions.Regex(@"^OWCE\.Resources\.SampleRideData\.(.*)\.bin$");
                 var assembly = System.Reflection.IntrospectionExtensions.GetTypeInfo(typeof(App)).Assembly;
                 foreach (var resourceName in assembly.GetManifestResourceNames())
@@ -76,16 +81,20 @@ namespace OWCE
                     if (match.Success) //resourceName.StartsWith("OWCE.Resources.SampleRideData.")
                     {
                         var targetFilename = Path.Combine(LogsDirectory, match.Groups[1].Value + ".bin");
-                        // TODO: Check filename? Check exists? Check checksum?
-                        using (var fileStream = assembly.GetManifestResourceStream(resourceName))
+                        if (File.Exists(targetFilename) == false)
                         {
-                            using (var streamWriter = File.Create(targetFilename))
+                            // TODO: Check filename? Check exists? Check checksum?
+                            using (var fileStream = assembly.GetManifestResourceStream(resourceName))
                             {
-                                fileStream.CopyTo(streamWriter);
+                                using (var streamWriter = File.Create(targetFilename))
+                                {
+                                    fileStream.CopyTo(streamWriter);
+                                }
                             }
                         }
                     }
                 }
+                */
 
                 OWBLE = new MockOWBLE();
             }
@@ -97,7 +106,8 @@ namespace OWCE
             OWBLE = DependencyService.Get<IOWBLE>();
 #endif
             //MainPage = new MainFlyoutPage();
-            MainPage = new NavigationPage(new BoardListPage());
+            MainPage = new CustomNavigationPage(new BoardListPage());
+            //MainPage = new CustomNavigationPage(new SubmitRidePage(new Ride()));
 
 
 

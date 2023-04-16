@@ -21,6 +21,9 @@ namespace OWCE.Pages.Popup
         IAsyncCommand<Grid> _aboutCommand;
         public IAsyncCommand<Grid> AboutCommand => _aboutCommand ??= new AsyncCommand<Grid>(async (sender) => await AboutCommand_Clicked(sender), allowsMultipleExecutions: false);
 
+        IAsyncCommand<Grid> _settingsCommand;
+        public IAsyncCommand<Grid> SettingsCommand => _settingsCommand ??= new AsyncCommand<Grid>(async (sender) => await SettingsCommand_Clicked(sender), allowsMultipleExecutions: false);
+
         View _pageSpecificSideMenu = null;
         public View PageSpecificSideMenu {
             get
@@ -56,7 +59,7 @@ namespace OWCE.Pages.Popup
             BindingContext = this;
         }
 
-        async Task CloseCommand_Clicked()
+        internal async Task CloseCommand_Clicked()
         {
             await PopupNavigation.Instance.PopAsync(true);
         }
@@ -67,10 +70,24 @@ namespace OWCE.Pages.Popup
 
             await Task.WhenAll(
                 sender.FadeTo(1f),
-                PopupNavigation.Instance.RemovePageAsync(this),
-                App.Current.MainPage.Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(new AboutPage()))
+                App.Current.MainPage.Navigation.PushModalAsync(new CustomNavigationPage(new AboutPage())),
+                PopupNavigation.Instance.RemovePageAsync(this)
             );
         }
+
+        async Task SettingsCommand_Clicked(Grid sender)
+        {
+            sender.Opacity = 0.6f;
+
+            await Task.WhenAll(
+                sender.FadeTo(1f),
+                App.Current.MainPage.Navigation.PushModalAsync(new CustomNavigationPage(new AppSettingsPage())),
+                PopupNavigation.Instance.RemovePageAsync(this)
+            );
+        }
+
+
+        
 
         protected override void OnAppearing()
         {

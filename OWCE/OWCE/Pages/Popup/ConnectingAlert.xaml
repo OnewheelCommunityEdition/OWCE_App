@@ -33,7 +33,7 @@
                     <ActivityIndicator Grid.Column="1" IsRunning="True" Color="Black" WidthRequest="26" HeightRequest="26" VerticalOptions="Center" />
                 </Grid>
                 <Grid Grid.Row="3" BackgroundColor="White" HeightRequest="76">
-                    <Button Text="{Binding ButtonText}" FontFamily="SairaExtraCondensed-Bold" CharacterSpacing="0.29" TextColor="Black" FontSize="18" VerticalOptions="Center" HorizontalOptions="CenterAndExpand" CornerRadius="20" HeightRequest="40" WidthRequest="112" BorderWidth="1" BorderColor="{StaticResource ButtonBoarder}" Command="{Binding ActionButtonCommand}" />
+                    <Button Text="{Binding ButtonText}" Style="{StaticResource RoundButtonStyle}" HorizontalOptions="CenterAndExpand" WidthRequest="112" Command="{Binding ActionButtonCommand}" />
                 </Grid>
             </Grid>
         </yummy:PancakeView>

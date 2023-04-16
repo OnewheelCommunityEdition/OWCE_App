@@ -1,11 +1,14 @@
 Onewheel Community Edition (OWCE) App
 ===========
 
-A cross-platform app for use with the [Onewheel](https://onewheel.com/) V1, Plus, XR and Pint boards from Future Motion.
+A cross-platform app for use with the [Onewheel](https://onewheel.com/) V1, Plus, XR, Pint, Pint X and GT.
 
+NOTE: GT support requires patching with [Rewheel](https://github.com/rewheel-app/rewheel).
 Newer board firmware no longer send through voltage as this was removed by Future Motion. Those versions are:
 - XR with firmware 4155 and higher
 - Pint with firmware 5059 and higher
+_ Pint X, all firmware
+- GT, all firmware
 
 NOTE: Onewheel Community Edition app is not endorsed by or affiliated with Future Motion in any way.
 
@@ -43,7 +46,7 @@ No. This app uses the same bluetooth low energy (BLE) interface that the officia
 
 ### What Onewheels are supported?
 
-Currently v1, Plus, XR and Pint. Pint X has not been tested yet.
+Currently v1, Plus, XR and Pint. Pint X and GT have not been thoroughly tested yet.
 
 ### Will using this app void my warranty?
 

@@ -123,13 +123,14 @@ namespace OWCE.Pages
 
 			_titleLabel = new Label()
 			{
-				FontFamily = "SairaExtraCondensed-SemiBold",
-				FontSize = 24,
+				FontAttributes = FontAttributes.Bold,
+				FontSize = 18,
 				TextColor = Color.Black,
 				VerticalOptions = LayoutOptions.Center,
 				HorizontalOptions = LayoutOptions.Center,
 			};
-			Grid.SetRow(_titleLabel, 1);
+
+            Grid.SetRow(_titleLabel, 1);
 			_mainGrid.Children.Add(_titleLabel);
 
 			Content = _mainGrid;

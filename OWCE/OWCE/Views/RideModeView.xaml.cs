@@ -152,8 +152,10 @@ namespace OWCE.Views
                 });
             }
 
-            RideModesCollectionView.ItemsSource = null;
-            RideModesCollectionView.ItemsSource = _rideModesList;
+            //RideModesCollectionView.ItemsSource = null;
+            //RideModesCollectionView.ItemsSource = _rideModesList;
+            BindableLayout.SetItemsSource(RideModesStackLayout, null);
+            BindableLayout.SetItemsSource(RideModesStackLayout, _rideModesList);
         }
 
         void RideModeButton_Clicked(System.Object sender, System.EventArgs e)

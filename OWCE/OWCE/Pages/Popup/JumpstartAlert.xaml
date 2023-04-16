@@ -45,7 +45,7 @@ connect to your board</Label.Text>
                 <Grid Grid.Row="2" BackgroundColor="White" HeightRequest="76">
                     <!--<Button Text="View Instructions" FontFamily="SairaExtraCondensed-Bold" CharacterSpacing="0.29" TextColor="Black" FontSize="18" VerticalOptions="Center" HorizontalOptions="CenterAndExpand" CornerRadius="20" HeightRequest="40" WidthRequest="112" BorderWidth="1" BorderColor="{StaticResource ButtonBoarder}" Command="{Binding InstructionsButtonCommand}" />
                     -->
-                    <Button Text="Ok" FontFamily="SairaExtraCondensed-Bold" CharacterSpacing="0.29" TextColor="Black" FontSize="18" VerticalOptions="Center" HorizontalOptions="CenterAndExpand" CornerRadius="20" HeightRequest="40" WidthRequest="112" BorderWidth="1" BorderColor="{StaticResource ButtonBoarder}" Command="{Binding ActionButtonCommand}" />
+                    <Button Text="Ok" Style="{StaticResource RoundButtonStyle}" HorizontalOptions="CenterAndExpand" WidthRequest="112" Command="{Binding ActionButtonCommand}" />
                 </Grid>
             </Grid>
         </yummy:PancakeView>

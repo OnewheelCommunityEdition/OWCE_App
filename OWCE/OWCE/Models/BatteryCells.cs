@@ -26,6 +26,9 @@ namespace OWCE.Models
         public string BatteryCell13 { get; private set; } = "-";
         public string BatteryCell14 { get; private set; } = "-";
         public string BatteryCell15 { get; private set; } = "-";
+        public string BatteryCell16 { get; private set; } = "-";
+        public string BatteryCell17 { get; private set; } = "-";
+
 
 
         private Dictionary<uint, float> _cells = new Dictionary<uint, float>();
@@ -113,8 +116,8 @@ namespace OWCE.Models
 
         public void SetCell(uint cellID, float voltage, string format = "F2")
         {
-            // Skip last cell on XR/Pint.
-            if (cellID == 15 && CellCount == 15)
+            // Skip last cell on XR/Pint/PintX.
+            if (CellCount == 15 && cellID >= 15)
             {
                 return;
             }
@@ -261,6 +264,20 @@ namespace OWCE.Models
                     {
                         BatteryCell15 = voltageString;
                         OnPropertyChanged("BatteryCell15");
+                    }
+                    break;
+                case 16:
+                    if (BatteryCell16 != voltageString)
+                    {
+                        BatteryCell16 = voltageString;
+                        OnPropertyChanged("BatteryCell16");
+                    }
+                    break;
+                case 17:
+                    if (BatteryCell17 != voltageString)
+                    {
+                        BatteryCell17 = voltageString;
+                        OnPropertyChanged("BatteryCell17");
                     }
                     break;
             }
