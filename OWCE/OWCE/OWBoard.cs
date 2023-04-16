@@ -21,6 +21,8 @@ using OWCE.DependencyInterfaces;
 using Rg.Plugins.Popup.Services;
 using MvvmHelpers;
 using OWCE.PropertyChangeHandlers;
+using OWCE.Pages;
+using OWCE.Utils;
 
 namespace OWCE
 {
@@ -52,6 +54,7 @@ namespace OWCE
         public const int Pint_Pacific = 6;
         public const int Pint_Elevated = 7;
         public const int Pint_Skyline = 8;
+        public const int Pint_Custom = 9;
 
         public const int GT_Bay = 3;
         public const int GT_Roam = 4;
@@ -98,7 +101,7 @@ namespace OWCE
         public const string SerialReadUUID = "E659F3FE-EA98-11E3-AC10-0800200C9A66";
         public const string SerialWriteUUID = "E659F3FF-EA98-11E3-AC10-0800200C9A66";
         public const string UNKNOWN1UUID = "E659F31D-EA98-11E3-AC10-0800200C9A66";
-        public const string UNKNOWN2UUID = "E659F31E-EA98-11E3-AC10-0800200C9A66";
+        public const string RideTraitsUUID = "E659F31E-EA98-11E3-AC10-0800200C9A66";
         public const string UNKNOWN3UUID = "E659F31F-EA98-11E3-AC10-0800200C9A66";
         public const string UNKNOWN4UUID = "E659F320-EA98-11E3-AC10-0800200C9A66";
 
@@ -325,6 +328,20 @@ namespace OWCE
             set { if (_incomingRideMode != value) { _incomingRideMode = value; OnPropertyChanged(); } }
         }
 
+        private bool _canEnableSimpleStop;
+        public bool CanEnableSimpleStop
+        {
+            get { return _canEnableSimpleStop; }
+            set { if (_canEnableSimpleStop != value) { _canEnableSimpleStop = value; OnPropertyChanged(); } }
+        }
+
+        private bool _canCustomShape;
+        public bool CanCustomShape
+        {
+            get { return _canCustomShape; }
+            set { if (_canCustomShape != value) { _canCustomShape = value; OnPropertyChanged(); } }
+        }
+
         public string RideModeString
         {
             get
@@ -360,6 +377,7 @@ namespace OWCE
                         6 => "Pacific",
                         7 => "Elevated",
                         8 => "Skyline",
+                        9 => "Custom",
                         _ => "Unknown",
                     };
                 }
@@ -382,11 +400,79 @@ namespace OWCE
             }
         }
 
-        private bool? _simpleStopEnabled = null;
+        private static Dictionary<RideTrait, int?> _rideTraits = new Dictionary<RideTrait, int?>()
+        {
+            { RideTrait.AngleOffset, null },
+            { RideTrait.TurnCompensation, null },
+            { RideTrait.Aggressiveness, null },
+            { RideTrait.SimpleStop, null }
+        };
+
         public bool? SimpleStopEnabled
         {
-            get { return _simpleStopEnabled; }
-            set { if (_simpleStopEnabled != value) { _simpleStopEnabled = value; OnPropertyChanged(); } }
+            get
+            {
+                if (_rideTraits[RideTrait.SimpleStop] == null) return null;
+                else return _rideTraits[RideTrait.SimpleStop] == 1;
+            }
+            set {
+                int? temp;
+                if (value is null)
+                    temp = null;
+                else
+                    temp = (bool) value ? 1 : 0;
+
+                if (_rideTraits[RideTrait.SimpleStop] != temp) { _rideTraits[RideTrait.SimpleStop] = temp; OnPropertyChanged(); } }
+        }
+
+        public int? AngleOffset
+        {
+            get { return _rideTraits[RideTrait.AngleOffset]; }
+            set { if (_rideTraits[RideTrait.AngleOffset] != value) { _rideTraits[RideTrait.AngleOffset] = value; OnPropertyChanged(); } }
+        }
+
+        public int? TurnCompensation
+        {
+            get { return _rideTraits[RideTrait.TurnCompensation]; }
+            set { if (_rideTraits[RideTrait.TurnCompensation] != value) { _rideTraits[RideTrait.TurnCompensation] = value; OnPropertyChanged(); } }
+        }
+
+        public int? Aggressiveness
+        {
+            get { return _rideTraits[RideTrait.Aggressiveness]; }
+            set { if (_rideTraits[RideTrait.Aggressiveness] != value) { _rideTraits[RideTrait.Aggressiveness] = value; OnPropertyChanged(); } }
+        }
+
+        public bool HasValidRideTraits()
+        {
+            List<RideTrait> toCheck = new List<RideTrait>();
+
+            if (CanEnableSimpleStop) toCheck.Add(RideTrait.SimpleStop);
+
+            if (CanCustomShape) {
+                toCheck.Add(RideTrait.AngleOffset);
+                toCheck.Add(RideTrait.TurnCompensation);
+                toCheck.Add(RideTrait.Aggressiveness);
+            }
+
+            foreach (var trait in toCheck)
+            {
+                if (_rideTraits[trait] == null)
+                    return false;
+            }
+
+            return true;
+        }
+        public void ResetCustomShaping()
+        {
+            _rideTraits[RideTrait.AngleOffset] = null;
+            _rideTraits[RideTrait.TurnCompensation] = null;
+            _rideTraits[RideTrait.Aggressiveness] = null;
+        }
+
+        public void ResetSimpleStop()
+        {
+            _rideTraits[RideTrait.SimpleStop] = null;
         }
 
         /*
@@ -507,13 +593,6 @@ namespace OWCE
         {
             get { return _UNKNOWN1; }
             set { if (_UNKNOWN1.AlmostEqualTo(value) == false) { _UNKNOWN1 = value; OnPropertyChanged(); } }
-        }
-
-        private float _UNKNOWN2 = 0;
-        public float UNKNOWN2
-        {
-            get { return _UNKNOWN2; }
-            set { if (_UNKNOWN2.AlmostEqualTo(value) == false) { _UNKNOWN2 = value; OnPropertyChanged(); } }
         }
 
         private float _UNKNOWN3 = 0;
@@ -714,7 +793,7 @@ namespace OWCE
                 //SerialRead,
                 //SerialWrite,
                 //UNKNOWN1UUID,
-                //UNKNOWN2UUID,
+                //RideTraitsUUID
                 //UNKNOWN3UUID,
                 //UNKNOWN4UUID,
             };
@@ -753,7 +832,7 @@ namespace OWCE
                 //SerialRead,
                 //SerialWrite,
                 //UNKNOWN1UUID,
-                //UNKNOWN2UUID,
+                RideTraitsUUID
                 //UNKNOWN3UUID,
                 //UNKNOWN4UUID,
             };
@@ -839,7 +918,6 @@ namespace OWCE
                 var data = await _owble.ReadValue(characteristic);
                 SetValue(characteristic, data, true);
             }
-
         }
 
         // This should be called to keep the board in its unlocked state.
@@ -1067,7 +1145,7 @@ namespace OWCE
             return bytes;
         }
 
-        private void SetValue(string uuid, byte[] data, bool initialData = false)
+        private async void SetValue(string uuid, byte[] data, bool initialData = false)
         {
             if (data == null)
                 return;
@@ -1240,22 +1318,25 @@ namespace OWCE
                     if (value >= 1 && value <= 2999)
                     {
                         BoardType = OWBoardType.V1;
+                        CanEnableSimpleStop = false;
+                        CanCustomShape = false;
                         SimpleStopEnabled = null;
-
                         BatteryCells.CellCount = 16;
                     }
                     else if (value >= 3000 && value <= 3999)
                     {
                         BoardType = OWBoardType.Plus;
+                        CanEnableSimpleStop = false;
+                        CanCustomShape = true;
                         SimpleStopEnabled = null;
-
                         BatteryCells.CellCount = 16;
                     }
                     else if (value >= 4000 && value <= 4999)
                     {
                         BoardType = OWBoardType.XR;
+                        CanEnableSimpleStop = false;
+                        CanCustomShape = true;
                         SimpleStopEnabled = null;
-
                         BatteryCells.CellCount = 15;
                         BatteryCells.IgnoreCell(15);
                         OnPropertyChanged("BatteryCells");
@@ -1263,11 +1344,9 @@ namespace OWCE
                     else if (value >= 5000 && value <= 5999)
                     {
                         BoardType = OWBoardType.Pint;
-                        if (SimpleStopEnabled == null)
-                        {
-                            SimpleStopEnabled = false;
-                        }
-
+                        CanEnableSimpleStop = true;
+                        // only true for patched boards
+                        CanCustomShape = true;
                         BatteryCells.CellCount = 15;
                         BatteryCells.IgnoreCell(15);
                         OnPropertyChanged("BatteryCells");
@@ -1291,7 +1370,8 @@ namespace OWCE
                         {
                             SimpleStopEnabled = false;
                         }
-
+                      CanEnableSimpleStop = true;
+                        CanCustomShape = true;
                         BatteryCells.CellCount = 18;
                         OnPropertyChanged("BatteryCells");
                     }
@@ -1327,8 +1407,37 @@ namespace OWCE
                 case UNKNOWN1UUID:
                     UNKNOWN1 = value;
                     break;
-                case UNKNOWN2UUID:
-                    UNKNOWN2 = value;
+                case RideTraitsUUID:
+                    var rideTraitsData = BitConverter.GetBytes(value);
+
+                    if (BitConverter.IsLittleEndian)
+                        Array.Reverse(rideTraitsData);
+
+                    RideTrait trait = (RideTrait)rideTraitsData[0];
+                    switch (trait)
+                    {
+                        case RideTrait.AngleOffset:
+                            AngleOffset = Rescaler.TwosComplement(rideTraitsData[1]);
+                            break;
+                        case RideTrait.TurnCompensation:
+                            TurnCompensation = Rescaler.TwosComplement(rideTraitsData[1]);
+                            break;
+                        case RideTrait.Aggressiveness:
+                            Aggressiveness = Rescaler.TwosComplement(rideTraitsData[1]);
+                            break;
+                        case RideTrait.SimpleStop:
+                            SimpleStopEnabled = rideTraitsData[1] == 1;
+                            break;
+                        default:
+                            Console.WriteLine(string.Format("Unknown ride trait found. Type: {0}", rideTraitsData[0]));
+                            break;
+                    }
+
+                    if (HasValidRideTraits())
+                    {
+                        await _owble.UnsubscribeValue(OWBoard.RideTraitsUUID, true);
+                    }
+                    //UNKNOWN2 = value;
                     break;
                 case UNKNOWN3UUID:
                     UNKNOWN3 = value;
@@ -1579,8 +1688,8 @@ namespace OWCE
                     return "SerialWrite";
                 case UNKNOWN1UUID:
                     return "UNKNOWN1";
-                case UNKNOWN2UUID:
-                    return "UNKNOWN2";
+                case RideTraitsUUID:
+                    return "RideTraits";
                 case UNKNOWN3UUID:
                     return "UNKNOWN3";
                 case UNKNOWN4UUID:
@@ -1597,6 +1706,41 @@ namespace OWCE
             _incomingRideMode = rideMode;
             byte[] rideModeBytes = BitConverter.GetBytes(rideMode);
             var result = await App.Current.OWBLE.WriteValue(OWBoard.RideModeUUID, rideModeBytes, true);
+        }
+
+        public async Task ChangeAngleOffset(int angleOffset)
+        {
+            byte converted = Rescaler.TwosComplement(angleOffset);
+            await ChangeRideTrait(RideTrait.AngleOffset, converted);
+        }
+
+        public async Task ChangeTurnCompensation(int turnCompensation)
+        {
+            byte converted = Rescaler.TwosComplement(turnCompensation);
+            await ChangeRideTrait(RideTrait.TurnCompensation, converted);
+        }
+
+        public async Task ChangeAggressiveness(int aggressiveness)
+        {
+            byte converted = Rescaler.TwosComplement(aggressiveness);
+            await ChangeRideTrait(RideTrait.Aggressiveness, converted);
+        }
+
+        public async Task ToggleSimpleStop(bool enabled)
+        {
+            await ChangeRideTrait(RideTrait.SimpleStop, enabled);
+        }
+
+        public async Task ChangeRideTrait(RideTrait trait, bool value)
+        {
+            byte[] frame = new byte[] { ((byte)trait), value ? (byte)1 : (byte)0 };
+            var result = await App.Current.OWBLE.WriteValue(RideTraitsUUID, frame.Reverse().ToArray(), true);
+        }
+
+        public async Task ChangeRideTrait(RideTrait trait, byte value)
+        {
+            byte[] frame = new byte[] { ((byte)trait), value };
+            var result = await App.Current.OWBLE.WriteValue(RideTraitsUUID, frame.Reverse().ToArray(), true);
         }
     }
 }
