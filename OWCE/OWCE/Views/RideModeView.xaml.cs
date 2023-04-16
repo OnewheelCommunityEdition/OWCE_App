@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OWCE.Converters;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -6,6 +7,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Xamarin.CommunityToolkit.UI.Views;
 using Xamarin.Forms;
+using Xamarin.RangeSlider.Forms;
+using RangeSlider = Xamarin.RangeSlider.Forms.RangeSlider;
 
 namespace OWCE.Views
 {
@@ -53,6 +56,10 @@ namespace OWCE.Views
             "BoardType",
             typeof(OWBoardType),
             typeof(RideModeView));
+
+        TurnCompensationConverter turnCompensationConverter = new TurnCompensationConverter();
+        AggressivenessConverter aggressivenessConverter = new AggressivenessConverter();
+        AngleOffsetConverter angleOffsetConverter = new AngleOffsetConverter();
 
         public OWBoardType BoardType
         {
@@ -173,6 +180,59 @@ namespace OWCE.Views
 
 
                //VisualStateManager.GoToState(button, selectedRideMode.IsSelected ? "SelectedState" : "NormalState");
+            }
+        }
+
+        private async void OnSimpleStopToggled(object sender, ToggledEventArgs e)
+        {
+            if (sender is Switch simpleStopSwitch)
+            {
+                if (BindingContext is OWBoard board)
+                {
+                    await board.ToggleSimpleStop(simpleStopSwitch.IsToggled);
+                }
+            }
+        }
+
+        private async void OnTurnCompensationChanged(object sender, EventArgs e)
+        {
+            if (sender is RangeSlider slider)
+            {
+                TurnCompensationLabel.Text = "Turn Compensation: " + (int)Math.Round(slider.UpperValue);
+                int turnCompensation = (int) turnCompensationConverter.ConvertBack((float)slider.UpperValue, null, null, null);
+
+                if (BindingContext is OWBoard board)
+                {
+                    await board.ChangeTurnCompensation(turnCompensation);
+                }
+            }
+        }
+
+        private async void OnAggressivenessChanged(object sender, EventArgs e)
+        {
+            if (sender is RangeSlider slider)
+            {
+                AggressivenessLabel.Text = "Aggressiveness: " + (int)Math.Round(slider.UpperValue);
+                int aggressivesness = (int)aggressivenessConverter.ConvertBack((float)slider.UpperValue, null, null, null);
+
+                if (BindingContext is OWBoard board)
+                {
+                    await board.ChangeAggressiveness(aggressivesness);
+                }
+            }
+        }
+
+        private async void OnAngleOffsetChanged(object sender, EventArgs e)
+        {
+            if (sender is RangeSlider slider)
+            {
+                AngleOffsetLabel.Text = "Angle Offset: " + Math.Round(slider.UpperValue, 1);
+                int angleOffset = (int)angleOffsetConverter.ConvertBack((float)slider.UpperValue, null, null, null);
+
+                if (BindingContext is OWBoard board)
+                {
+                    await board.ChangeAngleOffset(angleOffset);
+                }
             }
         }
     }

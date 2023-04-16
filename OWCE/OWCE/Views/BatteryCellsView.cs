@@ -29,6 +29,7 @@ namespace OWCE.Views
 
         Dictionary<uint, Label> _cellLables = new Dictionary<uint, Label>();
 
+
         public BatteryCellsView()
         {
             Content = new Grid()
@@ -42,7 +43,7 @@ namespace OWCE.Views
         {
             base.OnBindingContextChanged();
         }
-
+        
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);

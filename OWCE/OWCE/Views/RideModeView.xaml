@@ -5,15 +5,20 @@
              xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
              x:Class="OWCE.Views.RideModeView"
              xmlns:views="clr-namespace:OWCE.Views"
-             xmlns:converters="clr-namespace:OWCE.Converters">
+             xmlns:converters="clr-namespace:OWCE.Converters"
+             xmlns:forms="clr-namespace:Xamarin.RangeSlider.Forms;assembly=Xamarin.RangeSlider.Forms">
 
     <ContentView.Resources>
         <converters:AllTrueMultiConverter x:Key="AllTrueConverter" />
         <converters:AnyTrueMultiConverter x:Key="AnyTrueConverter" />
         <converters:IsBoardTypeConverter x:Key="IsBoardTypeConverter" />
+        <converters:IsCustomShapingConverter x:Key="IsCustomShapingConverter" />
         <converters:IsTrueConverter x:Key="IsTrueConverter" />
         <converters:IsFalseConverter x:Key="IsFalseConverter" />
         <converters:SelectedButtonConverter x:Key="SelectedButtonConverter" />
+        <converters:TurnCompensationConverter x:Key="TurnCompensationConverter" />
+        <converters:AggressivenessConverter x:Key="AggressivenessConverter" />
+        <converters:AngleOffsetConverter x:Key="AngleOffsetConverter" />
     </ContentView.Resources>
 
     <yummy:PancakeView BackgroundColor="#000000" Style="{StaticResource BoardDetailBlockBaseStyle}">
@@ -25,16 +30,33 @@
                     <Label Text="{Binding RideModeString}" FontFamily="SairaExtraCondensed-Black" HorizontalOptions="Center" TextColor="White" CharacterSpacing="2.2" FontSize="60" Padding="0,16,0,16" />
 
 
-                    <!--
                     <Label Text="Simplestop is ON" IsVisible="{Binding SimpleStopEnabled, Converter={StaticResource IsTrueConverter}}" FontFamily="SairaExtraCondensed-SemiBold" TextColor="Magenta" HorizontalOptions="Center" VerticalOptions="End" FontSize="16" Margin="0,0,0,6" />
                     <Label Text="Simplestop is OFF" IsVisible="{Binding SimpleStopEnabled, Converter={StaticResource IsFalseConverter}}" FontFamily="SairaExtraCondensed-SemiBold" TextColor="White" HorizontalOptions="Center" VerticalOptions="End" FontSize="16" Margin="0,0,0,6" />
-                    -->
 
                     <views:ExpanderArrowView x:Name="ExpanderArrow" HorizontalOptions="End" Margin="17,13" />
 
                 </Grid>
             </xct:Expander.Header>
             <Grid ColumnSpacing="0" RowSpacing="0" RowDefinitions="Auto,76,Auto" Margin="0" Padding="0">
+            <!-- custom shaping branch start -->
+                <Switch OnColor="Magenta" Toggled="OnSimpleStopToggled" Grid.Row="0" HorizontalOptions="Center" IsVisible="{Binding CanSimpleStop, Converter={StaticResource IsTrueConverter}}">
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="On">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="DarkMagenta" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Off">
+                                <VisualState.Setters>
+                                    <Setter Property="ThumbColor" Value="White" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+                </Switch>
+            <!-- custom shaping branch end -->
+
                 <!--
                 <views:SwitchView Grid.Row="0" HorizontalOptions="Center">
                     <views:SwitchView.IsVisible>
@@ -45,21 +67,7 @@
                     </views:SwitchView.IsVisible>
                 </views:SwitchView>
                 -->
-
-                <!--
-                <CollectionView x:Name="RideModesCollectionView" HorizontalScrollBarVisibility="Never" ItemsLayout="HorizontalList" Grid.Row="1" HeightRequest="76" BackgroundColor="White">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="views:RideModeButton">
-                            <Grid>
-                                <Button Text="{Binding Name}" Clicked="RideModeButton_Clicked" Style="{Binding IsSelected, Converter={StaticResource SelectedButtonConverter}}">
-                                    
-                                </Button>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-                -->
-
+                
                 <ScrollView Grid.Row="1" HeightRequest="76" BackgroundColor="White" HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never" Orientation="Horizontal">
                     <StackLayout  x:Name="RideModesStackLayout" BindableLayout.ItemsSource="{Binding User.TopFollowers}" Grid.Row="1" HeightRequest="76" BackgroundColor="White" Orientation="Horizontal">
                         <BindableLayout.ItemTemplate>
@@ -71,6 +79,23 @@
                         </BindableLayout.ItemTemplate>
                     </StackLayout>
                 </ScrollView>
+                
+                
+                <StackLayout Grid.Row="2" Padding="20" BackgroundColor="White">
+                    <StackLayout>
+                        <forms:RangeSlider MinimumValue="0" MaximumValue="10" UpperValue="{Binding TurnCompensation, Converter={StaticResource TurnCompensationConverter}}" LowerValue="0" MinThumbHidden="True" StepValue="0.1" StepValueContinuously="false" ShowTextAboveThumbs="True" DragCompleted="OnTurnCompensationChanged" />
+                        <Label x:Name="TurnCompensationLabel" TextColor="Black" />
+                    </StackLayout>
+                    <StackLayout>
+                        <forms:RangeSlider MinimumValue="-1.5" MaximumValue="3" UpperValue="{Binding AngleOffset, Converter={StaticResource AngleOffsetConverter}}" LowerValue="-1.5" MinThumbHidden="True" StepValue="0.1" StepValueContinuously="false" ShowTextAboveThumbs="True" DragCompleted="OnAngleOffsetChanged" />
+                        <Label x:Name="AngleOffsetLabel" TextColor="Black" />
+                    </StackLayout>
+                    <StackLayout>
+                        <forms:RangeSlider MinimumValue="0" MaximumValue="10" UpperValue="{Binding Aggressiveness, Converter={StaticResource AggressivenessConverter}}" LowerValue="0" MinThumbHidden="True" StepValue="0.1" StepValueContinuously="false" ShowTextAboveThumbs="True" DragCompleted="OnAggressivenessChanged" />
+                        <Label x:Name="AggressivenessLabel" TextColor="Black" />
+                    </StackLayout>
+                </StackLayout>
+                
                
 
                 <Button Grid.Row="2" Text="Set Custom Shaping" Style="{StaticResource RoundButtonStyle}" Margin="0,16" Clicked="SetCustomShaping_Clicked">
