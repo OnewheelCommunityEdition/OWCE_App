@@ -6,8 +6,9 @@
     xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
     xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
     xmlns:popup="clr-namespace:OWCE.Pages.Popup"
-    x:Class="OWCE.Pages.Popup.UploadingAlert"
-    x:DataType="popup:UploadingAlert"
+    xmlns:xcte="clr-namespace:Xamarin.CommunityToolkit.Effects;assembly=Xamarin.CommunityToolkit"
+    x:Class="OWCE.Pages.Popup.ProgressAlert"
+    x:DataType="popup:ProgressAlert"
     CloseWhenBackgroundIsClicked="false"
     BackgroundColor="#BF000000">
 
@@ -30,12 +31,10 @@
                 <Label Grid.Row="1" Text="{Binding TitleText}" FontFamily="SairaExtraCondensed-Black" TextColor="Black" FontSize="36" HorizontalTextAlignment="Center" />
                 <Grid Grid.Row="2" RowDefinitions="Auto" ColumnDefinitions="Auto,Auto" HorizontalOptions="Center"  Margin="0,9,0,18" >
                     <Label Grid.Column="0" Text="{Binding ConnectingText}" FontFamily="SairaExtraCondensed-Bold" TextColor="Black" FontSize="24" VerticalOptions="Center" CharacterSpacing="0.26" />
-
-                    <ProgressBar Grid.Column="1"  />
                     <ActivityIndicator Grid.Column="1" IsRunning="True" Color="Black" WidthRequest="26" HeightRequest="26" VerticalOptions="Center" />
                 </Grid>
                 <Grid Grid.Row="3" BackgroundColor="White" HeightRequest="76">
-                    <Button Text="{Binding ButtonText}" FontFamily="SairaExtraCondensed-Bold" CharacterSpacing="0.29" TextColor="Black" FontSize="18" VerticalOptions="Center" HorizontalOptions="CenterAndExpand" CornerRadius="20" HeightRequest="40" WidthRequest="112" BorderWidth="1" BorderColor="{StaticResource ButtonBoarder}" Command="{Binding ActionButtonCommand}" />
+                    <Button Text="{Binding ButtonText}" Style="{StaticResource RoundButtonStyle}" Command="{Binding ActionButtonCommand}" xcte:TouchEffect.NativeAnimation="True" />
                 </Grid>
             </Grid>
         </yummy:PancakeView>

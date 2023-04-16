@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Input;
+using OWCE.Network;
+using Xamarin.CommunityToolkit.ObjectModel;
+
 namespace OWCE.Pages
 {
     public class SubmitRideModel : Xamarin.CommunityToolkit.ObjectModel.ObservableObject
@@ -43,6 +48,37 @@ namespace OWCE.Pages
         {
             get => additionalNotes;
             set => SetProperty(ref additionalNotes, value);
+        }
+
+        AsyncRelayCommand _viewDataSubmittedCommand;
+        public AsyncRelayCommand ViewDataSubmittedCommand => _viewDataSubmittedCommand ??= new AsyncRelayCommand(ViewDataSubmittedAsync);
+
+        WeakReference<SubmitRidePage> _page = null;
+
+        public SubmitRideModel(SubmitRidePage page)
+        {
+            _page = new WeakReference<SubmitRidePage>(page);
+        }
+
+        async Task ViewDataSubmittedAsync()
+        {
+            if (_page.TryGetTarget(out SubmitRidePage page))
+            {
+                await page.ViewDataSubmittedAsync();
+            }
+        }
+
+        internal SubmitRideRequest GetSubmitRideRequest()
+        {
+            return new SubmitRideRequest()
+            {
+                RideName = RideName,
+                AftermarketBattery = IsAftermarketBattery,
+                BatteryType = BatteryType,
+                RemoveIdentifiers = RemoveIdentifiers,
+                AllowPublicly = AllowPublicly,
+                AdditionalNotes = AdditionalNotes,
+            };
         }
     }
 }

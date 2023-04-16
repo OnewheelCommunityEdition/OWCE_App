@@ -31,6 +31,8 @@ namespace OWCE
         Plus,
         XR,
         Pint,
+        PintX,
+        GT
     };
 
     public struct RideModes
@@ -38,16 +40,28 @@ namespace OWCE
         public const int V1_Classic = 1;
         public const int V1_Extreme = 2;
         public const int V1_Elevated = 3;
+
         public const int PlusXR_Sequoia = 4;
         public const int PlusXR_Cruz = 5;
         public const int PlusXR_Mission = 6;
         public const int PlusXR_Elevated = 7;
         public const int PlusXR_Delirium = 8;
         public const int PlusXR_Custom = 9;
+
         public const int Pint_Redwood = 5;
         public const int Pint_Pacific = 6;
         public const int Pint_Elevated = 7;
         public const int Pint_Skyline = 8;
+
+        public const int GT_Bay = 3;
+        public const int GT_Roam = 4;
+        public const int GT_Flow = 5;
+        public const int GT_HighLine = 6;
+        public const int GT_Elevated = 7;
+        public const int GT_Apex = 8;
+        public const int GT_Custom = 9;
+
+
     }
 
     public class OWBoard : OWBaseBoard
@@ -338,7 +352,7 @@ namespace OWCE
                         _ => "Unknown",
                     };
                 }
-                else if (_boardType == OWBoardType.Pint)
+                else if (_boardType == OWBoardType.Pint || _boardType == OWBoardType.PintX)
                 {
                     return _rideMode switch
                     {
@@ -346,6 +360,20 @@ namespace OWCE
                         6 => "Pacific",
                         7 => "Elevated",
                         8 => "Skyline",
+                        _ => "Unknown",
+                    };
+                }
+                else if (_boardType == OWBoardType.GT)
+                {
+                    return _rideMode switch
+                    {
+                        3 => "Bay",
+                        4 => "Roam",
+                        5 => "Flow",
+                        6 => "Highline",
+                        7 => "Elevated",
+                        8 => "Apex",
+                        9 => "Custom",
                         _ => "Unknown",
                     };
                 }
@@ -787,14 +815,18 @@ namespace OWCE
 
                 // Turns out the below timer does not fire immedaitly, it fires after the first 15sec have passed.
                 // Calling this before we start the timer should make it work more reliably.
-                KeepBoardAlive().SafeFireAndForget();
 
-                _keepHandshakeBackgroundRunning = true;
-                Device.StartTimer(TimeSpan.FromSeconds(15), () =>
+                if (!(HardwareRevision >= 6000 && HardwareRevision <= 6999)) // GT only works with OWCE if Rewheel'd with BLE Handshake patched, no need to keep alive.
                 {
                     KeepBoardAlive().SafeFireAndForget();
-                    return _keepHandshakeBackgroundRunning;
-                });
+
+                    _keepHandshakeBackgroundRunning = true;
+                    Device.StartTimer(TimeSpan.FromSeconds(15), () =>
+                    {
+                        KeepBoardAlive().SafeFireAndForget();
+                        return _keepHandshakeBackgroundRunning;
+                    });
+                }
             }
 
             foreach (var characteristic in characteristicsToSubscribeTo)
@@ -815,6 +847,7 @@ namespace OWCE
         {
             try
             {
+                Debug.WriteLine("KeepBoardAlive");
                 byte[] firmwareRevision = GetBytesForBoardFromUInt16((UInt16)FirmwareRevision, FirmwareRevisionUUID);
                 await _owble.WriteValue(OWBoard.FirmwareRevisionUUID, firmwareRevision);
             }
@@ -1001,84 +1034,6 @@ namespace OWCE
                         }
                     }
                 }
-
-                // If we never found the key in OWCE servers lets fetch it from FM servers.
-                using (var handler = new HttpClientHandler())
-                {
-                    handler.AutomaticDecompression = System.Net.DecompressionMethods.GZip;
-
-                    using (var client = new HttpClient())
-                    {
-                        // Match headers as best as possible.
-                        client.DefaultRequestHeaders.Clear();
-                        client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "application/json");
-                        client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "application/json");
-                        client.DefaultRequestHeaders.TryAddWithoutValidation("Connection", "keep-alive");
-                        client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "en-us");
-                        client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", "Basic Og==");
-                        client.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Encoding", "gzip");
-
-                        var platform = DeviceInfo.Platform;
-                        if (platform == DevicePlatform.Android)
-                        {
-                            var userAgent = DependencyService.Get<DependencyInterfaces.IUserAgent>();
-                            var systemUserAgent = await userAgent.GetSystemUserAgent();
-                            client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", systemUserAgent);
-                        }
-                        else if (platform == DevicePlatform.iOS)
-                        {
-                            client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Onewheel/0 CFNetwork/1121.2.2 Darwin/19.2.0");
-                        }
-                        else
-                        {
-                            client.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "Onewheel/0 CFNetwork/1121.2.2 Darwin/19.2.0");
-                        }
-
-                        string owType = _boardType switch
-                        {
-                            OWBoardType.XR => "xr",
-                            OWBoardType.Pint => "pint",
-                            _ => "",
-                        };
-
-                        // Request unlock key based on board name, board type, and token.
-                        var url = $"https://app.onewheel.com/wp-json/fm/v2/activation/{deviceName}?owType={owType}&apiKey={apiKey}";
-                        var response = await client.GetAsync(url);
-
-                        if (response.IsSuccessStatusCode)
-                        {
-                            var responseBody = await response.Content.ReadAsStringAsync();
-                            var activationResponse = JsonSerializer.Deserialize<FMActivationResponse>(responseBody);
-
-                            if (String.IsNullOrWhiteSpace(activationResponse.Key))
-                            {
-                                throw new Exceptions.HandshakeException("Unable to fetch key. Please don't attempt this again. If you can, please report this to our Facebook page or discussion group.", true);
-                            }
-
-                            var keyRequest = new KeyRequest()
-                            {
-                                APIKey = apiKey,
-                                BoardKey = activationResponse.Key,
-                                DeviceName = deviceName,
-                                OWType = owType,
-                            };
-                            var keyRequestJson = JsonSerializer.Serialize(keyRequest);
-                            var httpContent = new StringContent(keyRequestJson, System.Text.Encoding.UTF8, "application/json");
-                            response = await client.PutAsync($"https://{App.OWCEApiServer}/v1/handshake/{deviceName}", httpContent);
-
-
-                            await SecureStorage.SetAsync($"board_{deviceName}_key", apiKey);
-                            await SecureStorage.SetAsync($"board_{deviceName}_token", activationResponse.Key);
-
-                            var tokenArray = activationResponse.Key.StringToByteArray();
-                            return tokenArray;
-                        }
-                        else
-                        {
-                            throw new Exceptions.HandshakeException($"Unexpected response code ({response.StatusCode}). Please don't attempt this again. If you can, please report this to our Facebook page or discussion group.", true);
-                        }
-                    }
-                }
             }
             catch (Exceptions.HandshakeException err)
             {
@@ -1231,13 +1186,19 @@ namespace OWCE
                     FirmwareRevision = value;
                     break;
                 case CurrentAmpsUUID:
+                    if (_boardType == OWBoardType.Unknown)
+                    {
+                        break;
+                    }
 
                     var scaleFactor = _boardType switch {
                         OWBoardType.V1 => 0.0009f,
                         OWBoardType.Plus => 0.0018f,
                         OWBoardType.XR => 0.002f,
                         OWBoardType.Pint => 0.002f,
-                        _ => throw new Exception("Unknown board type"),
+                        OWBoardType.PintX => 0.002f,
+                        OWBoardType.GT => 0.002f,
+                        _ => throw new Exception("Unknown board type: " + _boardType),
                     };
 
                     /// https://en.wikipedia.org/wiki/Two's_complement
@@ -1280,16 +1241,24 @@ namespace OWCE
                     {
                         BoardType = OWBoardType.V1;
                         SimpleStopEnabled = null;
+
+                        BatteryCells.CellCount = 16;
                     }
                     else if (value >= 3000 && value <= 3999)
                     {
                         BoardType = OWBoardType.Plus;
                         SimpleStopEnabled = null;
+
+                        BatteryCells.CellCount = 16;
                     }
                     else if (value >= 4000 && value <= 4999)
                     {
                         BoardType = OWBoardType.XR;
                         SimpleStopEnabled = null;
+
+                        BatteryCells.CellCount = 15;
+                        BatteryCells.IgnoreCell(15);
+                        OnPropertyChanged("BatteryCells");
                     }
                     else if (value >= 5000 && value <= 5999)
                     {
@@ -1298,19 +1267,34 @@ namespace OWCE
                         {
                             SimpleStopEnabled = false;
                         }
-                    }
 
-                    if (HardwareRevision >= 4000)
-                    {
                         BatteryCells.CellCount = 15;
                         BatteryCells.IgnoreCell(15);
                         OnPropertyChanged("BatteryCells");
                     }
-                    else
+                    else if (value >= 7000 && value <= 7999)
                     {
-                        BatteryCells.CellCount = 16;
-                    }
+                        BoardType = OWBoardType.PintX;
+                        if (SimpleStopEnabled == null)
+                        {
+                            SimpleStopEnabled = false;
+                        }
 
+                        BatteryCells.CellCount = 15;
+                        BatteryCells.IgnoreCell(15);
+                        OnPropertyChanged("BatteryCells");
+                    }
+                    else if (value >= 6000 && value <= 6999)
+                    {
+                        BoardType = OWBoardType.GT;
+                        if (SimpleStopEnabled == null)
+                        {
+                            SimpleStopEnabled = false;
+                        }
+
+                        BatteryCells.CellCount = 18;
+                        OnPropertyChanged("BatteryCells");
+                    }
                     break;
                 case LifetimeOdometerUUID:
                     LifetimeOdometer = value;

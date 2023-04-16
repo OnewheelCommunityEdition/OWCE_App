@@ -51,6 +51,9 @@ namespace OWCE
 
         public string LogsDirectory => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "past_rides");
 
+        public string UserAgent => $"OWCE/{Xamarin.Essentials.AppInfo.VersionString} Build/{Xamarin.Essentials.AppInfo.BuildString} ({Xamarin.Essentials.DeviceInfo.Platform}; {Xamarin.Essentials.DeviceInfo.VersionString})";
+
+
         public App()
         {
 

@@ -64,7 +64,7 @@ namespace OWCE.Pages
         //[RelayCommand]
         async Task RideSelected(Ride ride)
         {
-            var submit = await DisplayAlert("Coming Soon", "Viewing of recorded rides is not implemented yet. However if you would like to assist with OWCE development (specifically if you have aftermarket batteries) you can submit your ride for research purposes.", "Submit", "Cancel");
+            var submit = await DisplayAlert("Coming Soon", "Viewing of recorded rides is not available yet. We are working hard to bring it to you soon.\n\nIn the meantime if you would like to assist with OWCE development (specifically if you have aftermarket batteries) you can submit your ride data for research purposes.", "Learn More", "Cancel");
             if (submit)
             {
                 await Navigation.PushModalAsync(new CustomNavigationPage(new SubmitRidePage(ride)));

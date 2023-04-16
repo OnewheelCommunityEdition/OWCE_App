@@ -147,6 +147,10 @@
     <ImageAsset Include="Assets.xcassets\hamburger.imageset\hamburger.png" />
     <ImageAsset Include="Assets.xcassets\hamburger.imageset\hamburger%402x.png" />
     <ImageAsset Include="Assets.xcassets\hamburger.imageset\hamburger%403x.png" />
+    <ImageAsset Include="Assets.xcassets\icon_share.imageset\Contents.json" />
+    <ImageAsset Include="Assets.xcassets\icon_share.imageset\icon_share.png" />
+    <ImageAsset Include="Assets.xcassets\icon_share.imageset\icon_share%402x.png" />
+    <ImageAsset Include="Assets.xcassets\icon_share.imageset\icon_share%403x.png" />
     <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\Contents.json" />
     <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\menu_leaderboards.png" />
     <ImageAsset Include="Assets.xcassets\menu_leaderboards.imageset\menu_leaderboards%402x.png" />
@@ -204,8 +208,8 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2545" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.7.4" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2578" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.5" />
     <PackageReference Include="Rg.Plugins.Popup">
       <Version>2.1.0</Version>
     </PackageReference>
@@ -248,6 +252,7 @@
     <Folder Include="DependencyImplementations\" />
     <Folder Include="Extensions\" />
     <Folder Include="Assets.xcassets\hamburger.imageset\" />
+    <Folder Include="Assets.xcassets\icon_share.imageset\" />
     <Folder Include="Assets.xcassets\menu_leaderboards.imageset\" />
     <Folder Include="Assets.xcassets\menu_myrides.imageset\" />
     <Folder Include="Assets.xcassets\menu_onewheels.imageset\" />

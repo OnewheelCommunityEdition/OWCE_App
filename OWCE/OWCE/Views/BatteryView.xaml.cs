@@ -94,6 +94,19 @@ namespace OWCE.Views
         }
 
 
+        public static readonly BindableProperty BoardTypeProperty = BindableProperty.Create(
+            "BoardType",
+            typeof(OWBoardType),
+            typeof(BatteryView));
+
+        public OWBoardType BoardType
+        {
+            get { return (OWBoardType)GetValue(BoardTypeProperty); }
+            set
+            {
+                SetValue(BoardTypeProperty, value);
+            }
+        }
 
         public BatteryView()
         {

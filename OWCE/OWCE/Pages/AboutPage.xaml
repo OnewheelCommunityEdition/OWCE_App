@@ -15,8 +15,8 @@
     </pages:BaseContentPage.Resources>
 
     <Grid Margin="16" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
-        <Label Grid.Row="0" Text="This is a third party app made by the community, for the community to give extra safety features &amp; better data." />
-        <Label Grid.Row="1" Text="This is not the official app. It is not supported, endorsed or affiliated with Future Motion in any way." />
+        <Label Grid.Row="0" Text="This is a third party app made by the community, for the community. Its aim is to bring additional safety features &amp; better data reporting to its users." />
+        <Label Grid.Row="1" Text="This is not the official Onewheel app. It is not supported, endorsed or affiliated with Future Motion in any way." />
         <Label Grid.Row="2">
              <Label.FormattedText>
                 <FormattedString>
