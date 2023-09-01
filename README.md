@@ -3,7 +3,7 @@ Onewheel Community Edition (OWCE) App
 
 A cross-platform app for use with the [Onewheel](https://onewheel.com/) V1, Plus, XR, Pint, Pint X and GT.
 
-NOTE: GT support requires patching with [Rewheel](https://github.com/rewheel-app/rewheel).
+NOTE: GT support requires patching with [Rewheel](https://autumn-bar-0505.on.fleek.co/) ([GitHub](https://github.com/ffmwheel/rewheel-main)).
 Newer board firmware no longer send through voltage as this was removed by Future Motion. Those versions are:
 - XR with firmware 4155 and higher
 - Pint with firmware 5059 and higher
