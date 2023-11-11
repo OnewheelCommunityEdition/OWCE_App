@@ -780,18 +780,40 @@ namespace OWCE
                         await App.Current.MainPage.DisplayAlert("Oh no!", "Some features of this app currently will not work with board firmware 4155 and higher.\n\nFuture Motion has locked some features down and as a result prevents apps like OWCE reporting valuable data to you.\n\nSorry about that.", "Ok");
                     }
 
-                    // No longer using the handshake with web connection.
-                    var jumpstartAlert = new Pages.Popup.JumpstartAlert(new Command(async () =>
+                    // If we already have a token lets try using it.
+                    if (await BoardSecureStorage.HasBoardTokenAsync(_name))
                     {
-                        await PopupNavigation.Instance.PopAllAsync();
-                        if (App.Current.MainPage.Navigation.ModalStack.Count == 1 && App.Current.MainPage.Navigation.ModalStack.FirstOrDefault() is NavigationPage modalNavigationPage && modalNavigationPage.CurrentPage is Pages.BoardPage boardPage)
+                        try
                         {
-                            await boardPage.DisconnectAndPop();
-                            return;
+                            await Handshake();
                         }
-                    }));
-                    await PopupNavigation.Instance.PushAsync(jumpstartAlert, true);
-                    return;
+                        catch (Exceptions.HandshakeException handshakeException)
+                        {
+                            await App.Current.MainPage.DisplayAlert("Error", handshakeException.Message, "Ok");
+                            if (handshakeException.ShouldDisconnect)
+                            {
+                                if (App.Current.MainPage.Navigation.ModalStack.Count == 1 && App.Current.MainPage.Navigation.ModalStack.FirstOrDefault() is Pages.CustomNavigationPage modalNavigationPage && modalNavigationPage.CurrentPage is Pages.BoardPage boardPage)
+                                {
+                                    await boardPage.DisconnectAndPop();
+                                }
+                                return;
+                            }
+                        }
+                    }
+                    else { // No longer using the handshake with web connection.
+
+                        var jumpstartAlert = new Pages.Popup.JumpstartAlert(new Command(async () =>
+                        {
+                            await PopupNavigation.Instance.PopAllAsync();
+                            if (App.Current.MainPage.Navigation.ModalStack.Count == 1 && App.Current.MainPage.Navigation.ModalStack.FirstOrDefault() is NavigationPage modalNavigationPage && modalNavigationPage.CurrentPage is Pages.BoardPage boardPage)
+                            {
+                                await boardPage.DisconnectAndPop();
+                                return;
+                            }
+                        }));
+                        await PopupNavigation.Instance.PushAsync(jumpstartAlert, true);
+                        return;
+                    }
                 }
                 else // XR 4209 and below
                 {
@@ -815,8 +837,10 @@ namespace OWCE
 
                 // Turns out the below timer does not fire immedaitly, it fires after the first 15sec have passed.
                 // Calling this before we start the timer should make it work more reliably.
+                // GT works with OWCE if Rewheel'd or a token was manualy set.
 
-                if (!(HardwareRevision >= 6000 && HardwareRevision <= 6999)) // GT only works with OWCE if Rewheel'd with BLE Handshake patched, no need to keep alive.
+                // Trigger keep alive if a token is defined.
+                if ((await BoardSecureStorage.HasBoardTokenAsync(_name)))
                 {
                     KeepBoardAlive().SafeFireAndForget();
 
@@ -969,22 +993,27 @@ namespace OWCE
             deviceName = deviceName.Replace("ow", String.Empty);
 
 
-            //SecureStorage.Remove($"board_{deviceName}_token");
-            //SecureStorage.Remove($"board_{deviceName}_key");
+            // BoardSecureStorage.RemoveBoardKey(_name);
+            // BoardSecureStorage.RemoveBoardToken(_name);
 
-            var key = await SecureStorage.GetAsync($"board_{deviceName}_key");
+            var key = await BoardSecureStorage.GetBoardKeyAsync(deviceName);
 
-            // If the API key has changed delete the stored token.
-            if (key != apiKey)
+            // If there is a key and it has changed delete the stored token.
+            if (!String.IsNullOrEmpty(key) && key != apiKey)
             {
-                SecureStorage.Remove($"board_{deviceName}_token");
+                await App.Current.MainPage.DisplayAlert("Handshake", "Board key changed since last handshake, Last saved key/token will be removed from app cache.", "Ok");
+
+                BoardSecureStorage.RemoveBoardToken(deviceName);
             }
 
 
             // If we already have a token lets use it.
-            var token = await SecureStorage.GetAsync($"board_{deviceName}_token");
+            var token = await BoardSecureStorage.GetBoardTokenAsync(deviceName);
             if (String.IsNullOrEmpty(token) == false)
             {
+                // Add matching key to storage
+                await BoardSecureStorage.SetBoardKeyAsync(deviceName, apiKey);
+
                 var tokenArray = token.StringToByteArray();
                 return tokenArray;
             }
@@ -1011,8 +1040,8 @@ namespace OWCE
 
                             if (String.IsNullOrWhiteSpace(keyResponse.Key) == false)
                             {
-                                await SecureStorage.SetAsync($"board_{deviceName}_key", apiKey);
-                                await SecureStorage.SetAsync($"board_{deviceName}_token", keyResponse.Key);
+                                await BoardSecureStorage.SetBoardKeyAsync(deviceName, apiKey);
+                                await BoardSecureStorage.SetBoardTokenAsync(deviceName, keyResponse.Key);
 
                                 var tokenArray = keyResponse.Key.StringToByteArray();
                                 return tokenArray;
@@ -1043,8 +1072,8 @@ namespace OWCE
             {
                 Debug.WriteLine($"ERROR: {err.Message}");
 
-                SecureStorage.Remove($"board_{deviceName}_token");
-                SecureStorage.Remove($"board_{deviceName}_key");
+                BoardSecureStorage.RemoveBoardKey(deviceName);
+                BoardSecureStorage.RemoveBoardToken(deviceName);
             }
 
             return null;
