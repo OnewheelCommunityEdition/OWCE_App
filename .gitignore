@@ -1,7 +1,8 @@
 bin/
 obj/
-.vs
-.mfractor
+.vs/
+.idea/
+.mfractor/
 OWCE/OWCE/AppConstants.cs
 AppConstants.cs
 packages/
