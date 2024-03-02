@@ -42,6 +42,7 @@ namespace OWCE.Protobuf {
   /// <summary>
   /// [START messages]
   /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class OWBoardEvent : pb::IMessage<OWBoardEvent>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -305,6 +306,7 @@ namespace OWCE.Protobuf {
 
   }
 
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class OWBoardEventList : pb::IMessage<OWBoardEventList>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
