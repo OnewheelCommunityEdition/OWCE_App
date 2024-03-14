@@ -64,8 +64,9 @@ namespace OWCE.Pages
         AsyncCommand<OWBaseBoard> _boardSelectedCommand;
         public AsyncCommand<OWBaseBoard> BoardSelectedCommand => _boardSelectedCommand ??= new AsyncCommand<OWBaseBoard>(BoardSelectedAsync, allowsMultipleExecutions: false);
 
-       
-        
+
+        AsyncCommand<OWBaseBoard> _boardLongPressCommand;
+        public AsyncCommand<OWBaseBoard> BoardLongPressCommand => _boardLongPressCommand ??= new AsyncCommand<OWBaseBoard>(BoardLongPressAsync, allowsMultipleExecutions: false);
 
         /*
 
@@ -336,9 +337,21 @@ namespace OWCE.Pages
         }
         */
 
+        async Task BoardLongPressAsync(OWBaseBoard baseBoard)
+        {
+            if (baseBoard == null || !baseBoard.IsAvailable)
+            {
+                return;
+            }
 
+            var key = await BoardSecureStorage.GetBoardKeyAsync(baseBoard.Name);
+            var token = await BoardSecureStorage.GetBoardTokenAsync(baseBoard.Name);
+            var popup = new Pages.Popup.BoadTokenPopup(baseBoard, key, token);
 
+            await PopupNavigation.Instance.PushAsync(popup, true);
 
+            return;
+        }
 
         async Task BoardSelectedAsync(OWBaseBoard baseBoard)
         {

@@ -9,6 +9,7 @@
              xmlns:views="clr-namespace:OWCE.Views"
              xmlns:popup="clr-namespace:OWCE.Pages.Popup"
              x:DataType="pages:BoardListPage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:xcte="clr-namespace:Xamarin.CommunityToolkit.Effects;assembly=Xamarin.CommunityToolkit">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -55,8 +56,8 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="owce:OWBaseBoard">
                         <ContentView Padding="16,10,16,15">
-                           
-                            <yummy:PancakeView HeightRequest="121" CornerRadius="11" BackgroundColor="{StaticResource BrightYellow}" xcte:TouchEffect.NativeAnimation="true" xcte:TouchEffect.Command="{Binding Source={x:Reference MainCollectionView}, Path=BindingContext.BoardSelectedCommand}" xcte:TouchEffect.CommandParameter="{Binding .}" >
+
+                            <yummy:PancakeView HeightRequest="121" CornerRadius="11" BackgroundColor="{StaticResource BrightYellow}" xcte:TouchEffect.NativeAnimation="true" xcte:TouchEffect.Command="{Binding Source={x:Reference MainCollectionView}, Path=BindingContext.BoardSelectedCommand}"  xcte:TouchEffect.LongPressCommand="{Binding Source={x:Reference MainCollectionView}, Path=BindingContext.BoardLongPressCommand}" xcte:TouchEffect.CommandParameter="{Binding .}" >
 
                                 
                                 <yummy:PancakeView.Shadow>
